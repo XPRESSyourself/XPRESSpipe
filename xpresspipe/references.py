@@ -44,7 +44,7 @@ USAGE: Output file helpful for counting Ribosome Profiling reads to avoid calcul
 
 ASSUMPTIONS:
 """
-def run_truncate(args_dict):
+def truncate(args_dict):
 
 
 """
@@ -54,4 +54,4 @@ ASSUMPTIONS:
 FastQC has already been run on all files
 Output folders from FastQC are in their own folder (path will be provided by user)
 """
-def run_rrnaprobe(args_dict):
+def rrnaprobe(args_dict):

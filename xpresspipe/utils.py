@@ -41,7 +41,7 @@ def check_directories(directory):
 """
 DESCRIPTION: Make a list of the files in a given directory, based on list of acceptable file suffixes
 """
-def file_list(directory, suffix):
+def get_files(directory, suffix):
 
     #Initialize blank file list to fill
     file_list = []
@@ -57,3 +57,20 @@ def file_list(directory, suffix):
     file_list = sorted(file_list)
 
     return tuple(file_list)
+
+"""
+DESCRIPTION: Unzip all files from directory
+"""
+def unzip_files(directory):
+
+    suffix = ['.gz', '.zip']
+
+    #Walk through raw data files within given directory
+    for subdir, dirs, files in os.walk(directory):
+        for f in files:
+            for s in suffix:
+                if f.endswith(str(s)):
+                    if s == '.gz':
+                        os.system('gzip -d ' + str(directory) + str(f))
+                    if s == '.zip':
+                        os.system('unzip ' + str(directory) + str(f))

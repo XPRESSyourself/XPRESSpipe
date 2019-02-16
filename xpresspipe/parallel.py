@@ -22,6 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 IMPORT DEPENDENCIES
 """
+import math
 import concurrent.futures
 from multiprocessing import cpu_count
 
@@ -38,11 +39,29 @@ def get_cores(args_dict):
     return cores
 
 """
+DESCRIPTION: Calculate most efficient use of cores provided
+"""
+def compute_cores_files(args_dict, file_list):
+
+    compute_number = 1
+    workers = args_dict['max_processors']
+
+    file_number = len(file_list)
+    core_number = get_cores(args_dict)
+
+    #Decide how many cores to dedicate to single process at a time
+    if file_number < core_number:
+        compute_number = math.ceil(core_number / file_number)
+        workers = core_number / compute_number
+
+    return compute_number, workers
+
+"""
 DESCRIPTION: Run function and files on pools
 """
-def run_pools(func, args_iter, cores):
+def run_pools(func, args_iter, args_dict):
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers=cores) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=args_dict['workers']) as executor:
         for file in zip(args_iter, executor.map(func, args_iter)):
             print(file, "has been processed.")
 
@@ -51,19 +70,16 @@ DESCRIPTION: Parallelize function on list of files
 """
 def parallelize(func, file_list, args_dict):
 
-    cores = get_cores(args_dict)
-
     args_iter = ([file, args_dict] for file in file_list)
 
-    run_pools(func, args_iter, cores)
+    args_dict['threads'], args_dict['workers'] = compute_cores_files(args_dict, file_list)
+
+    run_pools(func, args_iter, args_dict)
 
 """
 DESCRIPTION: Parallelize function on list of files for PE data
 """
 def parallelize_pe(func, file_list, args_dict):
-
-    #Determine number of processors to use
-    cores = get_cores(args_dict)
 
     #Pair files for paired-end processing
     c1 = 0
@@ -75,4 +91,6 @@ def parallelize_pe(func, file_list, args_dict):
 
     args_iter = set(args_iter)
 
-    run_pools(func, args_iter, cores)
+    args_dict['threads'], args_dict['workers'] = compute_cores_files(args_dict, file_list)
+
+    run_pools(func, args_iter, args_dict)

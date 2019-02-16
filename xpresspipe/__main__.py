@@ -27,10 +27,10 @@ from .__init__ import __version__
 from .messages import *
 from .arguments import get_arguments
 from .trim import run_trim
-from .align import run_align, run_seRNAseq, run_peRNAseq, run_riboprof
-from .count import run_count
-from .quality import run_quality, read_distribution, metagene, periodicity
-from .reference import run_truncate, run_rrnaprobe
+from .align import run_seRNAseq, run_peRNAseq
+from .count import create_bed, create_bigwig, count_reads, collect_counts
+from .quality import *
+from .reference import truncate, rrnaprobe
 
 """
 DESCRIPTION: Main function to call necessary functions for sub-modules
@@ -51,31 +51,84 @@ def main(args=None):
 
     #Execute corresponding functions determined by arguments provided by user
     if args.cmd == 'trim':
-        run_riboprof(args_dict)
+        run_trim(args_dict)
 
     elif args.cmd == 'align':
-        run_riboprof(args_dict)
+        #Align
+        if args_dict['type'].upper() == 'SE':
+            args_dict = run_seRNAseq(args_dict)
+        elif args_dict['type'].upper() == 'PE':
+            args_dict = run_peRNAseq(args_dict)
+        else:
+            raise Exception('Invalid type argument provided')
+        #Get other formatted files
+        if args_dict['output_bed'] == True:
+            create_bed(args_dict['output'], args_dict['aligndir'])
+        if args_dict['output_bigwig'] == True:
+            create_bigwig(args_dict['output'], args_dict['aligndir'])
 
     elif args.cmd == 'count':
-        run_riboprof(args_dict)
+        print('coming soon')
 
     elif args.cmd == 'quality':
-        run_riboprof(args_dict)
+        print('coming soon')
 
     elif args.cmd == 'truncate':
-        run_riboprof(args_dict)
+        print('coming soon')
 
-    elif args.cmd == 'rrnaprobe':
-        run_riboprof(args_dict)
+    elif args.cmd == 'rrnaProbe':
+        print('coming soon')
+
+    elif args.cmd == 'convertNames':
+        print('coming soon')
+
+    elif args.cmd == 'normalizeTable':
+        print('coming soon')
 
     elif args.cmd == 'seRNAseq':
-        run_riboprof(args_dict)
+        #Trim
+        args_dict = run_trim(args_dict)
+        #Align
+        args_dict['input'] = args_dict['trimdir']
+        args_dict = run_seRNAseq(args_dict)
+        #Get other formatted files
+        if args_dict['output_bed'] == True:
+            create_bed(args_dict['output'], args_dict['aligndir'])
+        if args_dict['output_bigwig'] == True:
+            create_bigwig(args_dict['output'], args_dict['aligndir'])
+        #Count
+        args_dict['input'] = args_dict['aligndir']
+
 
     elif args.cmd == 'peRNAseq':
-        run_riboprof(args_dict)
+        #Trim
+        args_dict = run_trim(args_dict)
+        #Align
+        args_dict['input'] = args_dict['trimdir']
+        args_dict = run_peRNAseq(args_dict)
+        #Get other formatted files
+        if args_dict['output_bed'] == True:
+            create_bed(args_dict['output'], args_dict['aligndir'])
+        if args_dict['output_bigwig'] == True:
+            create_bigwig(args_dict['output'], args_dict['aligndir'])
+        #Count
+        args_dict['input'] = args_dict['aligndir']
+
 
     elif args.cmd == 'riboprof':
-        run_riboprof(args_dict)
+        #Trim
+        args_dict = run_trim(args_dict)
+        #Align
+        args_dict['input'] = args_dict['trimdir']
+        args_dict = run_seRNAseq(args_dict)
+        #Get other formatted files
+        if args_dict['output_bed'] == True:
+            create_bed(args_dict['output'], args_dict['aligndir'])
+        if args_dict['output_bigwig'] == True:
+            create_bigwig(args_dict['output'], args_dict['aligndir'])
+        #Count
+        args_dict['input'] = args_dict['aligndir']
+
 
     else:
         raise Exception("Invalid function processing function provided.")

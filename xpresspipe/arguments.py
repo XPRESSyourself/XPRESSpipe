@@ -125,6 +125,8 @@ def check_inputs(args_dict):
         args_dict['input'] = check_directories(args_dict['input'])
     if 'output' in args_dict:
         args_dict['output'] = check_directories(args_dict['output'])
+    if 'reference in args_dict':
+        args_dict['reference'] = check_directories(args_dict['reference'])
 
     #Check max_processor input
     if 'max_processors' in args_dict and args_dict['max_processors'] != None:
@@ -215,13 +217,37 @@ def get_arguments(args, __version__):
         required=False)
 
     #ALIGN subparser
-    _parser = subparser.add_parser('', description='', add_help=False)
+    align_parser = subparser.add_parser('align', description='Align RNAseq reads to reference genome', add_help=False)
     #Required arguments
-    _reqs = _parser.add_argument_group('required arguments')
-    _opts.add_argument()
+    align_reqs = align_parser.add_argument_group('required arguments')
+    align_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory -- if paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        required=True)
+    align_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    align_reqs.add_argument(
+        '-t', '--type',
+        help='Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
+        required=True)
+    align_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        required=True)
     #Optional arguments
-    _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument()
+    align_opts = align_parser.add_argument_group('optional arguments')
+    align_opts.add_argument(
+        '--output_bed',
+        help='Include flag to output BED files for each aligned file',
+        action='store_true',
+        required=False)
+    align_opts.add_argument(
+        '--output_bigwig',
+        help='Include flag to output bigwig files for each aligned file',
+        action='store_true',
+        required=False)
 
     #COUNT subparser
     _parser = subparser.add_parser('', description='', add_help=False)
@@ -230,7 +256,16 @@ def get_arguments(args, __version__):
     _opts.add_argument()
     #Optional arguments
     _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument()
+    _opts.add_argument(
+        '--truncate',
+        help='Count reads to truncated reference (truncated reference should be added to the \"reference\" parent directory)',
+        type=bool,
+        required=False)
+    _opts.add_argument(
+        '--experiment',
+        help='Experiment name',
+        type=<str>,
+        required=False)
 
     #QUALITY subparser
     _parser = subparser.add_parser('', description='', add_help=False)
@@ -259,32 +294,131 @@ def get_arguments(args, __version__):
     _opts = _parser.add_argument_group('optional arguments')
     _opts.add_argument()
 
+    #GENENAMECONVERT subparser
+
+    #NORMALIZE subparser
+
     #SERNASEQ subparser
-    _parser = subparser.add_parser('', description='', add_help=False)
+    se_parser = subparser.add_parser('', description='', add_help=False)
     #Required arguments
-    _reqs = _parser.add_argument_group('required arguments')
-    _opts.add_argument()
+    se_reqs = se_parser.add_argument_group('required arguments')
+    se_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory',
+        required=True)
+    se_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    se_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        required=True)
     #Optional arguments
-    _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument()
+    se_opts = se_parser.add_argument_group('optional arguments')
+    se_opts.add_argument(
+        '--output_bed',
+        help='Include option to output BED files for each aligned file',
+        action='store_true',
+        required=False)
+    se_opts.add_argument(
+        '--output_bigwig',
+        help='Include flag to output bigwig files for each aligned file',
+        action='store_true',
+        required=False)
+    se_opts.add_argument(
+        '--count_coding',
+        help='Include flag to only count reads aligning to protein coding transcripts',
+        action='store_true',
+        required=False)
+    se_opts.add_argument(
+        '--experiment',
+        help='Experiment name',
+        type=<str>,
+        required=False)
 
     #PERNASEQ subparser
-    _parser = subparser.add_parser('', description='', add_help=False)
+    pe_parser = subparser.add_parser('', description='', add_help=False)
     #Required arguments
-    _reqs = _parser.add_argument_group('required arguments')
-    _opts.add_argument()
+    pe_reqs = pe_parser.add_argument_group('required arguments')
+    pe_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory -- if paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        required=True)
+    pe_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    pe_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        required=True)
     #Optional arguments
-    _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument()
+    pe_opts = pe_parser.add_argument_group('optional arguments')
+    pe_opts.add_argument(
+        '--output_bed',
+        help='Include option to output BED files for each aligned file',
+        action='store_true',
+        required=False)
+    pe_opts.add_argument(
+        '--output_bigwig',
+        help='Include flag to output bigwig files for each aligned file',
+        action='store_true',
+        required=False)
+    pe_opts.add_argument(
+        '--count_coding',
+        help='Include flag to only count reads aligning to protein coding transcripts',
+        action='store_true',
+        required=False)
+    pe_opts.add_argument(
+        '--experiment',
+        help='Experiment name',
+        type=<str>,
+        required=False)
 
     #RIBOPROF subparser
-    _parser = subparser.add_parser('', description='', add_help=False)
+    rp_parser = subparser.add_parser('', description='', add_help=False)
     #Required arguments
-    _reqs = _parser.add_argument_group('required arguments')
-    _opts.add_argument()
+    rp_reqs = rp_parser.add_argument_group('required arguments')
+    rp_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory',
+        required=True)
+    rp_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    rp_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        required=True)
     #Optional arguments
-    _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument()
+    rp_opts = rp_parser.add_argument_group('optional arguments')
+    rp_opts.add_argument(
+        '--output_bed',
+        help='Include option to output BED files for each aligned file',
+        action='store_true',
+        required=False)
+    rp_opts.add_argument(
+        '--output_bigwig',
+        help='Include flag to output bigwig files for each aligned file',
+        action='store_true',
+        required=False)
+    rp_opts.add_argument(
+        '--count_coding',
+        help='Include flag to only count reads aligning to protein coding transcripts',
+        action='store_true',
+        required=False)
+    rp_opts.add_argument(
+        '--truncate',
+        help='Count reads to truncated reference (truncated reference should be added to the \"reference\" parent directory)',
+        action='store_true',
+        required=False)
+    rp_opts.add_argument(
+        '--experiment',
+        help='Experiment name',
+        type=<str>,
+        required=False)
 
     """
     COLLECT PARSED ARGUMENTS AND PREPARE FOR DOWNSTREAM USE

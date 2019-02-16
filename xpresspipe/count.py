@@ -19,36 +19,168 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+"""
+IMPORT DEPENDENCIES
+"""
+import os, sys
+import datetime
+import pandas as pd
+from expresstools import count_table
+from .utils import get_files
+from .parallel import parallize
 
+"""
+DESCRIPTION: Convert a sorted sam file to a bam file
+"""
+def sam2bam(path, file):
 
+    os.system('samtools view -S -b ' + str(path) + str(file) + ' > ' + str(path) + str(file[:-4]) + '.bam')
+    os.system("samtools index " + str(path) + str(file[:-4]) + '.bam')
 
+"""
+DESCRIPTION: Convert sorted sam files in directory to bed files
+"""
+def add_bed_directories(args_dict):
 
+    os.system('mkdir ' + args_dict['output'] + 'bed')
+    args_dict['bed'] = str(str(args_dict['output']) + 'bed/')
 
+    return args_dict
 
+def bed_convert(args):
 
+    file, args_dict = args[0], args[1]
 
+    #Ensure input file is properly formatted as a sorted and indexed BAM file
+    if file.endswith('.sam'):
+        sam2bam(args_dict['input'], file)
+    elif file.endswith('.bam'):
+        pass
+    else:
+        raise Exception('Incorrect input file')
 
+    #Convert BAM to BED
+    os.system('bedtools bamtobed -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam > ' + str(args_dict['bed']) + str(file[:-4]) + '.bed')
 
+def create_bed(output, directory):
 
+    #Add output directories
+    args_dict = add_bed_directories(args_dict)
 
+    #Get list of files to convert based on acceptable file types
+    files = get_files(args_dict['input'], ['.sam', '.bam'])
 
+    #Convert aligned RNAseq reads to BED files
+    parallize(bed_convert, files, args_dict)
 
+    return args_dict
 
+"""
+DESCRIPTION: Convert sorted sam files in directory to bigwig files
+"""
+def add_bigwig_directories(args_dict):
 
+    os.system('mkdir ' + args_dict['output'] + 'bigwig')
+    args_dict['bigwig'] = str(str(args_dict['output']) + 'bigwig/')
 
+    return args_dict
 
+def bigwig_convert(args):
 
+    file, args_dict = args[0], args[1]
 
+    #Ensure input file is properly formatted as a sorted and indexed BAM file
+    if file.endswith('.sam'):
+        sam2bam(args_dict['input'], file)
+    elif file.endswith('.bam'):
+        pass
+    else:
+        raise Exception('Incorrect input file')
 
+    #Convert BAM to bigwig
+    os.system('bamCoverage -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam -o ' + str(args_dict['bigwig']) + str(file[:-4]) + '.bw')
 
+def create_bigwig(output, directory):
 
+    #Add output directories
+    args_dict = add_bigwig_directories(args_dict)
 
+    #Get list of files to convert based on acceptable file types
+    files = get_files(args_dict['input'], ['.sam', '.bam'])
 
+    #Convert aligned RNAseq reads to bigwig files
+    parallize(bigwig_convert, files, args_dict)
 
+    return args_dict
 
 """
 DESCRIPTION: Compile counts tables from HTseq output files
-
-ASSUMPTIONS:
 """
-def run_count(args_dict):
+def add_count_directories(args_dict):
+
+    os.system('mkdir ' + args_dict['output'] + 'counts')
+    args_dict['counts'] = str(str(args_dict['output']) + 'counts/')
+
+    return args_dict
+
+def count_file(args):
+
+    file, args_dict = args[0], args[1]
+
+    #Determine reference file type
+    if args_dict['count_coding'] == True and args_dict['truncate'] == True:
+        transcript_type = 'transcripts_coding_truncated'
+
+    elif args_dict['count_coding'] == True and args_dict['truncate'] == False:
+        transcript_type = 'transcripts_coding_truncated'
+
+    elif args_dict['count_coding'] == False and args_dict['truncate'] == True:
+        transcript_type = 'transcripts_coding_truncated'
+
+    elif args_dict['count_coding'] == False and args_dict['truncate'] == False:
+        transcript_type = 'transcripts_coding_truncated'
+
+    else:
+        raise Exception('Something went wrong in determining transcript reference file type')
+
+    #Count
+    os.system('htseq-count ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.csv')
+
+
+def count_reads(args_dict, gtf_type):
+
+    #Add output directories
+    args_dict = add_count_directories(args_dict)
+
+    #Get list of files to count based on acceptable file types
+    files = get_files(args_dict['input'], ['.csv'])
+
+    #Count aligned RNAseq reads
+    parallize(count_file, files, args_dict)
+
+    return args_dict
+
+"""
+DESCRIPTION: Take directory of single counts files and collate into single table
+"""
+def collect_counts(args_dict):
+
+    #Add output directories
+    args_dict = add_count_directories(args_dict)
+
+    #Get list of files to count based on acceptable file types
+    files = get_files(args_dict['input'], ['.csv'])
+
+    #Append path to file list
+    c = 0
+    for x in files:
+        files[c] = str(args_dict['input']) + str(x)
+        c += 1
+
+    #Create and output collated count table
+    count_table = count_table(files)
+    if 'experiment' in args_dict:
+        count_table.to_csv(str(args_dict['experiment']) + 'counts_table.csv')
+    else:
+        cdt = datetime.datetime.now()
+        count_table.to_csv(str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.csv')
