@@ -29,9 +29,11 @@ from .arguments import get_arguments
 from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq
 from .count import create_bed, create_bigwig, count_reads, collect_counts
-from .quality import *
 from .rrnaprobe import rrnaProbe
 from xpresstools import truncate
+
+#batch correct, rename, normalize
+from .quality import *
 
 """
 DESCRIPTION: Main function to call necessary functions for sub-modules
@@ -77,6 +79,7 @@ def main(args=None):
     elif args.cmd == 'truncate':
         print('coming soon')
         #Run straight from XPRESStools
+        truncate()
 
     elif args.cmd == 'rrnaProbe':
         print('coming soon')

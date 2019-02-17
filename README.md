@@ -4,6 +4,7 @@ STAR
 samtools
 bedtools
 deeptools
+xpresstools
 
 
 <b><u>USER GENERATED FILES</u></b>

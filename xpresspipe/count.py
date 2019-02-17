@@ -132,13 +132,13 @@ def count_file(args):
         transcript_type = 'transcripts_coding_truncated'
 
     elif args_dict['count_coding'] == True and args_dict['truncate'] == False:
-        transcript_type = 'transcripts_coding_truncated'
+        transcript_type = 'transcripts_coding'
 
     elif args_dict['count_coding'] == False and args_dict['truncate'] == True:
-        transcript_type = 'transcripts_coding_truncated'
+        raise Exception('A truncated transcript file that is not coding-only transcripts is not currently supported')
 
     elif args_dict['count_coding'] == False and args_dict['truncate'] == False:
-        transcript_type = 'transcripts_coding_truncated'
+        transcript_type = 'transcripts'
 
     else:
         raise Exception('Something went wrong in determining transcript reference file type')

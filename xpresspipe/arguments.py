@@ -40,65 +40,10 @@ DEFAULT_READ_QUALITY = 28
 DEFAULT_MAX_PROCESSORS = None
 
 descrip = """\
-The RiboPipe submodules can be accessed by executing:
-    'ribopipe module_name'
+The XPRESSpipe submodules can be accessed by executing:
+    'xpresspipe module_name'
 
-riboseq [--help]
-    Pipeline for handling raw ribosome profiling sequence data
-    Run quality and adaptor trimming, alignment, quality control, and output
-        formatting on a directory of raw ribosome profiling sequence data
 
-rnaseq [--help]
-    Pipeline for handling raw single-end short (<= 100 bps) sequence data
-    Run quality and adaptor trimming, alignment, quality control, and output
-        formatting on a directory of raw single-end short (<= 100 bps) sequence
-        data
-
-trim [--help]
-    Run quality and adaptor trimming on a directory of raw sequence data
-
-align [--help]
-    Run alignment and output formatting on a directory of sequence data
-    User must ensure data is properly trimmed if desired
-
-quality [--help]
-    Perform quality analyses on a table <.csv> of sequence counts
-
-rrna_prober [--help]
-    Run rrna_prober, a tool that identified over-represented sequences in
-    footprint data for rRNA depletion in the Ribosome Profiling protocol
-    Input is a directory of _fastqc_data.txt files
-
-gene_dictionary [--help]
-    Converts systematic gene names in a counts table to the common gene names
-    Converts raw count table into an RPKM normalized count table
-    Input is a raw count table <.csv> and a reference table <.csv> formatted as
-    follows:
-        Column1 data -> Systematic names
-        Column2 data -> Corresponding common names
-        Column3 data -> Transcript length (nt)
-
-diffex [--help]
-    Runs pairwise DESeq2 differential expression analysis on the raw counts
-    table output in the pipeline and a sample description table.
-    Please see https://github.com/j-berg/ribopipe/diffex_template.csv for a
-    template sample description table.
-    If samples input are not replicates, remove replicates column in
-    diffex_template.csv
-    If samples are not ribosome profiling, remove the type column in
-    diffex_template.csv
-    If other information is to be added, use the --name flag by providing a
-    headless .csv table with information as follows:
-    Column1 data -> Systematic names
-    Column2 data -> Information to be added (common names, descriptions, etc.)
-
-truncate [--help]
-    Create coding-only and truncated transcript reference file (gtf) from input
-    gtf file
-    Coding-only takes all genes beginning with gene_ids starting with Y
-    Truncated takes coding-only file and removes first 45 nt from each first
-    exon of each transcript
-    Only compatible with yeast genome at present (18 Nov 2018)
 """
 
 """
