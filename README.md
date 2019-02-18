@@ -5,6 +5,9 @@ samtools
 bedtools
 deeptools
 xpresstools
+picard
+fastqc
+plastid 
 
 
 <b><u>USER GENERATED FILES</u></b>

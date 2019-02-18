@@ -117,7 +117,7 @@ output_directory= Path to output directory (empty directory)
 fasta_files= Path to genome fasta files
 gtf= Path and file name of reference gtf to build reference with
 """
-def create_reference(output_directory, fasta_files, gtf, threads=8):
+def create_reference(output_directory, fasta_files, gtf, threads=8, truncate=45):
 
     #Create output directory
     output_directory = check_directories(output_directory)

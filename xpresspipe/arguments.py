@@ -264,7 +264,7 @@ def get_arguments(args, __version__):
         required=True)
     metagene_reqs.add_argument(
         '--experiment',
-        help='Experiment name to name counts table -- if none provided, datetime is used to format file output name',
+        help='Experiment name',
         type=<str>,
         required=True)
     metagene_reqs.add_argument(
@@ -317,12 +317,42 @@ def get_arguments(args, __version__):
     #Required arguments
     period_reqs = period_parser.add_argument_group('required arguments')
     period_reqs.add_argument()
+    period_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory of SAM alignment files',
+        required=True)
+    period_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    period_reqs.add_argument(
+        '-g', '--gtf',
+        help='Path and file name of reference GTF',
+        type=<str>,
+        required=True)
+    period_reqs.add_argument(
+        '--experiment',
+        help='Experiment name',
+        type=<str>,
+        required=True)
     #Optional arguments
     period_opts = period_parser.add_argument_group('optional arguments')
     period_opts.add_argument(
         '-h', '--help',
         action='help',
         help='Show help message and exit')
+    period_opts.add_argument(
+        '--landmark',
+        help='Metagene count landmark variable for landmark anchor of periodicity analysis (default: %s)' % 'cds_start',
+        default='cds_start',
+        metavar='<str>',
+        required=False)
+    period_opts.add_argument(
+        '--downstream',
+        help='Number of nucleotides to track after the landmark (default: %s)' % 200,
+        default=200,
+        metavar='<int>',
+        required=False)
 
     """
     TRUNCATE SUBPARSER
@@ -411,7 +441,7 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     probe_opts.add_argument(
         '-m', '--min_overlap',
-        help='Minimum number of bases that must match on a side to combine sequences (default: %s)' % OVERLAP,
+        help='Minimum number of bases that must match on a side to combine sequences (default: %s)' % 5,
         default=5,
         metavar='<int>',
         required=False)
