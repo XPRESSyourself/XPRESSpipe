@@ -74,7 +74,7 @@ def get_profiles(args):
 
     os.system("CollectRnaSeqMetrics -QUIET true -REF_FLAT " + str(args_dict['reference_type']) + " -STRAND_SPECIFICITY NONE -INPUT " + str(args_dict['input']) + str(file) + " -OUTPUT " + str(args_dict['metrics']) + str(file[:-4]) + "_rna_metrics")
 
-def make_metagene(sam_directory, args_dict):
+def make_metagene(args_dict):
 
     #Add output directory to output for metagene profiles
     args_dict = add_directory(args_dict, 'output', 'metagene')
@@ -108,7 +108,6 @@ def run_fastqc(args):
     file, args_dict = args[0], args[1]
 
     os.system("fastqc -q " + str(args_dict['input']) + str(file) + " -o " + str(args_dict['fastqc_output']))
-
 
 def make_readDistributions(args_dict):
 

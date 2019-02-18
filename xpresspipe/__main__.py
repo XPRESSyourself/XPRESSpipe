@@ -51,7 +51,17 @@ def main(args=None):
     except:
         raise Exception("There was an issue in processing the arguments for the provided function.")
 
-    #Sort files in
+    #Get GTF type
+    if 'count_coding' in args_dict:
+        if 'truncate' in args_dict:
+            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated.gtf'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
+        else:
+            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
+    else:
+        args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts.gtf'
+        args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
 
     #Execute corresponding functions determined by arguments provided by user
     if args.cmd == 'trim':
@@ -82,13 +92,13 @@ def main(args=None):
         collect_counts(args_dict)
 
     elif args.cmd == 'metagene':
-        make_metagene()
+        make_metagene(args_dict)
 
     elif args.cmd == 'readDistribution':
-        make_readDistributions()
+        make_readDistributions(args_dict)
 
     elif args.cmd == 'periodicity':
-        make_periodicity()
+        make_periodicity(args_dict)
 
     elif args.cmd == 'truncate':
         output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
@@ -134,12 +144,15 @@ def main(args=None):
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        matrix_location = str(args_dict['experiment']) + 'counts_table.csv'
         #Normalize
-        args_dict['data'] = matrix_location
-        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
+        args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
+        args_dict['input'] = args_dict['trimmed_fastq']
+        make_readDistributions(args_dict)
+        args_dict['input'] = args_dict['alignments']
+        make_metagene(args_dict)
 
         msg_finish()
 
@@ -163,12 +176,15 @@ def main(args=None):
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        matrix_location = str(args_dict['experiment']) + 'counts_table.csv'
         #Normalize
-        args_dict['data'] = matrix_location
-        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
+        args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
+        args_dict['input'] = args_dict['trimmed_fastq']
+        make_readDistributions(args_dict)
+        args_dict['input'] = args_dict['alignments']
+        make_metagene(args_dict)
 
         msg_finish()
 
@@ -192,12 +208,16 @@ def main(args=None):
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        matrix_location = str(args_dict['experiment']) + 'counts_table.csv'
         #Normalize
-        args_dict['data'] = matrix_location
-        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
+        args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
+        args_dict['input'] = args_dict['trimmed_fastq']
+        make_readDistributions(args_dict)
+        args_dict['input'] = args_dict['alignments']
+        make_periodicity(args_dict)
+        make_metagene(args_dict)
 
         msg_finish()
 

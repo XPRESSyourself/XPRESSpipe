@@ -313,7 +313,7 @@ def get_arguments(args, __version__):
     """
     PERIODICITY SUBPARSER
     """
-    period_parser = subparser.add_parser('periodicity', description='', add_help=False)
+    period_parser = subparser.add_parser('periodicity', description='Calculate periodicity of transcripts using the most abundant transcript length for alignments to map per sample', add_help=False)
     #Required arguments
     period_reqs = period_parser.add_argument_group('required arguments')
     period_reqs.add_argument()
