@@ -30,8 +30,8 @@ from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq
 from .count import create_bed, create_bigwig, count_reads, collect_counts, run_normalization
 from .rrnaprobe import rrnaProbe
-from .utils import get_probe_files
-from .quality import *#FILL THESE IN ONCE CREATED
+from .utils import get_probe_files, create_reference
+from .quality import make_metagene, make_readDistributions, make_periodicity
 from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf
 
 """
@@ -69,9 +69,9 @@ def main(args=None):
             raise Exception('Invalid type argument provided')
         #Get other formatted files
         if args_dict['output_bed'] == True:
-            create_bed(args_dict['output'], args_dict['aligndir'])
+            create_bed(args_dict['output'], args_dict['alignments'])
         if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict['output'], args_dict['aligndir'])
+            create_bigwig(args_dict['output'], args_dict['alignments'])
 
     elif args.cmd == 'count':
         msg_count()
@@ -81,12 +81,21 @@ def main(args=None):
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
 
-    elif args.cmd == 'quality':
-        print('coming soon')
+    elif args.cmd == 'metagene':
+        make_metagene()
+
+    elif args.cmd == 'readDistribution':
+        make_readDistributions()
+
+    elif args.cmd == 'periodicity':
+        make_periodicity()
 
     elif args.cmd == 'truncate':
         output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
+
+    elif args.cmd == 'createReference':
+        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'])
 
     elif args.cmd == 'rrnaProbe':
         #Get files to probe
@@ -111,16 +120,16 @@ def main(args=None):
         args_dict = run_trim(args_dict)
         #Align
         msg_align()
-        args_dict['input'] = args_dict['trimdir']
+        args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_seRNAseq(args_dict)
         #Get other formatted files
         if args_dict['output_bed'] == True:
-            create_bed(args_dict['output'], args_dict['aligndir'])
+            create_bed(args_dict['output'], args_dict['alignments'])
         if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict['output'], args_dict['aligndir'])
+            create_bigwig(args_dict['output'], args_dict['alignments'])
         #Count reads for each alignment file
         msg_count()
-        args_dict['input'] = args_dict['aligndir']
+        args_dict['input'] = args_dict['alignments']
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
@@ -130,6 +139,7 @@ def main(args=None):
         args_dict['data'] = matrix_location
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         run_normalization(args_dict)
+        #Run quality control
 
         msg_finish()
 
@@ -139,16 +149,16 @@ def main(args=None):
         args_dict = run_trim(args_dict)
         #Align
         msg_align()
-        args_dict['input'] = args_dict['trimdir']
+        args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_peRNAseq(args_dict)
         #Get other formatted files
         if args_dict['output_bed'] == True:
-            create_bed(args_dict['output'], args_dict['aligndir'])
+            create_bed(args_dict['output'], args_dict['alignments'])
         if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict['output'], args_dict['aligndir'])
+            create_bigwig(args_dict['output'], args_dict['alignments'])
         #Count reads for each alignment file
         msg_count()
-        args_dict['input'] = args_dict['aligndir']
+        args_dict['input'] = args_dict['alignments']
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
@@ -158,6 +168,7 @@ def main(args=None):
         args_dict['data'] = matrix_location
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         run_normalization(args_dict)
+        #Run quality control
 
         msg_finish()
 
@@ -167,16 +178,16 @@ def main(args=None):
         args_dict = run_trim(args_dict)
         #Align
         msg_align()
-        args_dict['input'] = args_dict['trimdir']
+        args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_seRNAseq(args_dict)
         #Get other formatted files
         if args_dict['output_bed'] == True:
-            create_bed(args_dict['output'], args_dict['aligndir'])
+            create_bed(args_dict['output'], args_dict['alignments'])
         if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict['output'], args_dict['aligndir'])
+            create_bigwig(args_dict['output'], args_dict['alignments'])
         #Count reads for each alignment file
         msg_count()
-        args_dict['input'] = args_dict['aligndir']
+        args_dict['input'] = args_dict['alignments']
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
@@ -186,6 +197,7 @@ def main(args=None):
         args_dict['data'] = matrix_location
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         run_normalization(args_dict)
+        #Run quality control
 
         msg_finish()
 

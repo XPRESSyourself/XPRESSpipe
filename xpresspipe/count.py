@@ -26,7 +26,7 @@ import os, sys
 import datetime
 import pandas as pd
 from expresstools import count_table
-from .utils import get_files
+from .utils import get_files, add_directory
 from .parallel import parallize
 
 """
@@ -40,13 +40,6 @@ def sam2bam(path, file):
 """
 DESCRIPTION: Convert sorted sam files in directory to bed files
 """
-def add_bed_directories(args_dict):
-
-    os.system('mkdir ' + args_dict['output'] + 'bed')
-    args_dict['bed'] = str(str(args_dict['output']) + 'bed/')
-
-    return args_dict
-
 def bed_convert(args):
 
     file, args_dict = args[0], args[1]
@@ -60,12 +53,12 @@ def bed_convert(args):
         raise Exception('Incorrect input file')
 
     #Convert BAM to BED
-    os.system('bedtools bamtobed -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam > ' + str(args_dict['bed']) + str(file[:-4]) + '.bed')
+    os.system('bedtools bamtobed -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
 
 def create_bed(output, directory):
 
     #Add output directories
-    args_dict = add_bed_directories(args_dict)
+    args_dict = add_directory(args_dict, 'output', 'bed_files')
 
     #Get list of files to convert based on acceptable file types
     files = get_files(args_dict['input'], ['.sam', '.bam'])
@@ -78,13 +71,6 @@ def create_bed(output, directory):
 """
 DESCRIPTION: Convert sorted sam files in directory to bigwig files
 """
-def add_bigwig_directories(args_dict):
-
-    os.system('mkdir ' + args_dict['output'] + 'bigwig')
-    args_dict['bigwig'] = str(str(args_dict['output']) + 'bigwig/')
-
-    return args_dict
-
 def bigwig_convert(args):
 
     file, args_dict = args[0], args[1]
@@ -98,12 +84,12 @@ def bigwig_convert(args):
         raise Exception('Incorrect input file')
 
     #Convert BAM to bigwig
-    os.system('bamCoverage -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam -o ' + str(args_dict['bigwig']) + str(file[:-4]) + '.bw')
+    os.system('bamCoverage -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam -o ' + str(args_dict['bigwig_files']) + str(file[:-4]) + '.bw')
 
 def create_bigwig(output, directory):
 
     #Add output directories
-    args_dict = add_bigwig_directories(args_dict)
+    args_dict = add_directory(args_dict, 'output', 'bigwig_files')
 
     #Get list of files to convert based on acceptable file types
     files = get_files(args_dict['input'], ['.sam', '.bam'])
@@ -116,13 +102,6 @@ def create_bigwig(output, directory):
 """
 DESCRIPTION: Compile counts tables from HTseq output files
 """
-def add_count_directories(args_dict):
-
-    os.system('mkdir ' + args_dict['output'] + 'counts')
-    args_dict['counts'] = str(str(args_dict['output']) + 'counts/')
-
-    return args_dict
-
 def count_file(args):
 
     file, args_dict = args[0], args[1]
@@ -149,7 +128,7 @@ def count_file(args):
 def count_reads(args_dict):
 
     #Add output directories
-    args_dict = add_count_directories(args_dict)
+    args_dict = add_directory(args_dict, 'output', 'counts')
 
     #Get list of files to count based on acceptable file types
     files = get_files(args_dict['input'], ['.csv'])
@@ -165,7 +144,7 @@ DESCRIPTION: Take directory of single counts files and collate into single table
 def collect_counts(args_dict):
 
     #Add output directories
-    args_dict = add_count_directories(args_dict)
+    args_dict = add_directory(args_dict, 'output', 'counts')
 
     #Get list of files to count based on acceptable file types
     files = get_files(args_dict['input'], ['.csv'])

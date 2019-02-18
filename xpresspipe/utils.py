@@ -39,6 +39,16 @@ def check_directories(directory):
     return directory
 
 """
+DESCRIPTION: Create output directory
+"""
+def add_directory(args_dict, parent, name):
+
+    os.system('mkdir ' + str(args_dict[str(parent)]) + str(name))
+    args_dict[name] = str(str(args_dict[str(parent)]) + str(name) + '/')
+
+    return args_dict
+
+"""
 DESCRIPTION: Make a list of the files in a given directory, based on list of acceptable file suffixes
 """
 def get_files(directory, suffix):
@@ -99,3 +109,23 @@ def unzip_files(directory):
                         os.system('gzip -d ' + str(directory) + str(f))
                     if s == '.zip':
                         os.system('unzip ' + str(directory) + str(f))
+
+"""
+DESCRIPTION: Create STAR reference genome
+
+output_directory= Path to output directory (empty directory)
+fasta_files= Path to genome fasta files
+gtf= Path and file name of reference gtf to build reference with
+"""
+def create_reference(output_directory, fasta_files, gtf, threads=8):
+
+    #Create output directory
+    output_directory = check_directories(output_directory)
+    os.system('mkdir ' + str(output_directory) + 'genome')
+
+    #Make space separated list of fasta files
+    fasta = get_files(fasta_files, ['.txt', '.fasta', '.fa'])
+    fasta_list = " ".join(fasta)
+
+    #Create reference
+    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome/ --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang 100 --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads))

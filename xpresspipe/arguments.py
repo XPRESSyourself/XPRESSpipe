@@ -249,15 +249,80 @@ def get_arguments(args, __version__):
         required=False)
 
     """
-    QUALITY SUBPARSER
+    METAGENE SUBPARSER
     """
-    _parser = subparser.add_parser('', description='', add_help=False)
+    metagene_parser = subparser.add_parser('metagene', description='Compile summarized metagene profiles for each sample in a directory', add_help=False)
     #Required arguments
-    _reqs = _parser.add_argument_group('required arguments')
-    _opts.add_argument()
+    metagene_reqs = metagene_parser.add_argument_group('required arguments')
+    metagene_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory of SAM alignment files',
+        required=True)
+    metagene_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    metagene_reqs.add_argument(
+        '--experiment',
+        help='Experiment name to name counts table -- if none provided, datetime is used to format file output name',
+        type=<str>,
+        required=True)
+    metagene_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        type=<str>,
+        required=True)
+    metagene_reqs.add_argument(
+        '-t', '--reference_type',
+        help='RefFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\",)',
+        type=<str>,
+        required=True)
     #Optional arguments
-    _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument()
+    metagene_opts = metagene_parser.add_argument_group('optional arguments')
+    metagene_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+
+    """
+    READ DISTRIBUTION SUBPARSER
+    """
+    distribution_parser = subparser.add_parser('readDistribution', description='Compile summarized distributions for each sample in a directory', add_help=False)
+    #Required arguments
+    distribution_reqs = distribution_parser.add_argument_group('required arguments')
+    distribution_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory of trimmed fastq (or untrimmed fastq) files',
+        required=True)
+    distribution_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    distribution_reqs.add_argument(
+        '--experiment',
+        help='Experiment name to name counts table -- if none provided, datetime is used to format file output name',
+        type=<str>,
+        required=True)
+    #Optional arguments
+    distribution_opts = distribution_parser.add_argument_group('optional arguments')
+    distribution_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+
+    """
+    PERIODICITY SUBPARSER
+    """
+    period_parser = subparser.add_parser('periodicity', description='', add_help=False)
+    #Required arguments
+    period_reqs = period_parser.add_argument_group('required arguments')
+    period_reqs.add_argument()
+    #Optional arguments
+    period_opts = period_parser.add_argument_group('optional arguments')
+    period_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
 
     """
     TRUNCATE SUBPARSER
@@ -278,10 +343,49 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     truncate_opts.add_argument(
         '-t', '--truncate_amount',
-        help='Path and file name of GTF reference file to process (default: %s)' % TRUNCATE,
+        help='Path and file name of GTF reference file to process (default: %s)' % 45,
         default=45,
         type=<int>,
+        required=False)
+    truncate_opts.add_argument(
+        '-c', '--create_refFlats',
+        help='Provide flag to output refFlat files for each transcript reference created',
+        action='store_true',
+        required=False)
+
+    """
+    REFERENCE SUBPARSER
+    """
+    reference_parser = subparser.add_parser('createReference', description='Create a STAR reference directory', add_help=False)
+    #Required arguments
+    reference_reqs = reference_parser.add_argument_group('required arguments')
+    reference_reqs.add_argument(
+        '-o', '--output',
+        help='Path to directory for output',
+        type=<str>,
         required=True)
+    reference_reqs.add_argument(
+        '-f', '--fasta',
+        help='Path to directory containing genomic fasta files',
+        type=<str>,
+        required=True)
+    reference_reqs.add_argument(
+        '-g', '--gtf',
+        help='Path and file name of reference GTF',
+        type=<str>,
+        required=True)
+    #Optional arguments
+    reference_opts = reference_parser.add_argument_group('optional arguments')
+    reference_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    reference_opts.add_argument(
+        '-t', '--threads',
+        help='Specify number of threads to use (default: %s)' % 8,
+        default=8,
+        type=<int>,
+        required=False)
 
     """
     RRNAPROBE SUBPARSER
