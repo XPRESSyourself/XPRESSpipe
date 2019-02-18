@@ -22,6 +22,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 IMPORT DEPENDENCIES
 """
+import pandas as pd
+import matplotlib
+matplotlib.use('agg') #remove need for -X server connect
+import matplotlib.pyplot as plt
+matplotlib.rcParams['font.sans-serif'] = "Arial"
+
+"""
+DESCRIPTION: Compile images from a list of metrics files using start and stop keys
+"""
 def compile_size_distribution(args_dict, path, file_list, line2find, line2stop, lab_x, lab_y, plot_type, experiment, dpi=600):
 
     #Keep axes happy to avoid 'IndexError: too many indices for array' error
@@ -65,19 +74,20 @@ def compile_size_distribution(args_dict, path, file_list, line2find, line2stop, 
                                 if data1 == '100':
                                     break
 
-    #prepare subplots
-    if file_number % 2 == 0:
-        ax_x = 0
-    else:
-        ax_x = 1
-
-    if file_number != 0:
+        #prepare subplots
         if file_number % 2 == 0:
-            ax_y += 1
+            ax_x = 0
+        else:
+            ax_x = 1
 
-    plot_title = str(experiment) + str(plot_type)
-    df.plot.line(x=lab_x, y=lab_y, title=plot_title, ax=axes[ax_y,ax_x])
-    file_number += 1
+        if file_number != 0:
+            if file_number % 2 == 0:
+                ax_y += 1
+
+        #Plot figure
+        plot_title = str(experiment) + str(plot_type)
+        df.plot.line(x=lab_x, y=lab_y, title=plot_title, ax=axes[ax_y,ax_x])
+        file_number += 1
 
     #Save catenated figure
     fig.savefig(args_dict['output'] + plot_title + '_summary.pdf', dpi=dpi)
