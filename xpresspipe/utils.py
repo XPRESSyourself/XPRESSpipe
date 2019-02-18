@@ -59,6 +59,31 @@ def get_files(directory, suffix):
     return tuple(file_list)
 
 """
+"""
+def get_probe_files(args_dict, suffix):
+
+    #Initialize blank file list to fill
+    probe_list = []
+
+    #Walk through raw data files within given directory
+    for subdir, dirs, files in os.walk(args_dict['input']):
+        for f in files:
+            for s in suffix:
+                if f.endswith(str(s)):
+                    file_list.append(f)
+
+
+    for x in args_dict['input']:
+        if x.endswith(str(suffix)) == True:
+            if 'footprint_only' in args_dict:
+                if 'FOOTPRINT' in x.upper() or 'FP' in x.upper() or 'RPF' in x.upper():
+                    probe_list.append(args_dict['input'] + x)
+            else:
+                probe_list.append(args_dict['input'] + x)
+
+    return tuple(probe_list)
+
+"""
 DESCRIPTION: Unzip all files from directory
 """
 def unzip_files(directory):

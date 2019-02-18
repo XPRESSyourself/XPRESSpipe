@@ -124,9 +124,12 @@ def run_peRNAseq(args_dict):
         #Get list of files to align based on acceptable file types
         files = get_files(args_dict['input'], ['.fastq','.fq','.txt'])
 
-        #Align paired-end RNAseq reads
-        parallelize_pe(pe_align, files, args_dict)
-        remove_intermediates(args_dict)
+        if len(files) % 2 != 0:
+            raise Exception('An uneven number of paired-end files were specified in the input directory')
+        else:
+            #Align paired-end RNAseq reads
+            parallelize_pe(pe_align, files, args_dict)
+            remove_intermediates(args_dict)
 
         return args_dict
 

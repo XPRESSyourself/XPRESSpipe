@@ -146,8 +146,7 @@ def count_file(args):
     #Count
     os.system('htseq-count ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.csv')
 
-
-def count_reads(args_dict, gtf_type):
+def count_reads(args_dict):
 
     #Add output directories
     args_dict = add_count_directories(args_dict)
@@ -184,3 +183,35 @@ def collect_counts(args_dict):
     else:
         cdt = datetime.datetime.now()
         count_table.to_csv(str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.csv')
+
+"""
+DESCRIPTION: Run normalization of count dataframe
+"""
+def run_normalization(args_dict):
+    if 'method' in args_dict:
+        #RPM normalization
+        if args_dict['method'].upper() == 'RPM':
+            type = 'rpm'
+            df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = rpm(df)
+            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', sep=',')
+        #RPKM or FPKM normalization
+        elif args_dict['method'].upper() == 'RPKM' or args_dict['type'].upper() == 'FPKM':
+            type = 'r_fpkm'
+            df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = r_fpkm(df)
+            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', sep=',')
+        #Log normalization
+        elif args_dict['method'].upper() == 'LOG':
+            type = 'log'
+            df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = log_scale(df, log_base=10)
+            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', sep=',')
+        else:
+            raise Exception('Unknown \"method\" argument provided')
+    #Run in batch normalization
+        if 'batch' in args_dict:
+            batch_normalize(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', args_dict['batch'], input_sep=',', batch_sep=',')
+    else:
+        if 'batch' in args_dict:
+            batch_normalize(args_dict['data'], args_dict['batch'], input_sep=',', batch_sep='\t')

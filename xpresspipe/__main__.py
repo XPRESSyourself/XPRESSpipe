@@ -28,12 +28,11 @@ from .messages import *
 from .arguments import get_arguments
 from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq
-from .count import create_bed, create_bigwig, count_reads, collect_counts
+from .count import create_bed, create_bigwig, count_reads, collect_counts, run_normalization
 from .rrnaprobe import rrnaProbe
-from xpresstools import truncate
-
-#batch correct, rename, normalize
-from .quality import *
+from .utils import get_probe_files
+from .quality import *#FILL THESE IN ONCE CREATED
+from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf
 
 """
 DESCRIPTION: Main function to call necessary functions for sub-modules
@@ -52,12 +51,16 @@ def main(args=None):
     except:
         raise Exception("There was an issue in processing the arguments for the provided function.")
 
+    #Sort files in
+
     #Execute corresponding functions determined by arguments provided by user
     if args.cmd == 'trim':
+        msg_trim()
         run_trim(args_dict)
 
     elif args.cmd == 'align':
         #Align
+        msg_align()
         if args_dict['type'].upper() == 'SE':
             args_dict = run_seRNAseq(args_dict)
         elif args_dict['type'].upper() == 'PE':
@@ -71,29 +74,43 @@ def main(args=None):
             create_bigwig(args_dict['output'], args_dict['aligndir'])
 
     elif args.cmd == 'count':
-        print('coming soon')
+        msg_count()
+        #Count reads for each alignment file
+        args_dict = count_reads(args_dict)
+        #Collect counts into a single table
+        args_dict['input'] = args_dict['counts']
+        collect_counts(args_dict)
 
     elif args.cmd == 'quality':
         print('coming soon')
 
     elif args.cmd == 'truncate':
-        print('coming soon')
-        #Run straight from XPRESStools
-        truncate()
+        output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
+        truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
 
     elif args.cmd == 'rrnaProbe':
-        print('coming soon')
+        #Get files to probe
+        probe_list = get_probe_files(args_dict, '.zip')
+        #Run rrna_prober, output to outputDir
+        probe_out = rrnaProbe(probe_list, args_dict['min_overlap']) #use inputDir to get FASTQC files and output to outputDir/analysis
+        #Output summary
+        with open(args_dict['output'] + 'rrnaProbe_output.txt', "w") as text_file:
+            print(probe_out, file=text_file)
 
     elif args.cmd == 'convertNames':
-        print('coming soon')
+        #Convert row names in dataframe
+        convert_names_gtf(args_dict['data'], args_dict['gtf'], orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'], new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'], refill=args_dict['refill'], sep='\t')
 
-    elif args.cmd == 'normalizeTable':
-        print('coming soon')
+    elif args.cmd == 'normalizeMatrix':
+        #Run in sample normalization
+        run_normalization(args_dict)
 
     elif args.cmd == 'seRNAseq':
         #Trim
+        msg_trim()
         args_dict = run_trim(args_dict)
         #Align
+        msg_align()
         args_dict['input'] = args_dict['trimdir']
         args_dict = run_seRNAseq(args_dict)
         #Get other formatted files
@@ -101,14 +118,27 @@ def main(args=None):
             create_bed(args_dict['output'], args_dict['aligndir'])
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict['output'], args_dict['aligndir'])
-        #Count
+        #Count reads for each alignment file
+        msg_count()
         args_dict['input'] = args_dict['aligndir']
+        args_dict = count_reads(args_dict)
+        #Collect counts into a single table
+        args_dict['input'] = args_dict['counts']
+        collect_counts(args_dict)
+        matrix_location = str(args_dict['experiment']) + 'counts_table.csv'
+        #Normalize
+        args_dict['data'] = matrix_location
+        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        run_normalization(args_dict)
 
+        msg_finish()
 
     elif args.cmd == 'peRNAseq':
         #Trim
+        msg_trim()
         args_dict = run_trim(args_dict)
         #Align
+        msg_align()
         args_dict['input'] = args_dict['trimdir']
         args_dict = run_peRNAseq(args_dict)
         #Get other formatted files
@@ -116,14 +146,27 @@ def main(args=None):
             create_bed(args_dict['output'], args_dict['aligndir'])
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict['output'], args_dict['aligndir'])
-        #Count
+        #Count reads for each alignment file
+        msg_count()
         args_dict['input'] = args_dict['aligndir']
+        args_dict = count_reads(args_dict)
+        #Collect counts into a single table
+        args_dict['input'] = args_dict['counts']
+        collect_counts(args_dict)
+        matrix_location = str(args_dict['experiment']) + 'counts_table.csv'
+        #Normalize
+        args_dict['data'] = matrix_location
+        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        run_normalization(args_dict)
 
+        msg_finish()
 
     elif args.cmd == 'riboprof':
         #Trim
+        msg_trim()
         args_dict = run_trim(args_dict)
         #Align
+        msg_align()
         args_dict['input'] = args_dict['trimdir']
         args_dict = run_seRNAseq(args_dict)
         #Get other formatted files
@@ -131,9 +174,20 @@ def main(args=None):
             create_bed(args_dict['output'], args_dict['aligndir'])
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict['output'], args_dict['aligndir'])
-        #Count
+        #Count reads for each alignment file
+        msg_count()
         args_dict['input'] = args_dict['aligndir']
+        args_dict = count_reads(args_dict)
+        #Collect counts into a single table
+        args_dict['input'] = args_dict['counts']
+        collect_counts(args_dict)
+        matrix_location = str(args_dict['experiment']) + 'counts_table.csv'
+        #Normalize
+        args_dict['data'] = matrix_location
+        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        run_normalization(args_dict)
 
+        msg_finish()
 
     else:
         raise Exception("Invalid function processing function provided.")

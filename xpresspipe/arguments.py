@@ -117,7 +117,9 @@ def get_arguments(args, __version__):
     """
     subparser = parser.add_subparsers(title='Sub-modules', description='Choose one of the following:', dest='cmd')
 
-    #TRIM subparser
+    """
+    TRIM SUBPARSER
+    """
     trim_parser = subparser.add_parser('trim', description='Trim RNAseq reads of adaptors and for quality', add_help=False)
     #Required arguments
     trim_reqs = trim_parser.add_argument_group('required arguments')
@@ -161,7 +163,9 @@ def get_arguments(args, __version__):
         default=DEFAULT_MAX_PROCESSORS,
         required=False)
 
-    #ALIGN subparser
+    """
+    ALIGN SUBPARSER
+    """
     align_parser = subparser.add_parser('align', description='Align RNAseq reads to reference genome', add_help=False)
     #Required arguments
     align_reqs = align_parser.add_argument_group('required arguments')
@@ -184,6 +188,10 @@ def get_arguments(args, __version__):
     #Optional arguments
     align_opts = align_parser.add_argument_group('optional arguments')
     align_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    align_opts.add_argument(
         '--output_bed',
         help='Include flag to output BED files for each aligned file',
         action='store_true',
@@ -193,26 +201,56 @@ def get_arguments(args, __version__):
         help='Include flag to output bigwig files for each aligned file',
         action='store_true',
         required=False)
+    align_opts.add_argument(
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
+        metavar='<int>',
+        default=DEFAULT_MAX_PROCESSORS,
+        required=False)
 
-    #COUNT subparser
-    _parser = subparser.add_parser('', description='', add_help=False)
+    """
+    COUNT SUBPARSER
+    """
+    count_parser = subparser.add_parser('count', description='Get counts and a counts table from aligned output', add_help=False)
     #Required arguments
-    _reqs = _parser.add_argument_group('required arguments')
-    _opts.add_argument()
+    count_reqs = count_parser.add_argument_group('required arguments')
+    count_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory',
+        required=True)
+    count_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    count_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        required=True)
     #Optional arguments
-    _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument(
+    count_opts = count_parser.add_argument_group('optional arguments')
+    count_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    count_opts.add_argument(
+        '--count_coding',
+        help='Count reads to coding transcripts only (coding reference should be added to the \"reference\" parent directory)',
+        action='store_true',
+        required=False)
+    count_opts.add_argument(
         '--truncate',
         help='Count reads to truncated reference (truncated reference should be added to the \"reference\" parent directory)',
-        type=bool,
+        action='store_true',
         required=False)
-    _opts.add_argument(
+    count_opts.add_argument(
         '--experiment',
-        help='Experiment name',
+        help='Experiment name to name counts table -- if none provided, datetime is used to format file output name',
         type=<str>,
         required=False)
 
-    #QUALITY subparser
+    """
+    QUALITY SUBPARSER
+    """
     _parser = subparser.add_parser('', description='', add_help=False)
     #Required arguments
     _reqs = _parser.add_argument_group('required arguments')
@@ -221,30 +259,154 @@ def get_arguments(args, __version__):
     _opts = _parser.add_argument_group('optional arguments')
     _opts.add_argument()
 
-    #TRUNCATE subparser
-    _parser = subparser.add_parser('', description='', add_help=False)
+    """
+    TRUNCATE SUBPARSER
+    """
+    truncate_parser = subparser.add_parser('truncate', description='Create a coding-only and coding-only truncated reference GTF', add_help=False)
     #Required arguments
-    _reqs = _parser.add_argument_group('required arguments')
-    _opts.add_argument()
+    truncate_reqs = truncate_parser.add_argument_group('required arguments')
+    truncate_reqs.add_argument(
+        '-g', '--gtf',
+        help='Path and file name of GTF reference file to process',
+        type=<str>,
+        required=True)
     #Optional arguments
-    _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument()
+    truncate_opts = truncate_parser.add_argument_group('optional arguments')
+    truncate_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    truncate_opts.add_argument(
+        '-t', '--truncate_amount',
+        help='Path and file name of GTF reference file to process (default: %s)' % TRUNCATE,
+        default=45,
+        type=<int>,
+        required=True)
 
-    #RRNAPROBE subparser
-    _parser = subparser.add_parser('', description='', add_help=False)
+    """
+    RRNAPROBE SUBPARSER
+    """
+    probe_parser = subparser.add_parser('rrnaProbe', description='Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT: Run a BLAST search on sequences you choose to use as depletion probes to verify they are rRNAs)', add_help=False)
     #Required arguments
-    _reqs = _parser.add_argument_group('required arguments')
-    _opts.add_argument()
+    probe_reqs = probe_parser.add_argument_group('required arguments')
+    probe_reqs.add_argument(
+        "-i", "--input",
+        help="Path to zipped files ",
+        metavar='<string>',
+        required=True)
+    probe_reqs.add_argument(
+        "-o", "--output",
+        help="Output file name to write output to",
+        metavar='<string>',
+        required=True)
     #Optional arguments
-    _opts = _parser.add_argument_group('optional arguments')
-    _opts.add_argument()
+    probe_opts = probe_parser.add_argument_group('optional arguments')
+    probe_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    probe_opts.add_argument(
+        '-m', '--min_overlap',
+        help='Minimum number of bases that must match on a side to combine sequences (default: %s)' % OVERLAP,
+        default=5,
+        metavar='<int>',
+        required=False)
+    probe_opts.add_argument(
+        '--footprint_only',
+        help='Only take zip files that are ribosome profiling footprints (file names must contain \"FP\", \"RPF\", or \"FOOTPRINT\")',
+        action='store_true',
+        required=False)
 
-    #GENENAMECONVERT subparser
+    """
+    CONVERTNAMES SUBPARSER
+    """
+    convert_parser = subparser.add_parser('convertNames', description='Convert gene identifiers using a GTF reference', add_help=False)
+    #Required arguments
+    convert_reqs = convert_parser.add_argument_group('required arguments')
+    convert_reqs.add_argument(
+        '-d', '--data',
+        help='Path and file name to sequence dataframe',
+        metavar='<string>',
+        required=True)
+    convert_reqs.add_argument(
+        '-g', '--gtf',
+        help='Path and file name to reference GTF',
+        metavar='<string>',
+        required=True)
+    #Optional arguments
+    convert_opts = convert_parser.add_argument_group('optional arguments')
+    convert_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    convert_opts.add_argument(
+        '--orig_name_label',
+        help='Label of original name (usually \"gene_id \")',
+        default='gene_id \"',
+        metavar='<str>',
+        required=False)
+    convert_opts.add_argument(
+        '--orig_name_location',
+        help='Position in last column of GTF where relevant data is found (i.e. 0 would be the first sub-string before the first comma, 3 would be the third sub-string after the second comma before the third comma)',
+        default=0,
+        metavar='<int>',
+        required=False)
+    convert_opts.add_argument(
+        '--new_name_label',
+        help='Label of original name (usually \"gene_name \")',
+        default='gene_name \"',
+        metavar='<str>',
+        required=False)
+    convert_opts.add_argument(
+        '--new_name_location',
+        help='Position in last column of GTF where relevant data is found (i.e. 0 would be the first sub-string before the first comma, 3 would be the third sub-string after the second comma before the third comma)',
+        default=2,
+        metavar='<int>',
+        required=False)
+    convert_opts.add_argument(
+        '--refill',
+        help='In some cases, where common gene names are unavailable, the dataframe will fill the gene name with the improper field of the GTF. In this case, specify this improper string and these values will be replaced with the original name',
+        default=None,
+        metavar='<str>',
+        required=False)
 
-    #NORMALIZE subparser
+    """
+    NORMALIZE SUBPARSER
+    """
+    normalize_parser = subparser.add_parser('normalizeMatrix', description='Perform normalization on sequence matrix', add_help=False)
+    #Required arguments
+    normalize_reqs = normalize_parser.add_argument_group('required arguments')
+    normalize_reqs.add_argument(
+        '-d', '--data',
+        help='Path and file name to sequence dataframe',
+        metavar='<string>',
+        required=True)
+    #Optional arguments
+    normalize_opts = normalize_parser.add_argument_group('optional arguments')
+    normalize_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    normalize_opts.add_argument(
+        '-m', '--method',
+        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a GTF reference file must be included',
+        metavar='<string>',
+        required=False)
+    normalize_opts.add_argument(
+        '-g', '--gtf',
+        help='Path and file name to reference GTF',
+        metavar='<string>',
+        required=False)
+    normalize_opts.add_argument(
+        '--batch',
+        help='Include path and filename of dataframe with batch normalization parameters',
+        metavar='<string>',
+        required=False)
 
-    #SERNASEQ subparser
-    se_parser = subparser.add_parser('', description='', add_help=False)
+    """
+    SERNASEQ SUBPARSER
+    """
+    se_parser = subparser.add_parser('seRNAseq', description='Trim, align, count, and perform quality control on single-end RNAseq raw data', add_help=False)
     #Required arguments
     se_reqs = se_parser.add_argument_group('required arguments')
     se_reqs.add_argument(
@@ -259,8 +421,17 @@ def get_arguments(args, __version__):
         '-r', '--reference',
         help='Path to parent organism reference directory',
         required=True)
+    se_reqs.add_argument(
+        '-e', '--experiment',
+        help='Experiment name',
+        type=<str>,
+        required=True)
     #Optional arguments
     se_opts = se_parser.add_argument_group('optional arguments')
+    se_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
     se_opts.add_argument(
         '--output_bed',
         help='Include option to output BED files for each aligned file',
@@ -277,13 +448,20 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     se_opts.add_argument(
-        '--experiment',
-        help='Experiment name',
-        type=<str>,
+        '-m', '--method',
+        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<string>',
+        required=False)
+    se_opts.add_argument(
+        '--batch',
+        help='Include path and filename of dataframe with batch normalization parameters',
+        metavar='<string>',
         required=False)
 
-    #PERNASEQ subparser
-    pe_parser = subparser.add_parser('', description='', add_help=False)
+    """
+    PERNASEQ SUBPARSER
+    """
+    pe_parser = subparser.add_parser('peRNAseq', description='Trim, align, count, and perform quality control on paired-end RNAseq raw data', add_help=False)
     #Required arguments
     pe_reqs = pe_parser.add_argument_group('required arguments')
     pe_reqs.add_argument(
@@ -298,8 +476,17 @@ def get_arguments(args, __version__):
         '-r', '--reference',
         help='Path to parent organism reference directory',
         required=True)
+    pe_reqs.add_argument(
+        '--experiment',
+        help='Experiment name',
+        type=<str>,
+        required=True)
     #Optional arguments
     pe_opts = pe_parser.add_argument_group('optional arguments')
+    pe_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
     pe_opts.add_argument(
         '--output_bed',
         help='Include option to output BED files for each aligned file',
@@ -316,13 +503,20 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     pe_opts.add_argument(
-        '--experiment',
-        help='Experiment name',
-        type=<str>,
+        '-m', '--method',
+        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<string>',
+        required=False)
+    pe_opts.add_argument(
+        '--batch',
+        help='Include path and filename of dataframe with batch normalization parameters',
+        metavar='<string>',
         required=False)
 
-    #RIBOPROF subparser
-    rp_parser = subparser.add_parser('', description='', add_help=False)
+    """
+    RIBOPROF SUBPARSER
+    """
+    rp_parser = subparser.add_parser('riboprof', description='Trim, align, count, and perform quality control on single-end Ribosome Profiling raw data', add_help=False)
     #Required arguments
     rp_reqs = rp_parser.add_argument_group('required arguments')
     rp_reqs.add_argument(
@@ -337,8 +531,17 @@ def get_arguments(args, __version__):
         '-r', '--reference',
         help='Path to parent organism reference directory',
         required=True)
+    rp_reqs.add_argument(
+        '--experiment',
+        help='Experiment name',
+        type=<str>,
+        required=True)
     #Optional arguments
     rp_opts = rp_parser.add_argument_group('optional arguments')
+    rp_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
     rp_opts.add_argument(
         '--output_bed',
         help='Include option to output BED files for each aligned file',
@@ -360,9 +563,14 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     rp_opts.add_argument(
-        '--experiment',
-        help='Experiment name',
-        type=<str>,
+        '-m', '--method',
+        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<string>',
+        required=False)
+    rp_opts.add_argument(
+        '--batch',
+        help='Include path and filename of dataframe with batch normalization parameters',
+        metavar='<string>',
         required=False)
 
     """
