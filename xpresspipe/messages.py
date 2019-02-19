@@ -22,7 +22,6 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 #All ASCII art from http://ascii.co.uk/art
 import time
 
-
 """
 FUNCTIONS
 """
