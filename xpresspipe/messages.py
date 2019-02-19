@@ -20,6 +20,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 #All ASCII art from http://ascii.co.uk/art
+import time
+
 
 """
 FUNCTIONS
@@ -47,9 +49,12 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
     """)
 
+def msg_complete():
+    print('Process complete.')
+
 #trim submodule
 def msg_trim():
-    print("""\n************************\nRiboPipe initialized...
+    print("""\n************************\nXPRESSpipe initialized...
         \nAdaptor and quality trimming...\n
   _       ,/'
  (_).  ,/'
@@ -58,11 +63,49 @@ def msg_trim():
            `\.
         \n************************\n""")
 
+    time.sleep(2)
+
 #align submodule
 def msg_align():
     print("""\n************************\nTrimming complete
         \nAligning...\n
+                                                    __________
+|             _,---.                          _..--'/          \              |
+|          ,-'      )                    _,-,'     /            \             |
+|         (          )               _,-'  /      /              \            |
+|          `-.__, -'             _,-/     /     _/ ,------------. \           |
+|     ,--._,---.             _,-'  /     /_,--'' | |     Who    | |           |
+|   _(_,-'      )        _,-'/    /_, - '|       | |     is     | |           |
+| ,'  (        )      ,'/   /_, -'|      ||_  -  | |    John    | |           |
+|(     `--._,-'    _,' /_,-'|     ||_  - |       | |    Galt    | |           |
+| `--.__,-'     _,'/,-'|  - ||_ - |      ||_  -  | |      ?     | |           |
+|            _,'/,'|  - ___ |     ||_  - |       | `------------' |           |
+|        _ ,' |_' -|- _(   ) |_   |      ||_  -  |                |           |
+|       ( ): ((`) -| (. `-/ )   - ||_  - |       |                |           |
+|      ` | '(-.,') '( _\`/-') _ - |      | _   - |                |           |
+|        `   (_.) -(_._ \|,-_)    ||_  - |       |                |           |
+| .        `. || ` | (_\||_)  _ - |      ||_  -  |                |           |
+|             `.    ` . ||  |   - ||_  - |       |                |           |
+|                `.     ||-.|  :  |  _   ||_   - |     __________ |           |
+|                   `.  ||    ` -.|   |  |   _   |    | _Doener_ |`'--.._     |
+|                      `.           ` - .|  | |  |    || ()._o  ||   __ |     |
+|\           `            `.   `           ` -' .|____|`'---.|>_||  |. ||     |
+|                            `.                         `' -- .._|__|__||     |
+|                      ,----.---------- .                            .-_.     |
+|   _                 |.`.,' `.           `.                         || |     |
+|    \                \ _|`. / `.            `.                       |_o     |
+|     \                | \  `.   \.-----_-----.\     `                        |
+|      \               `.|.`| `./ \\  c__)___/ \ \\             .               |
+|       \        `         `.   `. \\____\___)__\ \\                            |
+|                            `. _ `.\`____________\                           |
+|                              | \  |_|   ____   |_|                          |
+|          _                   `.|\ |#|__[jrei]__|_|`.                        |
+|           \                      `================'  `.                     |
+
+
         \n************************\n""")
+
+    time.sleep(2)
 
 #count submodule
 def msg_count():
@@ -97,63 +140,56 @@ def msg_count():
         \nGenerating count tables...\n
         1...2...3...4...5...6...7...8...9...
         \n************************\n""")
+    time.sleep(2)
 
-#check output submodule
-def msg_checking():
+#Normalize
+def msg_normalize():
     print("""\n************************\nCount tables generated
-        \nGenerating quality control summaries...\n
+        \nNormalizing counts based on parameters provided...\n
+                           ___,
+                    o___.-' /
+                    |      _\_
+                    |___.-'   `
+                    |
+                    |
+            _   _   j   _   _
+           [_]_[_]_[_]_[_]_[_]
+           [__j__j__j__j__j__]
+             [_j__j__j__j__]
+             [__j__j__j__j_]
+             [_j__j/V\_j__j]
+             [__j_// \\__j_]
+             [_j__|   |_j__]
+             [__j_|___|__j_]
+             [_j__j__j__j__]
+             [__j__j__j__j_]
+  _   _   _  [_j__j__j__j__]  _   _   _   _
+_[_]_[_]_[_]_[__j__j__j__j_]_[_]_[_]_[_]_[_]_
+  _j__j__j__j[_j__j__j__j__]j__j__j__j__j_
+     j  j  j [  j  j  j  j ] j  j  j  j
+        \n************************\n""")
+
+    time.sleep(2)
+
+#Quality control
+def msg_quality():
+    print("""
+    \n****************\nNormalization complete\n****************\n
+    \n*********************\nPerforming quality control on the processed sequencing data...\n*********************\n
       _               _               _
      | |             | |             | |
   ___| |__   ___  ___| | _____  _   _| |_
  / __| '_ \ / _ \/ __| |/ / _ \| | | | __|
 | (__| | | |  __/ (__|   < (_) | |_| | |_
  \___|_| |_|\___|\___|_|\_\___/ \__,_|\__|
-        \n************************\n""")
-
-#clean submodule
-def msg_cleaning():
-    print("""
-    \n****************\nQuality control summaries complete\n****************\n
-    \n*********************\nCleaning up the output...\n*********************\n
-    .-.
-    | |
-    |=|
-    |=|
-    | |
-    | |
-    | |
-    | |
-    | |
-    | |
-    | |
-    | |
-    | |
-    | |
-    | |
-    |=|
-    |=|
-    |_|
-  .=/I\=.
- ////V\\\\
- |#######|
- |||||||||
- |||||||||
- |||||||||
  \n***********************************************************************\n""")
+
+    time.sleep(2)
 
 #final message
 def msg_finish():
     print("""
-    \n************************\nRiboPipe processing complete
-    \nIt is recommended that you check the number of uniquely mapped reads in
-    each of the samples. Samples with less than 2 million mapped reads are often
-    considered to not allow for accuracy in downstream analyses. This number can
-    vary from organism to organism.
-    This information can be found in the
-    .../outputDir/assembly/counts/XXX_raw_counts_compiled.csv output file.
-    \nPlease refer to the diffex sub-module for differential expression analysis: 'ribopipe diffex --help'
-    \nOther programs for differential expression analysis in ribosome profiling
-    data include Xtail and RiboDiff
-    https://www.ncbi.nlm.nih.gov/pubmed/27041671
-    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5198522/\n*******************\n
+    \n************************\nQuality control complete
+    \n************************\nXPRESSpipe processing complete
+    \n*******************\n
         """)

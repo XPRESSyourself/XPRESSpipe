@@ -65,12 +65,13 @@ def main(args=None):
 
     #Execute corresponding functions determined by arguments provided by user
     if args.cmd == 'trim':
-        msg_trim()
+        print('Trimming reads...')
         run_trim(args_dict)
+        msg_complete()
 
     elif args.cmd == 'align':
         #Align
-        msg_align()
+        print('Aligning reads to reference...')
         if args_dict['type'].upper() == 'SE':
             args_dict = run_seRNAseq(args_dict)
         elif args_dict['type'].upper() == 'PE':
@@ -82,47 +83,66 @@ def main(args=None):
             create_bed(args_dict['output'], args_dict['alignments'])
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict['output'], args_dict['alignments'])
+        msg_complete()
 
     elif args.cmd == 'count':
-        msg_count()
+        print('Counting alignments...')
         #Count reads for each alignment file
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
+        print('Collecting and collating counts...')
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
+        msg_complete()
 
     elif args.cmd == 'metagene':
+        print('Performing metagene analysis on SAM files...')
         make_metagene(args_dict)
+        msg_complete()
 
     elif args.cmd == 'readDistribution':
+        print('Performing read distribution analysis on fastq files...')
         make_readDistributions(args_dict)
+        msg_complete()
 
     elif args.cmd == 'periodicity':
+        print('Performing periodicity analysis on most abundant read length in SAM files...')
         make_periodicity(args_dict)
+        msg_complete()
 
     elif args.cmd == 'truncate':
+        print('Formatting coding only and truncated reference files...')
         output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
+        msg_complete()
 
     elif args.cmd == 'createReference':
+        print('Creating reference files...')
         create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'])
+        msg_complete()
 
     elif args.cmd == 'rrnaProbe':
         #Get files to probe
         probe_list = get_probe_files(args_dict, '.zip')
         #Run rrna_prober, output to outputDir
+        print('Probing for most over-represented read sequences...')
         probe_out = rrnaProbe(probe_list, args_dict['min_overlap']) #use inputDir to get FASTQC files and output to outputDir/analysis
         #Output summary
         with open(args_dict['output'] + 'rrnaProbe_output.txt', "w") as text_file:
             print(probe_out, file=text_file)
+        msg_complete()
 
     elif args.cmd == 'convertNames':
         #Convert row names in dataframe
+        print('Converting row names...')
         convert_names_gtf(args_dict['data'], args_dict['gtf'], orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'], new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'], refill=args_dict['refill'], sep='\t')
+        msg_complete()
 
     elif args.cmd == 'normalizeMatrix':
         #Run in sample normalization
+        print('Normalizing matrix...')
         run_normalization(args_dict)
+        msg_complete()
 
     elif args.cmd == 'seRNAseq':
         #Trim
@@ -145,10 +165,12 @@ def main(args=None):
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
         #Normalize
+        msg_normalize()
         args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
+        msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
@@ -177,10 +199,12 @@ def main(args=None):
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
         #Normalize
+        msg_normalize()
         args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
+        msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
@@ -209,10 +233,12 @@ def main(args=None):
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
         #Normalize
+        msg_normalize()
         args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
+        msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
