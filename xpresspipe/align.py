@@ -52,7 +52,7 @@ def se_align(args):
     os.system('STAR --genomeDir ' + str(args_dict['intermediate_references']) + str(file[:-6]) + ' --readFilesIn ' + str(args_dict['input']) + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --limitBAMsortRAM 0 --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang 100 --outSAMstrandField intronMotif --outSAMattributes NH HI NM MD AS XS --outSAMunmapped Within --outSAMtype SAM SortedByCoordinate --outSAMheaderHD @HD VN:1.4 --outFileNamePrefix ' + str(args_dict['alignments']) + str(file[:-6]) + '_final_')
 
     #Create sam file with only unique hits
-    os.system('samtools sort ' + str(args_dict['alignments']) + str(file[:-6]) + '_final_Aligned.sam > ' + str(args_dict['alignments']) + str(file[:-6]) + '_sorted.sam')
+    os.system('samtools sort ' + str(args_dict['alignments']) + str(file[:-6]) + '_final_Aligned.sam -o ' + str(args_dict['alignments']) + str(file[:-6]) + '_sorted.sam')
     os.system('samtools view -q 255 ' + str(args_dict['alignments']) + str(file[:-6]) + '_sorted.sam > ' + str(args_dict['alignments']) + str(file[:-6]) + '_final.sam')
 
 """
@@ -73,7 +73,7 @@ def pe_align(args):
     os.system('STAR --genomeDir ' + str(args_dict['intermediate_references']) + str(file1[:-6]) + ' --readFilesIn ' + str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --limitBAMsortRAM 0 --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang 100 --outSAMstrandField intronMotif --outSAMattributes NH HI NM MD AS XS --outSAMunmapped Within --outSAMtype SAM SortedByCoordinate --outSAMheaderHD @HD VN:1.4 --outFileNamePrefix ' + str(args_dict['alignments']) + str(file1[:-6]) + '_final_')
 
     #Create sam file with only unique hits
-    os.system('samtools sort ' + str(args_dict['alignments']) + str(file1[:-6]) + '_final_Aligned.sam > ' + str(args_dict['alignments']) + str(file1[:-6]) + '_sorted.sam')
+    os.system('samtools sort ' + str(args_dict['alignments']) + str(file1[:-6]) + '_final_Aligned.sam -o ' + str(args_dict['alignments']) + str(file1[:-6]) + '_sorted.sam')
     os.system('samtools view -q 255 ' + str(args_dict['alignments']) + str(file1[:-6]) + '_sorted.sam > ' + str(args_dict['alignments']) + str(file1[:-6]) + '_final.sam')
 
     #Do paired reads need to be collated? -- downstream stuff assumes yes

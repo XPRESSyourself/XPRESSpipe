@@ -142,7 +142,7 @@ def get_arguments(args, __version__):
         metavar='<list>',
         nargs='+',
         default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide a list as ["autoPE"]',
         required=False)
     trim_opts.add_argument(
         '-q', '--quality',
@@ -567,6 +567,13 @@ def get_arguments(args, __version__):
         action='help',
         help='Show help message and exit')
     se_opts.add_argument(
+        '-a', '--adaptors',
+        metavar='<list>',
+        nargs='+',
+        default=None,
+        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        required=False)
+    se_opts.add_argument(
         '--output_bed',
         help='Include option to output BED files for each aligned file',
         action='store_true',
@@ -622,6 +629,13 @@ def get_arguments(args, __version__):
         action='help',
         help='Show help message and exit')
     pe_opts.add_argument(
+        '-a', '--adaptors',
+        metavar='<list>',
+        nargs='+',
+        default=None,
+        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide a list as ["autoPE"]',
+        required=False)
+    pe_opts.add_argument(
         '--output_bed',
         help='Include option to output BED files for each aligned file',
         action='store_true',
@@ -676,6 +690,13 @@ def get_arguments(args, __version__):
         '-h', '--help',
         action='help',
         help='Show help message and exit')
+    rp_opts.add_argument(
+        '-a', '--adaptors',
+        metavar='<list>',
+        nargs='+',
+        default=None,
+        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        required=False)
     rp_opts.add_argument(
         '--output_bed',
         help='Include option to output BED files for each aligned file',
