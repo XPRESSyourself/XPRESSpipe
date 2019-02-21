@@ -123,7 +123,7 @@ def count_file(args):
         raise Exception('Something went wrong in determining transcript reference file type')
 
     #Count
-    os.system('htseq-count ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.csv')
+    os.system('htseq-count ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 def count_reads(args_dict):
 
@@ -131,7 +131,7 @@ def count_reads(args_dict):
     args_dict = add_directory(args_dict, 'output', 'counts')
 
     #Get list of files to count based on acceptable file types
-    files = get_files(args_dict['input'], ['.csv'])
+    files = get_files(args_dict['input'], ['.sam'])
 
     #Count aligned RNAseq reads
     parallize(count_file, files, args_dict)
@@ -147,7 +147,7 @@ def collect_counts(args_dict):
     args_dict = add_directory(args_dict, 'output', 'counts')
 
     #Get list of files to count based on acceptable file types
-    files = get_files(args_dict['input'], ['.csv'])
+    files = get_files(args_dict['input'], ['.tsv'])
 
     #Append path to file list
     c = 0
