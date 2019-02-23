@@ -7,7 +7,8 @@ deeptools
 xpresstools
 picard
 fastqc
-plastid 
+plastid
+gtfToGenePred
 
 
 <b><u>USER GENERATED FILES</u></b>

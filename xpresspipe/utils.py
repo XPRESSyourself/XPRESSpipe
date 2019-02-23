@@ -117,7 +117,7 @@ output_directory= Path to output directory (empty directory)
 fasta_files= Path to genome fasta files
 gtf= Path and file name of reference gtf to build reference with
 """
-def create_reference(output_directory, fasta_files, gtf, threads=8, truncate=45):
+def create_reference(output_directory, fasta_files, gtf, threads=8, sjdbOverhang=100):
 
     #Create output directory
     output_directory = check_directories(output_directory)
@@ -128,4 +128,24 @@ def create_reference(output_directory, fasta_files, gtf, threads=8, truncate=45)
     fasta_list = " ".join(fasta)
 
     #Create reference
-    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome/ --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang 100 --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads))
+    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome/ --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang ' + str(sjdbOverhang) + ' --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads))
+
+"""
+DESCRIPTION: Create MultiQC processing summary from all files in args_dict output
+"""
+def get_summary(args_dict):
+
+    os.system('multiqc ' + str(args_dict['output']) + ' -i ' + str(args_dict['experiment']) + ' -o ' + args_dict['output'])
+
+"""
+DESCRIPTION: Create flat reference files for each gtf transcript in the input directory
+"""
+def create_flat(directory):
+
+    files = get_files(directory, ['.gtf'])
+
+    for x in files:
+        if x.startswith('transcripts'):
+            os.system('gtfToGenePred ' + str(directory) + str(x) + ' ' + str(x[:-4]) + '_refFlat.txt.tmp')
+            os.system("""awk '{print $1 "\t" $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $9 "\t" $10}'""" + str(x[:-4]) + '_refFlat.txt.tmp > ' + str(x[:-4]) + '_refFlat.txt')
+            os.system('rm ' + str(x[:-4]) + '_refFlat.txt.tmp')

@@ -384,6 +384,18 @@ def get_arguments(args, __version__):
         required=False)
 
     """
+    MAKEFLAT SUBPARSER
+    """
+    makeflat_parser = subparser.add_parser('makeFlat', description='Create flattened reference GTFs', add_help=False)
+    #Required arguments
+    makeflat_reqs = makeflat_parser.add_argument_group('required arguments')
+    makeflat_reqs.add_argument(
+        '-i', '--input',
+        help='Path where input transcripts*.gtf files are found',
+        type=<str>,
+        required=True)
+
+    """
     REFERENCE SUBPARSER
     """
     reference_parser = subparser.add_parser('createReference', description='Create a STAR reference directory', add_help=False)
@@ -414,6 +426,12 @@ def get_arguments(args, __version__):
         '-t', '--threads',
         help='Specify number of threads to use (default: %s)' % 8,
         default=8,
+        type=<int>,
+        required=False)
+    reference_opts.add_argument(
+        '--sjdbOverhang',
+        help='Specify number of threads to use (default: %s)' % 100,
+        default=100,
         type=<int>,
         required=False)
 

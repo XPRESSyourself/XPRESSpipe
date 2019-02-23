@@ -30,7 +30,7 @@ from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq
 from .count import create_bed, create_bigwig, count_reads, collect_counts, run_normalization
 from .rrnaprobe import rrnaProbe
-from .utils import get_probe_files, create_reference
+from .utils import get_probe_files, create_reference, get_summary, create_flat
 from .quality import make_metagene, make_readDistributions, make_periodicity
 from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf
 
@@ -116,9 +116,14 @@ def main(args=None):
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
         msg_complete()
 
+    elif args.cmd == 'makeFlat':
+        print('Formatting coding only and truncated reference files...')
+        create_flat(args_dict['input'])
+        msg_complete()
+
     elif args.cmd == 'createReference':
         print('Creating reference files...')
-        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'])
+        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
         msg_complete()
 
     elif args.cmd == 'rrnaProbe':
@@ -176,6 +181,7 @@ def main(args=None):
         args_dict['input'] = args_dict['alignments']
         make_metagene(args_dict)
 
+        get_summary(args_dict)
         msg_finish()
 
     elif args.cmd == 'peRNAseq':
@@ -210,6 +216,7 @@ def main(args=None):
         args_dict['input'] = args_dict['alignments']
         make_metagene(args_dict)
 
+        get_summary(args_dict)
         msg_finish()
 
     elif args.cmd == 'riboprof':
@@ -245,6 +252,7 @@ def main(args=None):
         make_periodicity(args_dict)
         make_metagene(args_dict)
 
+        get_summary(args_dict)
         msg_finish()
 
     else:
