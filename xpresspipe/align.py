@@ -46,7 +46,7 @@ def se_align(args):
 
     #STAR intermediate reference building
     os.system('mkdir ' + str(args_dict['intermediate_references']) + str(file[:-6]))
-    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(args_dict['intermediate_references']) + str(file[:-6]) + ' --genomeFastaFiles ' + str(args_dict['intermediate_references']) + 'genome.fa --sjdbOverhang 100 --runThreadN ' + str(args_dict['threads']) + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(file[:-6]) = '_SJ.out.tab')
+    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(args_dict['intermediate_references']) + str(file[:-6]) + ' --genomeFastaFiles ' + str(args_dict['intermediate_references']) + 'genome.fa --sjdbOverhang 100 --runThreadN ' + str(args_dict['threads']) + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(file[:-6]) + '_SJ.out.tab')
 
     #STAR second pass
     os.system('STAR --genomeDir ' + str(args_dict['intermediate_references']) + str(file[:-6]) + ' --readFilesIn ' + str(args_dict['input']) + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --limitBAMsortRAM 0 --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang 100 --outSAMstrandField intronMotif --outSAMattributes NH HI NM MD AS XS --outSAMunmapped Within --outSAMtype SAM SortedByCoordinate --outSAMheaderHD @HD VN:1.4 --outFileNamePrefix ' + str(args_dict['alignments']) + str(file[:-6]) + '_final_')
@@ -67,7 +67,7 @@ def pe_align(args):
 
     #STAR intermediate reference building
     os.system('mkdir ' + str(args_dict['intermediate_references']) + str(file1[:-6]))
-    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(args_dict['intermediate_references']) + str(file1[:-6]) + ' --genomeFastaFiles ' + str(args_dict['intermediate_references']) + 'genome.fa --sjdbOverhang 100 --runThreadN ' + str(args_dict['threads']) + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(file1[:-6]) = '_SJ.out.tab')
+    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(args_dict['intermediate_references']) + str(file1[:-6]) + ' --genomeFastaFiles ' + str(args_dict['intermediate_references']) + 'genome.fa --sjdbOverhang 100 --runThreadN ' + str(args_dict['threads']) + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(file1[:-6]) + '_SJ.out.tab')
 
     #STAR second pass
     os.system('STAR --genomeDir ' + str(args_dict['intermediate_references']) + str(file1[:-6]) + ' --readFilesIn ' + str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --limitBAMsortRAM 0 --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang 100 --outSAMstrandField intronMotif --outSAMattributes NH HI NM MD AS XS --outSAMunmapped Within --outSAMtype SAM SortedByCoordinate --outSAMheaderHD @HD VN:1.4 --outFileNamePrefix ' + str(args_dict['alignments']) + str(file1[:-6]) + '_final_')

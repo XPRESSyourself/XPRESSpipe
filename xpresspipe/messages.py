@@ -190,5 +190,5 @@ def msg_finish():
     print("""
     \n************************\nQuality control complete
     \n************************\nXPRESSpipe processing complete
-    \n*******************\n
+    \n*******************\n    
         """)

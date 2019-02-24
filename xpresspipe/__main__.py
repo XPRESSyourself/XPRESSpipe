@@ -43,13 +43,8 @@ Proper arguments are provided where some user renaming of files may be required
 def main(args=None):
 
     #Print license information
-    msg_license()
-
-    #Collate CLI arguments provided by user
-    try:
-        args, args_dict = get_arguments(args, __version__)
-    except:
-        raise Exception("There was an issue in processing the arguments for the provided function.")
+    #msg_license()
+    args, args_dict = get_arguments(args, __version__)
 
     #Get GTF type
     if 'count_coding' in args_dict:

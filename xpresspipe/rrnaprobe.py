@@ -162,7 +162,7 @@ def countFreqs(combined_entries):
 """
 DESCRIPTION: Determine consensus overrepresented sequences between files from list
 """
-def rrna_prober(files_list, min_overlap):
+def rrnaProbe(files_list, min_overlap):
     footprint_seqs = []
     for filename in files_list:
         footprint_seqs += get_overrep_seqs(filename)

@@ -1,0 +1,16 @@
+package:
+  name: XPRESSpipe
+  version: 0.0.1
+
+source:
+  fn: XPRESSpipe-0.0.1.tar.gz
+  url: https://github.com/XPRESSyourself/XPRESStools/archive/XPRESSpipe-0.0.1.tar.gz
+
+test:
+  commands:
+    - xpresspipe --help
+
+about:
+  home: https://xpresspipe.readthedocs.io/en/latest/
+  summary: An alignment and analysis pipeline for RNAseq data
+  license: GPL-3.0

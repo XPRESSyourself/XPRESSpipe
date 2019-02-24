@@ -36,7 +36,7 @@ def get_peaks(args):
     file, args_dict = args[0], args[1]
 
     #read sorted, unique only sam files, get most abundant length and make new file
-    df = pd.read_csv(str(args_dict['input']) + str(file), sep='\t', comment='@' header=None, usecols = list(range(0, 15)))
+    df = pd.read_csv(str(args_dict['input']) + str(file), sep='\t', comment='@', header=None, usecols = list(range(0, 15)))
     df[15]  = df[9].str.len()
     df_mode = df.loc[df[15] == mode(list(df[15]))]
     df_mode.to_csv(str(args_dict['metrics']) + str(file[:-4]) + 'mode.sam')

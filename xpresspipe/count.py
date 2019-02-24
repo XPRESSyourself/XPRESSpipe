@@ -25,9 +25,9 @@ IMPORT DEPENDENCIES
 import os, sys
 import datetime
 import pandas as pd
-from expresstools import count_table
+from xpresstools import count_table
 from .utils import get_files, add_directory
-from .parallel import parallize
+from .parallel import parallelize
 
 """
 DESCRIPTION: Convert a sorted sam file to a bam file
@@ -190,7 +190,7 @@ def run_normalization(args_dict):
             raise Exception('Unknown \"method\" argument provided')
     #Run in batch normalization
         if 'batch' in args_dict:
-            batch_normalize(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', args_dict['batch'], input_sep=',', batch_sep=',')
+            batch_normalize(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', str(args_dict['batch']), input_sep=',', batch_sep=',')
     else:
         if 'batch' in args_dict:
-            batch_normalize(args_dict['data'], args_dict['batch'], input_sep=',', batch_sep='\t')
+            batch_normalize(str(args_dict['data']), str(args_dict['batch']), input_sep=',', batch_sep='\t')

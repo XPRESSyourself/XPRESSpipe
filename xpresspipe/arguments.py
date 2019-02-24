@@ -40,9 +40,48 @@ DEFAULT_READ_QUALITY = 28
 DEFAULT_MAX_PROCESSORS = None
 
 descrip = """\
-The XPRESSpipe submodules can be accessed by executing:
-    'xpresspipe module_name'
+The XPRESSpipe sub-modules can be accessed by executing:
+    'xpresspipe module_name args1 args2 ...'
 
+Sub-module help can be displayed by executing:
+    'xpresspipe module_name --help'
+
+Sub-module descriptions:
+    +-----------------------+---------------------------------------------------------------------------------------+
+    |    seRNAseq           |   Trim, align, count, and perform quality control on single-end RNAseq raw data       |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    peRNAseq           |   Trim, align, count, and perform quality control on paired-end RNAseq raw data       |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    riboprof           |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
+    |                       |   raw data                                                                            |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    trim               |   Trim RNAseq reads of adaptors and for quality                                       |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    align              |   Align RNAseq reads to reference genome                                              |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    count              |   Get counts and a counts table from aligned output                                   |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    normalizeMatrix    |   Perform normalization on sequence matrix                                            |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    metagene           |   Compile summarized metagene profiles for each sample in a directory                 |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    readDistribution   |   Compile summarized distributions for each sample in a directory                     |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    periodicity        |   Calculate periodicity of transcripts using the most abundant transcript length      |
+    |                       |   for alignments to map per sample                                                    |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    truncate           |   Create a coding-only and coding-only truncated reference GTF                        |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    makeFlat           |   Create flattened reference GTFs                                                     |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    createReference    |   Create a STAR reference directory                                                   |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
+    |                       |   Run a BLAST search on sequences you choose to use as depletion probes to verify     |
+    |                       |   they are rRNAs)                                                                     |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    convertNames       |   Convert gene identifiers using a GTF reference                                      |
+    +-----------------------+---------------------------------------------------------------------------------------+
 
 """
 
@@ -89,7 +128,7 @@ def check_inputs(args_dict):
             if type(x) != str:
                 raise Exception('Adaptors must be provided as a list of strings')
 
-        if len(args_dict['adaptors'] > 2:
+        if len(args_dict['adaptors']) > 2:
             raise Exception('A maximum of 2 adaptors may be provided')
 
 """
@@ -103,7 +142,7 @@ def get_arguments(args, __version__):
     """
     INITIALIZE PARSER
     """
-    parser = argparse.ArgumentParser(prog='RiboPipe', description=dedent(descrip), formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(prog='RiboPipe', description=dedent(descrip), formatter_class=argparse.RawTextHelpFormatter)
     #optional arguments
     parser.add_argument(
         '-v', '--version',
@@ -115,7 +154,198 @@ def get_arguments(args, __version__):
     """
     MODULE SUBPARSER PROGRAMS
     """
-    subparser = parser.add_subparsers(title='Sub-modules', description='Choose one of the following:', dest='cmd')
+    subparser = parser.add_subparsers(dest='cmd')
+
+    """
+    SERNASEQ SUBPARSER
+    """
+    se_parser = subparser.add_parser('seRNAseq', description='Trim, align, count, and perform quality control on single-end RNAseq raw data', add_help=False)
+    #Required arguments
+    se_reqs = se_parser.add_argument_group('required arguments')
+    se_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory',
+        required=True)
+    se_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    se_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        required=True)
+    se_reqs.add_argument(
+        '-e', '--experiment',
+        help='Experiment name',
+        metavar='<str>',
+        required=True)
+    #Optional arguments
+    se_opts = se_parser.add_argument_group('optional arguments')
+    se_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    se_opts.add_argument(
+        '-a', '--adaptors',
+        metavar='<list>',
+        nargs='+',
+        default=None,
+        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        required=False)
+    se_opts.add_argument(
+        '--output_bed',
+        help='Include option to output BED files for each aligned file',
+        action='store_true',
+        required=False)
+    se_opts.add_argument(
+        '--output_bigwig',
+        help='Include flag to output bigwig files for each aligned file',
+        action='store_true',
+        required=False)
+    se_opts.add_argument(
+        '--count_coding',
+        help='Include flag to only count reads aligning to protein coding transcripts',
+        action='store_true',
+        required=False)
+    se_opts.add_argument(
+        '-m', '--method',
+        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<str>',
+        required=False)
+    se_opts.add_argument(
+        '--batch',
+        help='Include path and filename of dataframe with batch normalization parameters',
+        metavar='<str>',
+        required=False)
+
+    """
+    PERNASEQ SUBPARSER
+    """
+    pe_parser = subparser.add_parser('peRNAseq', description='Trim, align, count, and perform quality control on paired-end RNAseq raw data', add_help=False)
+    #Required arguments
+    pe_reqs = pe_parser.add_argument_group('required arguments')
+    pe_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory -- if paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        required=True)
+    pe_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    pe_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        required=True)
+    pe_reqs.add_argument(
+        '--experiment',
+        help='Experiment name',
+        metavar='<str>',
+        required=True)
+    #Optional arguments
+    pe_opts = pe_parser.add_argument_group('optional arguments')
+    pe_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    pe_opts.add_argument(
+        '-a', '--adaptors',
+        metavar='<list>',
+        nargs='+',
+        default=None,
+        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide a list as ["autoPE"]',
+        required=False)
+    pe_opts.add_argument(
+        '--output_bed',
+        help='Include option to output BED files for each aligned file',
+        action='store_true',
+        required=False)
+    pe_opts.add_argument(
+        '--output_bigwig',
+        help='Include flag to output bigwig files for each aligned file',
+        action='store_true',
+        required=False)
+    pe_opts.add_argument(
+        '--count_coding',
+        help='Include flag to only count reads aligning to protein coding transcripts',
+        action='store_true',
+        required=False)
+    pe_opts.add_argument(
+        '-m', '--method',
+        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<str>',
+        required=False)
+    pe_opts.add_argument(
+        '--batch',
+        help='Include path and filename of dataframe with batch normalization parameters',
+        metavar='<str>',
+        required=False)
+
+    """
+    RIBOPROF SUBPARSER
+    """
+    rp_parser = subparser.add_parser('riboprof', description='Trim, align, count, and perform quality control on single-end Ribosome Profiling raw data', add_help=False)
+    #Required arguments
+    rp_reqs = rp_parser.add_argument_group('required arguments')
+    rp_reqs.add_argument(
+        '-i', '--input',
+        help='Path to input directory',
+        required=True)
+    rp_reqs.add_argument(
+        '-o', '--output',
+        help='Path to output directory',
+        required=True)
+    rp_reqs.add_argument(
+        '-r', '--reference',
+        help='Path to parent organism reference directory',
+        required=True)
+    rp_reqs.add_argument(
+        '--experiment',
+        help='Experiment name',
+        metavar='<str>',
+        required=True)
+    #Optional arguments
+    rp_opts = rp_parser.add_argument_group('optional arguments')
+    rp_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    rp_opts.add_argument(
+        '-a', '--adaptors',
+        metavar='<list>',
+        nargs='+',
+        default=None,
+        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        required=False)
+    rp_opts.add_argument(
+        '--output_bed',
+        help='Include option to output BED files for each aligned file',
+        action='store_true',
+        required=False)
+    rp_opts.add_argument(
+        '--output_bigwig',
+        help='Include flag to output bigwig files for each aligned file',
+        action='store_true',
+        required=False)
+    rp_opts.add_argument(
+        '--count_coding',
+        help='Include flag to only count reads aligning to protein coding transcripts',
+        action='store_true',
+        required=False)
+    rp_opts.add_argument(
+        '--truncate',
+        help='Count reads to truncated reference (truncated reference should be added to the \"reference\" parent directory)',
+        action='store_true',
+        required=False)
+    rp_opts.add_argument(
+        '-m', '--method',
+        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<str>',
+        required=False)
+    rp_opts.add_argument(
+        '--batch',
+        help='Include path and filename of dataframe with batch normalization parameters',
+        metavar='<str>',
+        required=False)
 
     """
     TRIM SUBPARSER
@@ -245,7 +475,40 @@ def get_arguments(args, __version__):
     count_opts.add_argument(
         '--experiment',
         help='Experiment name to name counts table -- if none provided, datetime is used to format file output name',
-        type=<str>,
+        metavar='<str>',
+        required=False)
+
+    """
+    NORMALIZE SUBPARSER
+    """
+    normalize_parser = subparser.add_parser('normalizeMatrix', description='Perform normalization on sequence matrix', add_help=False)
+    #Required arguments
+    normalize_reqs = normalize_parser.add_argument_group('required arguments')
+    normalize_reqs.add_argument(
+        '-d', '--data',
+        help='Path and file name to sequence dataframe',
+        metavar='<str>',
+        required=True)
+    #Optional arguments
+    normalize_opts = normalize_parser.add_argument_group('optional arguments')
+    normalize_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    normalize_opts.add_argument(
+        '-m', '--method',
+        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a GTF reference file must be included',
+        metavar='<str>',
+        required=False)
+    normalize_opts.add_argument(
+        '-g', '--gtf',
+        help='Path and file name to reference GTF',
+        metavar='<str>',
+        required=False)
+    normalize_opts.add_argument(
+        '--batch',
+        help='Include path and filename of dataframe with batch normalization parameters',
+        metavar='<str>',
         required=False)
 
     """
@@ -265,17 +528,17 @@ def get_arguments(args, __version__):
     metagene_reqs.add_argument(
         '--experiment',
         help='Experiment name',
-        type=<str>,
+        metavar='<str>',
         required=True)
     metagene_reqs.add_argument(
         '-r', '--reference',
         help='Path to parent organism reference directory',
-        type=<str>,
+        metavar='<str>',
         required=True)
     metagene_reqs.add_argument(
         '-t', '--reference_type',
         help='RefFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\",)',
-        type=<str>,
+        metavar='<str>',
         required=True)
     #Optional arguments
     metagene_opts = metagene_parser.add_argument_group('optional arguments')
@@ -301,7 +564,7 @@ def get_arguments(args, __version__):
     distribution_reqs.add_argument(
         '--experiment',
         help='Experiment name to name counts table -- if none provided, datetime is used to format file output name',
-        type=<str>,
+        metavar='<str>',
         required=True)
     #Optional arguments
     distribution_opts = distribution_parser.add_argument_group('optional arguments')
@@ -316,7 +579,6 @@ def get_arguments(args, __version__):
     period_parser = subparser.add_parser('periodicity', description='Calculate periodicity of transcripts using the most abundant transcript length for alignments to map per sample', add_help=False)
     #Required arguments
     period_reqs = period_parser.add_argument_group('required arguments')
-    period_reqs.add_argument()
     period_reqs.add_argument(
         '-i', '--input',
         help='Path to input directory of SAM alignment files',
@@ -328,12 +590,12 @@ def get_arguments(args, __version__):
     period_reqs.add_argument(
         '-g', '--gtf',
         help='Path and file name of reference GTF',
-        type=<str>,
+        metavar='<str>',
         required=True)
     period_reqs.add_argument(
         '--experiment',
         help='Experiment name',
-        type=<str>,
+        metavar='<str>',
         required=True)
     #Optional arguments
     period_opts = period_parser.add_argument_group('optional arguments')
@@ -363,7 +625,7 @@ def get_arguments(args, __version__):
     truncate_reqs.add_argument(
         '-g', '--gtf',
         help='Path and file name of GTF reference file to process',
-        type=<str>,
+        metavar='<str>',
         required=True)
     #Optional arguments
     truncate_opts = truncate_parser.add_argument_group('optional arguments')
@@ -375,7 +637,7 @@ def get_arguments(args, __version__):
         '-t', '--truncate_amount',
         help='Path and file name of GTF reference file to process (default: %s)' % 45,
         default=45,
-        type=<int>,
+        metavar='<int>',
         required=False)
     truncate_opts.add_argument(
         '-c', '--create_refFlats',
@@ -392,7 +654,7 @@ def get_arguments(args, __version__):
     makeflat_reqs.add_argument(
         '-i', '--input',
         help='Path where input transcripts*.gtf files are found',
-        type=<str>,
+        metavar='<str>',
         required=True)
 
     """
@@ -404,17 +666,17 @@ def get_arguments(args, __version__):
     reference_reqs.add_argument(
         '-o', '--output',
         help='Path to directory for output',
-        type=<str>,
+        metavar='<str>',
         required=True)
     reference_reqs.add_argument(
         '-f', '--fasta',
         help='Path to directory containing genomic fasta files',
-        type=<str>,
+        metavar='<str>',
         required=True)
     reference_reqs.add_argument(
         '-g', '--gtf',
         help='Path and file name of reference GTF',
-        type=<str>,
+        metavar='<str>',
         required=True)
     #Optional arguments
     reference_opts = reference_parser.add_argument_group('optional arguments')
@@ -426,13 +688,13 @@ def get_arguments(args, __version__):
         '-t', '--threads',
         help='Specify number of threads to use (default: %s)' % 8,
         default=8,
-        type=<int>,
+        metavar='<int>',
         required=False)
     reference_opts.add_argument(
         '--sjdbOverhang',
         help='Specify number of threads to use (default: %s)' % 100,
         default=100,
-        type=<int>,
+        metavar='<int>',
         required=False)
 
     """
@@ -444,12 +706,12 @@ def get_arguments(args, __version__):
     probe_reqs.add_argument(
         "-i", "--input",
         help="Path to zipped files ",
-        metavar='<string>',
+        metavar='<str>',
         required=True)
     probe_reqs.add_argument(
         "-o", "--output",
         help="Output file name to write output to",
-        metavar='<string>',
+        metavar='<str>',
         required=True)
     #Optional arguments
     probe_opts = probe_parser.add_argument_group('optional arguments')
@@ -478,12 +740,12 @@ def get_arguments(args, __version__):
     convert_reqs.add_argument(
         '-d', '--data',
         help='Path and file name to sequence dataframe',
-        metavar='<string>',
+        metavar='<str>',
         required=True)
     convert_reqs.add_argument(
         '-g', '--gtf',
         help='Path and file name to reference GTF',
-        metavar='<string>',
+        metavar='<str>',
         required=True)
     #Optional arguments
     convert_opts = convert_parser.add_argument_group('optional arguments')
@@ -520,230 +782,6 @@ def get_arguments(args, __version__):
         help='In some cases, where common gene names are unavailable, the dataframe will fill the gene name with the improper field of the GTF. In this case, specify this improper string and these values will be replaced with the original name',
         default=None,
         metavar='<str>',
-        required=False)
-
-    """
-    NORMALIZE SUBPARSER
-    """
-    normalize_parser = subparser.add_parser('normalizeMatrix', description='Perform normalization on sequence matrix', add_help=False)
-    #Required arguments
-    normalize_reqs = normalize_parser.add_argument_group('required arguments')
-    normalize_reqs.add_argument(
-        '-d', '--data',
-        help='Path and file name to sequence dataframe',
-        metavar='<string>',
-        required=True)
-    #Optional arguments
-    normalize_opts = normalize_parser.add_argument_group('optional arguments')
-    normalize_opts.add_argument(
-        '-h', '--help',
-        action='help',
-        help='Show help message and exit')
-    normalize_opts.add_argument(
-        '-m', '--method',
-        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a GTF reference file must be included',
-        metavar='<string>',
-        required=False)
-    normalize_opts.add_argument(
-        '-g', '--gtf',
-        help='Path and file name to reference GTF',
-        metavar='<string>',
-        required=False)
-    normalize_opts.add_argument(
-        '--batch',
-        help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='<string>',
-        required=False)
-
-    """
-    SERNASEQ SUBPARSER
-    """
-    se_parser = subparser.add_parser('seRNAseq', description='Trim, align, count, and perform quality control on single-end RNAseq raw data', add_help=False)
-    #Required arguments
-    se_reqs = se_parser.add_argument_group('required arguments')
-    se_reqs.add_argument(
-        '-i', '--input',
-        help='Path to input directory',
-        required=True)
-    se_reqs.add_argument(
-        '-o', '--output',
-        help='Path to output directory',
-        required=True)
-    se_reqs.add_argument(
-        '-r', '--reference',
-        help='Path to parent organism reference directory',
-        required=True)
-    se_reqs.add_argument(
-        '-e', '--experiment',
-        help='Experiment name',
-        type=<str>,
-        required=True)
-    #Optional arguments
-    se_opts = se_parser.add_argument_group('optional arguments')
-    se_opts.add_argument(
-        '-h', '--help',
-        action='help',
-        help='Show help message and exit')
-    se_opts.add_argument(
-        '-a', '--adaptors',
-        metavar='<list>',
-        nargs='+',
-        default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
-        required=False)
-    se_opts.add_argument(
-        '--output_bed',
-        help='Include option to output BED files for each aligned file',
-        action='store_true',
-        required=False)
-    se_opts.add_argument(
-        '--output_bigwig',
-        help='Include flag to output bigwig files for each aligned file',
-        action='store_true',
-        required=False)
-    se_opts.add_argument(
-        '--count_coding',
-        help='Include flag to only count reads aligning to protein coding transcripts',
-        action='store_true',
-        required=False)
-    se_opts.add_argument(
-        '-m', '--method',
-        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<string>',
-        required=False)
-    se_opts.add_argument(
-        '--batch',
-        help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='<string>',
-        required=False)
-
-    """
-    PERNASEQ SUBPARSER
-    """
-    pe_parser = subparser.add_parser('peRNAseq', description='Trim, align, count, and perform quality control on paired-end RNAseq raw data', add_help=False)
-    #Required arguments
-    pe_reqs = pe_parser.add_argument_group('required arguments')
-    pe_reqs.add_argument(
-        '-i', '--input',
-        help='Path to input directory -- if paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
-        required=True)
-    pe_reqs.add_argument(
-        '-o', '--output',
-        help='Path to output directory',
-        required=True)
-    pe_reqs.add_argument(
-        '-r', '--reference',
-        help='Path to parent organism reference directory',
-        required=True)
-    pe_reqs.add_argument(
-        '--experiment',
-        help='Experiment name',
-        type=<str>,
-        required=True)
-    #Optional arguments
-    pe_opts = pe_parser.add_argument_group('optional arguments')
-    pe_opts.add_argument(
-        '-h', '--help',
-        action='help',
-        help='Show help message and exit')
-    pe_opts.add_argument(
-        '-a', '--adaptors',
-        metavar='<list>',
-        nargs='+',
-        default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide a list as ["autoPE"]',
-        required=False)
-    pe_opts.add_argument(
-        '--output_bed',
-        help='Include option to output BED files for each aligned file',
-        action='store_true',
-        required=False)
-    pe_opts.add_argument(
-        '--output_bigwig',
-        help='Include flag to output bigwig files for each aligned file',
-        action='store_true',
-        required=False)
-    pe_opts.add_argument(
-        '--count_coding',
-        help='Include flag to only count reads aligning to protein coding transcripts',
-        action='store_true',
-        required=False)
-    pe_opts.add_argument(
-        '-m', '--method',
-        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<string>',
-        required=False)
-    pe_opts.add_argument(
-        '--batch',
-        help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='<string>',
-        required=False)
-
-    """
-    RIBOPROF SUBPARSER
-    """
-    rp_parser = subparser.add_parser('riboprof', description='Trim, align, count, and perform quality control on single-end Ribosome Profiling raw data', add_help=False)
-    #Required arguments
-    rp_reqs = rp_parser.add_argument_group('required arguments')
-    rp_reqs.add_argument(
-        '-i', '--input',
-        help='Path to input directory',
-        required=True)
-    rp_reqs.add_argument(
-        '-o', '--output',
-        help='Path to output directory',
-        required=True)
-    rp_reqs.add_argument(
-        '-r', '--reference',
-        help='Path to parent organism reference directory',
-        required=True)
-    rp_reqs.add_argument(
-        '--experiment',
-        help='Experiment name',
-        type=<str>,
-        required=True)
-    #Optional arguments
-    rp_opts = rp_parser.add_argument_group('optional arguments')
-    rp_opts.add_argument(
-        '-h', '--help',
-        action='help',
-        help='Show help message and exit')
-    rp_opts.add_argument(
-        '-a', '--adaptors',
-        metavar='<list>',
-        nargs='+',
-        default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
-        required=False)
-    rp_opts.add_argument(
-        '--output_bed',
-        help='Include option to output BED files for each aligned file',
-        action='store_true',
-        required=False)
-    rp_opts.add_argument(
-        '--output_bigwig',
-        help='Include flag to output bigwig files for each aligned file',
-        action='store_true',
-        required=False)
-    rp_opts.add_argument(
-        '--count_coding',
-        help='Include flag to only count reads aligning to protein coding transcripts',
-        action='store_true',
-        required=False)
-    rp_opts.add_argument(
-        '--truncate',
-        help='Count reads to truncated reference (truncated reference should be added to the \"reference\" parent directory)',
-        action='store_true',
-        required=False)
-    rp_opts.add_argument(
-        '-m', '--method',
-        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<string>',
-        required=False)
-    rp_opts.add_argument(
-        '--batch',
-        help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='<string>',
         required=False)
 
     """

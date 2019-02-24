@@ -24,9 +24,9 @@ IMPORT DEPENDENCIES
 """
 import pandas as pd
 import matplotlib
-matplotlib.use('agg') #remove need for -X server connect
+#matplotlib.use('agg') #remove need for -X server connect
 import matplotlib.pyplot as plt
-matplotlib.rcParams['font.sans-serif'] = "Arial"
+matplotlib.rcParams['font.sans-serif'] = 'Arial'
 
 """
 DESCRIPTION: Compile images from a list of metrics files using start and stop keys
