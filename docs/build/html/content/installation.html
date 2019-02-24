@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; ribopipe 0.1.6-beta documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/ribopipe.png"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Quickstart" href="quickstart.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ribopipe
+          
+
+          
+            
+            <img src="../_static/ribopipe.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#local-installation">Local Installation:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hpc-installation">HPC Installation:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example-usage.html">Example Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced-usage.html">Advanced Usage</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ribopipe</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/installation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="local-installation">
+<h2>Local Installation:<a class="headerlink" href="#local-installation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Make sure Python3, git, and wget are installed.</li>
+<li>Download <a class="reference external" href="https://www.anaconda.com/download/#macos">Conda</a>, a package manager, for your operating system. Double click the <cite>.pkg</cite> file if on MacOS, the <cite>.exe</cite> file on Windows, or follow these <a class="reference external" href="https://conda.io/docs/user-guide/install/linux.html#install-linux-silent">instructions</a> on Linux.</li>
+<li>Execute the following lines of code in <a class="reference external" href="https://www.imore.com/how-use-terminal-mac-when-you-have-no-idea-where-start">Terminal</a> (on Mac, open Spotlight and type ‘Terminal’):</li>
+<li>Download current repository:</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/j-berg/ribopipe.git
+$ <span class="nb">cd</span> ribopipe/ribopipe/references
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>To download specific version</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">tag</span><span class="o">=</span><span class="s1">&#39;v0.1.4-beta&#39;</span>
+$ wget https://github.com/j-berg/ribopipe/archive/<span class="nv">$tag</span>.zip
+$ unzip ribopipe-<span class="si">${</span><span class="nv">tag</span><span class="p">:</span><span class="nv">1</span><span class="si">}</span>.zip
+$ <span class="nb">cd</span> ribopipe-<span class="si">${</span><span class="nv">tag</span><span class="p">:</span><span class="nv">1</span><span class="si">}</span>/ribopipe/references
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li>Get reference</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">model</span><span class="o">=</span><span class="s1">&#39;yeast&#39;</span>
+$ <span class="nv">program</span><span class="o">=</span><span class="s1">&#39;hisat2&#39;</span>
+$ wget https://sourceforge.net/projects/ribopipe/files/<span class="si">${</span><span class="nv">program</span><span class="si">}</span>_references/<span class="si">${</span><span class="nv">model</span><span class="si">}</span>_reference_<span class="si">${</span><span class="nv">program</span><span class="si">}</span>.zip
+$ unzip <span class="si">${</span><span class="nv">model</span><span class="si">}</span>_reference_<span class="si">${</span><span class="nv">program</span><span class="si">}</span>.zip
+$ rm <span class="si">${</span><span class="nv">model</span><span class="si">}</span>_reference_<span class="si">${</span><span class="nv">program</span><span class="si">}</span>.zip
+$ <span class="nb">cd</span> ../../
+$ python3 setup.py install --prefix ~/.local
+</pre></div>
+</div>
+<p>7) add script installation location given near the end of the setup scripting output to ~/.bashrc or ~/.bash_profile
+add to .bashrc</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s2">&quot;PATH=&#39;/path/to/scripts/:</span><span class="nv">$PATH</span><span class="s2">&#39;&quot;</span> &gt;&gt; ~/.bashrc
+</pre></div>
+</div>
+<p>add to .bash_profile</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s2">&quot;PATH=&#39;/path/to/scripts/:</span><span class="nv">$PATH</span><span class="s2">&#39;&quot;</span> &gt;&gt; ~/.bash_profile
+</pre></div>
+</div>
+<ol class="arabic simple" start="8">
+<li>Test by typing the following:</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ ribopipe --help
+</pre></div>
+</div>
+<ol class="arabic simple" start="9">
+<li>Install conda dependencies:</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ ribopipe install
+</pre></div>
+</div>
+<p>See local_install.sh in the <a class="reference external" href="https://github.com/j-berg/ribopipe/resources/">resources</a> folder for interactive script</p>
+</div>
+<div class="section" id="hpc-installation">
+<h2>HPC Installation:<a class="headerlink" href="#hpc-installation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Make sure Python3, git, and wget are installed.</li>
+<li>Execute the following lines of code:</li>
+<li>To download current repository:</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/j-berg/ribopipe.git
+$ <span class="nb">cd</span> ribopipe/ribopipe/references
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>To download specific version</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">tag</span><span class="o">=</span><span class="s1">&#39;v0.1.4-beta&#39;</span>
+$ wget https://github.com/j-berg/ribopipe/archive/<span class="nv">$tag</span>.zip
+$ unzip ribopipe-<span class="si">${</span><span class="nv">tag</span><span class="p">:</span><span class="nv">1</span><span class="si">}</span>.zip
+$ <span class="nb">cd</span> ribopipe-<span class="si">${</span><span class="nv">tag</span><span class="p">:</span><span class="nv">1</span><span class="si">}</span>/ribopipe/references
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Get reference</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">model</span><span class="o">=</span><span class="s1">&#39;yeast&#39;</span>
+$ <span class="nv">program</span><span class="o">=</span><span class="s1">&#39;hisat2&#39;</span>
+$ wget https://sourceforge.net/projects/ribopipe/files/<span class="si">${</span><span class="nv">program</span><span class="si">}</span>_references/<span class="si">${</span><span class="nv">model</span><span class="si">}</span>_reference_<span class="si">${</span><span class="nv">program</span><span class="si">}</span>.zip
+$ unzip <span class="si">${</span><span class="nv">model</span><span class="si">}</span>_reference_<span class="si">${</span><span class="nv">program</span><span class="si">}</span>.zip
+$ rm <span class="si">${</span><span class="nv">model</span><span class="si">}</span>_reference_<span class="si">${</span><span class="nv">program</span><span class="si">}</span>.zip
+$ <span class="nb">cd</span> ../../
+$ module load python3
+$ python setup.py install --prefix ~/.local
+</pre></div>
+</div>
+<p>6)  Add script installation location given near the end of the setup scripting output to ~/.bashrc or ~/.bash_profile
+add to .bashrc</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s2">&quot;PATH=&#39;/path/to/scripts/:</span><span class="nv">$PATH</span><span class="s2">&#39;&quot;</span> &gt;&gt; ~/.bashrc
+</pre></div>
+</div>
+<p>add to .bash_profile</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s2">&quot;PATH=&#39;/path/to/scripts/:</span><span class="nv">$PATH</span><span class="s2">&#39;&quot;</span> &gt;&gt; ~/.bash_profile
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li>Test by typing the following:</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ ribopipe --help
+</pre></div>
+</div>
+<p>See hpc_install.sh in the <a class="reference external" href="https://github.com/j-berg/ribopipe/resources/">resources</a> folder for interactive script</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Jordan A. Berg
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../',
+              VERSION:'0.1.6-beta',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
