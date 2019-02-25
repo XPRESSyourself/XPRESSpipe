@@ -41,4 +41,4 @@ install:
 
 script:
 
-  - test.py  # will run all tests in the package
+  - test.sh  # will run all tests in the package
