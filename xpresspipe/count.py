@@ -123,7 +123,10 @@ def count_file(args):
         raise Exception('Something went wrong in determining transcript reference file type')
 
     #Count
-    os.system('htseq-count ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+    if args_dict['type'] == 'PE':
+        os.system('htseq-count -r pos ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+    else:
+        os.system('htseq-count ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 def count_reads(args_dict):
 
@@ -190,7 +193,7 @@ def run_normalization(args_dict):
             raise Exception('Unknown \"method\" argument provided')
     #Run in batch normalization
         if 'batch' in args_dict:
-            batch_normalize(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', str(args_dict['batch']), input_sep=',', batch_sep=',')
+            batch_normalize(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', str(args_dict['batch']), input_sep=',', batch_sep=',', str(args_dict['output']))
     else:
         if 'batch' in args_dict:
-            batch_normalize(str(args_dict['data']), str(args_dict['batch']), input_sep=',', batch_sep='\t')
+            batch_normalize(str(args_dict['data']), str(args_dict['batch']), input_sep=',', batch_sep='\t', str(args_dict['output']))

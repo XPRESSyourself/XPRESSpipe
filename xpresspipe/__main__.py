@@ -145,6 +145,7 @@ def main(args=None):
         msg_complete()
 
     elif args.cmd == 'seRNAseq':
+        args_dict['type'] = 'SE'
         #Trim
         msg_trim()
         args_dict = run_trim(args_dict)
@@ -180,6 +181,7 @@ def main(args=None):
         msg_finish()
 
     elif args.cmd == 'peRNAseq':
+        args_dict['type'] = 'PE'
         #Trim
         msg_trim()
         args_dict = run_trim(args_dict)
@@ -215,6 +217,7 @@ def main(args=None):
         msg_finish()
 
     elif args.cmd == 'riboprof':
+        args_dict['type'] = 'SE'
         #Trim
         msg_trim()
         args_dict = run_trim(args_dict)
