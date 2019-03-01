@@ -35,6 +35,7 @@ setup(
     author_email = 'jordan.berg@biochem.utah.edu',
     url = 'https://github.com/XPRESSyourself/XPRESSpipe',
     packages = ['xpresspipe'],
+    exclude = ['tests','docs']
     package_dir = {'xpresspipe': 'xpresspipe'},
     include_package_data = True,
     license = 'GPL-3.0',
@@ -47,7 +48,7 @@ setup(
     },
 
     classifiers=[
-        'Development Status :: Beta',
+        'Development Status :: 1 - Pre-Alpha',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Bio-Informatics'
         ]

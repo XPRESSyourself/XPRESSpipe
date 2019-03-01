@@ -1,18 +1,12 @@
 language: python
-
 python:
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.5-dev"  # 3.5 development branch
-  - "3.6"
-  - "3.6-dev"  # 3.6 development branch
-  - "3.7-dev"  # 3.7 development branch
-
+- 2.7
+- 3.5
+- 3.6
+- 3.7
+dist: xenial
 before_install:
-
   # Here we just install Miniconda, which you shouldn't have to change.
-
   - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
   - chmod +x miniconda.sh
   - ./miniconda.sh -b
@@ -20,25 +14,10 @@ before_install:
   - conda update --yes conda
 
 install:
-
-  # We just set up a conda environment with the right Python version. This
-  # should not need changing.
-
   - conda create --yes -n test python=$TRAVIS_PYTHON_VERSION
   - source activate test
-
-  # Below, include the dependencies you want to install with conda, optionally
-  # specifying versions used in the matrix above. If you split this into
-  # multiple conda install commands, you should always include numpy=$NUMPY as
-  # the first package to install (for every conda install command) otherwise
-  # numpy may be automatically upgraded.
-
-  #- conda install --yes
-
-  # You can also install some dependencies with pip if not available in conda
-
-  # - pip install ...
-
+  - conda install -q -n test FastP STAR samtools bedtools deeptools picard fastqc plastid gtfToGenePred
+  - pip install xpresstools multiqc
 script:
 
   - test.sh  # will run all tests in the package
