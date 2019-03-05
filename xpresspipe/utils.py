@@ -61,6 +61,7 @@ def get_files(directory, suffix):
         for f in files:
             for s in suffix:
                 if f.endswith(str(s)):
+                    #Do not append directory, files in list will be modified and output to different locations
                     file_list.append(f)
 
     #Sort files in alphabetical order (helps in formatting the count tables correctly)

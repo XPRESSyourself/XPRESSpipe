@@ -109,8 +109,20 @@ def check_inputs(args_dict):
         args_dict['input'] = check_directories(args_dict['input'])
     if 'output' in args_dict:
         args_dict['output'] = check_directories(args_dict['output'])
-    if 'reference in args_dict':
+    if 'reference' in args_dict:
         args_dict['reference'] = check_directories(args_dict['reference'])
+
+        #Get GTF type
+        if 'count_coding' in args_dict:
+            if 'truncate' in args_dict:
+                args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated.gtf'
+                args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
+            else:
+                args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
+                args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
+        else:
+            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts.gtf'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
 
     #Check max_processor input
     if 'max_processors' in args_dict and args_dict['max_processors'] != None:
@@ -121,15 +133,19 @@ def check_inputs(args_dict):
 
     #Check number of adaptors provided
     if 'adaptors' in args_dict:
-        if type(args_dict['adaptors']) != list:
+        if args_dict['adaptors'] == None or args_dict['adaptors'] == [None]:
+            pass
+        elif type(args_dict['adaptors']) != list:
             raise Exception('Adaptors must be provided as a list of strings')
 
-        for x in args_dict['adaptors']:
-            if type(x) != str:
-                raise Exception('Adaptors must be provided as a list of strings')
+            for x in args_dict['adaptors']:
+                if type(x) != str:
+                    raise Exception('Adaptors must be provided as a list of strings')
 
-        if len(args_dict['adaptors']) > 2:
-            raise Exception('A maximum of 2 adaptors may be provided')
+            if len(args_dict['adaptors']) > 2:
+                raise Exception('A maximum of 2 adaptors may be provided')
+        else:
+            pass
 
 """
 DESCRIPTION: Get user arguments to determine sub-module to run and arguments provided
@@ -191,6 +207,18 @@ def get_arguments(args, __version__):
         nargs='+',
         default=None,
         help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        required=False)
+    se_opts.add_argument(
+        '-q', '--quality',
+        metavar='<int>',
+        default=DEFAULT_READ_QUALITY,
+        help='PHRED read quality threshold (default: %s)' % DEFAULT_READ_QUALITY,
+        required=False)
+    se_opts.add_argument(
+        '--min_length',
+        metavar='<int>',
+        default=DEFAULT_READ_MIN,
+        help='Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
         required=False)
     se_opts.add_argument(
         '--output_bed',
@@ -255,6 +283,18 @@ def get_arguments(args, __version__):
         help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide a list as ["autoPE"]',
         required=False)
     pe_opts.add_argument(
+        '-q', '--quality',
+        metavar='<int>',
+        default=DEFAULT_READ_QUALITY,
+        help='PHRED read quality threshold (default: %s)' % DEFAULT_READ_QUALITY,
+        required=False)
+    pe_opts.add_argument(
+        '--min_length',
+        metavar='<int>',
+        default=DEFAULT_READ_MIN,
+        help='Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        required=False)
+    pe_opts.add_argument(
         '--output_bed',
         help='Include option to output BED files for each aligned file',
         action='store_true',
@@ -317,6 +357,18 @@ def get_arguments(args, __version__):
         help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
         required=False)
     rp_opts.add_argument(
+        '-q', '--quality',
+        metavar='<int>',
+        default=DEFAULT_READ_QUALITY,
+        help='PHRED read quality threshold (default: %s)' % DEFAULT_READ_QUALITY,
+        required=False)
+    rp_opts.add_argument(
+        '--min_length',
+        metavar='<int>',
+        default=DEFAULT_READ_MIN,
+        help='Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        required=False)
+    rp_opts.add_argument(
         '--output_bed',
         help='Include option to output BED files for each aligned file',
         action='store_true',
@@ -372,7 +424,7 @@ def get_arguments(args, __version__):
         metavar='<list>',
         nargs='+',
         default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide a list as ["autoPE"]',
+        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide None twice',
         required=False)
     trim_opts.add_argument(
         '-q', '--quality',
@@ -800,6 +852,6 @@ def get_arguments(args, __version__):
     args_dict['path'] = __path__
 
     #Check inputs validity
-    check_arguments(args_dict)
+    check_inputs(args_dict)
 
     return args, args_dict

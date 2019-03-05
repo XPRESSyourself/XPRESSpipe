@@ -31,7 +31,7 @@ DESCRIPTION: Determine number of processors to use
 """
 def get_cores(args_dict):
 
-    if 'max_processors' in args_dict:
+    if 'max_processors' in args_dict and args_dict['max_processors'] != None:
         cores = args_dict['max_processors']
     else:
         cores = cpu_count() #Number of CPU cores on your system
@@ -43,16 +43,16 @@ DESCRIPTION: Calculate most efficient use of cores provided
 """
 def compute_cores_files(args_dict, file_list):
 
-    compute_number = 1
-    workers = args_dict['max_processors']
-
     file_number = len(file_list)
     core_number = get_cores(args_dict)
+
+    workers = core_number
+    compute_number = 1
 
     #Decide how many cores to dedicate to single process at a time
     if file_number < core_number:
         compute_number = math.ceil(core_number / file_number)
-        workers = core_number / compute_number
+        workers = math.ceil(core_number / compute_number)
 
     return compute_number, workers
 
@@ -84,12 +84,12 @@ def parallelize_pe(func, file_list, args_dict):
     #Pair files for paired-end processing
     c1 = 0
     args_iter = []
-    for c1 in file_list:
+    for c in range(int(len(file_list)/2)):
         c2 = c1 + 1
-        args_iter.append([c, c2, args_dict])
+        args_iter.append([file_list[c1], file_list[c2], args_dict])
         c1 += 2
 
-    args_iter = set(args_iter)
+    args_iter = ([x[0], x[1], x[2]] for x in args_iter)
 
     args_dict['threads'], args_dict['workers'] = compute_cores_files(args_dict, file_list)
 

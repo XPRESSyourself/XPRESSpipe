@@ -48,6 +48,15 @@ File Naming
   ExperimentName_b_exType_2.fastq(.qz)
   ExperimentName_b_exType_2.fastq(.qz)
 
+| 6. If you are working with paired-end data:
+
+.. code-block: shell
+
+    ExperimentName_Rep1_a_WT.read1.fastq.gz
+    ExperimentName_Rep1_a_WT.read2.fastq.gz
+    ExperimentName_Rep2_a_WT.read1.fastq.gz
+    ExperimentName_Rep2_a_WT.read2.fastq.gz
+
 ===========
 Data Output
 ===========

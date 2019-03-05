@@ -30,7 +30,7 @@ from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq
 from .count import create_bed, create_bigwig, count_reads, collect_counts, run_normalization
 from .rrnaprobe import rrnaProbe
-from .utils import get_probe_files, create_reference, get_summary, create_flat
+from .utils import get_probe_files, create_reference, get_summary, create_flat, unzip_files
 from .quality import make_metagene, make_readDistributions, make_periodicity
 from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf
 
@@ -46,17 +46,12 @@ def main(args=None):
     #msg_license()
     args, args_dict = get_arguments(args, __version__)
 
-    #Get GTF type
-    if 'count_coding' in args_dict:
-        if 'truncate' in args_dict:
-            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
-        else:
-            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
-    else:
-        args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts.gtf'
-        args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
+    if 'input' in args_dict:
+        unzip_files(args_dict['input'])
+
+    print('**************************')
+    print(args_dict)
+    print('**************************')
 
     #Execute corresponding functions determined by arguments provided by user
     if args.cmd == 'trim':

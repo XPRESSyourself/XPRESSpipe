@@ -7,7 +7,7 @@ in the :data:`--help` menu for each submodule.
 
 | XPRESSpipe can be run essentially from beginning to end as a pipeline, or as individual sub-modules. We will describe each option in more detail in each section of the documentation.
 
-| Further analysis on the resulting datasets can be performed using `XPRESStools <https://github.com/XPRESSyourself/XPRESStools>`.
+| Further analysis on the resulting datasets can be performed using `XPRESStools <https://github.com/XPRESSyourself/XPRESStools>`_.
 
 ======================================
 File Naming
@@ -47,6 +47,15 @@ File Naming
   ExperimentName_b_exType_1.fastq(.qz)
   ExperimentName_b_exType_2.fastq(.qz)
   ExperimentName_b_exType_2.fastq(.qz)
+
+| 6. If you are working with paired-end data:
+
+.. code-block: shell
+
+    ExperimentName_Rep1_a_WT.read1.fastq.gz
+    ExperimentName_Rep1_a_WT.read2.fastq.gz
+    ExperimentName_Rep2_a_WT.read1.fastq.gz
+    ExperimentName_Rep2_a_WT.read2.fastq.gz
 
 ===========
 Data Output

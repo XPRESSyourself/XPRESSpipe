@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>&lt;no title&gt; &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
+  <title>Trim &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
   
 
   
@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="align.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="quickstart.html" /> 
+    <link rel="next" title="Align" href="align.html" />
+    <link rel="prev" title="Ribosome Profiling Pipeline" href="riboprof.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,11 +88,25 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">XPRESSpipe</a></li>
 </ul>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference-building.html">Building References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-building.html">Curating References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">SE RNAseq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">PE RNAseq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Trim</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">Align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="count.html">Count</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quality.html">Quality Control/Meta-analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 </ul>
 
             
@@ -138,7 +152,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>&lt;no title&gt;</li>
+      <li>Trim</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -157,7 +171,121 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  
+  <div class="section" id="trim">
+<h1>Trim<a class="headerlink" href="#trim" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Trimming is a necessary part of RNAseq data processing due to the technological limitations described below:</strong></div>
+<div class="line">- Inherent in RNAseq library creation, RNA is fragmented and adaptor sequences are ligated to the sequence. These adaptors include information such as sample batch and act as a primer for the sequencer to recognize the fragment as something to analyze. However, these adaptors, once sequenced, prevent alignment to a reference as large chunks of the fragment are synthetic sequence not found in each transcript.</div>
+<div class="line">- A sequencer’s job is to read a fragment base by base and determine the nucleotide species each step of the way. While the technology has greatly improved over the years, a probability of error remains. Miscalled bases can prevent proper alignment of the sequenced fragment to the reference. Therefore, it is important for low confidence base calls to be trimmed from each read.</div>
+<div class="line"><br /></div>
+<div class="line">Trimming is performed by <a class="reference external" href="https://github.com/OpenGene/fastp">fastp</a></div>
+</div>
+<div class="section" id="arguments">
+<h2>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">The help menu can be accessed by calling the following from the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim --help
+</pre></div>
+</div>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Required Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">INPUT,</span> <span class="pre">--input</span> <span class="pre">INPUT</span></code></td>
+<td>Path to input directory – if paired-end, file names should be exactly the same except for <code class="xref py py-data docutils literal notranslate"><span class="pre">r1/r2.fastq</span></code> or similar suffix</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">OUTPUT,</span> <span class="pre">--output</span> <span class="pre">OUTPUT</span></code></td>
+<td>Path to output directory</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Optional Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-a</span> <span class="pre">&lt;list&gt;</span> <span class="pre">[&lt;list&gt;</span> <span class="pre">...]</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptor</span> <span class="pre">&lt;list&gt;</span> <span class="pre">[&lt;list&gt;</span> <span class="pre">...]</span></code></td>
+<td>Specify adaptor(s) in list of strings – if more than one is provided, it will be assumed reads are paired-end – if <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> are provided, software will attempt to auto-detect adaptors – if “POLYX” is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> twice</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-q</span> <span class="pre">&lt;int&gt;,</span> <span class="pre">--quality</span> <span class="pre">&lt;int&gt;</span></code></td>
+<td>PHRED read quality threshold (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">28</span></code>)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--min_length</span> <span class="pre">&lt;int&gt;</span></code></td>
+<td>Minimum read length threshold to keep for reads (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">18</span></code>)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></td>
+<td>Number of max processors to use for tasks (default: Max)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><strong>Example 1 – Trim ribosome profiling (or single-end) sequence data using default preferences:</strong></div>
+<div class="line">- Raw reads are <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code>-like and found in the <code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">riboprof_test/</span></code> directory. Can be uncompressed or compressed via <code class="xref py py-data docutils literal notranslate"><span class="pre">gz</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">zip</span></code></div>
+<div class="line">- A general output directory has been created, <code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">riboprof_out/</span></code></div>
+<div class="line">- All other arguments use the default value</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i riboprof_test/ -o riboprof_out/
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Example 2 – Predict adaptor and trim ribosome profiling (or single-end) sequence data:</strong></div>
+<div class="line">- A minimum read length of 22 nucleotides after trimming is required in order to keep the read</div>
+<div class="line">- A maximum or 6 processors can be used for the task</div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span></code> argument was not passed, so an attempt to discover adaptor sequences will be made (this is not always the most efficient or thorough method of trimming and providing the adaptor sequences is recommended)</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i riboprof_test/ -o riboprof_out/ --min_length <span class="m">22</span> -m <span class="m">6</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Example 3 – Pass explicit adaptor trim ribosome profiling (or single-end) sequence data:</strong></div>
+<div class="line">- The default minimum read length threshold will be used</div>
+<div class="line">- The maximum number of processors will be used by default</div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span></code> argument was passed, so adaptor sequences will trimmed explicitly</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i riboprof_test/ -o riboprof_out/ -a CTGTAGGCACCATCAAT
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><a href="#id1"><span class="problematic" id="id2">**</span></a>Example 4 – Predict adaptor and trim paired-end sequence data:</div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span></code> argument was passed as <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span> <span class="pre">None</span></code>, so an attempt to discover adaptor sequences will be made for paired-end reads. The <code class="xref py py-data docutils literal notranslate"><span class="pre">-a</span> <span class="pre">None</span> <span class="pre">None</span></code> syntax is essential for <code class="xref py py-data docutils literal notranslate"><span class="pre">trim</span></code> to recognize the reads as paired-end</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i pe_test/ -o pe_out/ -a None None
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Example 5 – Pass explicit adaptor and trim paired-end sequence data:</strong></div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span></code> argument was passed, so adaptor sequences will trimmed explicitly</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i pe_test/ -o pe_out/ -a ACACTCTTTCCCTACACGACGCTCTTCCGATC GATCGGAAGAGCGGTTCAGCAGGAATGCCGAG
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Example 6 – Trim single-end sequence data of polyX adaptors:</strong></div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span> <span class="pre">POLYX</span></code> argument was passed, so adaptor sequences will trimmed of polyX sequences</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i se_test/ -o se_out/ -a POLYX
+</pre></div>
+</div>
+</div>
+</div>
+
 
            </div>
            
@@ -166,10 +294,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="align.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="align.html" class="btn btn-neutral float-right" title="Align" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="quickstart.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="riboprof.html" class="btn btn-neutral float-left" title="Ribosome Profiling Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -29,16 +29,16 @@ Table of contents
    content/installation
    content/general-usage
    content/quickstart
+   content/reference-building
+   content/seRNAseq
+   content/peRNAseq
+   content/riboprof
    content/trim
    content/align
    content/count
    content/quality
-   content/reference-building
    content/formatting
    content/normalization
-   content/seRNAseq
-   content/peRNAseq
-   content/riboprof
 
 =======
 License

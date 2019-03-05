@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Building References &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
+  <title>Curating References &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
   
 
   
@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="formatting.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="quality.html" /> 
+    <link rel="next" title="SE RNAseq Pipeline" href="seRNAseq.html" />
+    <link rel="prev" title="Quickstart" href="quickstart.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,11 +92,17 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Building References</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#generating-curated-reference">Generating Curated Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#using-a-curated-reference-with-ribopipe">Using a Curated Reference with RiboPipe</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Curating References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">SE RNAseq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">PE RNAseq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trim.html">Trim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">Align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="count.html">Count</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quality.html">Quality Control/Meta-analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 </ul>
 
             
@@ -142,7 +148,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Building References</li>
+      <li>Curating References</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -161,49 +167,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="building-references">
-<h1>Building References<a class="headerlink" href="#building-references" title="Permalink to this headline">¶</a></h1>
-<p>Current curated reference files for compatible alignment programs are included
-when installing RiboPipe for S. cerevisiae only due to file hosting size limits.
-In order to use organisms other than yeast with RiboPipe, sub-modules are
-included that will generate these curated reference files formatted for
-compatibility with RiboPipe.</p>
-<div class="section" id="generating-curated-reference">
-<h2>Generating Curated Reference<a class="headerlink" href="#generating-curated-reference" title="Permalink to this headline">¶</a></h2>
-<p>Currently, curated references compatible with RiboPipe can be generated for the
-following model organisms:
-Homo sapiens (STAR)</p>
-<p>RiboPipe is easily adaptable to allow curation of other organisms as the need
-arises. Future updates will allow for increased breadth of model organisms.</p>
-<p>In order to generate these references, follow the example below:</p>
-<ol class="arabic simple">
-<li>Create a directory where ever convenient that will be used to store references:</li>
-</ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~/references
-</pre></div>
-</div>
-<p>2)  Run RiboPipe’s <code class="xref py py-data docutils literal notranslate"><span class="pre">curate</span></code> sub-module, specifying references directory
-created in previous step (or previously created for another curated reference):</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ ribopipe curate -l /path/to/reference/ -p STAR -r human -c <span class="m">16</span>
-</pre></div>
-</div>
-<p>If a model organism for a compatible alignment software is not available, please
-contact us and we can aid in generating a different curated reference file.</p>
-</div>
-<div class="section" id="using-a-curated-reference-with-ribopipe">
-<h2>Using a Curated Reference with RiboPipe<a class="headerlink" href="#using-a-curated-reference-with-ribopipe" title="Permalink to this headline">¶</a></h2>
-<p>Once a curated reference has been generated, slightly different parameters must be
-used with RiboPipe’s <code class="xref py py-data docutils literal notranslate"><span class="pre">riboseq</span></code> and <code class="xref py py-data docutils literal notranslate"><span class="pre">rnaseq</span></code> sub-modules.</p>
-<p>Provide the <code class="xref py py-data docutils literal notranslate"><span class="pre">-c</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">--custom</span></code> flags
-Provide the full path to the reference folder with the <code class="xref py py-data docutils literal notranslate"><span class="pre">-r</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">--reference</span></code> flags,
-such as in the example below:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ ribopipe riboseq -i /path/to/input -o /path/to/output ... <span class="se">\</span>
--c -r /scratch/general/lustre/u0690617/references/human_reference_star
-</pre></div>
-</div>
-<p>If using alignment software other than STAR, the <code class="xref py py-data docutils literal notranslate"><span class="pre">-p</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">--program</span></code>
-flags still need to be provided with the appropriate software name</p>
-</div>
+  <div class="section" id="curating-references">
+<h1>Curating References<a class="headerlink" href="#curating-references" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -214,10 +179,10 @@ flags still need to be provided with the appropriate software name</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="formatting.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="seRNAseq.html" class="btn btn-neutral float-right" title="SE RNAseq Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="quality.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -18,7 +18,4 @@ dependencies:
 - plastid
 - gtfToGenePred
 - htseq
-- pip:
- - xpresstools
- - multiqc
 prefix: .miniconda2/envs/test
