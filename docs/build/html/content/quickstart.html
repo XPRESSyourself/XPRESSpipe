@@ -8,54 +8,56 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quickstart &mdash; ribopipe 0.1.6-beta documentation</title>
+  <title>&lt;no title&gt; &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../_static/ribopipe.png"/>
+    <link rel="shortcut icon" href="../_static/xpressyourself.png"/>
   
   
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="General Usage" href="general-usage.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+    <link rel="next" title="&lt;no title&gt;" href="trim.html" />
+    <link rel="prev" title="General Usage" href="general-usage.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="../index.html" class="icon icon-home"> ribopipe
+            <a href="../index.html" class="icon icon-home"> XPRESSpipe
           
 
           
             
-            <img src="../_static/ribopipe.png" class="logo" alt="Logo"/>
+            <img src="../_static/xpressyourself.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -83,17 +85,14 @@
               
             
             
-              <ul class="current">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">XPRESSpipe</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#local">Local</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#hpc">HPC</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example-usage.html">Example Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advanced-usage.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-building.html">Building References</a></li>
 </ul>
 
             
@@ -108,7 +107,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">ribopipe</a>
+          <a href="../index.html">XPRESSpipe</a>
         
       </nav>
 
@@ -139,7 +138,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Quickstart</li>
+      <li>&lt;no title&gt;</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -158,48 +157,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="quickstart">
-<h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<ol class="arabic simple">
-<li><a class="reference external" href="installation">Install</a> RiboPipe.</li>
-</ol>
-<div class="section" id="local">
-<h2>Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple" start="2">
-<li>Move raw data to directory of choice</li>
-<li>Create output directory</li>
-<li>Run ribopipe:</li>
-</ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">raw_data</span><span class="o">=</span>/path/to/raw/data
-$ <span class="nv">output_data</span><span class="o">=</span>/path/to/output/data
-$ ribopipe riboseq -i <span class="nv">$raw_data</span> -o <span class="nv">$output_data</span>
-</pre></div>
-</div>
-<ol class="arabic simple" start="5">
-<li>Collect raw_counts.csv output in $output_data/assembly/counts and edit <a class="reference external" href="https://github.com/j-berg/ribopipe/blob/master/resources/diffex_template.csv">sample_info.csv</a></li>
-<li>Run diffex:</li>
-</ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">ribopipe_path</span><span class="o">=</span>/path/to/ribopipe
-$ ribopipe diffex -i <span class="nv">$output_data</span>/assembly/counts/raw_counts.csv -d <span class="nv">$ribopipe_path</span>/resources/sample_info.csv -o output_name --type riboseq
-</pre></div>
-</div>
-</div>
-<div class="section" id="hpc">
-<h2>HPC<a class="headerlink" href="#hpc" title="Permalink to this headline">¶</a></h2>
-<p>2) Modify hpc_run_template.sh in the <a class="reference external" href="https://github.com/j-berg/ribopipe/resources/">resources</a>
-folder for an example script for submitting the pipeline job to the HPC and make sure dependencies
-listed in this script are on the HPC system, else they need to be locally installed
-3)  Run the script by executing the following:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ sbatch hpc_run_template.sh
-</pre></div>
-</div>
-<p>If you want the slurm output file to be sent to the SLURM directory to avoid storage space issues on your interactive node, then in the <cite>#SBATCH -o slurmjob-%j</cite> line, replace it with the path to your SLURM directory:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="c1">#SBATCH -o /scratch/general/lustre/INPUT_USER_ID_HERE/slurmjob-%j</span>
-</pre></div>
-</div>
-</div>
-</div>
-
+  
 
            </div>
            
@@ -208,10 +166,10 @@ listed in this script are on the HPC system, else they need to be locally instal
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="general-usage.html" class="btn btn-neutral float-right" title="General Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="trim.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="general-usage.html" class="btn btn-neutral float-left" title="General Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -220,7 +178,7 @@ listed in this script are on the HPC system, else they need to be locally instal
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Jordan A. Berg
+        &copy; Copyright 2019, Jordan A. Berg
 
     </p>
   </div> 
@@ -236,35 +194,16 @@ listed in this script are on the HPC system, else they need to be locally instal
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.1.6-beta',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

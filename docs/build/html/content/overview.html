@@ -8,54 +8,56 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview &mdash; ribopipe 0.1.6-beta documentation</title>
+  <title>Overview &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="../_static/ribopipe.png"/>
+    <link rel="shortcut icon" href="../_static/xpressyourself.png"/>
   
   
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation" href="installation.html" />
-    <link rel="prev" title="RiboPipe: An assembly and analysis pipeline for sequencing data" href="../index.html" /> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+    <link rel="prev" title="XPRESSpipe" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="../index.html" class="icon icon-home"> ribopipe
+            <a href="../index.html" class="icon icon-home"> XPRESSpipe
           
 
           
             
-            <img src="../_static/ribopipe.png" class="logo" alt="Logo"/>
+            <img src="../_static/xpressyourself.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -83,16 +85,19 @@
               
             
             
-              <ul class="current">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">XPRESSpipe</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#se-and-pe-rnaseq">SE and PE RNAseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ribosome-profiling">Ribosome Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#batch-effect-normalization">Batch Effect Normalization</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example-usage.html">Example Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="advanced-usage.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-building.html">Building References</a></li>
 </ul>
 
             
@@ -107,7 +112,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">ribopipe</a>
+          <a href="../index.html">XPRESSpipe</a>
         
       </nav>
 
@@ -159,20 +164,34 @@
             
   <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="background">
-<h2>Background<a class="headerlink" href="#background" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://en.wikipedia.org/wiki/Ribosome_profiling">Ribosome profiling</a> utilizes
-Next Generation Sequencing to provide a detailed picture of the protein translation
-landscape within cells. Cells are lysed, translating ribosomes are isolated, and
-the ribosome protected mRNA fragments are integrated into a sequencing library.
-The library is then sequenced and raw data (often in the form of
-<a class="reference external" href="http://support.illumina.com/content/dam/illumina-support/help/BaseSpaceHelp_v2/Content/Vault/Informatics/Sequencing_Analysis/BS/swSEQ_mBS_FASTQFiles.htm">.fastq</a>
-or .txt files) is generated. This pipeline is flexibly designed to be able to
-process and perform preliminary analyses on SE (single-end) short (&lt;= 100 bp)
-read raw sequence data.</p>
-<p>See this <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/28579404">paper</a>
-for a recent discussion and detailed protocol of the technique.</p>
-<a class="reference internal image-reference" href="../_images/riboseq_overview.png"><img alt="../_images/riboseq_overview.png" src="../_images/riboseq_overview.png" style="width: 600px;" /></a>
+<div class="section" id="se-and-pe-rnaseq">
+<h2>SE and PE RNAseq<a class="headerlink" href="#se-and-pe-rnaseq" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">The XPRESSpipe pipeline is flexibly designed to be able to process and perform preliminary analyses on single-end (SE) or paired-end RNAseq sequence read. Raw data is most often generated in the form of a <a class="reference external" href="http://support.illumina.com/content/dam/illumina-support/help/BaseSpaceHelp_v2/Content/Vault/Informatics/Sequencing_Analysis/BS/swSEQ_mBS_FASTQFiles.htm">.fastq</a> or .txt file. This data is useful in determining the transcriptional landscape of a population of cells or of single cells. Other qualities, such as microRNA abundance, splice events, and sequence variants can also be detected and analyzed.</div>
+</div>
+</div>
+<div class="section" id="ribosome-profiling">
+<h2>Ribosome Profiling<a class="headerlink" href="#ribosome-profiling" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://en.wikipedia.org/wiki/Ribosome_profiling">Ribosome profiling</a> utilizes Next Generation Sequencing (NGS) to provide a detailed picture of the protein translation landscape within cells. Cells are lysed, translating ribosomes are isolated, and the ribosome protected mRNA fragments (ribosome footprints are integrated into a SE RNAseq library. The library is then sequenced and processed similarly to a single-end RNAseq run, with some exceptions:</div>
+</div>
+<div class="line-block">
+<div class="line">- <strong>5’ ribosome footprint bias</strong>: 5’ footprint bias has been well-documented in any sequence library preparation method. Therefore, it is advised that when counting reads to a reference transcriptome, one avoids mapping to the first 45-50 nucleotides of exon 1 of each transcript. By using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">truncate</span></code> sub-module, one can create truncated transcriptome reference files (GTF) for counting their aligned reads.</div>
+</div>
+<div class="line-block">
+<div class="line">- <strong>rRNA contamination</strong>: As pervasive ribosomal RNA (rRNA) can contaminate footprint libraries due to most commercial kits’ inability to deplete these various fragmented rRNAs inherent in the ribosome profiling methodology, it is advised to create depletion probes that are dominant in ribosome profiling libraries for a given organism. By using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">rrnaProbe</span></code> sub-module, one can collate these dominant rRNA species and create depletion probes for these fragment species.</div>
+</div>
+<div class="line-block">
+<div class="line">See this <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/28579404">paper</a> for a recent discussion and detailed protocol of the technique.</div>
+</div>
+<a class="reference internal image-reference" href="../_images/riboseq_overview.png"><img alt="../_images/riboseq_overview.png" class="align-center" src="../_images/riboseq_overview.png" style="width: 600px;" /></a>
+</div>
+<div class="section" id="batch-effect-normalization">
+<h2>Batch Effect Normalization<a class="headerlink" href="#batch-effect-normalization" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><strong>Batch Effect</strong>: When using larger RNAseq libraries where multiple people prepared sequence libraries or where libraries were prepared on different days, batch effect normalization must be performed to remove these effects on sequence counts and make libraries that are comparable to one another. This step can be performed using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">batchNormalize</span></code> sub-module.</div>
+<div class="line"><strong>Sample Variability</strong>: Other sample inherent biases, such as variable total read counts per sample on the same sequencing chip, should be normalized using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">normalizeMatrix</span></code> sub-module.</div>
+</div>
 </div>
 </div>
 
@@ -187,7 +206,7 @@ for a recent discussion and detailed protocol of the technique.</p>
         <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral" title="RiboPipe: An assembly and analysis pipeline for sequencing data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="XPRESSpipe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -196,7 +215,7 @@ for a recent discussion and detailed protocol of the technique.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Jordan A. Berg
+        &copy; Copyright 2019, Jordan A. Berg
 
     </p>
   </div> 
@@ -212,35 +231,16 @@ for a recent discussion and detailed protocol of the technique.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../',
-              VERSION:'0.1.6-beta',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="../_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -20,14 +20,14 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
-project = 'ribopipe'
-copyright = '2018, Jordan A. Berg'
+project = 'XPRESSpipe'
+copyright = '2019, Jordan A. Berg'
 author = 'Jordan A. Berg'
 
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.1.6-beta'
+release = '0.0.1-alpha'
 
 
 # -- General configuration ---------------------------------------------------
@@ -101,12 +101,12 @@ html_short_title = project + " v" + release
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = 'content/ribopipe.png'
+html_logo = 'content/xpressyourself.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = 'content/ribopipe.png'
+html_favicon = 'content/xpressyourself.png'
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -125,7 +125,7 @@ html_show_sphinx = False
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ribopipe-docs'
+htmlhelp_basename = 'xpresspipe-docs'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -152,7 +152,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ribopipe.tex', 'ribopipe Documentation',
+    (master_doc, 'xpresspipe.tex', 'xpresspipe Documentation',
      'Jordan A. Berg', 'manual'),
 ]
 
@@ -162,7 +162,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'ribopipe', 'ribopipe Documentation',
+    (master_doc, 'xpresspipe', 'xpresspipe Documentation',
      [author], 1)
 ]
 
@@ -173,8 +173,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ribopipe', 'ribopipe Documentation',
-     author, 'ribopipe', 'One line description of project.',
+    (master_doc, 'xpresspipe', 'xpresspipe Documentation',
+     author, 'xpresspipe', 'One line description of project.',
      'Miscellaneous'),
 ]
 

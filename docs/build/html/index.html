@@ -8,53 +8,55 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>RiboPipe: An assembly and analysis pipeline for sequencing data &mdash; ribopipe 0.1.6-beta documentation</title>
+  <title>XPRESSpipe &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
   
 
   
   
-    <link rel="shortcut icon" href="_static/ribopipe.png"/>
+    <link rel="shortcut icon" href="_static/xpressyourself.png"/>
   
   
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Overview" href="content/overview.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
-            <a href="#" class="icon icon-home"> ribopipe
+            <a href="#" class="icon icon-home"> XPRESSpipe
           
 
           
             
-            <img src="_static/ribopipe.png" class="logo" alt="Logo"/>
+            <img src="_static/xpressyourself.png" class="logo" alt="Logo"/>
           
           </a>
 
@@ -82,13 +84,14 @@
               
             
             
-              <ul>
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">XPRESSpipe</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="content/overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/example-usage.html">Example Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/advanced-usage.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/reference-building.html">Building References</a></li>
 </ul>
 
             
@@ -103,7 +106,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">ribopipe</a>
+          <a href="#">XPRESSpipe</a>
         
       </nav>
 
@@ -134,7 +137,7 @@
     
       <li><a href="#">Docs</a> &raquo;</li>
         
-      <li><strong>RiboPipe</strong>: <em>An assembly and analysis pipeline for sequencing data</em></li>
+      <li>XPRESSpipe</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -153,45 +156,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ribopipe-an-assembly-and-analysis-pipeline-for-sequencing-data">
-<h1><strong>RiboPipe</strong>: <em>An assembly and analysis pipeline for sequencing data</em><a class="headerlink" href="#ribopipe-an-assembly-and-analysis-pipeline-for-sequencing-data" title="Permalink to this headline">¶</a></h1>
-<p><strong>RiboPipe</strong> is toolkit designed for automating the assembly,
-quality control, and analysis of ribosome profiling and other single-end RNAseq
-datasets. It is intended to be easy to use for bench and computational biologists
-and is quick to use out of the box.</p>
-<p><strong>RiboPipe</strong> is developed by Jordan Berg in the <a class="reference external" href="https://biochem.utah.edu/rutter/index.html">Rutter Lab</a>
-&#64; the <a class="reference external" href="https://www.utah.edu/">University of Utah</a>, along with other collaborators.</p>
+  <div class="section" id="xpresspipe">
+<h1>XPRESSpipe<a class="headerlink" href="#xpresspipe" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://travis-ci.org/XPRESSyourself/XPRESSpipe"><img alt="Build Status" src="https://travis-ci.org/XPRESSyourself/XPRESSpipe.svg?branch=master" /></a> <a class="reference external" href="https://xpresspipe.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/xpresspipe/badge/?version=latest" /></a> <a class="reference external" href="https://pypi.org/project/XPRESSpipe"><img alt="PyPi Status" src="https://img.shields.io/pypi/v/XPRESSpipe.svg" /></a> <a class="reference external" href="https://zenodo.org/badge/latestdoi/######"><img alt="DOI Status" src="https://zenodo.org/badge/######.svg" /></a></p>
+<div class="section" id="about">
+<h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is a part of the <a class="reference external" href="https://github.com/XPRESSyourself/">XPRESSyourself</a> suite of sequencing tools. <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is an automated and flexible pipeline for processing RNAseq raw data and preparing for sequence analysis. <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is capable of handling single-end (SE), paired-end (PE), and ribosome profiling SE data. Features include the ability to trim, align, and count sequence reads. Other useful features include:</div>
+<div class="line">- Create a 5’ truncated transcript reference file to counting reads (useful in ribosome profiling to avoid quantifying the persistent 5’ ribosome footprint bias)</div>
+<div class="line">- Automated creation of <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> alignment reference files</div>
+<div class="line">- Identification of over-abundant sequences in library prep for depletion probe design of those sequences and library quality improvement</div>
+<div class="line">- Meta-analyses, such as metagene profiles for each processed file and 3-codon periodicity of most-abundant footprint length (useful in ribosome profiling library quality control)</div>
+<div class="line"><br /></div>
+<div class="line"><a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> and the <a class="reference external" href="https://github.com/XPRESSyourself/">XPRESSyourself</a> suite is developed and maintained by Jordan Berg in the <a class="reference external" href="https://biochem.utah.edu/rutter/index.html">Rutter Lab</a> &#64; the <a class="reference external" href="https://www.utah.edu/">University of Utah</a>, along with other collaborators.</div>
+</div>
 </div>
 <div class="section" id="table-of-contents">
-<h1>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h1>
+<h2>Table of contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="content/overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/example-usage.html">Example Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/advanced-usage.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/reference-building.html">Building References</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<p>Video walkthrough coming soon! See the <a class="reference external" href="content/quickstart">Quickstart</a> guide for more information.</p>
-</div>
-<div class="section" id="important-notes">
-<h1>Important notes<a class="headerlink" href="#important-notes" title="Permalink to this headline">¶</a></h1>
-</div>
-<div class="section" id="performance">
-<h1>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h1>
-</div>
 <div class="section" id="license">
-<h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>
-<p>RiboPipe is freely available under a GNU General Public License (v3.0).</p>
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is freely available under a GNU General Public License (v3.0).</div>
 </div>
-<div class="section" id="mailing-list">
-<h1>Mailing list<a class="headerlink" href="#mailing-list" title="Permalink to this headline">¶</a></h1>
-<p>If you have questions, requests, or bugs to report, please use the Github issues forum.</p>
+</div>
+<div class="section" id="questions">
+<h2>Questions?<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">If you have questions, requests, or bugs to report, please use the <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe/issues">Github issues forum</a>.</div>
+</div>
+</div>
 </div>
 
 
@@ -212,7 +216,7 @@ and is quick to use out of the box.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Jordan A. Berg
+        &copy; Copyright 2019, Jordan A. Berg
 
     </p>
   </div> 
@@ -228,35 +232,16 @@ and is quick to use out of the box.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'0.1.6-beta',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -2,120 +2,75 @@
 Installation
 ############
 
-===================
-Local Installation:
-===================
-1)  Make sure Python3, git, and wget are installed.
-2)  Download `Conda <https://www.anaconda.com/download/#macos>`_, a package manager, for your operating system. Double click the `.pkg` file if on MacOS, the `.exe` file on Windows, or follow these `instructions <https://conda.io/docs/user-guide/install/linux.html#install-linux-silent>`_ on Linux.
-3)  Execute the following lines of code in `Terminal <https://www.imore.com/how-use-terminal-mac-when-you-have-no-idea-where-start>`_ (on Mac, open Spotlight and type 'Terminal'):
-4)  Download current repository:
+====================
+PyPi Install
+====================
+| This feature is not yet available...
+|
+| 1)  Install XPRESSpipe and associated dependencies via pip:
 
 .. code-block:: shell
 
-  $ git clone https://github.com/j-berg/ribopipe.git
-  $ cd ribopipe/ribopipe/references
+  $ pip install xpresspipe
 
-5)  To download specific version
-
-.. code-block:: shell
-
-  $ tag='v0.1.4-beta'
-  $ wget https://github.com/j-berg/ribopipe/archive/$tag.zip
-  $ unzip ribopipe-${tag:1}.zip
-  $ cd ribopipe-${tag:1}/ribopipe/references
-
-6)  Get reference
+====================
+Conda Install
+====================
+| This feature is not yet available...
+|
+| 1)  Install XPRESSpipe and associated dependencies via conda:
 
 .. code-block:: shell
 
-  $ model='yeast'
-  $ program='hisat2'
-  $ wget https://sourceforge.net/projects/ribopipe/files/${program}_references/${model}_reference_${program}.zip
-  $ unzip ${model}_reference_${program}.zip
-  $ rm ${model}_reference_${program}.zip
-  $ cd ../../
-  $ python3 setup.py install --prefix ~/.local
+  $ conda install -y -c bioconda xpresspipe
 
-7) add script installation location given near the end of the setup scripting output to ~/.bashrc or ~/.bash_profile
-add to .bashrc
+======================
+Manual install
+======================
+
+| 1)  Or download XPRESSpipe manually:
 
 .. code-block:: shell
 
-  $ echo "PATH='/path/to/scripts/:$PATH'" >> ~/.bashrc
+  $ git clone https://github.com/XPRESSyourself/xpresspipe.git
+  $ cd XPRESSpipe
+  $ cd python setup.py install
 
-add to .bash_profile
-
-.. code-block:: shell
-
-  $ echo "PATH='/path/to/scripts/:$PATH'" >> ~/.bash_profile
-
-8) Test by typing the following:
+| 2)  Or, to download specific version:
 
 .. code-block:: shell
 
-  $ ribopipe --help
+  $ tag='v0.0.1-beta'
+  $ wget https://github.com/XPRESSyourself/XPRESSpipe/archive/$tag.zip
+  $ unzip xpresspipe-${tag:1}.zip
+  $ mv xpresspipe-${tag:1} xpresspipe
+  $ cd xpresspipe
+  $ cd python setup.py install
 
-9) Install conda dependencies:
-
-.. code-block:: shell
-
-  $ ribopipe install
-
-See local_install.sh in the `resources <https://github.com/j-berg/ribopipe/resources/>`_ folder for interactive script
-
-
-=================
-HPC Installation:
-=================
-1)  Make sure Python3, git, and wget are installed.
-2)  Execute the following lines of code:
-
-3)  To download current repository:
+| 3)  At the end of the installation instructions, an installation location will be given. Add this to your $PATH:
 
 .. code-block:: shell
 
-  $ git clone https://github.com/j-berg/ribopipe.git
-  $ cd ribopipe/ribopipe/references
+  ...
+  Installing xpresspipe script to /Users/$USERNAME/anaconda3/bin
 
-4)  To download specific version
+  Installed /Users/$USERNAME/anaconda3/lib/python3.6/site-packages/xpresspipe-0.0.1b0-py3.6.egg
+  Processing dependencies for XPRESSpipe==0.0.1b0
+  Finished processing dependencies for XPRESSpipe==0.0.1b0
 
-.. code-block:: shell
+  $ echo "export PATH='/Users/$USERNAME/anaconda3/bin:$PATH' >> ~/.bash_profile
 
-  $ tag='v0.1.4-beta'
-  $ wget https://github.com/j-berg/ribopipe/archive/$tag.zip
-  $ unzip ribopipe-${tag:1}.zip
-  $ cd ribopipe-${tag:1}/ribopipe/references
-
-5)  Get reference
-
-.. code-block:: shell
-
-  $ model='yeast'
-  $ program='hisat2'
-  $ wget https://sourceforge.net/projects/ribopipe/files/${program}_references/${model}_reference_${program}.zip
-  $ unzip ${model}_reference_${program}.zip
-  $ rm ${model}_reference_${program}.zip
-  $ cd ../../
-  $ module load python3
-  $ python setup.py install --prefix ~/.local
-
-6)  Add script installation location given near the end of the setup scripting output to ~/.bashrc or ~/.bash_profile
-add to .bashrc
-
-.. code-block:: shell
-
-  $ echo "PATH='/path/to/scripts/:$PATH'" >> ~/.bashrc
-
-add to .bash_profile
-
-.. code-block:: shell
-
-  $ echo "PATH='/path/to/scripts/:$PATH'" >> ~/.bash_profile
-
-7) Test by typing the following:
-
-.. code-block:: shell
-
-  $ ribopipe --help
-
-See hpc_install.sh in the `resources <https://github.com/j-berg/ribopipe/resources/>`_ folder for interactive script
+====================
+Dependencies
+====================
+| - FastP
+| - STAR
+| - samtools
+| - bedtools
+| - deeptools
+| - xpresspipe
+| - picard
+| - fastqc
+| - plastid
+| - gtfToGenePred
+| - htseq

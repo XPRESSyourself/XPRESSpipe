@@ -1,10 +1,10 @@
 package:
   name: XPRESSpipe
-  version: 0.0.1
+  version: 0.0.1-alpha
 
 source:
-  fn: XPRESSpipe-0.0.1.tar.gz
-  url: https://github.com/XPRESSyourself/XPRESStools/archive/XPRESSpipe-0.0.1.tar.gz
+  fn: XPRESSpipe-0.0.1a1.tar.gz
+  url: https://github.com/XPRESSyourself/XPRESStools/archive/XPRESSpipe-0.0.1a1.tar.gz
 
 test:
   commands:
@@ -14,3 +14,11 @@ about:
   home: https://xpresspipe.readthedocs.io/en/latest/
   summary: An alignment and analysis pipeline for RNAseq data
   license: GPL-3.0
+
+package:
+  version: {{ environ['VERSION'] }}
+
+build:
+  script_env:
+   - VERSION
+   - CONDA_BLD_PATH
