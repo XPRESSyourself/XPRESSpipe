@@ -73,7 +73,7 @@ Examples
 
   $ xpresspipe trim -i riboprof_test/ -o riboprof_out/ -a CTGTAGGCACCATCAAT
 
-| **Example 4 -- Predict adaptor and trim paired-end sequence data:
+| **Example 4 -- Predict adaptor and trim paired-end sequence data:**
 | - The :data:`--adaptors` argument was passed as :data:`None None`, so an attempt to discover adaptor sequences will be made for paired-end reads. The :data:`-a None None` syntax is essential for :data:`trim` to recognize the reads as paired-end
 
 .. code-block:: shell

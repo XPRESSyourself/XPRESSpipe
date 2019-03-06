@@ -1,7 +1,7 @@
 ##############
 XPRESSpipe
 ##############
-|build-status| |docs| |pypi| |doi|
+|build-status| |codecov| |docs| |pypi|
 
 =================
 About
@@ -56,6 +56,10 @@ Questions?
     :target: https://travis-ci.org/XPRESSyourself/XPRESSpipe
     :alt: Build Status
 
+.. |codecov| image:: https://codecov.io/gh/XPRESSyourself/XPRESSpipe/XPRESSpipe.svg?branch=master
+    :target: https://codecov.io/gh/XPRESSyourself/XPRESSpipe
+    :alt: Code Coverage
+
 .. |docs| image:: https://readthedocs.org/projects/xpresspipe/badge/?version=latest
     :target: https://xpresspipe.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
@@ -63,7 +67,3 @@ Questions?
 .. |pypi| image:: https://img.shields.io/pypi/v/XPRESSpipe.svg
     :target: https://pypi.org/project/XPRESSpipe
     :alt: PyPi Status
-
-.. |doi| image:: https://zenodo.org/badge/######.svg
-   :target: https://zenodo.org/badge/latestdoi/######
-   :alt: DOI Status

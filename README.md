@@ -4,6 +4,7 @@
 ### A toolkit for navigating and analyzing gene expression datasets
 
 [![Build Status](https://travis-ci.org/XPRESSyourself/XPRESSpipe.svg?branch=master)](https://travis-ci.org/XPRESSyourself/XPRESSpipe)
+[![codecov.io](https://codecov.io/gh/XPRESSyourself/XPRESSpipe/XPRESSpipe.svg?branch=master)](https://codecov.io/gh/XPRESSyourself/XPRESSpipe)
 [![Documentation Status](https://readthedocs.org/projects/xpresspipe/badge/?version=latest)](https://xpresspipe.readthedocs.io/en/latest/?badge=latest)
 [![PyPi Status](https://img.shields.io/pypi/v/XPRESSpipe.svg)](https://pypi.org/project/XPRESSpipe/)
 

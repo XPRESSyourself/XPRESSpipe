@@ -31,9 +31,17 @@ xpresspipe trim -i pe_test -o pe_out --min_length 50 -a POLYx
 rn -r pe_test
 mv pe_test_archive pe_test
 
+#####################
+#TEST CREATEREFERENCE
+#####################
+
+
 ###########
 #TEST ALIGN
 ###########
+TRIMDIR=pe_out/trimmed_fastq
+
+xpresspipe align -i $TRIMDIR -o riboprof_out -r ../references/tcga_reference_star
 
 ###########
 #TEST ALIGN

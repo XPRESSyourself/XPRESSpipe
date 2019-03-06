@@ -35,7 +35,7 @@ setup(
     author_email = 'jordan.berg@biochem.utah.edu',
     url = 'https://github.com/XPRESSyourself/XPRESSpipe',
     packages = ['xpresspipe'],
-    exclude = ['tests','docs']
+    exclude = ['tests','docs'],
     package_dir = {'xpresspipe': 'xpresspipe'},
     include_package_data = True,
     license = 'GPL-3.0',
