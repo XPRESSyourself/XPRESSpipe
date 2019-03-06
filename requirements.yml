@@ -12,10 +12,9 @@ dependencies:
 - samtools
 - bedtools
 - deeptools
-- xpresspipe
 - picard
 - fastqc
 - plastid
-- gtfToGenePred
+- ucsc-gtftogenepred
 - htseq
 prefix: .miniconda2/envs/test
