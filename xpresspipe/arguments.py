@@ -722,10 +722,10 @@ def get_arguments(args, __version__):
         action='help',
         help='Show help message and exit')
     curate_opts.add_argument(
-        '--threads',
-        help='Specify number of threads to use (default: %s)' % 8,
-        default=8,
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
         metavar='<int>',
+        default=DEFAULT_MAX_PROCESSORS,
         required=False)
     curate_opts.add_argument(
         '--sjdbOverhang',
@@ -815,10 +815,10 @@ def get_arguments(args, __version__):
         action='help',
         help='Show help message and exit')
     reference_opts.add_argument(
-        '-t', '--threads',
-        help='Specify number of threads to use (default: %s)' % 8,
-        default=8,
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
         metavar='<int>',
+        default=DEFAULT_MAX_PROCESSORS,
         required=False)
     reference_opts.add_argument(
         '--sjdbOverhang',

@@ -4,3 +4,9 @@
 *__pycache__*
 .DS_Store
 *.soft.gz
+**.DS_Store
+/tests/*out*
+/tests/pe_out/**
+/tests/pe_test_archive/**
+/tests/riboprof_out/**
+**reference/genome**

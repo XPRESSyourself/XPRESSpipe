@@ -36,25 +36,9 @@ def get_cores(args_dict):
     else:
         cores = cpu_count() #Number of CPU cores on your system
 
-    return cores
+    workers = 1
 
-"""
-DESCRIPTION: Calculate most efficient use of cores provided
-"""
-def compute_cores_files(args_dict, file_list):
-
-    file_number = len(file_list)
-    core_number = get_cores(args_dict)
-
-    workers = core_number
-    compute_number = 1
-
-    #Decide how many cores to dedicate to single process at a time
-    if file_number < core_number:
-        compute_number = math.ceil(core_number / file_number)
-        workers = math.ceil(core_number / compute_number)
-
-    return compute_number, workers
+    return cores, workers
 
 """
 DESCRIPTION: Run function and files on pools
@@ -72,7 +56,7 @@ def parallelize(func, file_list, args_dict):
 
     args_iter = ([file, args_dict] for file in file_list)
 
-    args_dict['threads'], args_dict['workers'] = compute_cores_files(args_dict, file_list)
+    args_dict['threads'], args_dict['workers'] = get_cores(args_dict)
 
     run_pools(func, args_iter, args_dict)
 
@@ -91,6 +75,6 @@ def parallelize_pe(func, file_list, args_dict):
 
     args_iter = ([x[0], x[1], x[2]] for x in args_iter)
 
-    args_dict['threads'], args_dict['workers'] = compute_cores_files(args_dict, file_list)
+    args_dict['threads'], args_dict['workers'] = get_cores(args_dict)
 
     run_pools(func, args_iter, args_dict)

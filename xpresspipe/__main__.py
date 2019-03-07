@@ -32,6 +32,7 @@ from .count import create_bed, create_bigwig, count_reads, collect_counts, run_n
 from .rrnaprobe import rrnaProbe
 from .utils import get_probe_files, create_reference, get_summary, create_flat, unzip_files
 from .quality import make_metagene, make_readDistributions, make_periodicity
+from .parallel import get_cores
 from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf
 
 """
@@ -105,6 +106,7 @@ def main(args=None):
         print('Curating reference')
         args_dict['create_refFlats'] = True
         #Create STAR reference
+        args_dict['threads'], args_dict['workers'] = get_cores(args_dict)
         create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
         #Truncate transcript reference
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(output_path), sep='\t', return_files=False)
@@ -114,6 +116,7 @@ def main(args=None):
 
     elif args.cmd == 'makeReference':
         print('Creating reference files...')
+        args_dict['threads'], args_dict['workers'] = get_cores(args_dict)
         create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
         msg_complete()
 

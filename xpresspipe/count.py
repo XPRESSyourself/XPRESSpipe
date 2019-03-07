@@ -34,7 +34,7 @@ DESCRIPTION: Convert a sorted sam file to a bam file
 """
 def sam2bam(path, file):
 
-    os.system('samtools view -S -b ' + str(path) + str(file) + ' > ' + str(path) + str(file[:-4]) + '.bam')
+    os.system('samtools view -h -S -b ' + str(path) + str(file) + ' > ' + str(path) + str(file[:-4]) + '.bam')
     os.system("samtools index " + str(path) + str(file[:-4]) + '.bam')
 
 """
@@ -53,6 +53,7 @@ def bed_convert(args):
         raise Exception('Incorrect input file')
 
     #Convert BAM to BED
+    print('bedtools bamtobed -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
     os.system('bedtools bamtobed -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
 
 def create_bed(args_dict):

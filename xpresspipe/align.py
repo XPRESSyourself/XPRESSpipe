@@ -24,7 +24,7 @@ IMPORT DEPENDENCIES
 """
 import os, sys
 from .utils import get_files, unzip_files, add_directory, get_fasta
-from .parallel import parallelize, parallelize_pe, compute_cores_files
+from .parallel import parallelize, parallelize_pe
 
 """
 """
@@ -50,7 +50,7 @@ def second_star(file, output, args_dict):
 def alignment_sort(output, args_dict):
 
     os.system('samtools sort ' + str(args_dict['alignments']) + str(output) + '_final_Aligned.out.sam -o ' + str(args_dict['alignments']) + str(output) + '_sorted.sam')
-    os.system('samtools view -q 255 ' + str(args_dict['alignments']) + str(output) + '_sorted.sam > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
+    os.system('samtools view -h -q 255 ' + str(args_dict['alignments']) + str(output) + '_sorted.sam > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
 
 """
 DESCRIPTION: Remove all intermediate alignment files and references after alignment is complete
