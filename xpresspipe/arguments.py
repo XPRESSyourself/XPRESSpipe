@@ -183,19 +183,26 @@ def get_arguments(args, __version__):
     se_reqs.add_argument(
         '-i', '--input',
         help='Path to input directory',
+        metavar='<path>',
+        type=str,
         required=True)
     se_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     se_reqs.add_argument(
         '-r', '--reference',
         help='Path to parent organism reference directory',
+        metavar='<path>',
+        type=str,
         required=True)
     se_reqs.add_argument(
         '-e', '--experiment',
         help='Experiment name',
-        metavar='<str>',
+        metavar='<experiment_name>',
+        type=str,
         required=True)
     #Optional arguments
     se_opts = se_parser.add_argument_group('optional arguments')
@@ -205,22 +212,25 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     se_opts.add_argument(
         '-a', '--adaptors',
-        metavar='<list>',
+        help='Specify adaptor as string (only one allowed) -- if \"None\" is provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        metavar='<adaptor1>',
+        type=str,
         nargs='+',
         default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
         required=False)
     se_opts.add_argument(
         '-q', '--quality',
-        metavar='<int>',
-        default=DEFAULT_READ_QUALITY,
         help='PHRED read quality threshold (default: %s)' % DEFAULT_READ_QUALITY,
+        metavar='<PHRED_value>',
+        type=int,
+        default=DEFAULT_READ_QUALITY,
         required=False)
     se_opts.add_argument(
         '--min_length',
-        metavar='<int>',
-        default=DEFAULT_READ_MIN,
         help='Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        metavar='<length_value>',
+        type=int,
+        default=DEFAULT_READ_MIN,
         required=False)
     se_opts.add_argument(
         '--output_bed',
@@ -240,18 +250,21 @@ def get_arguments(args, __version__):
     se_opts.add_argument(
         '-m', '--method',
         help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<str>',
+        metavar='<normalization_type>',
+        type=str,
         required=False)
     se_opts.add_argument(
         '--batch',
         help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='<str>',
+        metavar='<path>',
+        type=str,
         required=False)
     se_opts.add_argument(
         '--sjdbOverhang',
         help='Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        metavar='<sjdbOverhang_amount>',
+        type=int,
         default=100,
-        metavar='<int>',
         required=False)
 
     """
@@ -262,20 +275,27 @@ def get_arguments(args, __version__):
     pe_reqs = pe_parser.add_argument_group('required arguments')
     pe_reqs.add_argument(
         '-i', '--input',
-        help='Path to input directory -- if paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        help='Path to input directory -- for paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        metavar='<path>',
+        type=str,
         required=True)
     pe_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     pe_reqs.add_argument(
         '-r', '--reference',
         help='Path to parent organism reference directory',
+        metavar='<path>',
+        type=str,
         required=True)
     pe_reqs.add_argument(
-        '--experiment',
+        '-e', '--experiment',
         help='Experiment name',
-        metavar='<str>',
+        metavar='<experiment_name>',
+        type=str,
         required=True)
     #Optional arguments
     pe_opts = pe_parser.add_argument_group('optional arguments')
@@ -285,22 +305,25 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     pe_opts.add_argument(
         '-a', '--adaptors',
-        metavar='<list>',
+        help='Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if \"None None\" is provided, software will attempt to auto-detect adaptors',
+        metavar='<adaptor1 adaptor2>',
+        type=str,
         nargs='+',
         default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide a list as ["autoPE"]',
         required=False)
     pe_opts.add_argument(
         '-q', '--quality',
-        metavar='<int>',
-        default=DEFAULT_READ_QUALITY,
         help='PHRED read quality threshold (default: %s)' % DEFAULT_READ_QUALITY,
+        metavar='<PHRED_value>',
+        type=int,
+        default=DEFAULT_READ_QUALITY,
         required=False)
     pe_opts.add_argument(
         '--min_length',
-        metavar='<int>',
-        default=DEFAULT_READ_MIN,
         help='Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        metavar='<length_value>',
+        type=int,
+        default=DEFAULT_READ_MIN,
         required=False)
     pe_opts.add_argument(
         '--output_bed',
@@ -320,18 +343,21 @@ def get_arguments(args, __version__):
     pe_opts.add_argument(
         '-m', '--method',
         help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<str>',
+        metavar='<normalization_type>',
+        type=str,
         required=False)
     pe_opts.add_argument(
         '--batch',
         help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='<str>',
+        metavar='<path>',
+        type=str,
         required=False)
     pe_opts.add_argument(
         '--sjdbOverhang',
         help='Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        metavar='<sjdbOverhang_amount>',
+        type=int,
         default=100,
-        metavar='<int>',
         required=False)
 
     """
@@ -343,19 +369,26 @@ def get_arguments(args, __version__):
     rp_reqs.add_argument(
         '-i', '--input',
         help='Path to input directory',
+        metavar='<path>',
+        type=str,
         required=True)
     rp_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     rp_reqs.add_argument(
         '-r', '--reference',
         help='Path to parent organism reference directory',
+        metavar='<path>',
+        type=str,
         required=True)
     rp_reqs.add_argument(
-        '--experiment',
+        '-e', '--experiment',
         help='Experiment name',
-        metavar='<str>',
+        metavar='<experiment_name>',
+        type=str,
         required=True)
     #Optional arguments
     rp_opts = rp_parser.add_argument_group('optional arguments')
@@ -365,22 +398,25 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     rp_opts.add_argument(
         '-a', '--adaptors',
-        metavar='<list>',
+        help='Specify adaptor as string (only one allowed) -- if \"None\" is provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        metavar='<adaptor1>',
+        type=str,
         nargs='+',
         default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
         required=False)
     rp_opts.add_argument(
         '-q', '--quality',
-        metavar='<int>',
-        default=DEFAULT_READ_QUALITY,
         help='PHRED read quality threshold (default: %s)' % DEFAULT_READ_QUALITY,
+        metavar='<PHRED_value>',
+        type=int,
+        default=DEFAULT_READ_QUALITY,
         required=False)
     rp_opts.add_argument(
         '--min_length',
-        metavar='<int>',
-        default=DEFAULT_READ_MIN,
         help='Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        metavar='<length_value>',
+        type=int,
+        default=DEFAULT_READ_MIN,
         required=False)
     rp_opts.add_argument(
         '--output_bed',
@@ -405,18 +441,21 @@ def get_arguments(args, __version__):
     rp_opts.add_argument(
         '-m', '--method',
         help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<str>',
+        metavar='<normalization_type>',
+        type=str,
         required=False)
     rp_opts.add_argument(
         '--batch',
         help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='<str>',
+        metavar='<path>',
+        type=str,
         required=False)
     rp_opts.add_argument(
         '--sjdbOverhang',
         help='Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        metavar='<sjdbOverhang_amount>',
+        type=int,
         default=100,
-        metavar='<int>',
         required=False)
 
     """
@@ -738,6 +777,7 @@ def get_arguments(args, __version__):
         help='Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
         default=45,
         metavar='<int>',
+        type=int,
         required=False)
 
     """
@@ -762,6 +802,7 @@ def get_arguments(args, __version__):
         help='Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
         default=45,
         metavar='<int>',
+        type=int,
         required=False)
     truncate_opts.add_argument(
         '-c', '--create_refFlats',

@@ -51,7 +51,7 @@ def add_directory(args_dict, parent, name):
 """
 DESCRIPTION: Make a list of the files in a given directory, based on list of acceptable file suffixes
 """
-def get_files(directory, suffix):
+def get_files(directory, suffix, omit=['refFlat']):
 
     #Initialize blank file list to fill
     file_list = []
@@ -65,6 +65,13 @@ def get_files(directory, suffix):
 
     #Sort files in alphabetical order (helps in formatting the count tables correctly)
     file_list = sorted(file_list)
+
+    #Get rid of bad grabs
+    if len(omit) > 0:
+        for x in file_list:
+            for o in omit:
+                if x.contains(str(o)):
+                    file_list.remove(x)
 
     return tuple(file_list)
 
@@ -161,6 +168,6 @@ def create_flat(directory):
 
     for x in files:
         if x.startswith('transcripts'):
-            os.system('gtfToGenePred ' + str(directory) + str(x) + ' ' + str(x[:-4]) + '_refFlat.txt.tmp')
-            os.system("""awk '{print $1 "\t" $1 "\t" $2 "\t" $3 "\t" $4 "\t" $5 "\t" $6 "\t" $7 "\t" $8 "\t" $9 "\t" $10}'""" + str(x[:-4]) + '_refFlat.txt.tmp > ' + str(x[:-4]) + '_refFlat.txt')
-            os.system('rm ' + str(x[:-4]) + '_refFlat.txt.tmp')
+            os.system('gtfToGenePred ' + str(directory) + str(x) + ' ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp')
+            os.system("awk '{print $1 \t $1 \t $2 \t $3 \t $4 \t $5 \t $6 \t $7 \t $8 \t $9 \t $10}' " + str(directory) + str(x[:-4]) + "_refFlat.txt.tmp > " + str(directory) + str(x[:-4]) + "_refFlat.txt")
+            os.system('rm ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp')

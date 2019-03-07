@@ -10,3 +10,6 @@
 /tests/pe_test_archive/**
 /tests/riboprof_out/**
 **reference/genome**
+**reference/transcripts_**
+/tests/se_reference
+/tests/pe_reference

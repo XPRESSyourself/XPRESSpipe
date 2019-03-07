@@ -109,7 +109,7 @@ def main(args=None):
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict)
         create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
         #Truncate transcript reference
-        truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(output_path), sep='\t', return_files=False)
+        truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(args_dict['output']), sep='\t', return_files=False)
         #Flatten transcript reference files
         create_flat(args_dict['output'])
         msg_complete()
