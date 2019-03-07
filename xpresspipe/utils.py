@@ -57,12 +57,11 @@ def get_files(directory, suffix):
     file_list = []
 
     #Walk through raw data files within given directory
-    for subdir, dirs, files in os.walk(directory):
-        for f in files:
-            for s in suffix:
-                if f.endswith(str(s)):
-                    #Do not append directory, files in list will be modified and output to different locations
-                    file_list.append(f)
+    for file in os.listdir(directory):
+        for s in suffix:
+            if file.endswith(str(s)):
+                #Do not append directory, files in list will be modified and output to different locations
+                file_list.append(file)
 
     #Sort files in alphabetical order (helps in formatting the count tables correctly)
     file_list = sorted(file_list)
@@ -112,24 +111,39 @@ def unzip_files(directory):
                         os.system('unzip ' + str(directory) + str(f))
 
 """
+"""
+def get_fasta(fasta_directory):
+
+    #Make space separated list of fasta files
+    fasta = get_files(fasta_directory, ['.txt', '.fasta', '.fa'])
+    fasta = [fasta_directory + x for x in fasta]
+
+    if len(fasta) > 1:
+        fasta_list = " ".join(fasta)
+    else:
+        fasta_list = "".join(fasta)
+
+    return fasta_list
+
+"""
 DESCRIPTION: Create STAR reference genome
 
 output_directory= Path to output directory (empty directory)
 fasta_files= Path to genome fasta files
 gtf= Path and file name of reference gtf to build reference with
 """
-def create_reference(output_directory, fasta_files, gtf, threads=8, sjdbOverhang=100):
+def create_reference(output_directory, fasta_directory, gtf, threads=8, sjdbOverhang=100):
 
     #Create output directory
     output_directory = check_directories(output_directory)
+    fasta_directory = check_directories(fasta_directory)
+
     os.system('mkdir ' + str(output_directory) + 'genome')
 
-    #Make space separated list of fasta files
-    fasta = get_files(fasta_files, ['.txt', '.fasta', '.fa'])
-    fasta_list = " ".join(fasta)
+    fasta_list = get_fasta(fasta_directory)
 
     #Create reference
-    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome/ --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang ' + str(sjdbOverhang) + ' --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads))
+    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang ' + str(sjdbOverhang) + ' --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads))
 
 """
 DESCRIPTION: Create MultiQC processing summary from all files in args_dict output

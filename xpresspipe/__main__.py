@@ -69,10 +69,11 @@ def main(args=None):
         else:
             raise Exception('Invalid type argument provided')
         #Get other formatted files
+        args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
-            create_bed(args_dict['output'], args_dict['alignments'])
+            create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict['output'], args_dict['alignments'])
+            create_bigwig(args_dict)
         msg_complete()
 
     elif args.cmd == 'count':
@@ -100,20 +101,33 @@ def main(args=None):
         make_periodicity(args_dict)
         msg_complete()
 
+    elif args.cmd == 'curateReference':
+        print('Curating reference')
+        args_dict['create_refFlats'] = True
+        #Create STAR reference
+        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+        #Truncate transcript reference
+        truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(output_path), sep='\t', return_files=False)
+        #Flatten transcript reference files
+        create_flat(args_dict['output'])
+        msg_complete()
+
+    elif args.cmd == 'makeReference':
+        print('Creating reference files...')
+        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+        msg_complete()
+
     elif args.cmd == 'truncate':
         print('Formatting coding only and truncated reference files...')
         output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
+        if 'create_refFlats' in args_dict and args_dict['create_refFlats'] == True:
+            create_flat(str(output_path))
         msg_complete()
 
     elif args.cmd == 'makeFlat':
         print('Formatting coding only and truncated reference files...')
         create_flat(args_dict['input'])
-        msg_complete()
-
-    elif args.cmd == 'createReference':
-        print('Creating reference files...')
-        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
         msg_complete()
 
     elif args.cmd == 'rrnaProbe':
@@ -149,13 +163,13 @@ def main(args=None):
         args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_seRNAseq(args_dict)
         #Get other formatted files
+        args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
-            create_bed(args_dict['output'], args_dict['alignments'])
+            create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict['output'], args_dict['alignments'])
+            create_bigwig(args_dict)
         #Count reads for each alignment file
         msg_count()
-        args_dict['input'] = args_dict['alignments']
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
@@ -185,13 +199,13 @@ def main(args=None):
         args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_peRNAseq(args_dict)
         #Get other formatted files
+        args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
-            create_bed(args_dict['output'], args_dict['alignments'])
+            create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict['output'], args_dict['alignments'])
+            create_bigwig(args_dict)
         #Count reads for each alignment file
         msg_count()
-        args_dict['input'] = args_dict['alignments']
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
@@ -221,13 +235,13 @@ def main(args=None):
         args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_seRNAseq(args_dict)
         #Get other formatted files
+        args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
-            create_bed(args_dict['output'], args_dict['alignments'])
+            create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict['output'], args_dict['alignments'])
+            create_bigwig(args_dict)
         #Count reads for each alignment file
         msg_count()
-        args_dict['input'] = args_dict['alignments']
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']

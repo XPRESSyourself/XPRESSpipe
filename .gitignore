@@ -4,4 +4,6 @@
 *__pycache__*
 .DS_Store
 *.soft.gz
-references/
+/tests/test_reference/genome/
+*genome/S*
+*genome/Genom*

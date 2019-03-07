@@ -41,7 +41,7 @@ DEFAULT_MAX_PROCESSORS = None
 
 descrip = """\
 The XPRESSpipe sub-modules can be accessed by executing:
-    'xpresspipe module_name args1 args2 ...'
+    'xpresspipe module_name arg1 arg2 ...'
 
 Sub-module help can be displayed by executing:
     'xpresspipe module_name --help'
@@ -57,7 +57,7 @@ Sub-module descriptions:
     |-----------------------|---------------------------------------------------------------------------------------|
     |    trim               |   Trim RNAseq reads of adaptors and for quality                                       |
     |-----------------------|---------------------------------------------------------------------------------------|
-    |    align              |   Align RNAseq reads to reference genome                                              |
+    |    align              |   Align RNAseq reads to reference genome (memory intensive)                           |
     |-----------------------|---------------------------------------------------------------------------------------|
     |    count              |   Get counts and a counts table from aligned output                                   |
     |-----------------------|---------------------------------------------------------------------------------------|
@@ -70,11 +70,13 @@ Sub-module descriptions:
     |    periodicity        |   Calculate periodicity of transcripts using the most abundant transcript length      |
     |                       |   for alignments to map per sample                                                    |
     |-----------------------|---------------------------------------------------------------------------------------|
+    |    curateReference    |   Run makeReference, truncate, and makeFlat in a single command                       |
+    |-----------------------|---------------------------------------------------------------------------------------|
+    |    makeReference      |   Create a STAR reference directory (memory intensive)                                |
+    |-----------------------|---------------------------------------------------------------------------------------|
     |    truncate           |   Create a coding-only and coding-only truncated reference GTF                        |
     |-----------------------|---------------------------------------------------------------------------------------|
     |    makeFlat           |   Create flattened reference GTFs                                                     |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    createReference    |   Create a STAR reference directory                                                   |
     |-----------------------|---------------------------------------------------------------------------------------|
     |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
     |                       |   Run a BLAST search on sequences you choose to use as depletion probes to verify     |
@@ -245,6 +247,12 @@ def get_arguments(args, __version__):
         help='Include path and filename of dataframe with batch normalization parameters',
         metavar='<str>',
         required=False)
+    se_opts.add_argument(
+        '--sjdbOverhang',
+        help='Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        default=100,
+        metavar='<int>',
+        required=False)
 
     """
     PERNASEQ SUBPARSER
@@ -318,6 +326,12 @@ def get_arguments(args, __version__):
         '--batch',
         help='Include path and filename of dataframe with batch normalization parameters',
         metavar='<str>',
+        required=False)
+    pe_opts.add_argument(
+        '--sjdbOverhang',
+        help='Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        default=100,
+        metavar='<int>',
         required=False)
 
     """
@@ -397,6 +411,12 @@ def get_arguments(args, __version__):
         '--batch',
         help='Include path and filename of dataframe with batch normalization parameters',
         metavar='<str>',
+        required=False)
+    rp_opts.add_argument(
+        '--sjdbOverhang',
+        help='Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        default=100,
+        metavar='<int>',
         required=False)
 
     """
@@ -488,6 +508,12 @@ def get_arguments(args, __version__):
         help='Number of max processors to use for tasks (default: No limit)',
         metavar='<int>',
         default=DEFAULT_MAX_PROCESSORS,
+        required=False)
+    align_opts.add_argument(
+        '--sjdbOverhang',
+        help='Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        default=100,
+        metavar='<int>',
         required=False)
 
     """
@@ -669,6 +695,52 @@ def get_arguments(args, __version__):
         required=False)
 
     """
+    CURATE SUBPARSER
+    """
+    curate_parser = subparser.add_parser('curateReference', description='Run makeReference, truncate, and makeFlat in a single command', add_help=False)
+    #Required arguments
+    curate_reqs = curate_parser.add_argument_group('required arguments')
+    curate_reqs.add_argument(
+        '-o', '--output',
+        help='Path to directory for output',
+        metavar='<str>',
+        required=True)
+    curate_reqs.add_argument(
+        '-f', '--fasta',
+        help='Path to directory containing genomic fasta files',
+        metavar='<str>',
+        required=True)
+    curate_reqs.add_argument(
+        '-g', '--gtf',
+        help='Path and file name of reference GTF',
+        metavar='<str>',
+        required=True)
+    #Optional arguments
+    curate_opts = curate_parser.add_argument_group('optional arguments')
+    curate_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
+    curate_opts.add_argument(
+        '--threads',
+        help='Specify number of threads to use (default: %s)' % 8,
+        default=8,
+        metavar='<int>',
+        required=False)
+    curate_opts.add_argument(
+        '--sjdbOverhang',
+        help='Specify length of genomic sequences for constructing splice-aware reference. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        default=100,
+        metavar='<int>',
+        required=False)
+    curate_opts.add_argument(
+        '-t', '--truncate_amount',
+        help='Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
+        default=45,
+        metavar='<int>',
+        required=False)
+
+    """
     TRUNCATE SUBPARSER
     """
     truncate_parser = subparser.add_parser('truncate', description='Create a coding-only and coding-only truncated reference GTF', add_help=False)
@@ -687,7 +759,7 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     truncate_opts.add_argument(
         '-t', '--truncate_amount',
-        help='Path and file name of GTF reference file to process (default: %s)' % 45,
+        help='Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
         default=45,
         metavar='<int>',
         required=False)
@@ -708,11 +780,17 @@ def get_arguments(args, __version__):
         help='Path where input transcripts*.gtf files are found',
         metavar='<str>',
         required=True)
+    #Optional arguments
+    makeflat_opts = makeflat_parser.add_argument_group('optional arguments')
+    makeflat_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
 
     """
     REFERENCE SUBPARSER
     """
-    reference_parser = subparser.add_parser('createReference', description='Create a STAR reference directory', add_help=False)
+    reference_parser = subparser.add_parser('makeReference', description='Create a STAR reference directory', add_help=False)
     #Required arguments
     reference_reqs = reference_parser.add_argument_group('required arguments')
     reference_reqs.add_argument(
@@ -744,7 +822,7 @@ def get_arguments(args, __version__):
         required=False)
     reference_opts.add_argument(
         '--sjdbOverhang',
-        help='Specify number of threads to use (default: %s)' % 100,
+        help='Specify length of genomic sequences for constructing splice-aware reference. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
         default=100,
         metavar='<int>',
         required=False)

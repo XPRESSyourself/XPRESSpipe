@@ -55,7 +55,7 @@ def bed_convert(args):
     #Convert BAM to BED
     os.system('bedtools bamtobed -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
 
-def create_bed(output, directory):
+def create_bed(args_dict):
 
     #Add output directories
     args_dict = add_directory(args_dict, 'output', 'bed_files')
@@ -64,7 +64,7 @@ def create_bed(output, directory):
     files = get_files(args_dict['input'], ['.sam', '.bam'])
 
     #Convert aligned RNAseq reads to BED files
-    parallize(bed_convert, files, args_dict)
+    parallelize(bed_convert, files, args_dict)
 
     return args_dict
 
@@ -86,7 +86,7 @@ def bigwig_convert(args):
     #Convert BAM to bigwig
     os.system('bamCoverage -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam -o ' + str(args_dict['bigwig_files']) + str(file[:-4]) + '.bw')
 
-def create_bigwig(output, directory):
+def create_bigwig(args_dict):
 
     #Add output directories
     args_dict = add_directory(args_dict, 'output', 'bigwig_files')
@@ -95,7 +95,7 @@ def create_bigwig(output, directory):
     files = get_files(args_dict['input'], ['.sam', '.bam'])
 
     #Convert aligned RNAseq reads to bigwig files
-    parallize(bigwig_convert, files, args_dict)
+    parallelize(bigwig_convert, files, args_dict)
 
     return args_dict
 
