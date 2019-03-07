@@ -70,7 +70,7 @@ def get_files(directory, suffix, omit=['refFlat']):
     if len(omit) > 0:
         for x in file_list:
             for o in omit:
-                if x.contains(str(o)):
+                if str(o) in x:
                     file_list.remove(x)
 
     return tuple(file_list)
