@@ -51,7 +51,7 @@ def add_directory(args_dict, parent, name):
 """
 DESCRIPTION: Make a list of the files in a given directory, based on list of acceptable file suffixes
 """
-def get_files(directory, suffix, omit=['refFlat']):
+def get_files(directory, suffix, omit=[]):
 
     #Initialize blank file list to fill
     file_list = []
@@ -122,7 +122,7 @@ def unzip_files(directory):
 def get_fasta(fasta_directory):
 
     #Make space separated list of fasta files
-    fasta = get_files(fasta_directory, ['.txt', '.fasta', '.fa'])
+    fasta = get_files(fasta_directory, ['.txt', '.fasta', '.fa'], omit=['refFlat'])
     fasta = [fasta_directory + x for x in fasta]
 
     if len(fasta) > 1:
