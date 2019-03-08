@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Align &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
+  <title>Alignment &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
   
 
   
@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Count" href="count.html" />
-    <link rel="prev" title="Trim" href="trim.html" /> 
+    <link rel="prev" title="Read Pre-Processing" href="trim.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,8 +97,20 @@
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">SE RNAseq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">PE RNAseq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trim.html">Trim</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Alignment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#single-end-rnaseq-alignment">Single-End RNAseq Alignment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#paired-end-rnaseq-alignment">Paired-End RNAseq Alignment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="count.html">Count</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quality.html">Quality Control/Meta-analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
@@ -148,7 +160,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Align</li>
+      <li>Alignment</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -167,8 +179,179 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="align">
-<h1>Align<a class="headerlink" href="#align" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="alignment">
+<h1>Alignment<a class="headerlink" href="#alignment" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">In order to quantify transcription on a transcript to transcript basis, individual reads called during sequencing must be mapped to the genome. While there are multiple alignment software packages available, XPRESSpipe uses a current version of <a class="reference external" href="https://github.com/alexdobin/STAR">STAR</a> to perform this step in transcription quantification for several reasons:</div>
+<div class="line">- Performance: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/">performance and accuracy is superior to the majority of other splice aware aligners currently available</a></div>
+<div class="line">- Splice Junction Aware: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.</div>
+<div class="line">- Standard: The foundation of the pipeline used in XPRESSpipe is based in the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> standards for RNAseq alignment. This method utilizes a 2-pass alignment program, where alignment is performed to identify splice junctions, these junctions are considered in the reference genome, and reads are re-aligned with this new reference. While more time-intensive, the practice provides the user with a more thorough quantification of their RNA sequencing.</div>
+</div>
+<div class="section" id="single-end-rnaseq-alignment">
+<h2>Single-End RNAseq Alignment<a class="headerlink" href="#single-end-rnaseq-alignment" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">The following runs single-end reads alignment using the specified XPRESSpipe-formatted reference directory.</div>
+<div class="line">Notes:</div>
+<div class="line">- For the <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> argument, the same value should be entered that was used when creating the STAR reference files.</div>
+<div class="line">- Ribosome profiling data can be run as a single-end RNAseq</div>
+</div>
+<div class="section" id="arguments">
+<h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">The help menu can be accessed by calling the following from the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align --help
+</pre></div>
+</div>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Required Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to input directory</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to output directory</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-t</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--type</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Sequencing type (“SE” for single-end, “PE” for paired-end)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-r</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--reference</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to parent organism reference directory</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Optional Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></td>
+<td>Include flag to output BED files for each aligned file</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bigwig</span></code></td>
+<td>Include flag to output bigwig files for each aligned file</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></td>
+<td>Number of max processors to use for tasks (default: Max)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;int&gt;</span></code></td>
+<td>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><strong>Example 1 – Single-end RNAseq alignment:</strong></div>
+<div class="line">- Raw reads are <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code>-like and found in the <code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">/path/to/input/files/</span></code> directory. Can be uncompressed or compressed via <code class="xref py py-data docutils literal notranslate"><span class="pre">gz</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">zip</span></code></div>
+<div class="line">- A general output directory has been created, <code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">riboprof_out/</span></code></div>
+<div class="line">- <code class="xref py py-data docutils literal notranslate"><span class="pre">--type</span></code> is specified as ‘SE’ and path to parent reference directory is provided</div>
+<div class="line">- The value for <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> used in reference creation is provided. Failure to do so will trigger an error</div>
+<div class="line">- BED and BIGWIG files will be output in their own directories in <code class="xref py py-data docutils literal notranslate"><span class="pre">output</span></code></div>
+<div class="line">- All other arguments use the default value</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align -i /path/to/input/files/ -o riboprof_out/ -t SE -r /path/to/reference/ --sjdbOverhang <span class="m">49</span> --output_bed --output_bigwig
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="paired-end-rnaseq-alignment">
+<h2>Paired-End RNAseq Alignment<a class="headerlink" href="#paired-end-rnaseq-alignment" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">The following runs paired-end reads alignment using the specified XPRESSpipe-formatted reference directory.</div>
+<div class="line">Notes:</div>
+<div class="line">- For the <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> argument, the same value should be entered that was used when creating the STAR reference files.</div>
+</div>
+<div class="section" id="id1">
+<h3>Arguments<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">The help menu can be accessed by calling the following from the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align --help
+</pre></div>
+</div>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Required Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to input directory</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to output directory</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-t</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--type</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Sequencing type (“SE” for single-end, “PE” for paired-end)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-r</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--reference</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to parent organism reference directory</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Optional Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></td>
+<td>Include flag to output BED files for each aligned file</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bigwig</span></code></td>
+<td>Include flag to output bigwig files for each aligned file</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></td>
+<td>Number of max processors to use for tasks (default: Max)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;int&gt;</span></code></td>
+<td>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id2">
+<h3>Examples<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><strong>Example 1 – Paired-end RNAseq alignment:</strong></div>
+<div class="line">- Raw reads are <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code>-like and found in the <code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">pe_test/</span></code> directory. Can be uncompressed or compressed via <code class="xref py py-data docutils literal notranslate"><span class="pre">gz</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">zip</span></code></div>
+<div class="line">- A general output directory has been created, <code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">pe_out/</span></code></div>
+<div class="line">- <code class="xref py py-data docutils literal notranslate"><span class="pre">--type</span></code> is specified as ‘PE’ and path to parent reference directory is provided</div>
+<div class="line">- The value for <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> used in reference creation is provided. Failure to do so will trigger an error. In this case, since the reference was created using default values, the optional flag is not used</div>
+<div class="line">- BED and BIGWIG files are not output</div>
+<div class="line">- All other arguments use the default value</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align -i /path/to/input/files/ -o riboprof_out -t PE -r /path/to/reference/
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -182,7 +365,7 @@
         <a href="count.html" class="btn btn-neutral float-right" title="Count" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="trim.html" class="btn btn-neutral float-left" title="Trim" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="trim.html" class="btn btn-neutral float-left" title="Read Pre-Processing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

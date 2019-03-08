@@ -93,12 +93,35 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Curating References</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Curating References</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#xpresspipe-reference-requirements">XPRESSpipe Reference Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#star-reference-curation">STAR Reference Curation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#transcript-reference-curation-and-truncation">Transcript Reference Curation and Truncation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#flatten-transcript-references">Flatten Transcript References</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#perform-full-reference-curation">Perform Full Reference Curation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">SE RNAseq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">PE RNAseq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trim.html">Trim</a></li>
-<li class="toctree-l1"><a class="reference internal" href="align.html">Align</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="count.html">Count</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quality.html">Quality Control/Meta-analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
@@ -169,6 +192,251 @@
             
   <div class="section" id="curating-references">
 <h1>Curating References<a class="headerlink" href="#curating-references" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">In order to quantify transcription on a transcript to transcript basis, individual reads called during sequencing must be mapped to the genome. While there are multiple alignment software packages available, XPRESSpipe uses a current version of <a class="reference external" href="https://github.com/alexdobin/STAR">STAR</a> to perform this step in transcription quantification for several reasons:</div>
+<div class="line">- Performance: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/">performance and accuracy is superior to the majority of other splice aware aligners currently available</a></div>
+<div class="line">- Splice Junction Aware: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.</div>
+<div class="line">- Standard: The foundation of the pipeline used in XPRESSpipe is based in the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> standards for RNAseq alignment. This method utilizes a 2-pass alignment program, where alignment is performed to identify splice junctions, these junctions are considered in the reference genome, and reads are re-aligned with this new reference. While more time-intensive, the practice provides the user with a more thorough quantification of their RNA sequencing.</div>
+</div>
+<div class="section" id="xpresspipe-reference-requirements">
+<h2>XPRESSpipe Reference Requirements<a class="headerlink" href="#xpresspipe-reference-requirements" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">An XPRESSpipe compatible reference directory must meet some requirements:</div>
+<div class="line">- All chromosomal genome fasta files are in the parent reference directory</div>
+<div class="line">- A sub-directory, named <code class="xref py py-data docutils literal notranslate"><span class="pre">genome</span></code>, contains the STAR reference files. If <code class="xref py py-data docutils literal notranslate"><span class="pre">createReference</span></code> is used to curate the reference, and the parent reference directory was provided as output location, this formatted will be handled by XPRESSpipe</div>
+<div class="line">- A transcript reference (GTF), is located in the reference parent directory and is named <code class="xref py py-data docutils literal notranslate"><span class="pre">transcripts.gtf</span></code>. If coding-only or truncated reference GTFs are used, they should also be in this directory (<code class="xref py py-data docutils literal notranslate"><span class="pre">truncate</span></code> will handle file naming and formatting so long as the output location is specified as this parent directory)</div>
+<div class="line">- If <code class="xref py py-data docutils literal notranslate"><span class="pre">metagene</span></code> analysis is being performed, properly flattened transcript references are located in the parent reference directory. If <code class="xref py py-data docutils literal notranslate"><span class="pre">makeFlat</span></code> was used with this parent reference directory as output location, proper naming and formatted will be handled by XPRESSpipe</div>
+<div class="line"><a href="#id1"><span class="problematic" id="id2">**</span></a>A completed reference directory can be created that follows these requirements by creating a directory, placing the transcripts.gtf and chromosome genomic fasta files in the parent directory and running <code class="xref py py-data docutils literal notranslate"><span class="pre">curateReference</span></code> as described below</div>
+</div>
+</div>
+<div class="section" id="star-reference-curation">
+<h2>STAR Reference Curation<a class="headerlink" href="#star-reference-curation" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">The following creates a STAR reference compatible with XPRESSpipe. These files are output in a directory called <code class="xref py py-data docutils literal notranslate"><span class="pre">genome</span></code> in the specified <code class="xref py py-data docutils literal notranslate"><span class="pre">--output</span></code> directory.</div>
+</div>
+<div class="section" id="arguments">
+<h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">The help menu can be accessed by calling the following from the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe createReference --help
+</pre></div>
+</div>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Required Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to output directory</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-f</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--fasta</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to genome fasta files (file names should end in .fa, .fasta, or .txt and no other files should exist in the directory with similar extensions)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path and file name to transcript reference file names ‘transcripts.gtf’</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Optional Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-t</span></code></td>
+<td>Specify number of threads to use (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">8</span></code>)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;int&gt;</span></code></td>
+<td>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><strong>Example 1 – Create a single-end sequencing reference:</strong></div>
+<div class="line">- Paths to output and location of genome fasta files for each chromosome are provided, as well as path and file name to transcripts.gtf file</div>
+<div class="line">- Default number of threads are used for preparing reference</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe createReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -sjdbOverhang <span class="m">49</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Example 2 – Create a paired-end sequencing reference:</strong></div>
+<div class="line">- 12 threads are specified for reference creation</div>
+<div class="line">- The as 2x100bp paired-end sequencing was used, the default value for <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> is appropriate in this case</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe createReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -t <span class="m">12</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="transcript-reference-curation-and-truncation">
+<h2>Transcript Reference Curation and Truncation<a class="headerlink" href="#transcript-reference-curation-and-truncation" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">At times, quantification of transcripts to coding-only transcripts or to a modified transcript reference is desirable. Below are two examples:</div>
+<div class="line">1. As ribosomal RNA (rRNA) contamination is common in RNAseq, even when a depletion step was performed prior to library preparation, it is sometimes desirable to not count these and other non-coding RNAs in the quantification and analysis.</div>
+<div class="line">2. During ribosome profiling library preparation, a 5’ transcript bias is common, regardless of library preparation method. It has therefore been suggested to <a class="reference external" href="https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1">exclude the first 45-50 nucleotides of each transcript from quantification</a></div>
+</div>
+<div class="section" id="id3">
+<h3>Arguments<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">The help menu can be accessed by calling the following from the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe truncate --help
+</pre></div>
+</div>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Required Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path and file name to transcript reference file (GTF) to process</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Optional Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-t</span></code></td>
+<td>Number of nucleotides to truncate from the 5’ end of each transcript (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">45</span></code>)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--create_refFlats</span></code></td>
+<td>Provide flag to output refFlat files for each transcript reference created</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id4">
+<h3>Examples<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="flatten-transcript-references">
+<h2>Flatten Transcript References<a class="headerlink" href="#flatten-transcript-references" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Certain analysis platforms require a RefFlat transcript prediction file. These files can be created with the following command.</div>
+<div class="line">XPRESSpipe uses the <a class="reference external" href="https://bioconda.github.io/recipes/ucsc-gtftogenepred/README.html">UCSC-GTFtoGenePred</a> package to perform these conversions.</div>
+</div>
+<div class="section" id="id5">
+<h3>Arguments<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">The help menu can be accessed by calling the following from the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe makeFlat --help
+</pre></div>
+</div>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Required Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path where input transcripts*.gtf files are found</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id6">
+<h3>Examples<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="perform-full-reference-curation">
+<h2>Perform Full Reference Curation<a class="headerlink" href="#perform-full-reference-curation" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">The following will create a XPRESSpipe-formatted reference directory containing all STAR reference files and transcript references needs for quantification and meta-analysis.</div>
+<div class="line">A parent reference directory containing the transcripts.gtf file and all chromosomal genome fasta files must be present</div>
+</div>
+<div class="section" id="id7">
+<h3>Arguments<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">The help menu can be accessed by calling the following from the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe curateReference --help
+</pre></div>
+</div>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Required Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to output directory</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-f</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--fasta</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path to genome fasta files (file names should end in .fa, .fasta, or .txt and no other files should exist in the directory with similar extensions)</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;str&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;str&gt;</span></code></td>
+<td>Path and file name to transcript reference file names ‘transcripts.gtf’</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="41%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Optional Arguments</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-t</span></code></td>
+<td>Specify number of threads to use (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">8</span></code>)</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;int&gt;</span></code></td>
+<td>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-data docutils literal notranslate"><span class="pre">-t</span></code></td>
+<td>Number of nucleotides to truncate from the 5’ end of each transcript (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">45</span></code>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="id8">
+<h3>Examples<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
 </div>
 
 

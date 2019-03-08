@@ -1,16 +1,20 @@
-###########
-Trim
-###########
+###################
+Read Pre-Processing
+###################
 
-| **Trimming is a necessary part of RNAseq data processing due to the technological limitations described below:**
+===================
+Read Trimming
+===================
+
+| Trimming is a necessary part of RNAseq data processing due to the technological limitations described below:
 | - Inherent in RNAseq library creation, RNA is fragmented and adaptor sequences are ligated to the sequence. These adaptors include information such as sample batch and act as a primer for the sequencer to recognize the fragment as something to analyze. However, these adaptors, once sequenced, prevent alignment to a reference as large chunks of the fragment are synthetic sequence not found in each transcript.
 | - A sequencer's job is to read a fragment base by base and determine the nucleotide species each step of the way. While the technology has greatly improved over the years, a probability of error remains. Miscalled bases can prevent proper alignment of the sequenced fragment to the reference. Therefore, it is important for low confidence base calls to be trimmed from each read.
 |
 | Trimming is performed by `fastp <https://github.com/OpenGene/fastp>`_
 
-================
+-------------
 Arguments
-================
+-------------
 | The help menu can be accessed by calling the following from the command line:
 
 .. code-block:: shell
@@ -23,9 +27,9 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-i INPUT, --input INPUT`
+   * - :data:`-i \<str\>, --input \<str\>`
      - Path to input directory -- if paired-end, file names should be exactly the same except for :data:`r1/r2.fastq` or similar suffix
-   * - :data:`-o OUTPUT, --output OUTPUT`
+   * - :data:`-o \<str\>, --output \<str\>`
      - Path to output directory
 
 .. list-table::
@@ -43,9 +47,9 @@ Arguments
    * - :data:`-m <int>, --max_processors <int>`
      - Number of max processors to use for tasks (default: Max)
 
-================
+--------------
 Examples
-================
+--------------
 | **Example 1 -- Trim ribosome profiling (or single-end) sequence data using default preferences:**
 | - Raw reads are :data:`.fastq`-like and found in the :data:`-i riboprof_test/` directory. Can be uncompressed or compressed via :data:`.gz` or :data:`.zip`
 | - A general output directory has been created, :data:`-o riboprof_out/`
@@ -73,7 +77,7 @@ Examples
 
   $ xpresspipe trim -i riboprof_test/ -o riboprof_out/ -a CTGTAGGCACCATCAAT
 
-| **Example 4 -- Predict adaptor and trim paired-end sequence data:
+| **Example 4 -- Predict adaptor and trim paired-end sequence data:**
 | - The :data:`--adaptors` argument was passed as :data:`None None`, so an attempt to discover adaptor sequences will be made for paired-end reads. The :data:`-a None None` syntax is essential for :data:`trim` to recognize the reads as paired-end
 
 .. code-block:: shell
