@@ -29,14 +29,14 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-i \<str\>, --input \<str\>`
+   * - :data:`-i \<path\>, --input \<path\>`
      - Path to input directory
-   * - :data:`-o \<str\>, --output \<str\>`
+   * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
-   * - :data:`-t \<str\>, --type \<str\>`
-     - Sequencing type ("SE" for single-end, "PE" for paired-end)
-   * - :data:`-r \<str\>, --reference \<str\>`
+   * - :data:`-r \<path\>, --reference \<path\>`
      - Path to parent organism reference directory
+   * - :data:`-t \<SE or PE\>, --type \<SE or PE\>`
+     - Sequencing type ("SE" for single-end, "PE" for paired-end)
 
 .. list-table::
    :widths: 35 50
@@ -48,10 +48,10 @@ Arguments
      - Include flag to output BED files for each aligned file
    * - :data:`--output_bigwig`
      - Include flag to output bigwig files for each aligned file
-   * - :data:`-m <int>, --max_processors <int>`
-     - Number of max processors to use for tasks (default: Max)
-   * - :data:`--sjdbOverhang \<int\>`
+   * - :data:`--sjdbOverhang \<sjdbOverhang_amount\>`
      - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
+   * - :data:`-m <processors>, --max_processors <processors>`
+     - Number of max processors to use for tasks (default: No limit)
 
 -----------
 Examples
@@ -90,14 +90,14 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-i \<str\>, --input \<str\>`
+   * - :data:`-i \<path\>, --input \<path\>`
      - Path to input directory
-   * - :data:`-o \<str\>, --output \<str\>`
+   * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
-   * - :data:`-t \<str\>, --type \<str\>`
-     - Sequencing type ("SE" for single-end, "PE" for paired-end)
-   * - :data:`-r \<str\>, --reference \<str\>`
+   * - :data:`-r \<path\>, --reference \<path\>`
      - Path to parent organism reference directory
+   * - :data:`-t \<SE or PE\>, --type \<SE or PE\>`
+     - Sequencing type ("SE" for single-end, "PE" for paired-end)
 
 .. list-table::
    :widths: 35 50
@@ -109,10 +109,10 @@ Arguments
      - Include flag to output BED files for each aligned file
    * - :data:`--output_bigwig`
      - Include flag to output bigwig files for each aligned file
-   * - :data:`-m <int>, --max_processors <int>`
-     - Number of max processors to use for tasks (default: Max)
-   * - :data:`--sjdbOverhang \<int\>`
+   * - :data:`--sjdbOverhang \<sjdbOverhang_amount\>`
      - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
+   * - :data:`-m <processors>, --max_processors <processors>`
+     - Number of max processors to use for tasks (default: No limit)
 
 -----------
 Examples

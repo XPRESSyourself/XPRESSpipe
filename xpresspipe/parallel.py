@@ -36,7 +36,10 @@ def get_cores(args_dict):
     else:
         cores = cpu_count() #Number of CPU cores on your system
 
-    workers = 1
+    if 'mod_workers' in args_dict and args_dict['mod_workers'] == True:
+        workers = cores
+    else:
+        workers = 1
 
     return cores, workers
 

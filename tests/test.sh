@@ -135,7 +135,19 @@ rm align_test.out
 ###########
 #Preliminary test
 xpresspipe count --help >> count_test.out
+#Run some tests
+xpresspipe count -i riboprof_out/alignments/ -o riboprof_out/ -r se_reference/ -e se_test >> count_test.out
+xpresspipe count -i riboprof_out/alignments/ -o riboprof_out/ -r se_reference/ >> count_test.out
+#Run some error prone tests
 
+#Clean up data
+rm -r riboprof_out/counts
+#Final counting
+xpresspipe count -i riboprof_out/alignments/ -o riboprof_out/ -r se_reference/ -e se_test --count_coding --truncate
+xpresspipe count -i pe_out/alignments/ -o pe_out/ -r pe_reference/ -e pe_test
+#Error checking
+[[ $(cat count_test.out | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { echo "Errors or exceptions were present in COUNT testing output"; exit 1; }
+rm count_test.out
 
 ###############
 #TEST NORMALIZE

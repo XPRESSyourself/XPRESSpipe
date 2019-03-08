@@ -49,8 +49,8 @@ def second_star(file, output, args_dict):
 """
 def alignment_sort(output, args_dict):
 
-    os.system('samtools sort ' + str(args_dict['alignments']) + str(output) + '_final_Aligned.out.sam -o ' + str(args_dict['alignments']) + str(output) + '_sorted.sam')
-    os.system('samtools view -h -q 255 ' + str(args_dict['alignments']) + str(output) + '_sorted.sam > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
+    os.system('samtools sort -n --threads ' + str(args_dict['threads']) + ' ' + str(args_dict['alignments']) + str(output) + '_final_Aligned.out.sam -o ' + str(args_dict['alignments']) + str(output) + '_sorted.sam')
+    os.system('samtools view --threads ' + str(args_dict['threads']) + ' -h -q 255 ' + str(args_dict['alignments']) + str(output) + '_sorted.sam > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
 
 """
 DESCRIPTION: Remove all intermediate alignment files and references after alignment is complete

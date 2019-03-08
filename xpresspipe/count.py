@@ -53,7 +53,6 @@ def bed_convert(args):
         raise Exception('Incorrect input file')
 
     #Convert BAM to BED
-    print('bedtools bamtobed -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
     os.system('bedtools bamtobed -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
 
 def create_bed(args_dict):
@@ -124,10 +123,8 @@ def count_file(args):
         raise Exception('Something went wrong in determining transcript reference file type')
 
     #Count
-    if args_dict['type'] == 'PE':
-        os.system('htseq-count -r pos -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
-    else:
-        os.system('htseq-count -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+    os.system('htseq-count -r name -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+
 
 def count_reads(args_dict):
 
@@ -138,7 +135,8 @@ def count_reads(args_dict):
     files = get_files(args_dict['input'], ['.sam'])
 
     #Count aligned RNAseq reads
-    parallize(count_file, files, args_dict)
+    args_dict['mod_workers'] = True
+    parallelize(count_file, files, args_dict)
 
     return args_dict
 
@@ -154,18 +152,18 @@ def collect_counts(args_dict):
     files = get_files(args_dict['input'], ['.tsv'])
 
     #Append path to file list
-    c = 0
+    count_files = []
     for x in files:
-        files[c] = str(args_dict['input']) + str(x)
-        c += 1
+        count_files.append(str(args_dict['input']) + str(x))
 
     #Create and output collated count table
-    count_table = count_table(files)
-    if 'experiment' in args_dict:
-        count_table.to_csv(str(args_dict['experiment']) + 'counts_table.csv')
+    counts = count_table(count_files)
+
+    if 'experiment' in args_dict and args_dict['experiment'] != None:
+        counts.to_csv(str(args_dict['counts']) + str(args_dict['experiment']) + '_counts_table.csv')
     else:
         cdt = datetime.datetime.now()
-        count_table.to_csv(str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.csv')
+        counts.to_csv(str(args_dict['counts']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.csv')
 
 """
 DESCRIPTION: Run normalization of count dataframe

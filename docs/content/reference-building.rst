@@ -28,7 +28,7 @@ Arguments
 
 .. code-block:: shell
 
-  $ xpresspipe createReference --help
+  $ xpresspipe makeReference --help
 
 .. list-table::
    :widths: 35 50
@@ -36,11 +36,11 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-o \<str\>, --output \<str\>`
+   * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
-   * - :data:`-f \<str\>, --fasta \<str\>`
+   * - :data:`-f \<path\>, --fasta \<path\>`
      - Path to genome fasta files (file names should end in .fa, .fasta, or .txt and no other files should exist in the directory with similar extensions)
-   * - :data:`-g \<str\>, --gtf \<str\>`
+   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
      - Path and file name to transcript reference file names 'transcripts.gtf'
 
 .. list-table::
@@ -49,10 +49,10 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`-t <int>, --threads <int>`
-     - Specify number of threads to use (default: :data:`8`)
    * - :data:`--sjdbOverhang \<int\>`
      - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
+   * - :data:`-m <processors>, --max_processors <processors>`
+     - Number of max processors to use for tasks (default: No limit)
 
 -----------
 Examples
@@ -63,7 +63,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe createReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -sjdbOverhang 49
+  $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -sjdbOverhang 49
 
 | **Example 2 -- Create a paired-end sequencing reference:**
 | - 12 threads are specified for reference creation
@@ -71,7 +71,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe createReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -t 12
+  $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -t 12
 
 ============================================
 Transcript Reference Curation and Truncation
@@ -95,8 +95,8 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-g \<str\>, --gtf \<str\>`
-     - Path and file name to transcript reference file (GTF) to process
+   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
+     - Path and file name to reference GTF
 
 .. list-table::
    :widths: 35 50
@@ -104,7 +104,7 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`-t <int>, --truncate_amount <int>`
+   * - :data:`-t <value>, --truncate_amount <value>`
      -  Number of nucleotides to truncate from the 5' end of each transcript (default: :data:`45`)
    * - :data:`-c, --create_refFlats`
      - Provide flag to output refFlat files for each transcript reference created
@@ -141,7 +141,7 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-i \<str\>, --input \<str\>`
+   * - :data:`-i \<path\>, --input \<path\>`
      - Path where input transcripts*.gtf files are found
 
 -----------
@@ -175,11 +175,11 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-o \<str\>, --output \<str\>`
+   * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
-   * - :data:`-f \<str\>, --fasta \<str\>`
+   * - :data:`-f \<path\>, --fasta \<path\>`
      - Path to genome fasta files (file names should end in .fa, .fasta, or .txt and no other files should exist in the directory with similar extensions)
-   * - :data:`-g \<str\>, --gtf \<str\>`
+   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
      - Path and file name to transcript reference file names 'transcripts.gtf'
 
 .. list-table::
@@ -188,12 +188,13 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`-t <int>, --threads <int>`
-     - Specify number of threads to use (default: :data:`8`)
-   * - :data:`--sjdbOverhang \<int\>`
-     - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
-   * - :data:`-t <int>, --truncate_amount <int>`
+   * - :data:`-t <value>, --truncate_amount <value>`
      -  Number of nucleotides to truncate from the 5' end of each transcript (default: :data:`45`)
+   * - :data:`--sjdbOverhang \<value\>`
+     - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
+   * - :data:`-m <processors>, --max_processors <processors>`
+     - Number of max processors to use for tasks (default: No limit)
+
 
 -----------
 Examples
@@ -206,7 +207,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe curateReference -o $SE_REF/ -f $SE_REF/ -g $SE_REF/transcripts.gtf -t 50 -m 10 --sjdbOverhang 49
+  $ xpresspipe curateReference -o /path/to/se/ref/ -f /path/to/se/ref/ -g /path/to/se/ref/transcripts.gtf -t 50 -m 10 --sjdbOverhang 49
 
 | **Example 2 -- Create refFlat files:**
 | - Creates a star reference for paired-end read mapping (2x100bp reads)
@@ -215,4 +216,4 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe curateReference -o $PE_REF/ -f $PE_REF/ -g $PE_REF/transcripts.gtf -m 10
+  $ xpresspipe curateReference -o /path/to/pe/ref/ -f /path/to/pe/ref/ -g /path/to/pe/ref/transcripts.gtf -m 10

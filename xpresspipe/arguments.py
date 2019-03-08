@@ -160,7 +160,7 @@ def get_arguments(args, __version__):
     """
     INITIALIZE PARSER
     """
-    parser = argparse.ArgumentParser(prog='RiboPipe', description=dedent(descrip), formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(prog='XPRESSpipe', description=dedent(descrip), formatter_class=argparse.RawTextHelpFormatter)
     #optional arguments
     parser.add_argument(
         '-v', '--version',
@@ -602,7 +602,7 @@ def get_arguments(args, __version__):
     count_reqs = count_parser.add_argument_group('required arguments')
     count_reqs.add_argument(
         '-i', '--input',
-        help='Path to input directory',
+        help='Path to input directory of SAM files',
         metavar='<path>',
         type=str,
         required=True)
@@ -639,7 +639,14 @@ def get_arguments(args, __version__):
         help='Experiment name',
         metavar='<experiment_name>',
         type=str,
-        required=True)
+        required=False)
+    count_opts.add_argument(
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
+        metavar='<processors>',
+        type=int,
+        default=DEFAULT_MAX_PROCESSORS,
+        required=False)
 
     """
     NORMALIZE SUBPARSER

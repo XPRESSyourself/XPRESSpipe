@@ -23,13 +23,12 @@ install:
   - source activate test
   - conda info --envs
   - conda list
-  - pip install xpresstools multiqc codecov
+  - pip install xpresstools multiqc
   - pip install .
   - python setup.py install
 script:
   - cd tests/
-  - coverage run test.sh  # will run all tests in the package
-  - bash <(curl -s https://codecov.io/bash)
+  - bash test.sh  # will run all tests in the package
   - cd ../
 after_success:
   - test $TRAVIS_BRANCH = "master" && conda install conda-build && conda install anaconda-client && bash conda/conda_upload.sh

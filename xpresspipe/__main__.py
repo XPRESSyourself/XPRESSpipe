@@ -50,10 +50,6 @@ def main(args=None):
     if 'input' in args_dict:
         unzip_files(args_dict['input'])
 
-    print('**************************')
-    print(args_dict)
-    print('**************************')
-
     #Execute corresponding functions determined by arguments provided by user
     if args.cmd == 'trim':
         print('Trimming reads...')
