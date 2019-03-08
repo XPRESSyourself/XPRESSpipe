@@ -112,7 +112,13 @@ Arguments
 -----------
 Examples
 -----------
+| **Example 1 -- Create coding-only and truncated references:**
+| - Creates a coding only GTF reference file and a truncated coding-only reference file
+| - Truncates the first 50 nucleotides from the first exon of every transcript
 
+.. code-block:: shell
+
+  $ xpresspipe truncate -g /path/to/reference/transcripts.gtf -t 50 -c
 
 ============================================
 Flatten Transcript References
@@ -141,7 +147,12 @@ Arguments
 -----------
 Examples
 -----------
+| **Example 1 -- Create refFlat files:**
+| - Creates a refFlat-formatted file for each GTF file in the given input directory
 
+.. code-block:: shell
+
+  $ xpresspipe makeFlat -i /path/to/reference/
 
 ============================================
 Perform Full Reference Curation
@@ -187,3 +198,21 @@ Arguments
 -----------
 Examples
 -----------
+| **Example 1 -- Create XPRESSpipe-formatted reference for single-end alignment:**
+| - Creates a star reference for single-end read mapping (1x50bp reads)
+| - Outputs coding-only and truncated coding-only transcripts reference GTFs
+| - Truncates the first 50 nucleotides from the first exon of every transcript
+| - Creates a refFlat-formatted file for each GTF file in the given input directory
+
+.. code-block:: shell
+
+  $ xpresspipe curateReference -o $SE_REF/ -f $SE_REF/ -g $SE_REF/transcripts.gtf -t 50 -m 10 --sjdbOverhang 49
+
+| **Example 2 -- Create refFlat files:**
+| - Creates a star reference for paired-end read mapping (2x100bp reads)
+| - Outputs coding-only and truncated coding-only transcripts reference GTFs
+| - Creates a refFlat-formatted file for each GTF file in the given input directory
+
+.. code-block:: shell
+
+  $ xpresspipe curateReference -o $PE_REF/ -f $PE_REF/ -g $PE_REF/transcripts.gtf -m 10
