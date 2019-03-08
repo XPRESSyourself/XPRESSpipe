@@ -133,6 +133,9 @@ rm align_test.out
 ###########
 #TEST COUNT
 ###########
+#Preliminary test
+xpresspipe count --help >> count_test.out
+
 
 ###############
 #TEST NORMALIZE

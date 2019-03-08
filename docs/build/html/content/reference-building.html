@@ -337,6 +337,14 @@
 </div>
 <div class="section" id="id4">
 <h3>Examples<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><strong>Example 1 – Create coding-only and truncated references:</strong></div>
+<div class="line">- Creates a coding only GTF reference file and a truncated coding-only reference file</div>
+<div class="line">- Truncates the first 50 nucleotides from the first exon of every transcript</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe truncate -g /path/to/reference/transcripts.gtf -t <span class="m">50</span> -c
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="flatten-transcript-references">
@@ -372,6 +380,13 @@
 </div>
 <div class="section" id="id6">
 <h3>Examples<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><strong>Example 1 – Create refFlat files:</strong></div>
+<div class="line">- Creates a refFlat-formatted file for each GTF file in the given input directory</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe makeFlat -i /path/to/reference/
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="perform-full-reference-curation">
@@ -435,6 +450,25 @@
 </div>
 <div class="section" id="id8">
 <h3>Examples<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line"><strong>Example 1 – Create XPRESSpipe-formatted reference for single-end alignment:</strong></div>
+<div class="line">- Creates a star reference for single-end read mapping (1x50bp reads)</div>
+<div class="line">- Outputs coding-only and truncated coding-only transcripts reference GTFs</div>
+<div class="line">- Truncates the first 50 nucleotides from the first exon of every transcript</div>
+<div class="line">- Creates a refFlat-formatted file for each GTF file in the given input directory</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe curateReference -o <span class="nv">$SE_REF</span>/ -f <span class="nv">$SE_REF</span>/ -g <span class="nv">$SE_REF</span>/transcripts.gtf -t <span class="m">50</span> -m <span class="m">10</span> --sjdbOverhang <span class="m">49</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Example 2 – Create refFlat files:</strong></div>
+<div class="line">- Creates a star reference for paired-end read mapping (2x100bp reads)</div>
+<div class="line">- Outputs coding-only and truncated coding-only transcripts reference GTFs</div>
+<div class="line">- Creates a refFlat-formatted file for each GTF file in the given input directory</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe curateReference -o <span class="nv">$PE_REF</span>/ -f <span class="nv">$PE_REF</span>/ -g <span class="nv">$PE_REF</span>/transcripts.gtf -m <span class="m">10</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
