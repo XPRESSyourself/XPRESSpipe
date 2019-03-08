@@ -67,11 +67,15 @@ def get_files(directory, suffix, omit=[]):
     file_list = sorted(file_list)
 
     #Get rid of bad grabs
+    omit_drop = []
     if len(omit) > 0:
         for x in file_list:
             for o in omit:
                 if str(o) in x:
-                    file_list.remove(x)
+                    omit_drop.append(x)
+
+    for x in omit_drop:
+        file_list.remove(x)
 
     return tuple(file_list)
 
@@ -83,12 +87,10 @@ def get_probe_files(args_dict, suffix):
     probe_list = []
 
     #Walk through raw data files within given directory
-    for subdir, dirs, files in os.walk(args_dict['input']):
-        for f in files:
-            for s in suffix:
-                if f.endswith(str(s)):
-                    file_list.append(f)
-
+    for file in os.listdir(args_dict['input']):
+        for s in suffix:
+            if file.endswith(str(s)):
+                file_list.append(file)
 
     for x in args_dict['input']:
         if x.endswith(str(suffix)) == True:
@@ -108,14 +110,13 @@ def unzip_files(directory):
     suffix = ['.gz', '.zip']
 
     #Walk through raw data files within given directory
-    for subdir, dirs, files in os.walk(directory):
-        for f in files:
-            for s in suffix:
-                if f.endswith(str(s)):
-                    if s == '.gz':
-                        os.system('gzip -d ' + str(directory) + str(f))
-                    if s == '.zip':
-                        os.system('unzip ' + str(directory) + str(f))
+    for file in os.listdir(directory):
+        for s in suffix:
+            if file.endswith(str(s)):
+                if s == '.gz':
+                    os.system('gzip -d ' + str(directory) + str(file))
+                if s == '.zip':
+                    os.system('unzip ' + str(directory) + str(file))
 
 """
 """

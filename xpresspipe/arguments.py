@@ -248,7 +248,7 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     se_opts.add_argument(
-        '-m', '--method',
+        '--method',
         help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
         metavar='<normalization_type>',
         type=str,
@@ -265,6 +265,13 @@ def get_arguments(args, __version__):
         metavar='<sjdbOverhang_amount>',
         type=int,
         default=100,
+        required=False)
+    se_opts.add_argument(
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
+        metavar='<processors>',
+        type=int,
+        default=DEFAULT_MAX_PROCESSORS,
         required=False)
 
     """
@@ -341,7 +348,7 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     pe_opts.add_argument(
-        '-m', '--method',
+        '--method',
         help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
         metavar='<normalization_type>',
         type=str,
@@ -358,6 +365,13 @@ def get_arguments(args, __version__):
         metavar='<sjdbOverhang_amount>',
         type=int,
         default=100,
+        required=False)
+    pe_opts.add_argument(
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
+        metavar='<processors>',
+        type=int,
+        default=DEFAULT_MAX_PROCESSORS,
         required=False)
 
     """
@@ -439,7 +453,7 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     rp_opts.add_argument(
-        '-m', '--method',
+        '--method',
         help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
         metavar='<normalization_type>',
         type=str,
@@ -457,6 +471,13 @@ def get_arguments(args, __version__):
         type=int,
         default=100,
         required=False)
+    rp_opts.add_argument(
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
+        metavar='<processors>',
+        type=int,
+        default=DEFAULT_MAX_PROCESSORS,
+        required=False)
 
     """
     TRIM SUBPARSER
@@ -466,11 +487,15 @@ def get_arguments(args, __version__):
     trim_reqs = trim_parser.add_argument_group('required arguments')
     trim_reqs.add_argument(
         '-i', '--input',
-        help='Path to input directory -- if paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        help='Path to input directory -- for paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        metavar='<path>',
+        type=str,
         required=True)
     trim_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     #Optional arguments
     trim_opts = trim_parser.add_argument_group('optional arguments')
@@ -480,27 +505,31 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     trim_opts.add_argument(
         '-a', '--adaptors',
-        metavar='<list>',
+        help='Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if \"None None\" is provided, software will attempt to auto-detect adaptors',
+        metavar='<adaptor1 ...>',
+        type=str,
         nargs='+',
         default=None,
-        help='Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if none are provided, software will attempt to auto-detect adaptors -- if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide None twice',
         required=False)
     trim_opts.add_argument(
         '-q', '--quality',
-        metavar='<int>',
-        default=DEFAULT_READ_QUALITY,
         help='PHRED read quality threshold (default: %s)' % DEFAULT_READ_QUALITY,
+        metavar='<PHRED_value>',
+        type=int,
+        default=DEFAULT_READ_QUALITY,
         required=False)
     trim_opts.add_argument(
         '--min_length',
-        metavar='<int>',
-        default=DEFAULT_READ_MIN,
         help='Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        metavar='<length_value>',
+        type=int,
+        default=DEFAULT_READ_MIN,
         required=False)
     trim_opts.add_argument(
         '-m', '--max_processors',
         help='Number of max processors to use for tasks (default: No limit)',
-        metavar='<int>',
+        metavar='<processors>',
+        type=int,
         default=DEFAULT_MAX_PROCESSORS,
         required=False)
 
@@ -512,19 +541,27 @@ def get_arguments(args, __version__):
     align_reqs = align_parser.add_argument_group('required arguments')
     align_reqs.add_argument(
         '-i', '--input',
-        help='Path to input directory -- if paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        help='Path to input directory -- for paired-end, file names should be exactly the same except for r1/r2.fastq or similar suffix',
+        metavar='<path>',
+        type=str,
         required=True)
     align_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
-        required=True)
-    align_reqs.add_argument(
-        '-t', '--type',
-        help='Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
+        metavar='<path>',
+        type=str,
         required=True)
     align_reqs.add_argument(
         '-r', '--reference',
         help='Path to parent organism reference directory',
+        metavar='<path>',
+        type=str,
+        required=True)
+    align_reqs.add_argument(
+        '-t', '--type',
+        help='Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
+        metavar='<SE or PE>',
+        type=str,
         required=True)
     #Optional arguments
     align_opts = align_parser.add_argument_group('optional arguments')
@@ -534,7 +571,7 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     align_opts.add_argument(
         '--output_bed',
-        help='Include flag to output BED files for each aligned file',
+        help='Include option to output BED files for each aligned file',
         action='store_true',
         required=False)
     align_opts.add_argument(
@@ -543,16 +580,18 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     align_opts.add_argument(
-        '-m', '--max_processors',
-        help='Number of max processors to use for tasks (default: No limit)',
-        metavar='<int>',
-        default=DEFAULT_MAX_PROCESSORS,
-        required=False)
-    align_opts.add_argument(
         '--sjdbOverhang',
         help='Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
+        metavar='<sjdbOverhang_amount>',
+        type=int,
         default=100,
-        metavar='<int>',
+        required=False)
+    align_opts.add_argument(
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
+        metavar='<processors>',
+        type=int,
+        default=DEFAULT_MAX_PROCESSORS,
         required=False)
 
     """
@@ -564,14 +603,20 @@ def get_arguments(args, __version__):
     count_reqs.add_argument(
         '-i', '--input',
         help='Path to input directory',
+        metavar='<path>',
+        type=str,
         required=True)
     count_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     count_reqs.add_argument(
         '-r', '--reference',
         help='Path to parent organism reference directory',
+        metavar='<path>',
+        type=str,
         required=True)
     #Optional arguments
     count_opts = count_parser.add_argument_group('optional arguments')
@@ -590,10 +635,11 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     count_opts.add_argument(
-        '--experiment',
-        help='Experiment name to name counts table -- if none provided, datetime is used to format file output name',
-        metavar='<str>',
-        required=False)
+        '-e', '--experiment',
+        help='Experiment name',
+        metavar='<experiment_name>',
+        type=str,
+        required=True)
 
     """
     NORMALIZE SUBPARSER
@@ -604,7 +650,8 @@ def get_arguments(args, __version__):
     normalize_reqs.add_argument(
         '-d', '--data',
         help='Path and file name to sequence dataframe',
-        metavar='<str>',
+        metavar='</path/filename>',
+        type=str,
         required=True)
     #Optional arguments
     normalize_opts = normalize_parser.add_argument_group('optional arguments')
@@ -613,19 +660,22 @@ def get_arguments(args, __version__):
         action='help',
         help='Show help message and exit')
     normalize_opts.add_argument(
-        '-m', '--method',
+        '--method',
         help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a GTF reference file must be included',
-        metavar='<str>',
+        metavar='<RPM, RPKM, FPKM, LOG>',
+        type=str,
         required=False)
     normalize_opts.add_argument(
         '-g', '--gtf',
         help='Path and file name to reference GTF',
-        metavar='<str>',
+        metavar='</path/transcripts.gtf>',
+        type=int,
         required=False)
     normalize_opts.add_argument(
         '--batch',
         help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='<str>',
+        metavar='</path/filename>',
+        type=int,
         required=False)
 
     """
@@ -637,25 +687,32 @@ def get_arguments(args, __version__):
     metagene_reqs.add_argument(
         '-i', '--input',
         help='Path to input directory of SAM alignment files',
+        metavar='<path>',
+        type=str,
         required=True)
     metagene_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
-        required=True)
-    metagene_reqs.add_argument(
-        '--experiment',
-        help='Experiment name',
-        metavar='<str>',
+        metavar='<path>',
+        type=str,
         required=True)
     metagene_reqs.add_argument(
         '-r', '--reference',
         help='Path to parent organism reference directory',
-        metavar='<str>',
+        metavar='<path>',
+        type=str,
         required=True)
     metagene_reqs.add_argument(
         '-t', '--reference_type',
         help='RefFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\",)',
-        metavar='<str>',
+        metavar='<DEFAULT, CODING, CODING_TRUNCATED>',
+        type=int,
+        required=True)
+    metagene_reqs.add_argument(
+        '-e', '--experiment',
+        help='Experiment name',
+        metavar='<experiment_name>',
+        type=str,
         required=True)
     #Optional arguments
     metagene_opts = metagene_parser.add_argument_group('optional arguments')
@@ -673,15 +730,20 @@ def get_arguments(args, __version__):
     distribution_reqs.add_argument(
         '-i', '--input',
         help='Path to input directory of trimmed fastq (or untrimmed fastq) files',
+        metavar='<path>',
+        type=str,
         required=True)
     distribution_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     distribution_reqs.add_argument(
-        '--experiment',
-        help='Experiment name to name counts table -- if none provided, datetime is used to format file output name',
-        metavar='<str>',
+        '-e', '--experiment',
+        help='Experiment name',
+        metavar='<experiment_name>',
+        type=str,
         required=True)
     #Optional arguments
     distribution_opts = distribution_parser.add_argument_group('optional arguments')
@@ -699,20 +761,26 @@ def get_arguments(args, __version__):
     period_reqs.add_argument(
         '-i', '--input',
         help='Path to input directory of SAM alignment files',
+        metavar='<path>',
+        type=str,
         required=True)
     period_reqs.add_argument(
         '-o', '--output',
         help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     period_reqs.add_argument(
         '-g', '--gtf',
-        help='Path and file name of reference GTF',
-        metavar='<str>',
-        required=True)
+        help='Path and file name to reference GTF',
+        metavar='</path/transcripts.gtf>',
+        type=int,
+        required=False)
     period_reqs.add_argument(
-        '--experiment',
+        '-e', '--experiment',
         help='Experiment name',
-        metavar='<str>',
+        metavar='<experiment_name>',
+        type=str,
         required=True)
     #Optional arguments
     period_opts = period_parser.add_argument_group('optional arguments')
@@ -722,15 +790,17 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     period_opts.add_argument(
         '--landmark',
-        help='Metagene count landmark variable for landmark anchor of periodicity analysis (default: %s)' % 'cds_start',
+        help='Metagene count landmark variable (Plastid-valid) for landmark anchor of periodicity analysis (default: %s)' % 'cds_start',
         default='cds_start',
-        metavar='<str>',
+        metavar='<landmark>',
+        type=int,
         required=False)
     period_opts.add_argument(
         '--downstream',
         help='Number of nucleotides to track after the landmark (default: %s)' % 200,
         default=200,
-        metavar='<int>',
+        metavar='<value>',
+        type=int,
         required=False)
 
     """
@@ -741,19 +811,22 @@ def get_arguments(args, __version__):
     curate_reqs = curate_parser.add_argument_group('required arguments')
     curate_reqs.add_argument(
         '-o', '--output',
-        help='Path to directory for output',
-        metavar='<str>',
+        help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     curate_reqs.add_argument(
         '-f', '--fasta',
         help='Path to directory containing genomic fasta files',
-        metavar='<str>',
+        metavar='<path>',
+        type=int,
         required=True)
     curate_reqs.add_argument(
         '-g', '--gtf',
-        help='Path and file name of reference GTF',
-        metavar='<str>',
-        required=True)
+        help='Path and file name to reference GTF',
+        metavar='</path/transcripts.gtf>',
+        type=int,
+        required=False)
     #Optional arguments
     curate_opts = curate_parser.add_argument_group('optional arguments')
     curate_opts.add_argument(
@@ -761,23 +834,25 @@ def get_arguments(args, __version__):
         action='help',
         help='Show help message and exit')
     curate_opts.add_argument(
-        '-m', '--max_processors',
-        help='Number of max processors to use for tasks (default: No limit)',
-        metavar='<int>',
-        default=DEFAULT_MAX_PROCESSORS,
+        '-t', '--truncate_amount',
+        help='Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
+        default=45,
+        metavar='<value>',
+        type=int,
         required=False)
     curate_opts.add_argument(
         '--sjdbOverhang',
         help='Specify length of genomic sequences for constructing splice-aware reference. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
         default=100,
-        metavar='<int>',
+        metavar='<value>',
+        type=int,
         required=False)
     curate_opts.add_argument(
-        '-t', '--truncate_amount',
-        help='Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
-        default=45,
-        metavar='<int>',
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
+        metavar='<processors>',
         type=int,
+        default=DEFAULT_MAX_PROCESSORS,
         required=False)
 
     """
@@ -788,9 +863,10 @@ def get_arguments(args, __version__):
     truncate_reqs = truncate_parser.add_argument_group('required arguments')
     truncate_reqs.add_argument(
         '-g', '--gtf',
-        help='Path and file name of GTF reference file to process',
-        metavar='<str>',
-        required=True)
+        help='Path and file name to reference GTF',
+        metavar='</path/transcripts.gtf>',
+        type=int,
+        required=False)
     #Optional arguments
     truncate_opts = truncate_parser.add_argument_group('optional arguments')
     truncate_opts.add_argument(
@@ -801,7 +877,7 @@ def get_arguments(args, __version__):
         '-t', '--truncate_amount',
         help='Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
         default=45,
-        metavar='<int>',
+        metavar='<value>',
         type=int,
         required=False)
     truncate_opts.add_argument(
@@ -819,7 +895,8 @@ def get_arguments(args, __version__):
     makeflat_reqs.add_argument(
         '-i', '--input',
         help='Path where input transcripts*.gtf files are found',
-        metavar='<str>',
+        metavar='<path>',
+        type=int,
         required=True)
     #Optional arguments
     makeflat_opts = makeflat_parser.add_argument_group('optional arguments')
@@ -836,19 +913,22 @@ def get_arguments(args, __version__):
     reference_reqs = reference_parser.add_argument_group('required arguments')
     reference_reqs.add_argument(
         '-o', '--output',
-        help='Path to directory for output',
-        metavar='<str>',
+        help='Path to output directory',
+        metavar='<path>',
+        type=str,
         required=True)
     reference_reqs.add_argument(
         '-f', '--fasta',
         help='Path to directory containing genomic fasta files',
-        metavar='<str>',
+        metavar='<path>',
+        type=int,
         required=True)
     reference_reqs.add_argument(
         '-g', '--gtf',
-        help='Path and file name of reference GTF',
-        metavar='<str>',
-        required=True)
+        help='Path and file name to reference GTF',
+        metavar='</path/transcripts.gtf>',
+        type=int,
+        required=False)
     #Optional arguments
     reference_opts = reference_parser.add_argument_group('optional arguments')
     reference_opts.add_argument(
@@ -856,16 +936,18 @@ def get_arguments(args, __version__):
         action='help',
         help='Show help message and exit')
     reference_opts.add_argument(
-        '-m', '--max_processors',
-        help='Number of max processors to use for tasks (default: No limit)',
-        metavar='<int>',
-        default=DEFAULT_MAX_PROCESSORS,
-        required=False)
-    reference_opts.add_argument(
         '--sjdbOverhang',
         help='Specify length of genomic sequences for constructing splice-aware reference. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1=99. However, the default value of 100 should work in most cases',
         default=100,
-        metavar='<int>',
+        metavar='<value>',
+        type=int,
+        required=False)
+    reference_opts.add_argument(
+        '-m', '--max_processors',
+        help='Number of max processors to use for tasks (default: No limit)',
+        metavar='<processors>',
+        type=int,
+        default=DEFAULT_MAX_PROCESSORS,
         required=False)
 
     """
@@ -875,14 +957,16 @@ def get_arguments(args, __version__):
     #Required arguments
     probe_reqs = probe_parser.add_argument_group('required arguments')
     probe_reqs.add_argument(
-        "-i", "--input",
-        help="Path to zipped files ",
-        metavar='<str>',
+        '-i', '--input',
+        help='Path to zipped files',
+        metavar='<path>',
+        type=str,
         required=True)
     probe_reqs.add_argument(
-        "-o", "--output",
-        help="Output file name to write output to",
-        metavar='<str>',
+        '-o', '--output',
+        help='Path and file name to write output to',
+        metavar='</path/filename>',
+        type=str,
         required=True)
     #Optional arguments
     probe_opts = probe_parser.add_argument_group('optional arguments')
@@ -894,7 +978,8 @@ def get_arguments(args, __version__):
         '-m', '--min_overlap',
         help='Minimum number of bases that must match on a side to combine sequences (default: %s)' % 5,
         default=5,
-        metavar='<int>',
+        metavar='<value>',
+        type=int,
         required=False)
     probe_opts.add_argument(
         '--footprint_only',
@@ -911,13 +996,15 @@ def get_arguments(args, __version__):
     convert_reqs.add_argument(
         '-d', '--data',
         help='Path and file name to sequence dataframe',
-        metavar='<str>',
+        metavar='</path/filename>',
+        type=str,
         required=True)
     convert_reqs.add_argument(
         '-g', '--gtf',
         help='Path and file name to reference GTF',
-        metavar='<str>',
-        required=True)
+        metavar='</path/transcripts.gtf>',
+        type=int,
+        required=False)
     #Optional arguments
     convert_opts = convert_parser.add_argument_group('optional arguments')
     convert_opts.add_argument(
@@ -928,31 +1015,36 @@ def get_arguments(args, __version__):
         '--orig_name_label',
         help='Label of original name (usually \"gene_id \")',
         default='gene_id \"',
-        metavar='<str>',
+        metavar='<label>',
+        type=str,
         required=False)
     convert_opts.add_argument(
         '--orig_name_location',
         help='Position in last column of GTF where relevant data is found (i.e. 0 would be the first sub-string before the first comma, 3 would be the third sub-string after the second comma before the third comma)',
         default=0,
-        metavar='<int>',
+        metavar='<position>',
+        type=int,
         required=False)
     convert_opts.add_argument(
         '--new_name_label',
         help='Label of original name (usually \"gene_name \")',
         default='gene_name \"',
-        metavar='<str>',
+        metavar='<label>',
+        type=str,
         required=False)
     convert_opts.add_argument(
         '--new_name_location',
         help='Position in last column of GTF where relevant data is found (i.e. 0 would be the first sub-string before the first comma, 3 would be the third sub-string after the second comma before the third comma)',
         default=2,
-        metavar='<int>',
+        metavar='<position>',
+        type=int,
         required=False)
     convert_opts.add_argument(
         '--refill',
         help='In some cases, where common gene names are unavailable, the dataframe will fill the gene name with the improper field of the GTF. In this case, specify this improper string and these values will be replaced with the original name',
         default=None,
-        metavar='<str>',
+        metavar='<label>',
+        type=str,
         required=False)
 
     """

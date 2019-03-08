@@ -117,10 +117,9 @@ PE_TRIM=pe_out/trimmed_fastq
 xpresspipe align --help >> align_test.out
 #Test all arguments
 xpresspipe align -i $SE_TRIM -o riboprof_out -t SE -r $SE_REF --sjdbOverhang 49 --output_bigwig --output_bed --max_processors 10 >> align_test.out
+xpresspipe align -i $SE_TRIM -o riboprof_out -t SE -r $SE_REF --sjdbOverhang 49 >> align_test.out
 #Test some error-prone tries
 
-#Final test to use with next steps
-xpresspipe align -i $SE_TRIM -o riboprof_out -t SE -r $SE_REF --sjdbOverhang 49 >> align_test.out
 #clean up test data
 rm -r riboprof_out/alignments
 #Create reference for align tests with SE 50bp reads
@@ -130,6 +129,7 @@ xpresspipe align -i $PE_TRIM -o pe_out -t PE -r $PE_REF >> align_test.out
 #Error checking
 [[ $(cat align_test.out | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { echo "Errors or exceptions were present in ALIGN testing output"; exit 1; }
 rm align_test.out
+
 ###########
 #TEST COUNT
 ###########
@@ -161,6 +161,8 @@ rm align_test.out
 ##############
 #TEST SERNASEQ
 ##############
+
+#Test one file
 
 ##############
 #TEST PERNASEQ

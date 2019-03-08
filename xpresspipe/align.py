@@ -89,8 +89,9 @@ def pe_align(args):
     file1, file2, args_dict = args[0], args[1], args[2]
 
     #STAR first pass
-    output = str(file[:-6]) #get output file name before adding path to file name(s)
+    output = str(file1[:-7]) #get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2)
+
     first_star(file, output, args_dict)
 
     #STAR intermediate reference building
@@ -101,8 +102,6 @@ def pe_align(args):
 
     #Create sam file with only unique hits
     alignment_sort(output, args_dict)
-
-    #Do paired reads need to be collated? -- downstream stuff assumes yes
 
 """
 DESCRIPTION: Align single-end Illumina RNAseq reads
