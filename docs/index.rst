@@ -36,9 +36,9 @@ Table of contents
    content/trim
    content/align
    content/count
-   content/quality
    content/formatting
    content/normalization
+   content/analysis
 
 =======
 License

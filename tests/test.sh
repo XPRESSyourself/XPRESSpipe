@@ -152,6 +152,44 @@ rm count_test.out
 ###############
 #TEST NORMALIZE
 ###############
+#Preliminary test
+xpresspipe normalizeMatrix --help >> normalize_test.out
+#Run some tests
+xpresspipe normalizeMatrix -d riboprof_out/counts/se_test_counts_table.csv --method RPKM -g se_reference/transcripts_coding_truncated.gtf >> normalize_test.out
+xpresspipe normalizeMatrix -d riboprof_out/counts/se_test_counts_table.csv --method RPM
+xpresspipe normalizeMatrix -d riboprof_out/counts/se_test_counts_table.csv --method FPKM -g se_reference/transcripts_coding_truncated.gtf >> normalize_test.out
+xpresspipe normalizeMatrix -d riboprof_out/counts/se_test_counts_table.csv --method LOG
+#Run some error prone tests
+[[ $(xpresspipe normalizeMatrix -d riboprof_out/counts/se_test_counts_table.csv --method FPKM | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { exit 0; }
+#Error checking
+[[ $(cat normalize_test.out | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { echo "Errors or exceptions were present in NORMALIZE testing output"; exit 1; }
+rm normalize_test.out
+
+############
+#TEST DESEQ2
+############
+#Preliminary test
+xpresspipe diffxpress --help >> diffex_test.out
+#Run some tests
+xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design replicate+condition
+#Run some error prone tests
+
+#Error checking
+[[ $(cat diffex_test.out | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { echo "Errors or exceptions were present in DIFFXPRESS testing output"; exit 1; }
+rm diffex_test.out
+
+#########################
+#TEST BATCH NORMALIZATION
+#########################
+#Preliminary test
+xpresspipe normalizeMatrix --help >> batch_test.out
+#Run some tests
+xpresspipe normalizeMatrix -d test_r/test_dataset.tsv --batch test_r/batch_info.tsv
+#Run some error prone tests
+
+#Error checking
+[[ $(cat batch_test.out | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { echo "Errors or exceptions were present in BATCH testing output"; exit 1; }
+rm batch_test.out
 
 ##############
 #TEST METAGENE
@@ -201,3 +239,5 @@ rm -r *reference/genome
 rm -r *reference/transcripts_*
 rm -r se_reference
 rm -r pe_reference
+rm test_r/*batched*
+rm test_r/*diffx*

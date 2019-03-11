@@ -25,7 +25,7 @@ IMPORT DEPENDENCIES
 import os, sys
 import datetime
 import pandas as pd
-from xpresstools import count_table, batch_normalize
+from xpresstools import count_table, batch_normalize, rpm, r_fpkm, log_scale
 from .utils import get_files, add_directory
 from .parallel import parallelize
 
@@ -160,39 +160,44 @@ def collect_counts(args_dict):
     counts = count_table(count_files)
 
     if 'experiment' in args_dict and args_dict['experiment'] != None:
-        counts.to_csv(str(args_dict['counts']) + str(args_dict['experiment']) + '_counts_table.csv')
+        counts.to_csv(str(args_dict['counts']) + str(args_dict['experiment']) + '_counts_table.tsv', sep='\t')
     else:
         cdt = datetime.datetime.now()
-        counts.to_csv(str(args_dict['counts']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.csv')
+        counts.to_csv(str(args_dict['counts']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.tsv', sep='\t')
 
 """
 DESCRIPTION: Run normalization of count dataframe
 """
 def run_normalization(args_dict):
-    if 'method' in args_dict:
+
+    #Run sample normalization
+    if 'method' in args_dict and args_dict['method'] != None:
         #RPM normalization
         if args_dict['method'].upper() == 'RPM':
             type = 'rpm'
             df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
             df = rpm(df)
-            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', sep=',')
+            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         #RPKM or FPKM normalization
-        elif args_dict['method'].upper() == 'RPKM' or args_dict['type'].upper() == 'FPKM':
+        elif args_dict['method'].upper() == 'RPKM' or args_dict['method'].upper() == 'FPKM':
+            if args_dict['gtf'] == None:
+                raise Exception('A GTF reference file is required for RPKM and FPKM normalization')
             type = 'r_fpkm'
             df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
-            df = r_fpkm(df)
-            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', sep=',')
+            df = r_fpkm(df, args_dict['gtf'])
+            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         #Log normalization
         elif args_dict['method'].upper() == 'LOG':
             type = 'log'
             df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
             df = log_scale(df, log_base=10)
-            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', sep=',')
+            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         else:
             raise Exception('Unknown \"method\" argument provided')
+
     #Run in batch normalization
-        if 'batch' in args_dict:
-            batch_normalize(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', str(args_dict['batch']), str(args_dict['output']), input_sep=',', batch_sep=',')
+        if 'batch' in args_dict and args_dict['batch'] != None:
+            batch_normalize(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', str(args_dict['batch']))
     else:
-        if 'batch' in args_dict:
-            batch_normalize(str(args_dict['data']), str(args_dict['batch']), str(args_dict['output']), input_sep=',', batch_sep='\t')
+        if 'batch' in args_dict and args_dict['batch'] != None:
+            batch_normalize(str(args_dict['data']), str(args_dict['batch']))

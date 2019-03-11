@@ -29,6 +29,9 @@ pip install xpresspipe
 conda install -c bioconda xpresspipe
 ```
 
+### Other Requirements:
+If using this package to perform batch effect normalization or differential expression analysis, you must install [R](https://www.r-project.org/)
+
 ### QuickStart:   
 ```
 $ xpresspipe riboprof -i /path/to/raw/data/ -o /path/to/output/ -r /path/to/reference/ ...

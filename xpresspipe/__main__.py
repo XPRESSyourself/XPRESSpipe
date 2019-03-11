@@ -33,7 +33,7 @@ from .rrnaprobe import rrnaProbe
 from .utils import get_probe_files, create_reference, get_summary, create_flat, unzip_files
 from .quality import make_metagene, make_readDistributions, make_periodicity
 from .parallel import get_cores
-from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf
+from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf, diff_xpress
 
 """
 DESCRIPTION: Main function to call necessary functions for sub-modules
@@ -81,6 +81,11 @@ def main(args=None):
         print('Collecting and collating counts...')
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
+        msg_complete()
+
+    elif args.cmd == 'diffxpress':
+        print('Performing differential expression analysis...')
+        diff_xpress(str(args_dict['data']), str(args_dict['sample']), equation=str(args_dict['design']))
         msg_complete()
 
     elif args.cmd == 'metagene':

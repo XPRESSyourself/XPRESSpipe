@@ -63,6 +63,8 @@ Sub-module descriptions:
     |-----------------------|---------------------------------------------------------------------------------------|
     |    normalizeMatrix    |   Perform normalization on sequence matrix                                            |
     |-----------------------|---------------------------------------------------------------------------------------|
+    |    diffxpress         |   Perform DESeq2 differential expression analysis on counts matrix                    |
+    |-----------------------|---------------------------------------------------------------------------------------|
     |    metagene           |   Compile summarized metagene profiles for each sample in a directory                 |
     |-----------------------|---------------------------------------------------------------------------------------|
     |    readDistribution   |   Compile summarized distributions for each sample in a directory                     |
@@ -657,7 +659,7 @@ def get_arguments(args, __version__):
     normalize_reqs.add_argument(
         '-d', '--data',
         help='Path and file name to sequence dataframe',
-        metavar='</path/filename>',
+        metavar='</path/filename.tsv>',
         type=str,
         required=True)
     #Optional arguments
@@ -676,14 +678,45 @@ def get_arguments(args, __version__):
         '-g', '--gtf',
         help='Path and file name to reference GTF',
         metavar='</path/transcripts.gtf>',
-        type=int,
+        type=str,
         required=False)
     normalize_opts.add_argument(
         '--batch',
         help='Include path and filename of dataframe with batch normalization parameters',
-        metavar='</path/filename>',
-        type=int,
+        metavar='</path/filename.tsv>',
+        type=str,
         required=False)
+
+    """
+    DIFFXPRESS SUBPARSER
+    """
+    diffx_parser = subparser.add_parser('diffxpress', description='Perform DESeq2 differential expression analysis on counts matrix', add_help=False)
+    #Required arguments
+    diffx_reqs = diffx_parser.add_argument_group('required arguments')
+    diffx_reqs.add_argument(
+        '-d', '--data',
+        help='Path and file name to counts dataframe',
+        metavar='</path/filename.tsv>',
+        type=str,
+        required=True)
+    diffx_reqs.add_argument(
+        '-s', '--sample',
+        help='Path and file name to sample metadata dataframe',
+        metavar='</path/filename.tsv>',
+        type=str,
+        required=True)
+    diffx_reqs.add_argument(
+        '--design',
+        help='Design formula for differential expression analysis (spaces in command line are conserved in input string. DO NOT INCLUDE ~ IN FORMULA IN COMMAND LINE, will be automatically added)',
+        metavar='<formula>',
+        type=str,
+        required=True)
+    #Optional arguments
+    diffx_opts = diffx_parser.add_argument_group('optional arguments')
+    diffx_opts.add_argument(
+        '-h', '--help',
+        action='help',
+        help='Show help message and exit')
 
     """
     METAGENE SUBPARSER
@@ -713,7 +746,7 @@ def get_arguments(args, __version__):
         '-t', '--reference_type',
         help='RefFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\",)',
         metavar='<DEFAULT, CODING, CODING_TRUNCATED>',
-        type=int,
+        type=str,
         required=True)
     metagene_reqs.add_argument(
         '-e', '--experiment',
@@ -781,7 +814,7 @@ def get_arguments(args, __version__):
         '-g', '--gtf',
         help='Path and file name to reference GTF',
         metavar='</path/transcripts.gtf>',
-        type=int,
+        type=str,
         required=False)
     period_reqs.add_argument(
         '-e', '--experiment',
@@ -826,13 +859,13 @@ def get_arguments(args, __version__):
         '-f', '--fasta',
         help='Path to directory containing genomic fasta files',
         metavar='<path>',
-        type=int,
+        type=str,
         required=True)
     curate_reqs.add_argument(
         '-g', '--gtf',
         help='Path and file name to reference GTF',
         metavar='</path/transcripts.gtf>',
-        type=int,
+        type=str,
         required=False)
     #Optional arguments
     curate_opts = curate_parser.add_argument_group('optional arguments')
@@ -872,7 +905,7 @@ def get_arguments(args, __version__):
         '-g', '--gtf',
         help='Path and file name to reference GTF',
         metavar='</path/transcripts.gtf>',
-        type=int,
+        type=str,
         required=False)
     #Optional arguments
     truncate_opts = truncate_parser.add_argument_group('optional arguments')
@@ -903,7 +936,7 @@ def get_arguments(args, __version__):
         '-i', '--input',
         help='Path where input transcripts*.gtf files are found',
         metavar='<path>',
-        type=int,
+        type=str,
         required=True)
     #Optional arguments
     makeflat_opts = makeflat_parser.add_argument_group('optional arguments')
@@ -928,13 +961,13 @@ def get_arguments(args, __version__):
         '-f', '--fasta',
         help='Path to directory containing genomic fasta files',
         metavar='<path>',
-        type=int,
+        type=str,
         required=True)
     reference_reqs.add_argument(
         '-g', '--gtf',
         help='Path and file name to reference GTF',
         metavar='</path/transcripts.gtf>',
-        type=int,
+        type=str,
         required=False)
     #Optional arguments
     reference_opts = reference_parser.add_argument_group('optional arguments')
@@ -1010,7 +1043,7 @@ def get_arguments(args, __version__):
         '-g', '--gtf',
         help='Path and file name to reference GTF',
         metavar='</path/transcripts.gtf>',
-        type=int,
+        type=str,
         required=False)
     #Optional arguments
     convert_opts = convert_parser.add_argument_group('optional arguments')
