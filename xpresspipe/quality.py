@@ -67,7 +67,7 @@ def get_peaks(args):
     os.system('samtools index ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam')
 
     #Perform plastid analysis
-    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam --fiveprime --offset 14 --normalize_over 30 200 --min_counts 1 --cmap Blues --title ' + file[:-4] + ' >/dev/null 2>&1')
+    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam --fiveprime --offset 14 --normalize_over 30 200 --min_counts 50 --cmap Blues --title ' + file[:-4])
 
 def make_periodicity(args_dict):
 
@@ -102,7 +102,7 @@ def get_profiles(args):
 
     file, args_dict = args[0], args[1]
 
-    os.system('picard CollectRnaSeqMetrics REF_FLAT=' + str(args_dict['reference_type']) + ' STRAND_SPECIFICITY=NONE INPUT=' + str(args_dict['input']) + str(file) + ' OUTPUT=' + str(args_dict['metrics']) + str(file[:-4]) + '_rna_metrics >/dev/null 2>&1')
+    os.system('picard CollectRnaSeqMetrics REF_FLAT=' + str(args_dict['reference_type']) + ' STRAND_SPECIFICITY=NONE INPUT=' + str(args_dict['input']) + str(file) + ' OUTPUT=' + str(args_dict['metrics']) + str(file[:-4]) + '_rna_metrics')
 
 def make_metagene(args_dict):
 
@@ -138,7 +138,7 @@ def run_fastqc(args):
 
     file, args_dict = args[0], args[1]
 
-    os.system("fastqc -q " + str(args_dict['input']) + str(file) + " -o " + str(args_dict['fastqc_output']) + ' >/dev/null 2>&1')
+    os.system("fastqc -q " + str(args_dict['input']) + str(file) + " -o " + str(args_dict['fastqc_output']))
 
 def make_readDistributions(args_dict):
 

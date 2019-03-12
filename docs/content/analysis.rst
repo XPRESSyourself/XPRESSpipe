@@ -65,7 +65,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition
+  $ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition
 
 | **Example 2 -- Analyze RNAseq data that was prepared in different batches:**
 
@@ -94,7 +94,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition+Batch
+  $ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition+Batch
 
 | **Example 3 -- Analyze ribosome profiling data:**
 
@@ -123,4 +123,134 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Type+Condition+Type:Condition
+  $ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Type+Condition+Type:Condition
+
+=================================
+Read Distribution Analysis
+=================================
+| When performing RNAseq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all fastq samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library.
+
+-----------
+Arguments
+-----------
+| The help menu can be accessed by calling the following from the command line:
+
+.. code-block:: shell
+
+  $ xpresspipe readDistribution --help
+
+.. list-table::
+   :widths: 35 50
+   :header-rows: 1
+
+   * - Required Arguments
+     - Description
+   * - :data:`-i \<path\>, --input \<path\>`
+     - Path to input directory of trimmed fastq (or untrimmed fastq) files
+   * - :data:`-o \<path\>, --output \<path\>`
+     - Path to output directory
+   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
+     - Experiment name
+
+-----------
+Examples
+-----------
+| **Example 1 -- Analyze read distributions from ribosome profiling libraries**
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe readDistribution -i riboprof_out/trimmed_fastq -o riboprof_out -e se_test
+
+.. image:: se_test_fastqc_summary.png
+  :width: 450px
+
+=================================
+Metagene Analysis
+=================================
+| Analyze each sequencing sample to ensure equal distribution of reads across all transcripts. Can be useful in identifying 5' or 3' biases in sequence preparation.
+
+.. code-block:: shell
+
+  $ xpresspipe metagene --help
+
+.. list-table::
+   :widths: 35 50
+   :header-rows: 1
+
+   * - Required Arguments
+     - Description
+   * - :data:`-i \<path\>, --input \<path\>`
+     - Path to input directory of SAM alignment files
+   * - :data:`-o \<path\>, --output \<path\>`
+     - Path to output directory
+   * - :data:`-r \<path\>, --reference \<path\>`
+     - Path to parent organism reference directory
+   * - :data:`-t <DEFAULT, CODING, CODING_TRUNCATED>`, :data:`--reference_type <DEFAULT, CODING, CODING_TRUNCATED>`
+     - RefFlat type (i.e. "DEFAULT", "CODING", "CODING_TRUNCATED")
+   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
+     - Experiment name
+
+-----------
+Examples
+-----------
+| **Example 1 -- Analyze metagene profiles of sequence libraries**
+| - Use default transcript reference (maps to all transcripts, even if non-coding)
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe metagene -i riboprof_out/alignments/ -o riboprof_out -r se_reference -t DEFAULT -e se_test
+
+.. image:: se_test_metagene_summary.png
+  :width: 450px
+
+=================================
+Codon Periodicitiy Analysis
+=================================
+| Analze periodicity of most abundant read length. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.
+
+.. code-block:: shell
+
+  $ xpresspipe periodicity --help
+
+.. list-table::
+   :widths: 35 50
+   :header-rows: 1
+
+   * - Required Arguments
+     - Description
+   * - :data:`-i \<path\>, --input \<path\>`
+     - Path to input directory of SAM alignment files
+   * - :data:`-o \<path\>, --output \<path\>`
+     - Path to output directory
+   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
+     - Path and file name to reference GTF for periodicity reference generation/location
+   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
+     - Experiment name
+
+.. list-table::
+  :widths: 35 50
+  :header-rows: 1
+
+  * - Optional Arguments
+    - Description
+  * - :data:`--landmark \<landmark\>`
+    -  Metagene count landmark variable (Plastid-valid) for landmark anchor of periodicity analysis (default: cds_start)
+  * - :data:`--downstream \<value\>`
+    - Number of nucleotides to track after the landmark (default: 200)
+  * - :data:`--generate_ref`
+    - Provide flag to generate periodicity reference using GTF file provided
+
+-----------
+Examples
+-----------
+| **Example 1 -- Analyze periodicity from ribosome profiling libraries**
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
+
+.. image:: se_test_periodicity_summary.png
+  :width: 450px
