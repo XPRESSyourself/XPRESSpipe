@@ -170,5 +170,5 @@ def create_flat(directory):
     for x in files:
         if x.startswith('transcripts'):
             os.system('gtfToGenePred ' + str(directory) + str(x) + ' ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp')
-            os.system("awk '{print $1 \t $1 \t $2 \t $3 \t $4 \t $5 \t $6 \t $7 \t $8 \t $9 \t $10}' " + str(directory) + str(x[:-4]) + "_refFlat.txt.tmp > " + str(directory) + str(x[:-4]) + "_refFlat.txt")
+            os.system("awk -v OFS='\t' '{print $1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' " + str(directory) + str(x[:-4]) + "_refFlat.txt.tmp > " + str(directory) + str(x[:-4]) + "_refFlat.txt")
             os.system('rm ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp')

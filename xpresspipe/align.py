@@ -30,35 +30,35 @@ from .parallel import parallelize, parallelize_pe
 """
 def first_star(file, output, args_dict):
 
-    os.system('STAR --genomeDir ' + str(args_dict['reference']) + 'genome --readFilesIn ' + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --outSAMstrandField intronMotif --outSAMtype None --outSAMmode None --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_')
+    os.system('STAR --genomeDir ' + str(args_dict['reference']) + 'genome --readFilesIn ' + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --outSAMstrandField intronMotif --outSAMtype None --outSAMmode None --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_  >/dev/null 2>&1')
 
 """
 """
 def build_intermediate(output, args_dict):
 
     os.system('mkdir ' + str(args_dict['intermediate_references']) + str(output))
-    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(args_dict['intermediate_references']) + str(output) + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --runThreadN ' + str(args_dict['threads']) + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab')
+    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(args_dict['intermediate_references']) + str(output) + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --runThreadN ' + str(args_dict['threads']) + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab  >/dev/null 2>&1')
 
 """
 """
 def second_star(file, output, args_dict):
 
-    os.system('STAR --genomeDir ' + str(args_dict['intermediate_references']) + str(output) + ' --readFilesIn ' + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --limitBAMsortRAM 0 --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --outSAMstrandField intronMotif --outSAMattributes NH HI NM MD AS XS --outSAMunmapped Within --outSAMtype SAM --outSAMheaderHD @HD VN:1.4 --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_final_')
+    os.system('STAR --genomeDir ' + str(args_dict['intermediate_references']) + str(output) + ' --readFilesIn ' + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --limitBAMsortRAM 0 --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --outSAMstrandField intronMotif --outSAMattributes NH HI NM MD AS XS --outSAMunmapped Within --outSAMtype SAM --outSAMheaderHD @HD VN:1.4 --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_final_  >/dev/null 2>&1')
 
 """
 """
 def alignment_sort(output, args_dict):
 
-    os.system('samtools sort -n --threads ' + str(args_dict['threads']) + ' ' + str(args_dict['alignments']) + str(output) + '_final_Aligned.out.sam -o ' + str(args_dict['alignments']) + str(output) + '_sorted.sam')
-    os.system('samtools view --threads ' + str(args_dict['threads']) + ' -h -q 255 ' + str(args_dict['alignments']) + str(output) + '_sorted.sam > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
+    os.system('samtools sort -n --threads ' + str(args_dict['threads']) + ' ' + str(args_dict['alignments']) + str(output) + '_final_Aligned.out.sam -o ' + str(args_dict['alignments']) + str(output) + '_sorted.sam  >/dev/null 2>&1')
+    os.system('samtools view --threads ' + str(args_dict['threads']) + ' -h -q 255 ' + str(args_dict['alignments']) + str(output) + '_sorted.sam > ' + str(args_dict['alignments']) + str(output) + '_final.sam  >/dev/null 2>&1')
 
 """
 DESCRIPTION: Remove all intermediate alignment files and references after alignment is complete
 """
 def remove_intermediates(args_dict):
 
-    os.system('rm -r ' + str(args_dict['intermediate_references']))
-    os.system('find ' + str(args_dict['alignments']) + ' ! -name *_final.sam ! -name *_final_Log.final.out -maxdepth 1 -type f -delete')
+    os.system('rm -r ' + str(args_dict['intermediate_references']) + ' >/dev/null 2>&1')
+    os.system('find ' + str(args_dict['alignments']) + ' ! -name *_final.sam ! -name *_final_Log.final.out -maxdepth 1 -type f -delete  >/dev/null 2>&1')
 
 """
 DESCRIPTION:

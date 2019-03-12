@@ -22,6 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 IMPORT DEPENDENCIES
 """
+import math
 import pandas as pd
 import matplotlib
 #matplotlib.use('agg') #remove need for -X server connect
@@ -31,7 +32,7 @@ matplotlib.rcParams['font.sans-serif'] = 'Arial'
 """
 DESCRIPTION: Compile images from a list of metrics files using start and stop keys
 """
-def compile_size_distribution(args_dict, path, file_list, line2find, line2stop, lab_x, lab_y, plot_type, experiment, dpi=600):
+def compile_size_distribution(args_dict, path, file_list, line2find, line2stop, lab_x, lab_y, plot_type, experiment, plot_output, dpi=600):
 
     #Keep axes happy to avoid 'IndexError: too many indices for array' error
     #Auto formats figure summary size based on number of plots
@@ -52,27 +53,27 @@ def compile_size_distribution(args_dict, path, file_list, line2find, line2stop, 
     #Parse files for relevant data
     for file in file_list:
         with open(path + file, 'r') as f:
-            df = pd.DataFrame(pd.DataFrame(columns=[lab_x,lab_y]))
             x = 0
+            df = pd.DataFrame(pd.DataFrame(columns=[lab_x,lab_y]))
             for line in f:
                 if str(line2find) in line:
                     for line in f: # now you are at the lines you want
-                        if line2stop != None:
-                            if str(line2stop) in line:
-                                break
+                        if plot_type == 'fastqc' and line2stop in line:
+                            break
+                        data = line.split("\t")
+                        if plot_type == 'periodicity' and data[0] == line2stop:
+                            break
+                        if data[1].endswith('\n'):
+                            data[1] = data[1].strip()
+                        if data[1] != 'nan':
+                            df.loc[x] = [int(data[0]),float(data[1])]
                         else:
-                            data1, data2 = line.split("\t")
-                            if data2.endswith('\n'):
-                                data2 = data2.strip()
-                            try:
-                                df.loc[x] = [int(data1),float(data2)]
-                            except:
-                                df.loc[x] = [int(data1),0]
-                            x += 1
-                            #Additional break point for fastqc summaries
-                            if plot_type == 'fastqc':
-                                if data1 == '100':
-                                    break
+                            df.loc[x] = [int(data[0]),0]
+                        x += 1
+                        #Additional break point for fastqc summaries
+                        if plot_type == 'metagene' and data[0] == '100':
+                            break
+
 
         #prepare subplots
         if file_number % 2 == 0:
@@ -85,9 +86,10 @@ def compile_size_distribution(args_dict, path, file_list, line2find, line2stop, 
                 ax_y += 1
 
         #Plot figure
-        plot_title = str(experiment) + str(plot_type)
-        df.plot.line(x=lab_x, y=lab_y, title=plot_title, ax=axes[ax_y,ax_x])
+        df.plot.line(x=lab_x, y=lab_y, title=file[:-4], ax=axes[ax_y,ax_x])
         file_number += 1
+        del df
 
     #Save catenated figure
-    fig.savefig(args_dict['output'] + plot_title + '_summary.pdf', dpi=dpi)
+    plot_title = str(experiment) + '_' + str(plot_type)
+    fig.savefig(str(plot_output) + plot_title + '_summary.pdf', dpi=dpi)

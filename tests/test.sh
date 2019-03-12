@@ -194,14 +194,27 @@ rm batch_test.out
 ##############
 #TEST METAGENE
 ##############
+xpresspipe metagene --help >> quality_test.out
+
+xpresspipe metagene -i riboprof_out/alignments/ -o riboprof_out -r se_reference -t DEFAULT -e se_test >> quality_test.out
 
 ######################
 #TEST READDISTRIBUTION
 ######################
+xpresspipe readDistribution --help >> quality_test.out
+
+xpresspipe readDistribution -i riboprof_out/trimmed_fastq -o riboprof_out -e se_test >> quality_test.out
 
 #################
 #TEST PERIODICITY
 #################
+xpresspipe periodicity --help >> quality_test.out
+
+xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test >> quality_test.out
+
+#Error checking
+[[ $(cat batch_test.out | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { echo "Errors or exceptions were present in BATCH testing output"; exit 1; }
+rm batch_test.out
 
 ###############
 #TEST RRNAPROBE

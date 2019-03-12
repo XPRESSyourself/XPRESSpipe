@@ -744,7 +744,7 @@ def get_arguments(args, __version__):
         required=True)
     metagene_reqs.add_argument(
         '-t', '--reference_type',
-        help='RefFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\",)',
+        help='RefFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
         metavar='<DEFAULT, CODING, CODING_TRUNCATED>',
         type=str,
         required=True)
@@ -812,10 +812,10 @@ def get_arguments(args, __version__):
         required=True)
     period_reqs.add_argument(
         '-g', '--gtf',
-        help='Path and file name to reference GTF',
+        help='Path and file name to reference GTF for periodicity reference generation/location',
         metavar='</path/transcripts.gtf>',
         type=str,
-        required=False)
+        required=True)
     period_reqs.add_argument(
         '-e', '--experiment',
         help='Experiment name',
@@ -833,7 +833,7 @@ def get_arguments(args, __version__):
         help='Metagene count landmark variable (Plastid-valid) for landmark anchor of periodicity analysis (default: %s)' % 'cds_start',
         default='cds_start',
         metavar='<landmark>',
-        type=int,
+        type=str,
         required=False)
     period_opts.add_argument(
         '--downstream',
@@ -841,6 +841,11 @@ def get_arguments(args, __version__):
         default=200,
         metavar='<value>',
         type=int,
+        required=False)
+    period_opts.add_argument(
+        '--generate_ref',
+        help='Provide flag to generate periodicity reference using GTF file provided',
+        action='store_true',
         required=False)
 
     """
