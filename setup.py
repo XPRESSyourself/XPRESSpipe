@@ -48,7 +48,8 @@ setup(
           'plotly',
           'matplotlib',
           'git-lfs',
-          'multiqc'
+          'multiqc',
+          'xpresstools'
       ],
 
     entry_points = {
