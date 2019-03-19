@@ -20,17 +20,25 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 #All ASCII art from http://ascii.co.uk/art
+import os, sys
 import time
 
 """
 FUNCTIONS
 """
+def check_process(log_file, message_func, step):
+
+    try:
+        os.system('[[ $(cat ' + log_file + ' | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { echo "Errors or exceptions were present in ' + step + ', please refer to the ' + str(log_file[log_file.rfind('/') + 1:]) + ' file for information concerning errors"; exit 1; }')
+    except:
+        message_func
+
 #show license information
 def msg_license():
     print("""
-RiboPipe
+XPRESSpipe
 An assembly and analysis pipeline for sequencing data
-alias: ripopipe
+alias: xpresspipe
 
 Copyright (C) 2018  Jordan A. Berg
 jordan <dot> berg <at> biochem <dot> utah <dot> edu
@@ -49,25 +57,26 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
     """)
 
 def msg_complete():
-    print('Process complete.')
+    print("""Process complete.
+    \n************************
+    """)
 
 #trim submodule
 def msg_trim():
-    print("""\n************************\nXPRESSpipe initialized...
+    print("""\nXPRESSpipe initialized...
         \nAdaptor and quality trimming...\n
   _       ,/'
  (_).  ,/'
   __  ::
  (__)'  `\.
            `\.
-        \n************************\n""")
+        \n""")
 
-    time.sleep(2)
+    time.sleep(1)
 
 #align submodule
 def msg_align():
-    print("""\n************************\nTrimming complete
-        \nAligning...\n
+    print("""Aligning...\n
                                                     __________
 |             _,---.                          _..--'/          \              |
 |          ,-'      )                    _,-,'     /            \             |
@@ -98,17 +107,18 @@ def msg_align():
 |       \        `         `.   `. \\____\___)__\ \\                            |
 |                            `. _ `.\`____________\                           |
 |                              | \  |_|   ____   |_|                          |
-|          _                   `.|\ |#|__[....]__|_|`.                        |
+|          _                   `.|\ |#|__[....]__|#|`.                        |
 |           \                      `================'  `.                     |
 
 
-        \n************************\n""")
+        \n""")
 
-    time.sleep(2)
+    time.sleep(1)
 
 #count submodule
 def msg_count():
-    print("""\n************************\nAlignment complete
+    print("""Generating count tables...\n
+    1...2...3...4...5...6...7...8...9...
  ______________________________________________________________________________
 |==============================================================================|
 |NOVA TOTIUS TERRARUM ORBIS GEOGRAPHICA AC HYDROGRAPHICA TABULA auct:Iud:Hondio|
@@ -136,15 +146,13 @@ def msg_count():
 |--. / . : /____\---.....---',\_O_\   ,-. -')>/\_O_ `---.....---'('')  (  /_/  |
 |--'  `.\;  |--|-. ____IGNIS  _|_/|`._>' `-_,'   \)`-   AER `-' ,  (""\  \     |
 |______________________________________________________________________________|
-        \nGenerating count tables...\n
-        1...2...3...4...5...6...7...8...9...
-        \n************************\n""")
-    time.sleep(2)
+
+        \n""")
+    time.sleep(1)
 
 #Normalize
 def msg_normalize():
-    print("""\n************************\nCount tables generated
-        \nNormalizing counts based on parameters provided...\n
+    print("""Normalizing counts based on parameters provided...\n
                            ___,
                     o___.-' /
                     |      _\_
@@ -166,29 +174,26 @@ def msg_normalize():
 _[_]_[_]_[_]_[__j__j__j__j_]_[_]_[_]_[_]_[_]_
   _j__j__j__j[_j__j__j__j__]j__j__j__j__j_
      j  j  j [  j  j  j  j ] j  j  j  j
-        \n************************\n""")
+        \n""")
 
-    time.sleep(2)
+    time.sleep(1)
 
 #Quality control
 def msg_quality():
-    print("""
-    \n****************\nNormalization complete\n****************\n
-    \n*********************\nPerforming quality control on the processed sequencing data...\n*********************\n
+    print("""Performing quality control on the processed sequencing data...\n
       _               _               _
      | |             | |             | |
   ___| |__   ___  ___| | _____  _   _| |_
  / __| '_ \ / _ \/ __| |/ / _ \| | | | __|
 | (__| | | |  __/ (__|   < (_) | |_| | |_
  \___|_| |_|\___|\___|_|\_\___/ \__,_|\__|
- \n***********************************************************************\n""")
+ \n""")
 
-    time.sleep(2)
+    time.sleep(1)
 
 #final message
 def msg_finish():
-    print("""
-    \n************************\nQuality control complete
+    print("""Quality control complete\n
              __
             / /
            / /
@@ -199,7 +204,7 @@ def msg_finish():
    \ \/ /
     \__/
 
-    \n************************\nXPRESSpipe processing complete
+    \nXPRESSpipe processing complete
 
                                     ..
                                      .(  )`-._
@@ -237,5 +242,5 @@ def msg_finish():
    _.-` ``--..  ..  `.-._  `._  `- `-._ .-_. ._.- -._ --.._`` _.-`---`-.
 
 
-    \n*******************\n
+    \n
         """)

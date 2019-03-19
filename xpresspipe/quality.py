@@ -61,14 +61,14 @@ def get_peaks(args):
     f.close()
 
     #Convert SAM to BAM and index
-    os.system('mv ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.sam')
+    os.system('mv ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.sam' + str(args_dict['log']))
     os.system('samtools view -S -b ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.sam > ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam')
-    os.system('rm ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.sam')
-    os.system('samtools sort ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam -o ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam')
-    os.system('samtools index ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam')
+    os.system('rm ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.sam' + str(args_dict['log']))
+    os.system('samtools sort ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam -o ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam' + str(args_dict['log']))
+    os.system('samtools index ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam' + str(args_dict['log']))
 
     #Perform plastid analysis
-    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam --fiveprime --offset 14 --normalize_over 30 200 --min_counts 50 --cmap Blues --title ' + file[:-4])
+    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam --fiveprime --offset 14 --normalize_over 30 200 --min_counts 50 --cmap Blues --title ' + file[:-4] + str(args_dict['log']))
 
 def make_periodicity(args_dict):
 
@@ -81,9 +81,9 @@ def make_periodicity(args_dict):
 
     #Add metagene reference to folder
     if 'generate_ref' in args_dict and args_dict['generate_ref'] == True:
-        os.system('metagene generate ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference --landmark ' + str(args_dict['landmark']) + ' --annotation_files ' + str(args_dict['gtf']) + ' --downstream ' + str(args_dict['downstream']))
+        os.system('metagene generate ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference --landmark ' + str(args_dict['landmark']) + ' --annotation_files ' + str(args_dict['gtf']) + ' --downstream ' + str(args_dict['downstream']) + str(args_dict['log']))
     else:
-        print('****************************************\nSkipping periodicity reference generation...\nIf parameters other than default values for landmark and downstream were used during reference generation, these values need to be provided even if not creating a reference...\n****************************************')
+        print('Skipping periodicity reference generation...\nIf parameters other than default values for landmark and downstream were used during reference generation, these values need to be provided even if not creating a reference...\n')
 
     #Perform metagene analysis
     parallelize(get_peaks, files, args_dict)
@@ -93,8 +93,8 @@ def make_periodicity(args_dict):
     compile_size_distribution(args_dict, args_dict['metrics'], files, 'metagene_average', str(int(args_dict['downstream'] - 1)), 'position', 'metagene coverage', 'periodicity', args_dict['experiment'], output_location)
 
     #Clean output
-    os.system('rm ' + str(args_dict['metrics']) + '*_mode*')
-    os.system('rm ' + str(args_dict['metrics']) + '*png')
+    os.system('rm ' + str(args_dict['metrics']) + '*_mode*' + str(args_dict['log']))
+    os.system('rm ' + str(args_dict['metrics']) + '*png' + str(args_dict['log']))
 
 """
 DESCRIPTION: Generate metagene profiles
@@ -103,7 +103,7 @@ def get_profiles(args):
 
     file, args_dict = args[0], args[1]
 
-    os.system('picard CollectRnaSeqMetrics REF_FLAT=' + str(args_dict['flat_type']) + ' STRAND_SPECIFICITY=NONE INPUT=' + str(args_dict['input']) + str(file) + ' OUTPUT=' + str(args_dict['metrics']) + str(file[:-4]) + '_rna_metrics')
+    os.system('picard CollectRnaSeqMetrics REF_FLAT=' + str(args_dict['flat_type']) + ' STRAND_SPECIFICITY=NONE INPUT=' + str(args_dict['input']) + str(file) + ' OUTPUT=' + str(args_dict['metrics']) + str(file[:-4]) + '_rna_metrics' + str(args_dict['log']))
 
 def make_metagene(args_dict):
 
@@ -129,7 +129,7 @@ def run_fastqc(args):
 
     file, args_dict = args[0], args[1]
 
-    os.system("fastqc -q " + str(args_dict['input']) + str(file) + " -o " + str(args_dict['fastqc_output']))
+    os.system("fastqc -q " + str(args_dict['input']) + str(file) + " -o " + str(args_dict['fastqc_output']) + str(args_dict['log']))
 
 def make_readDistributions(args_dict):
 
@@ -146,7 +146,7 @@ def make_readDistributions(args_dict):
     files = get_files(args_dict['fastqc_output'], ['.zip'])
     for file in files:
         if file.endswith('.zip'):
-            os.system('unzip -n -q ' + str(args_dict['fastqc_output']) + str(file) + ' -d ' + str(args_dict['fastqc_output']))
+            os.system('unzip -n -q ' + str(args_dict['fastqc_output']) + str(file) + ' -d ' + str(args_dict['fastqc_output']) + str(args_dict['log']))
 
     #Compile read distributions
     files = get_files(args_dict['fastqc_output'], ['.zip'])

@@ -35,7 +35,7 @@ DESCRIPTION: Convert a sorted sam file to a bam file
 def sam2bam(path, file):
 
     os.system('samtools view -h -S -b ' + str(path) + str(file) + ' > ' + str(path) + str(file[:-4]) + '.bam')
-    os.system("samtools index " + str(path) + str(file[:-4]) + '.bam')
+    os.system("samtools index " + str(path) + str(file[:-4]) + '.bam' + str(args_dict['log']))
 
 """
 DESCRIPTION: Convert sorted sam files in directory to bed files
@@ -84,7 +84,7 @@ def bigwig_convert(args):
         raise Exception('Incorrect input file')
 
     #Convert BAM to bigwig
-    os.system('bamCoverage -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam -o ' + str(args_dict['bigwig_files']) + str(file[:-4]) + '.bw')
+    os.system('bamCoverage -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam -o ' + str(args_dict['bigwig_files']) + str(file[:-4]) + '.bw' + str(args_dict['log']))
 
 def create_bigwig(args_dict):
 
@@ -107,7 +107,7 @@ def count_file(args):
     file, args_dict = args[0], args[1]
 
     #Count
-    os.system('htseq-count -m intersection-nonempty -r name -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['gtf_type']) + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+    os.system('htseq-count -q -m intersection-nonempty -r name -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['gtf_type']) + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 def count_reads(args_dict):
 

@@ -30,15 +30,15 @@ Table of contents
    content/general-usage
    content/quickstart
    content/reference-building
-   content/seRNAseq
-   content/peRNAseq
-   content/riboprof
    content/trim
    content/align
    content/count
    content/formatting
    content/normalization
    content/analysis
+   content/seRNAseq
+   content/peRNAseq
+   content/riboprof
 
 =======
 License

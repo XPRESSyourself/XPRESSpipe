@@ -55,7 +55,7 @@ def main(args=None):
     if args.cmd == 'trim':
         print('Trimming reads...')
         run_trim(args_dict)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'TRIM')
 
     elif args.cmd == 'align':
         #Align
@@ -72,7 +72,7 @@ def main(args=None):
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
 
     elif args.cmd == 'count':
         print('Counting alignments...')
@@ -82,27 +82,27 @@ def main(args=None):
         print('Collecting and collating counts...')
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'COUNT')
 
     elif args.cmd == 'diffxpress':
         print('Performing differential expression analysis...')
         diff_xpress(str(args_dict['data']), str(args_dict['sample']), equation=str(args_dict['design']))
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'DIFFERENTIAL EXPRESSION')
 
     elif args.cmd == 'metagene':
         print('Performing metagene analysis on SAM files...')
         make_metagene(args_dict)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'METAGENE')
 
     elif args.cmd == 'readDistribution':
         print('Performing read distribution analysis on fastq files...')
         make_readDistributions(args_dict)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'READ DISTRIBUTION')
 
     elif args.cmd == 'periodicity':
         print('Performing periodicity analysis on most abundant read length in SAM files...')
         make_periodicity(args_dict)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'PERIODICITY')
 
     elif args.cmd == 'curateReference':
         print('Curating reference')
@@ -114,13 +114,13 @@ def main(args=None):
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(args_dict['output']), sep='\t', return_files=False)
         #Flatten transcript reference files
         create_flat(args_dict['output'])
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
 
     elif args.cmd == 'makeReference':
         print('Creating reference files...')
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict)
         create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'MAKE REFERENCE')
 
     elif args.cmd == 'truncate':
         print('Formatting coding only and truncated reference files...')
@@ -128,12 +128,12 @@ def main(args=None):
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
         if 'create_refFlats' in args_dict and args_dict['create_refFlats'] == True:
             create_flat(str(output_path))
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
 
     elif args.cmd == 'makeFlat':
         print('Formatting coding only and truncated reference files...')
         create_flat(args_dict['input'])
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'MAKE REFFLAT')
 
     elif args.cmd == 'rrnaProbe':
         #Get files to probe
@@ -144,7 +144,7 @@ def main(args=None):
         #Output summary
         with open(args_dict['output'] + 'rrnaProbe_output.txt', "w") as text_file:
             print(probe_out, file=text_file)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'RRNA PROBE')
 
     elif args.cmd == 'convertNames':
         #Convert row names in dataframe
@@ -158,19 +158,20 @@ def main(args=None):
         data = pd.read_csv(str(args_dict['data']), sep=delim)
         data = convert_names_gtf(data, args_dict['gtf'], orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'], new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'], refill=args_dict['refill'], sep='\t')
         data.to_csv(str(args_dict['data'])[:-4] + '_renamed' + str(suf), sep=delim, index=False)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'CONVERT NAMES')
 
     elif args.cmd == 'normalizeMatrix':
         #Run in sample normalization
         print('Normalizing matrix...')
         run_normalization(args_dict)
-        msg_complete()
+        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
 
     elif args.cmd == 'seRNAseq':
         args_dict['type'] = 'SE'
         #Trim
         msg_trim()
         args_dict = run_trim(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'TRIM')
         #Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
@@ -181,24 +182,27 @@ def main(args=None):
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
         #Count reads for each alignment file
         msg_count()
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'COUNT')
         #Normalize
         msg_normalize()
         args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
         #Run quality control
         msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
         make_metagene(args_dict)
-
+        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL')
         get_summary(args_dict)
         msg_finish()
 
@@ -207,6 +211,7 @@ def main(args=None):
         #Trim
         msg_trim()
         args_dict = run_trim(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'TRIM')
         #Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
@@ -217,24 +222,27 @@ def main(args=None):
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
         #Count reads for each alignment file
         msg_count()
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'COUNT')
         #Normalize
         msg_normalize()
         args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
         #Run quality control
         msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
         make_metagene(args_dict)
-
+        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL')
         get_summary(args_dict)
         msg_finish()
 
@@ -243,6 +251,7 @@ def main(args=None):
         #Trim
         msg_trim()
         args_dict = run_trim(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'TRIM')
         #Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
@@ -253,17 +262,20 @@ def main(args=None):
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
         #Count reads for each alignment file
         msg_count()
         args_dict = count_reads(args_dict)
         #Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'COUNT')
         #Normalize
         msg_normalize()
         args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
+        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
         #Run quality control
         msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
@@ -271,7 +283,7 @@ def main(args=None):
         args_dict['input'] = args_dict['alignments']
         make_periodicity(args_dict)
         make_metagene(args_dict)
-
+        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL')
         get_summary(args_dict)
         msg_finish()
 

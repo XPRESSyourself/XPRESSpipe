@@ -43,7 +43,7 @@ DESCRIPTION: Create output directory
 """
 def add_directory(args_dict, parent, name):
 
-    os.system('mkdir ' + str(args_dict[str(parent)]) + str(name))
+    os.system('mkdir ' + str(args_dict[str(parent)]) + str(name) + str(args_dict['log']))
     args_dict[name] = str(str(args_dict[str(parent)]) + str(name) + '/')
 
     return args_dict
@@ -114,9 +114,9 @@ def unzip_files(directory):
         for s in suffix:
             if file.endswith(str(s)):
                 if s == '.gz':
-                    os.system('gzip -d ' + str(directory) + str(file))
+                    os.system('gzip -d ' + str(directory) + str(file) + str(args_dict['log']))
                 if s == '.zip':
-                    os.system('unzip ' + str(directory) + str(file))
+                    os.system('unzip ' + str(directory) + str(file) + str(args_dict['log']))
 
 """
 """
@@ -146,19 +146,19 @@ def create_reference(output_directory, fasta_directory, gtf, threads=1, sjdbOver
     output_directory = check_directories(output_directory)
     fasta_directory = check_directories(fasta_directory)
 
-    os.system('mkdir ' + str(output_directory) + 'genome')
+    os.system('mkdir ' + str(output_directory) + 'genome' + str(args_dict['log']))
 
     fasta_list = get_fasta(fasta_directory)
 
     #Create reference
-    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang ' + str(sjdbOverhang) + ' --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads))
+    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang ' + str(sjdbOverhang) + ' --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads) + str(args_dict['log']))
 
 """
 DESCRIPTION: Create MultiQC processing summary from all files in args_dict output
 """
 def get_summary(args_dict):
 
-    os.system('multiqc ' + str(args_dict['output']) + ' -i ' + str(args_dict['experiment']) + ' -o ' + args_dict['output'])
+    os.system('multiqc ' + str(args_dict['output']) + ' -i ' + str(args_dict['experiment']) + ' -o ' + args_dict['output'] + str(args_dict['log']))
 
 """
 DESCRIPTION: Create flat reference files for each gtf transcript in the input directory
@@ -169,6 +169,6 @@ def create_flat(directory):
 
     for x in files:
         if x.startswith('transcripts'):
-            os.system('gtfToGenePred ' + str(directory) + str(x) + ' ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp')
-            os.system("awk -v OFS='\t' '{print $1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' " + str(directory) + str(x[:-4]) + "_refFlat.txt.tmp > " + str(directory) + str(x[:-4]) + "_refFlat.txt")
-            os.system('rm ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp')
+            os.system('gtfToGenePred ' + str(directory) + str(x) + ' ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp' + str(args_dict['log']))
+            os.system("awk -v OFS='\t' '{print $1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' " + str(directory) + str(x[:-4]) + "_refFlat.txt.tmp > " + str(directory) + str(x[:-4]) + "_refFlat.txt" + str(args_dict['log']))
+            os.system('rm ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp' + str(args_dict['log']))

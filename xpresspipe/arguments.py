@@ -24,6 +24,7 @@ IMPORT DEPENDENCIES
 """
 import os, sys
 import argparse
+import datetime
 import multiprocessing
 from textwrap import dedent
 from .utils import check_directories
@@ -90,20 +91,6 @@ Sub-module descriptions:
 """
 
 """
-DESCRIPTION: Check if file is comma separated
-"""
-def check_csv(file, sep=','):
-
-    #Make sure file is a csv (for use with converting count tables to gene names and RPKM values)
-    if str(file).endswith('.csv'):
-        pass
-    else:
-        raise argparse.ArgumentTypeError('Input file type incorrect')
-        sys.exit(1)
-
-    return str(file)
-
-"""
 DESCRIPTION: Check arguments provided by user
 """
 def check_inputs(args_dict):
@@ -115,8 +102,6 @@ def check_inputs(args_dict):
         args_dict['output'] = check_directories(args_dict['output'])
     if 'reference' in args_dict:
         args_dict['reference'] = check_directories(args_dict['reference'])
-
-    print(args_dict)
 
     #Check reference_type
     if 'reference_type' in args_dict and args_dict['cmd'] == 'seRNAseq' or args_dict['cmd'] == 'peRNAseq':
@@ -164,6 +149,14 @@ def check_inputs(args_dict):
                 raise Exception('A maximum of 2 adaptors may be provided')
         else:
             pass
+
+    if 'experiment' in args_dict and args_dict['experiment'] != None:
+        args_dict['log'] = ' >> ' + str(args_dict['output']) + str(args_dict['experiment']) + '.log 2>&1'
+        args_dict['log_file'] = str(args_dict['output']) + str(args_dict['experiment']) + '.log'
+    else:
+        cdt = datetime.datetime.now()
+        args_dict['log'] = ' >> ' + str(args_dict['output']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + '.log 2>&1'
+        args_dict['log_file'] = str(args_dict['output']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + '.log'
 
     return args_dict
 

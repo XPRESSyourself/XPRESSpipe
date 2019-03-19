@@ -208,7 +208,7 @@ Examples
 =================================
 Codon Periodicitiy Analysis
 =================================
-| Analze periodicity of most abundant read length. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.
+| Analyze periodicity of most abundant read length. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.
 
 .. code-block:: shell
 
@@ -254,3 +254,55 @@ Examples
 
 .. image:: se_test_periodicity_summary.png
   :width: 450px
+
+======================
+rRNA Probe
+======================
+| Ribosome RNA (rRNA) contamination is common in RNA-seq library preparation. As the bulk of RNA in a cell at any given time is dedicated to rRNA, and as these rRNA sequences are relatively few and therefore highly repeated, depletion of these sequences is often desired in order to have better depth of coverage of non-rRNA sequences. In order to facilitate this depletion, many commercial kits are available that target specific rRNA sequences for depletion, or that enrich mRNA polyA tails. However, and especially in the case of ribosome profiling experiments, where RNA is digested to create ribosome footprints that commercial depletion kits won't detect and polyA selection kits are inoperable as footprints will not have the requisite polyA sequence. To this end, `custom rRNA probes <https://www.ncbi.nlm.nih.gov/pubmed/28579404>`_ are recommended, and the :data:`rrnaProbe` sub-module was designed to facilitate this process.
+| :data:`rrnaProbe` works by doing the following:
+| 1. Run FASTQC to detect over-represented sequences
+| 2. Collate these sequences to determine consensus fragments
+| 3. Output rank ordered list of over-represented fragments within the appropriate length range to target for depletion
+| NOTE: BLAST capability to verify over-represented consensus fragments are indeed rRNA sequences is not yet incorporated, so any sequences that will be used as probes should be BLAST-verified first.
+
+.. code-block:: shell
+
+  $ xpresspipe rrnaProbe --help
+
+.. list-table::
+   :widths: 35 50
+   :header-rows: 1
+
+   * - Required Arguments
+     - Description
+   * - :data:`-i \<path\>, --input \<path\>`
+     - Path to zipped FASTQC files
+   * - :data:`-o \</path/filename\>, --output \</path/filename\>`
+     - Path and file name to write output
+
+.. list-table::
+   :widths: 35 50
+   :header-rows: 1
+
+   * - Optional Arguments
+     - Description
+   * - :data:`-m \<value\>, --min_overlap \<value\>`
+     - Minimum number of bases that must match on a side to combine sequences (default: 5)
+   * - :data:`--footprint_only`
+     - Only take zip files that are ribosome profiling footprints (file names must contain "FP", "RPF", or "FOOTPRINT")
+
+-----------
+Examples
+-----------
+| **Example 1 -- Generate rank-ordered list of over-represented sequences**
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe rrnaProbe -i riboprof_out/fastqc_out/ -o riboprof_out/sequences.txt --footprint_only
+
+  TTGATGATTCATAATAACTTTTCGAATCGCAT    514832
+  TATAAATCATTTGTATACGACTTAGAT         121739
+  TTGATGATTCATAATAACTTTTCGAATCGCAT    15776
+  TTTGATGATTCATAATAACTTTTCGAATCGCAC   33325
+  ATAAATCATTTGTATACGACTTAGAC          13603

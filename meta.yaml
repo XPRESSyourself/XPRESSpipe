@@ -1,10 +1,10 @@
 package:
   name: XPRESSpipe
-  version: 0.0.1-alpha
+  version: 0.0.1-beta
 
 source:
-  fn: XPRESSpipe-0.0.1a1.tar.gz
-  url: https://github.com/XPRESSyourself/XPRESStools/archive/XPRESSpipe-0.0.1a1.tar.gz
+  fn: XPRESSpipe-0.0.1b1.tar.gz
+  url: https://github.com/XPRESSyourself/XPRESStools/archive/XPRESSpipe-0.0.1b1.tar.gz
 
 test:
   commands:
