@@ -31,6 +31,8 @@ from zipfile import ZipFile as zf
 DESCRIPTION: Get overrepresented sequences from a given FastQC zip file
 """
 def get_overrep_seqs(zipfile):
+    print('************')
+    print(zipfile)
     with zf(zipfile) as folder:
         datafilename = ''
         for resource in folder.namelist():

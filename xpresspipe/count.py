@@ -123,7 +123,7 @@ def count_file(args):
         raise Exception('Something went wrong in determining transcript reference file type')
 
     #Count
-    os.system('htseq-count -r name -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+    os.system('htseq-count -m intersection-nonempty -r name -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 
 def count_reads(args_dict):

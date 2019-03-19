@@ -23,6 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 IMPORT DEPENDENCIES
 """
 import os, sys
+import pandas as pd
 from .__init__ import __version__
 from .messages import *
 from .arguments import get_arguments
@@ -148,7 +149,15 @@ def main(args=None):
     elif args.cmd == 'convertNames':
         #Convert row names in dataframe
         print('Converting row names...')
-        convert_names_gtf(args_dict['data'], args_dict['gtf'], orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'], new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'], refill=args_dict['refill'], sep='\t')
+        if str(args_dict['data']).endswith('.csv'):
+            delim = ','
+            suf = '.csv'
+        else:
+            delim = '\t'
+            suf = '.tsv'
+        data = pd.read_csv(str(args_dict['data']), sep=delim)
+        data = convert_names_gtf(data, args_dict['gtf'], orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'], new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'], refill=args_dict['refill'], sep='\t')
+        data.to_csv(str(args_dict['data'])[:-4] + '_renamed' + str(suf), sep=delim, index=False)
         msg_complete()
 
     elif args.cmd == 'normalizeMatrix':

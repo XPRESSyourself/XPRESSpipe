@@ -219,10 +219,15 @@ rm batch_test.out
 ###############
 #TEST RRNAPROBE
 ###############
+xpresspipe rrnaProbe --help
+
 
 ##################
 #TEST CONVERTNAMES
 ##################
+xpresspipe convertNames --help
+
+xpresspipe convertNames -d riboprof_out/counts/se_test_counts_table.csv -g se_reference/transcripts.gtf
 
 ##############
 #TEST SERNASEQ

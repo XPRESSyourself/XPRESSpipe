@@ -64,10 +64,11 @@ def get_peaks(args):
     os.system('mv ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.sam')
     os.system('samtools view -S -b ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.sam > ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam')
     os.system('rm ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.sam')
-    os.system('samtools index ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam')
+    os.system('samtools sort ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam -o ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam')
+    os.system('samtools index ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam')
 
     #Perform plastid analysis
-    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode.bam --fiveprime --offset 14 --normalize_over 30 200 --min_counts 50 --cmap Blues --title ' + file[:-4])
+    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam --fiveprime --offset 14 --normalize_over 30 200 --min_counts 50 --cmap Blues --title ' + file[:-4])
 
 def make_periodicity(args_dict):
 
@@ -92,7 +93,7 @@ def make_periodicity(args_dict):
     compile_size_distribution(args_dict, args_dict['metrics'], files, 'metagene_average', str(int(args_dict['downstream'] - 1)), 'position', 'metagene coverage', 'periodicity', args_dict['experiment'], output_location)
 
     #Clean output
-    os.system('rm ' + str(args_dict['metrics']) + '*_mode.ba*')
+    os.system('rm ' + str(args_dict['metrics']) + '*_mode*')
     os.system('rm ' + str(args_dict['metrics']) + '*png')
 
 """

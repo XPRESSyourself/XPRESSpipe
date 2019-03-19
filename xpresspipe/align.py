@@ -57,7 +57,7 @@ DESCRIPTION: Remove all intermediate alignment files and references after alignm
 """
 def remove_intermediates(args_dict):
 
-    os.system('rm -r ' + str(args_dict['intermediate_references']) + ' >/dev/null 2>&1')
+    os.system('rm -r ' + str(args_dict['intermediate_references']))
     os.system('find ' + str(args_dict['alignments']) + ' ! -name *_final.sam ! -name *_final_Log.final.out -maxdepth 1 -type f -delete')
 
 """

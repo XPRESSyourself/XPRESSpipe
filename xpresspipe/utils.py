@@ -90,7 +90,7 @@ def get_probe_files(args_dict, suffix):
     for file in os.listdir(args_dict['input']):
         for s in suffix:
             if file.endswith(str(s)):
-                file_list.append(file)
+                probe_list.append(file)
 
     for x in args_dict['input']:
         if x.endswith(str(suffix)) == True:
@@ -99,7 +99,7 @@ def get_probe_files(args_dict, suffix):
                     probe_list.append(args_dict['input'] + x)
             else:
                 probe_list.append(args_dict['input'] + x)
-
+    print(probe_list)
     return tuple(probe_list)
 
 """
@@ -123,7 +123,7 @@ def unzip_files(directory):
 def get_fasta(fasta_directory):
 
     #Make space separated list of fasta files
-    fasta = get_files(fasta_directory, ['.txt', '.fasta', '.fa'], omit=['refFlat'])
+    fasta = get_files(fasta_directory, ['.txt', '.fasta', '.fa'], omit=['refFlat', 'rois'])
     fasta = [fasta_directory + x for x in fasta]
 
     if len(fasta) > 1:

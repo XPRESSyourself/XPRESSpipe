@@ -1003,7 +1003,7 @@ def get_arguments(args, __version__):
     probe_reqs = probe_parser.add_argument_group('required arguments')
     probe_reqs.add_argument(
         '-i', '--input',
-        help='Path to zipped files',
+        help='Path to zipped FASTQC files',
         metavar='<path>',
         type=str,
         required=True)
