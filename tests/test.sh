@@ -242,6 +242,10 @@ xpresspipe convertNames -d riboprof_out/counts/se_test_counts_table.csv -g se_re
 ##############
 #TEST RIBOPROF
 ##############
+xpresspipe riboprof --help
+
+xpresspipe riboprof -i riboprof_test -o ribopipe_out -r se_reference -e riboprof_test -a CTGTAGGCACCATCAAT --count_coding --truncate --method RPKM --sjdbOverhang 49
+
 
 ###########################
 #FINAL CLEANUP OF TEST DATA

@@ -103,7 +103,7 @@ def get_profiles(args):
 
     file, args_dict = args[0], args[1]
 
-    os.system('picard CollectRnaSeqMetrics REF_FLAT=' + str(args_dict['reference_type']) + ' STRAND_SPECIFICITY=NONE INPUT=' + str(args_dict['input']) + str(file) + ' OUTPUT=' + str(args_dict['metrics']) + str(file[:-4]) + '_rna_metrics')
+    os.system('picard CollectRnaSeqMetrics REF_FLAT=' + str(args_dict['flat_type']) + ' STRAND_SPECIFICITY=NONE INPUT=' + str(args_dict['input']) + str(file) + ' OUTPUT=' + str(args_dict['metrics']) + str(file[:-4]) + '_rna_metrics')
 
 def make_metagene(args_dict):
 
@@ -111,16 +111,6 @@ def make_metagene(args_dict):
     args_dict = add_directory(args_dict, 'output', 'metagene')
     args_dict = add_directory(args_dict, 'metagene', 'metrics')
     output_location = args_dict['metagene']
-
-    #Get refFlat file type
-    if args_dict['reference_type'].upper() == 'DEFAULT':
-        args_dict['reference_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
-    elif args_dict['reference_type'].upper() == 'CODING':
-        args_dict['reference_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
-    elif args_dict['reference_type'].upper() == 'CODING_TRUNCATED':
-        args_dict['reference_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
-    else:
-        raise Exception('Invalid reference flat file type provided')
 
     #Get list of sam files from user input
     files = get_files(args_dict['input'], ['.sam'])

@@ -116,17 +116,31 @@ def check_inputs(args_dict):
     if 'reference' in args_dict:
         args_dict['reference'] = check_directories(args_dict['reference'])
 
-        #Get GTF type
-        if 'count_coding' in args_dict:
-            if 'truncate' in args_dict:
-                args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated.gtf'
-                args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
-            else:
-                args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
-                args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
-        else:
+    print(args_dict)
+
+    #Check reference_type
+    if 'reference_type' in args_dict and args_dict['cmd'] == 'seRNAseq' or args_dict['cmd'] == 'peRNAseq':
+        if args_dict['reference_type'].upper() == 'DEFAULT':
             args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts.gtf'
             args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
+        elif args_dict['reference_type'].upper() == 'CODING':
+            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
+        else:
+            raise Exception('Invalid reference_type value provided')
+
+    if 'reference_type' in args_dict and args_dict['cmd'] == 'riboprof' or args_dict['cmd'] == 'metagene' or args_dict['cmd'] == 'count':
+        if args_dict['reference_type'].upper() == 'DEFAULT':
+            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts.gtf'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
+        elif args_dict['reference_type'].upper() == 'CODING':
+            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
+        elif args_dict['reference_type'].upper() == 'CODING_TRUNCATED':
+            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated.gtf'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
+        else:
+            raise Exception('Invalid reference_type value provided')
 
     #Check max_processor input
     if 'max_processors' in args_dict and args_dict['max_processors'] != None:
@@ -150,6 +164,8 @@ def check_inputs(args_dict):
                 raise Exception('A maximum of 2 adaptors may be provided')
         else:
             pass
+
+    return args_dict
 
 """
 DESCRIPTION: Get user arguments to determine sub-module to run and arguments provided
@@ -201,6 +217,12 @@ def get_arguments(args, __version__):
         type=str,
         required=True)
     se_reqs.add_argument(
+        '-t', '--reference_type',
+        help='GTF and refFlat type (i.e. \"DEFAULT\", \"CODING\")',
+        metavar='<DEFAULT, CODING>',
+        type=str,
+        required=True)
+    se_reqs.add_argument(
         '-e', '--experiment',
         help='Experiment name',
         metavar='<experiment_name>',
@@ -242,11 +264,6 @@ def get_arguments(args, __version__):
     se_opts.add_argument(
         '--output_bigwig',
         help='Include flag to output bigwig files for each aligned file',
-        action='store_true',
-        required=False)
-    se_opts.add_argument(
-        '--count_coding',
-        help='Include flag to only count reads aligning to protein coding transcripts',
         action='store_true',
         required=False)
     se_opts.add_argument(
@@ -301,6 +318,12 @@ def get_arguments(args, __version__):
         type=str,
         required=True)
     pe_reqs.add_argument(
+        '-t', '--reference_type',
+        help='GTF and refFlat type (i.e. \"DEFAULT\", \"CODING\")',
+        metavar='<DEFAULT, CODING>',
+        type=str,
+        required=True)
+    pe_reqs.add_argument(
         '-e', '--experiment',
         help='Experiment name',
         metavar='<experiment_name>',
@@ -342,11 +365,6 @@ def get_arguments(args, __version__):
     pe_opts.add_argument(
         '--output_bigwig',
         help='Include flag to output bigwig files for each aligned file',
-        action='store_true',
-        required=False)
-    pe_opts.add_argument(
-        '--count_coding',
-        help='Include flag to only count reads aligning to protein coding transcripts',
         action='store_true',
         required=False)
     pe_opts.add_argument(
@@ -401,6 +419,12 @@ def get_arguments(args, __version__):
         type=str,
         required=True)
     rp_reqs.add_argument(
+        '-t', '--reference_type',
+        help='GTF and refFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
+        metavar='<DEFAULT, CODING, CODING_TRUNCATED>',
+        type=str,
+        required=True)
+    rp_reqs.add_argument(
         '-e', '--experiment',
         help='Experiment name',
         metavar='<experiment_name>',
@@ -445,16 +469,6 @@ def get_arguments(args, __version__):
         action='store_true',
         required=False)
     rp_opts.add_argument(
-        '--count_coding',
-        help='Include flag to only count reads aligning to protein coding transcripts',
-        action='store_true',
-        required=False)
-    rp_opts.add_argument(
-        '--truncate',
-        help='Count reads to truncated reference (truncated reference should be added to the \"reference\" parent directory)',
-        action='store_true',
-        required=False)
-    rp_opts.add_argument(
         '--method',
         help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
         metavar='<normalization_type>',
@@ -472,6 +486,13 @@ def get_arguments(args, __version__):
         metavar='<sjdbOverhang_amount>',
         type=int,
         default=100,
+        required=False)
+    rp_opts.add_argument(
+        '--downstream',
+        help='Number of nucleotides to track after the landmark (default: %s)' % 200,
+        default=200,
+        metavar='<value>',
+        type=int,
         required=False)
     rp_opts.add_argument(
         '-m', '--max_processors',
@@ -620,22 +641,18 @@ def get_arguments(args, __version__):
         metavar='<path>',
         type=str,
         required=True)
+    count_reqs.add_argument(
+        '-t', '--reference_type',
+        help='GTF type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
+        metavar='<DEFAULT, CODING, CODING_TRUNCATED>',
+        type=str,
+        required=True)
     #Optional arguments
     count_opts = count_parser.add_argument_group('optional arguments')
     count_opts.add_argument(
         '-h', '--help',
         action='help',
         help='Show help message and exit')
-    count_opts.add_argument(
-        '--count_coding',
-        help='Count reads to coding transcripts only (coding reference should be added to the \"reference\" parent directory)',
-        action='store_true',
-        required=False)
-    count_opts.add_argument(
-        '--truncate',
-        help='Count reads to truncated reference (truncated reference should be added to the \"reference\" parent directory)',
-        action='store_true',
-        required=False)
     count_opts.add_argument(
         '-e', '--experiment',
         help='Experiment name',
@@ -744,7 +761,7 @@ def get_arguments(args, __version__):
         required=True)
     metagene_reqs.add_argument(
         '-t', '--reference_type',
-        help='RefFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
+        help='refFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
         metavar='<DEFAULT, CODING, CODING_TRUNCATED>',
         type=str,
         required=True)
@@ -1108,6 +1125,6 @@ def get_arguments(args, __version__):
     args_dict['path'] = __path__
 
     #Check inputs validity
-    check_inputs(args_dict)
+    args_dict = check_inputs(args_dict)
 
     return args, args_dict

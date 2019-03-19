@@ -16,6 +16,20 @@ XPRESSpipe Reference Requirements
 | - If :data:`metagene` analysis is being performed, properly flattened transcript references are located in the parent reference directory. If :data:`makeFlat` was used with this parent reference directory as output location, proper naming and formatted will be handled by XPRESSpipe
 | **A completed reference directory can be created that follows these requirements by creating a directory, placing the transcripts.gtf and chromosome genomic fasta files in the parent directory and running :data:`curateReference` as described below
 
+============================
+Get Sequence Files
+============================
+| The following is an example of how to get the reference files needed for generating a human reference:
+
+.. code-block:: shell
+
+  $ mkdir human_reference
+  $ cd human_reference/
+  $ curl ftp://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz -o transcripts.gtf.gz
+  $ for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y MT; do curl -O ftp://ftp.ensembl.org/pub/release-95/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.${i}.fa.gz; done
+  $ gzip -d *.gz
+
+
 ==========================
 STAR Reference Curation
 ==========================

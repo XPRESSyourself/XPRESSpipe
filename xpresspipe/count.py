@@ -106,25 +106,8 @@ def count_file(args):
 
     file, args_dict = args[0], args[1]
 
-    #Determine reference file type
-    if args_dict['count_coding'] == True and args_dict['truncate'] == True:
-        transcript_type = 'transcripts_coding_truncated'
-
-    elif args_dict['count_coding'] == True and args_dict['truncate'] == False:
-        transcript_type = 'transcripts_coding'
-
-    elif args_dict['count_coding'] == False and args_dict['truncate'] == True:
-        raise Exception('A truncated transcript file that is not coding-only transcripts is not currently supported')
-
-    elif args_dict['count_coding'] == False and args_dict['truncate'] == False:
-        transcript_type = 'transcripts'
-
-    else:
-        raise Exception('Something went wrong in determining transcript reference file type')
-
     #Count
-    os.system('htseq-count -m intersection-nonempty -r name -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['reference']) + str(transcript_type)+ '.gtf > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
-
+    os.system('htseq-count -m intersection-nonempty -r name -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['gtf_type']) + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 def count_reads(args_dict):
 

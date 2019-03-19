@@ -189,7 +189,7 @@ def main(args=None):
         collect_counts(args_dict)
         #Normalize
         msg_normalize()
-        args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
+        args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
@@ -225,7 +225,7 @@ def main(args=None):
         collect_counts(args_dict)
         #Normalize
         msg_normalize()
-        args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
+        args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
@@ -261,7 +261,7 @@ def main(args=None):
         collect_counts(args_dict)
         #Normalize
         msg_normalize()
-        args_dict['data'] = str(args_dict['experiment']) + 'counts_table.csv'
+        args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         #Run quality control
