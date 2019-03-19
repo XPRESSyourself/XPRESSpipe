@@ -40,6 +40,16 @@ setup(
     include_package_data = True,
     license = 'GPL-3.0',
     zip_safe = False,
+    install_requires=[
+          'pandas',
+          'numpy',
+          'scipy',
+          'seaborn',
+          'plotly',
+          'matplotlib',
+          'git-lfs',
+          'multiqc'
+      ],
 
     entry_points = {
         'console_scripts': [

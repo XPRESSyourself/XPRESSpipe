@@ -29,7 +29,6 @@ Get Sequence Files
   $ for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y MT; do curl -O ftp://ftp.ensembl.org/pub/release-95/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.${i}.fa.gz; done
   $ gzip -d *.gz
 
-
 ==========================
 STAR Reference Curation
 ==========================
