@@ -158,29 +158,29 @@ def run_normalization(args_dict):
         #RPM normalization
         if args_dict['method'].upper() == 'RPM':
             type = 'rpm'
-            df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = pd.read_csv(str(args_dict['input']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
             df = rpm(df)
-            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
+            df.to_csv(str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         #RPKM or FPKM normalization
         elif args_dict['method'].upper() == 'RPKM' or args_dict['method'].upper() == 'FPKM':
             if args_dict['gtf'] == None:
                 raise Exception('A GTF reference file is required for RPKM and FPKM normalization')
             type = 'r_fpkm'
-            df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = pd.read_csv(str(args_dict['input']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
             df = r_fpkm(df, args_dict['gtf'])
-            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
+            df.to_csv(str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         #Log normalization
         elif args_dict['method'].upper() == 'LOG':
             type = 'log'
-            df = pd.read_csv(str(args_dict['data']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = pd.read_csv(str(args_dict['input']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
             df = log_scale(df, log_base=10)
-            df.to_csv(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
+            df.to_csv(str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         else:
             raise Exception('Unknown \"method\" argument provided')
 
     #Run in batch normalization
         if 'batch' in args_dict and args_dict['batch'] != None:
-            batch_normalize(str(args_dict['data'][:-4]) + '_' + str(type) + 'Normalized.csv', str(args_dict['batch']))
+            batch_normalize(str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.csv', str(args_dict['batch']))
     else:
         if 'batch' in args_dict and args_dict['batch'] != None:
-            batch_normalize(str(args_dict['data']), str(args_dict['batch']))
+            batch_normalize(str(args_dict['input']), str(args_dict['batch']))

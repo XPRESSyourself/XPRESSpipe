@@ -87,7 +87,7 @@ def main(args=None):
 
     elif args.cmd == 'diffxpress':
         print('Performing differential expression analysis...')
-        diff_xpress(str(args_dict['data']), str(args_dict['sample']), equation=str(args_dict['design']))
+        diff_xpress(str(args_dict['input']), str(args_dict['sample']), equation=str(args_dict['design']))
         check_process(args_dict['log_file'], msg_complete(), 'DIFFERENTIAL EXPRESSION')
 
     elif args.cmd == 'metagene':
@@ -150,15 +150,15 @@ def main(args=None):
     elif args.cmd == 'convertNames':
         #Convert row names in dataframe
         print('Converting row names...')
-        if str(args_dict['data']).endswith('.csv'):
+        if str(args_dict['input']).endswith('.csv'):
             delim = ','
             suf = '.csv'
         else:
             delim = '\t'
             suf = '.tsv'
-        data = pd.read_csv(str(args_dict['data']), sep=delim)
+        data = pd.read_csv(str(args_dict['input']), sep=delim)
         data = convert_names_gtf(data, args_dict['gtf'], orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'], new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'], refill=args_dict['refill'], sep='\t')
-        data.to_csv(str(args_dict['data'])[:-4] + '_renamed' + str(suf), sep=delim, index=False)
+        data.to_csv(str(args_dict['input'])[:-4] + '_renamed' + str(suf), sep=delim, index=False)
         check_process(args_dict['log_file'], msg_complete(), 'CONVERT NAMES')
 
     elif args.cmd == 'normalizeMatrix':
@@ -193,7 +193,7 @@ def main(args=None):
         check_process(args_dict['log_file'], msg_complete(), 'COUNT')
         #Normalize
         msg_normalize()
-        args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
+        args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
@@ -233,7 +233,7 @@ def main(args=None):
         check_process(args_dict['log_file'], msg_complete(), 'COUNT')
         #Normalize
         msg_normalize()
-        args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
+        args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
@@ -273,7 +273,7 @@ def main(args=None):
         check_process(args_dict['log_file'], msg_complete(), 'COUNT')
         #Normalize
         msg_normalize()
-        args_dict['data'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
+        args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
