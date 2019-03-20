@@ -114,7 +114,7 @@ def main(args=None):
         #Truncate transcript reference
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(args_dict['output']), sep='\t', return_files=False)
         #Flatten transcript reference files
-        create_flat(args_dict['output'], args_dict['id'])
+        create_flat(args_dict['output'])
         check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
 
     elif args.cmd == 'makeReference':
@@ -128,13 +128,13 @@ def main(args=None):
         output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
         if 'create_refFlats' in args_dict and args_dict['create_refFlats'] == True:
-            create_flat(str(output_path), args_dict['id'])
+            create_flat(str(output_path))
         check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
 
     elif args.cmd == 'makeFlat':
         print('Formatting coding only and truncated reference files...')
-        create_flat(args_dict['input'], args_dict['id'])
-        check_process(args_dict['log_file'], msg_complete(), 'MAKE REFFLAT')
+        create_flat(args_dict['input'])
+        #check_process(args_dict['log_file'], msg_complete(), 'MAKE REFFLAT')
 
     elif args.cmd == 'rrnaProbe':
         #Get files to probe

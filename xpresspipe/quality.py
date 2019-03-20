@@ -38,25 +38,27 @@ def get_peaks(args):
     file, args_dict = args[0], args[1]
 
     #Get SAM headers
-    with open(str(args_dict['input']) + str(file)) as comment:
-        reader = csv.reader(comment)
-        comment1 = next(reader)
-        comment2 = next(reader)
-        comment3 = next(reader)
-        comment4 = next(reader)
+    with open(str(args_dict['input']) + str(file)) as sam:
+        reader = csv.reader(sam)
+        first = '@'
+        comments = []
+        iter = -1
+        while first == '@':
+            comment = next(reader)
+            comments.append(comment)
+            first = comment[0][0]
+            iter += 1
 
     #read sorted, unique only sam files, get most abundant length and make new file
-    df = pd.read_csv(str(args_dict['input']) + str(file), sep='\t', skiprows=4, header=None, usecols = list(range(0, 16)))
+    df = pd.read_csv(str(args_dict['input']) + str(file), sep='\t', skiprows=iter, header=None, usecols = list(range(0, 16)))
     df[16]  = df[9].str.len()
     df_mode = df.loc[df[16] == mode(list(df[16]))]
     df_mode = df_mode.drop(labels=16, axis=1)
 
     #Save SAM file with SAM header
     f = open(str(args_dict['metrics']) + str(file[:-4]) + '_mode.txt', 'a')
-    f.write(str(''.join(comment1) + '\n'))
-    f.write(str(''.join(comment2) + '\n'))
-    f.write(str(''.join(comment3) + '\n'))
-    f.write(str(''.join(comment4) + '\n'))
+    for x in comments:
+        f.write(str(''.join(x) + '\n'))
     df_mode.to_csv(f, sep='\t', header=None, index=False)
     f.close()
 

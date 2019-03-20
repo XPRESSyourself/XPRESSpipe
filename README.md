@@ -13,7 +13,8 @@
 -----
 
 ### Development Notes:
-<b><i>XPRESSpipe is still in alpha production</i></b>   
+- <b><i>XPRESSpipe is still in beta production</i></b>  
+- All metagene modules are currently broken due to Picard CollectRnaSeqMetrics memory handling issues with refFlat files 
 
 ### Citation:    
 ```

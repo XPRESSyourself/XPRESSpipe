@@ -110,7 +110,7 @@ def check_inputs(args_dict):
             args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
         elif args_dict['reference_type'].upper() == 'CODING':
             args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
         else:
             raise Exception('Invalid reference_type value provided')
 
@@ -120,10 +120,10 @@ def check_inputs(args_dict):
             args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
         elif args_dict['reference_type'].upper() == 'CODING':
             args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
         elif args_dict['reference_type'].upper() == 'CODING_TRUNCATED':
             args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
         else:
             raise Exception('Invalid reference_type value provided')
 
@@ -952,12 +952,6 @@ def get_arguments(args, __version__):
         help='Provide flag to output refFlat files for each transcript reference created',
         action='store_true',
         required=False)
-    truncate_opts.add_argument(
-        '--id',
-        help='UCSC ID (organism and version number), required if --create_refFlats used',
-        metavar='<id>',
-        type=str,
-        required=True)
 
     """
     MAKEFLAT SUBPARSER
@@ -969,12 +963,6 @@ def get_arguments(args, __version__):
         '-i', '--input',
         help='Path where input transcripts*.gtf files are found',
         metavar='<path>',
-        type=str,
-        required=True)
-    makeflat_reqs.add_argument(
-        '--id',
-        help='UCSC ID (organism and version number)',
-        metavar='<id>',
         type=str,
         required=True)
     #Optional arguments
