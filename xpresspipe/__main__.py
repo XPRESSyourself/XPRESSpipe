@@ -48,7 +48,8 @@ def main(args=None):
     #msg_license()
     args, args_dict = get_arguments(args, __version__)
 
-    if 'input' in args_dict:
+    #Should have already seen check_directory() so should have a trailing '/'
+    if 'input' in args_dict and str(args_dict['input']).endswith('/'):
         unzip_files(args_dict['input'])
 
     #Execute corresponding functions determined by arguments provided by user
