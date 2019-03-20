@@ -151,14 +151,14 @@ def collect_counts(args_dict):
 """
 DESCRIPTION: Run normalization of count dataframe
 """
-def run_normalization(args_dict):
+def run_normalization(args_dict, sep='\t'):
 
     #Run sample normalization
     if 'method' in args_dict and args_dict['method'] != None:
         #RPM normalization
         if args_dict['method'].upper() == 'RPM':
             type = 'rpm'
-            df = pd.read_csv(str(args_dict['input']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = pd.read_csv(str(args_dict['input']), sep=sep, header=0, index_col=0, comment='#', low_memory=False)
             df = rpm(df)
             df.to_csv(str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         #RPKM or FPKM normalization
@@ -166,13 +166,13 @@ def run_normalization(args_dict):
             if args_dict['gtf'] == None:
                 raise Exception('A GTF reference file is required for RPKM and FPKM normalization')
             type = 'r_fpkm'
-            df = pd.read_csv(str(args_dict['input']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = pd.read_csv(str(args_dict['input']), sep=sep, header=0, index_col=0, comment='#', low_memory=False)
             df = r_fpkm(df, args_dict['gtf'])
             df.to_csv(str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         #Log normalization
         elif args_dict['method'].upper() == 'LOG':
             type = 'log'
-            df = pd.read_csv(str(args_dict['input']), sep=',', header=0, index_col=0, comment='#', low_memory=False)
+            df = pd.read_csv(str(args_dict['input']), sep=sep, header=0, index_col=0, comment='#', low_memory=False)
             df = log_scale(df, log_base=10)
             df.to_csv(str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv', sep='\t')
         else:

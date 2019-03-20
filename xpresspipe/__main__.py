@@ -165,7 +165,8 @@ def main(args=None):
         #Run in sample normalization
         print('Normalizing matrix...')
         run_normalization(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
+        #No os.sys call, no log created when run on own
+        #check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
 
     elif args.cmd == 'seRNAseq':
         args_dict['type'] = 'SE'
