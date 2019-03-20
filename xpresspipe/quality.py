@@ -86,7 +86,7 @@ def make_periodicity(args_dict):
         print('Skipping periodicity reference generation...\nIf parameters other than default values for landmark and downstream were used during reference generation, these values need to be provided even if not creating a reference...\n')
 
     #Perform metagene analysis
-    parallelize(get_peaks, files, args_dict)
+    parallelize(get_peaks, files, args_dict, mod_workers=True)
 
     #Compile images
     files = get_files(args_dict['metrics'], ['_periodicity_metagene_profile.txt'])
@@ -103,7 +103,7 @@ def get_profiles(args):
 
     file, args_dict = args[0], args[1]
 
-    os.system('picard CollectRnaSeqMetrics REF_FLAT=' + str(args_dict['flat_type']) + ' STRAND_SPECIFICITY=NONE INPUT=' + str(args_dict['input']) + str(file) + ' OUTPUT=' + str(args_dict['metrics']) + str(file[:-4]) + '_rna_metrics' + str(args_dict['log']))
+    os.system('picard CollectRnaSeqMetrics MINIMUM_LENGTH=' + str(args_dict['min_length']) + ' REF_FLAT=' + str(args_dict['flat_type']) + ' STRAND_SPECIFICITY=NONE INPUT=' + str(args_dict['input']) + str(file) + ' OUTPUT=' + str(args_dict['metrics']) + str(file[:-4]) + '_rna_metrics' + str(args_dict['log']))
 
 def make_metagene(args_dict):
 
@@ -116,7 +116,7 @@ def make_metagene(args_dict):
     files = get_files(args_dict['input'], ['.sam'])
 
     #Perform metagene analysis
-    parallelize(get_profiles, files, args_dict)
+    parallelize(get_profiles, files, args_dict, mod_workers=True)
 
     #Compile images
     files = get_files(args_dict['metrics'], ['_rna_metrics'])
@@ -141,7 +141,7 @@ def make_readDistributions(args_dict):
     files = get_files(args_dict['input'], ['.fastq', '.fq', '.txt'])
 
     #Perform fastqc on each file and unzip output
-    parallelize(run_fastqc, files, args_dict)
+    parallelize(run_fastqc, files, args_dict, mod_workers=True)
 
     files = get_files(args_dict['fastqc_output'], ['.zip'])
     for file in files:

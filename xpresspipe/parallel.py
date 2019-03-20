@@ -29,14 +29,14 @@ from multiprocessing import cpu_count
 """
 DESCRIPTION: Determine number of processors to use
 """
-def get_cores(args_dict):
+def get_cores(args_dict, mod_workers):
 
     if 'max_processors' in args_dict and args_dict['max_processors'] != None:
         cores = args_dict['max_processors']
     else:
         cores = cpu_count() #Number of CPU cores on your system
 
-    if 'mod_workers' in args_dict and args_dict['mod_workers'] == True:
+    if mod_workers == True:
         workers = cores
     else:
         workers = 1
@@ -55,18 +55,18 @@ def run_pools(func, args_iter, args_dict):
 """
 DESCRIPTION: Parallelize function on list of files
 """
-def parallelize(func, file_list, args_dict):
+def parallelize(func, file_list, args_dict, mod_workers=False):
 
     args_iter = ([file, args_dict] for file in file_list)
 
-    args_dict['threads'], args_dict['workers'] = get_cores(args_dict)
+    args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers)
 
     run_pools(func, args_iter, args_dict)
 
 """
 DESCRIPTION: Parallelize function on list of files for PE data
 """
-def parallelize_pe(func, file_list, args_dict):
+def parallelize_pe(func, file_list, args_dict, mod_workers=False):
 
     #Pair files for paired-end processing
     c1 = 0
@@ -78,6 +78,6 @@ def parallelize_pe(func, file_list, args_dict):
 
     args_iter = ([x[0], x[1], x[2]] for x in args_iter)
 
-    args_dict['threads'], args_dict['workers'] = get_cores(args_dict)
+    args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers)
 
     run_pools(func, args_iter, args_dict)

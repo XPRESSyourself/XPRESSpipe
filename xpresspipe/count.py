@@ -107,7 +107,7 @@ def count_file(args):
     file, args_dict = args[0], args[1]
 
     #Count
-    os.system('htseq-count -q -m intersection-nonempty -r name -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['gtf_type']) + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+    os.system('htseq-count -q -m intersection-nonempty -r pos -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['gtf_type']) + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 def count_reads(args_dict):
 
@@ -118,8 +118,7 @@ def count_reads(args_dict):
     files = get_files(args_dict['input'], ['.sam'])
 
     #Count aligned RNAseq reads
-    args_dict['mod_workers'] = True
-    parallelize(count_file, files, args_dict)
+    parallelize(count_file, files, args_dict, mod_workers=True)
 
     return args_dict
 

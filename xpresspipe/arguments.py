@@ -79,7 +79,7 @@ Sub-module descriptions:
     |-----------------------|---------------------------------------------------------------------------------------|
     |    truncate           |   Create a coding-only and coding-only truncated reference GTF                        |
     |-----------------------|---------------------------------------------------------------------------------------|
-    |    makeFlat           |   Create flattened reference GTFs                                                     |
+    |    makeFlat           |   Grab flattened reference file from UCSC based on organism ID                        |
     |-----------------------|---------------------------------------------------------------------------------------|
     |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
     |                       |   Run a BLAST search on sequences you choose to use as depletion probes to verify     |
@@ -110,7 +110,7 @@ def check_inputs(args_dict):
             args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
         elif args_dict['reference_type'].upper() == 'CODING':
             args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
         else:
             raise Exception('Invalid reference_type value provided')
 
@@ -120,10 +120,10 @@ def check_inputs(args_dict):
             args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
         elif args_dict['reference_type'].upper() == 'CODING':
             args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
         elif args_dict['reference_type'].upper() == 'CODING_TRUNCATED':
             args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
+            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
         else:
             raise Exception('Invalid reference_type value provided')
 
@@ -222,7 +222,7 @@ def get_arguments(args, __version__):
         required=True)
     se_reqs.add_argument(
         '-t', '--reference_type',
-        help='GTF and refFlat type (i.e. \"DEFAULT\", \"CODING\")',
+        help='GTF type (i.e. \"DEFAULT\", \"CODING\")',
         metavar='<DEFAULT, CODING>',
         type=str,
         required=True)
@@ -323,7 +323,7 @@ def get_arguments(args, __version__):
         required=True)
     pe_reqs.add_argument(
         '-t', '--reference_type',
-        help='GTF and refFlat type (i.e. \"DEFAULT\", \"CODING\")',
+        help='GTF type (i.e. \"DEFAULT\", \"CODING\")',
         metavar='<DEFAULT, CODING>',
         type=str,
         required=True)
@@ -424,7 +424,7 @@ def get_arguments(args, __version__):
         required=True)
     rp_reqs.add_argument(
         '-t', '--reference_type',
-        help='GTF and refFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
+        help='GTF type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
         metavar='<DEFAULT, CODING, CODING_TRUNCATED>',
         type=str,
         required=True)
@@ -764,12 +764,6 @@ def get_arguments(args, __version__):
         type=str,
         required=True)
     metagene_reqs.add_argument(
-        '-t', '--reference_type',
-        help='refFlat type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
-        metavar='<DEFAULT, CODING, CODING_TRUNCATED>',
-        type=str,
-        required=True)
-    metagene_reqs.add_argument(
         '-e', '--experiment',
         help='Experiment name',
         metavar='<experiment_name>',
@@ -781,6 +775,13 @@ def get_arguments(args, __version__):
         '-h', '--help',
         action='help',
         help='Show help message and exit')
+    metagene_opts.add_argument(
+        '--min_length',
+        help='Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        metavar='<length_value>',
+        type=int,
+        default=DEFAULT_READ_MIN,
+        required=False)
 
     """
     READ DISTRIBUTION SUBPARSER
@@ -951,17 +952,29 @@ def get_arguments(args, __version__):
         help='Provide flag to output refFlat files for each transcript reference created',
         action='store_true',
         required=False)
+    truncate_opts.add_argument(
+        '--id',
+        help='UCSC ID (organism and version number), required if --create_refFlats used',
+        metavar='<id>',
+        type=str,
+        required=True)
 
     """
     MAKEFLAT SUBPARSER
     """
-    makeflat_parser = subparser.add_parser('makeFlat', description='Create flattened reference GTFs', add_help=False)
+    makeflat_parser = subparser.add_parser('makeFlat', description='Grab flattened reference file from UCSC based on organism ID', add_help=False)
     #Required arguments
     makeflat_reqs = makeflat_parser.add_argument_group('required arguments')
     makeflat_reqs.add_argument(
         '-i', '--input',
         help='Path where input transcripts*.gtf files are found',
         metavar='<path>',
+        type=str,
+        required=True)
+    makeflat_reqs.add_argument(
+        '--id',
+        help='UCSC ID (organism and version number)',
+        metavar='<id>',
         type=str,
         required=True)
     #Optional arguments
