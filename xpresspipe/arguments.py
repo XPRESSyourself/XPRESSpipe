@@ -150,13 +150,24 @@ def check_inputs(args_dict):
         else:
             pass
 
+    #Determine output directory for log file
+    if 'output' in args_dict and args_dict['output'] != None:
+        args_dict['log_loc'] = args_dict['output']
+    else:
+        if 'input' in args_dict and args_dict['input'] != None:
+            args_dict['log_loc'] = str(args_dict['input'][:args_dict['input'].rfind('/') + 1])
+        elif 'gtf' in args_dict and args_dict['gtf'] != None:
+            args_dict['log_loc'] = str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1])
+        else:
+            args_dict['log_loc'] = './'
+
     if 'experiment' in args_dict and args_dict['experiment'] != None:
-        args_dict['log'] = ' >> ' + str(args_dict['output']) + str(args_dict['experiment']) + '.log 2>&1'
-        args_dict['log_file'] = str(args_dict['output']) + str(args_dict['experiment']) + '.log'
+        args_dict['log'] = ' >> ' + str(args_dict['log_loc']) + str(args_dict['experiment']) + '.log 2>&1'
+        args_dict['log_file'] = str(args_dict['log_loc']) + str(args_dict['experiment']) + '.log'
     else:
         cdt = datetime.datetime.now()
-        args_dict['log'] = ' >> ' + str(args_dict['output']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + '.log 2>&1'
-        args_dict['log_file'] = str(args_dict['output']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + '.log'
+        args_dict['log'] = ' >> ' + str(args_dict['log_loc']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + '.log 2>&1'
+        args_dict['log_file'] = str(args_dict['log_loc']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + '.log'
 
     return args_dict
 
@@ -667,7 +678,7 @@ def get_arguments(args, __version__):
     #Required arguments
     normalize_reqs = normalize_parser.add_argument_group('required arguments')
     normalize_reqs.add_argument(
-        '-d', '--data',
+        '-i', '--input',
         help='Path and file name to sequence dataframe',
         metavar='</path/filename.tsv>',
         type=str,
@@ -704,7 +715,7 @@ def get_arguments(args, __version__):
     #Required arguments
     diffx_reqs = diffx_parser.add_argument_group('required arguments')
     diffx_reqs.add_argument(
-        '-d', '--data',
+        '-i', '--input',
         help='Path and file name to counts dataframe',
         metavar='</path/filename.tsv>',
         type=str,
@@ -1049,7 +1060,7 @@ def get_arguments(args, __version__):
     #Required arguments
     convert_reqs = convert_parser.add_argument_group('required arguments')
     convert_reqs.add_argument(
-        '-d', '--data',
+        '-i', '--input',
         help='Path and file name to sequence dataframe',
         metavar='</path/filename>',
         type=str,

@@ -28,15 +28,17 @@ import os, sys
 DESCRIPTION: Check directory formatting
 """
 #Check directory formatting
-def check_directories(directory):
+def check_directories(input):
 
     #Check input directory name is formatted correctly and fix if necessary
-    if directory.endswith('/'):
+    if input.endswith('/'):
+        pass
+    elif '.' in input: #Assumes this is a file input and not a directory input
         pass
     else:
-        directory += '/'
+        input += '/'
 
-    return directory
+    return input
 
 """
 DESCRIPTION: Create output directory
