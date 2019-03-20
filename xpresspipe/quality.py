@@ -70,7 +70,7 @@ def get_peaks(args):
     os.system('samtools index ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam' + str(args_dict['log']))
 
     #Perform plastid analysis
-    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam --fiveprime --offset 14 --normalize_over 30 200 --min_counts 50 --cmap Blues --title ' + file[:-4] + str(args_dict['log']))
+    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam --fiveprime --offset 0 --normalize_over 20 50 --min_counts 10 --title ' + file[:-4] + str(args_dict['log']))
 
 def make_periodicity(args_dict):
 
