@@ -70,7 +70,7 @@ def get_peaks(args):
     os.system('samtools index ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam' + str(args_dict['log']))
 
     #Perform plastid analysis
-    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam --fiveprime --offset 0 --normalize_over 20 50 --min_counts 10 --title ' + file[:-4] + str(args_dict['log']))
+    os.system('metagene count -q ' + str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]) + 'metagene_reference_rois.txt ' + str(args_dict['metrics']) + str(file[:-4]) + '_periodicity --count_files ' + str(args_dict['metrics']) + str(file[:-4]) + '_mode_sorted.bam --fiveprime --offset 14 --normalize_over 0 200 --min_counts 10 --title ' + file[:-4] + str(args_dict['log']))
 
 def make_periodicity(args_dict):
 
@@ -154,3 +154,30 @@ def make_readDistributions(args_dict):
     files = get_files(args_dict['fastqc_output'], ['.zip'])
     files = [str(x[:-4]) + '/fastqc_data.txt' for x in files]
     compile_size_distribution(args_dict, args_dict['fastqc_output'], files, '#Length', '>>END_MODULE', 'position', 'read size (bp)', 'fastqc', args_dict['experiment'], output_location)
+
+"""
+DESCRIPTION: Measure library complexity
+"""
+"""
+def run_complexity(args):
+
+    file, args_dict = args[0], args[1]
+
+    os.system("picard EstimateLibraryComplexity INPUT=" + str(args_dict['input']) + str(file) + " -o " + str(args_dict['complexity']) + 'metrics/' + str(file)[:-4] + '_complexity_metrics.txt' + str(args_dict['log']))
+
+def make_complexity(args_dict):
+
+    args_dict = add_directory(args_dict, 'output', 'complexity')
+    args_dict = add_directory(args_dict, 'complexity', 'metrics')
+    output_location = args_dict['complexity']
+
+    #Get bam files
+    files = get_files(args_dict['input'], ['.bam'])
+
+    #Perform metagene analysis
+    parallelize(run_complexity, files, args_dict, mod_workers=True)
+
+    #Compile images
+    files = get_files(args_dict['metrics'], ['_complexity_metrics'])
+    compile_size_distribution(args_dict, args_dict['metrics'], files, 'normalized_position', None, 'meta_position', 'normalized_coverage (all_reads)', 'metagene',  args_dict['experiment'], output_location)
+"""

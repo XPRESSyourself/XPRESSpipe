@@ -55,13 +55,16 @@ def alignment_sort(output, args_dict):
     # only take unique mappers (q = 255)
     os.system('samtools view --threads ' + str(args_dict['threads']) + ' -h -q 255 ' + str(args_dict['alignments']) + str(output) + '_sorted.sam > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
 
+    # make bam file
+    os.system('samtools view -S -b --threads ' + str(args_dict['threads']) + ' ' + str(args_dict['alignments']) + str(output) + '_final.sam > ' + str(args_dict['alignments']) + str(output) + '_final.bam')
+
 """
 DESCRIPTION: Remove all intermediate alignment files and references after alignment is complete
 """
 def remove_intermediates(args_dict):
 
     os.system('rm -r ' + str(args_dict['intermediate_references']) + str(args_dict['log']))
-    os.system('find ' + str(args_dict['alignments']) + ' ! -name *_final.sam ! -name *_final_Log.final.out -maxdepth 1 -type f -delete' + str(args_dict['log']))
+    os.system('find ' + str(args_dict['alignments']) + ' ! -name *_final.bam ! -name *_final.sam ! -name *_final_Log.final.out -maxdepth 1 -type f -delete' + str(args_dict['log']))
 
 """
 DESCRIPTION:
