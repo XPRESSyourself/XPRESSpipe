@@ -107,7 +107,7 @@ def count_file(args):
     file, args_dict = args[0], args[1]
 
     #Count
-    os.system('htseq-count -q -m intersection-nonempty -r pos -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['gtf_type']) + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+    os.system('htseq-count -q -m intersection-nonempty -t exon -r pos -s no ' + str(args_dict['input']) + str(file) + ' ' + str(args_dict['gtf_type']) + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 def count_reads(args_dict):
 
