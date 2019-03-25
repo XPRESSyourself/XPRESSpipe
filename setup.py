@@ -46,9 +46,9 @@ setup(
           'scipy',
           'seaborn',
           'plotly',
-          'matplotlib',
-          'git-lfs',
           'multiqc',
+          #'matplotlib',
+          'git-lfs',
           'xpresstools'
       ],
 
