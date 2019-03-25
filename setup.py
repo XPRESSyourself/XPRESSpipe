@@ -46,10 +46,11 @@ setup(
           'scipy',
           'seaborn',
           'plotly',
+          'matplotlib<3.0.0,>=2.1.1',
           'multiqc',
           'git-lfs',
-          #'xpresstools',
-          'matplotlib<3.0.0,>=2.1.1'
+          'xpresstools'
+
       ],
 
     entry_points = {

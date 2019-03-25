@@ -3,7 +3,7 @@ RUN conda create -n env python=3.6
 RUN echo "source activate env" > ~/.bashrc
 ENV PATH /opt/conda/envs/env/bin:$PATH
 
-RUN git clone clone https://github.com/XPRESSyourself/XPRESStools.git; cd XPRESStools; python setup.py install
+RUN git clone https://github.com/XPRESSyourself/XPRESStools.git; cd XPRESStools; python setup.py install
 
 RUN git clone https://github.com/XPRESSyourself/XPRESSpipe.git
 
@@ -13,4 +13,4 @@ ENV PATH /opt/conda/envs/$(head -1 /XPRESSpipe/requirements.yml | cut -d' ' -f2)
 
 RUN cd XPRESSpipe; python setup.py install
 
-ENTRYPOINT ["python", "XPRESSpipe/xpresspipe/__main__.py"]
+ENTRYPOINT ["xpresspipe"]

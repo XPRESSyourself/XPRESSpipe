@@ -9,12 +9,12 @@
 [![PyPi Status](https://img.shields.io/pypi/v/XPRESSpipe.svg)](https://pypi.org/project/XPRESSpipe/)
 
 ##### Find documentation [here](https://xpresspipe.readthedocs.io/en/latest/)
-
+##### Download the latest Docker image [HERE](https://sourceforge.net/projects/xpresspipe/files/docker_images/)
 -----
 
 ### Development Notes:
 - <b><i>XPRESSpipe is still in beta production</i></b>  
-- All metagene modules are currently broken due to Picard CollectRnaSeqMetrics memory handling issues with refFlat files 
+- All metagene modules are currently broken due to Picard CollectRnaSeqMetrics memory handling issues with refFlat files
 
 ### Citation:    
 ```

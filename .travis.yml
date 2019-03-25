@@ -30,4 +30,4 @@ script:
   - bash test.sh  # will run all tests in the package
   - cd ../
 after_success:
-  - test $TRAVIS_BRANCH = "master" && conda install conda-build && conda install anaconda-client && bash conda/conda_upload.sh
+  - test $TRAVIS_BRANCH = "master" && conda install conda-build && conda install anaconda-client && bash conda_upload.sh

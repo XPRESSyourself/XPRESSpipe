@@ -5,6 +5,7 @@
 .DS_Store
 *.soft.gz
 **.DS_Store
+**.tar
 /tests/*out*
 /tests/pe_out/**
 /tests/pe_test_archive/**
