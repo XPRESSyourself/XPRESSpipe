@@ -15,6 +15,16 @@ dependencies:
 - picard
 - fastqc
 - plastid
-#- ucsc-gtftogenepred
+- ucsc-gtftogenepred
 - htseq
+- pip:
+  - pandas
+  - numpy
+  - scipy
+  - seaborn
+  - plotly
+  - git-lfs
+  - xpresstools
+  - matplotlib<3.0.0,>=2.1.1
+  - multiqc
 prefix: .miniconda2/envs/test
