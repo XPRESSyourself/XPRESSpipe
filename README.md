@@ -6,10 +6,9 @@
 [![Build Status](https://travis-ci.org/XPRESSyourself/XPRESSpipe.svg?branch=master)](https://travis-ci.org/XPRESSyourself/XPRESSpipe)
 [![codecov.io](https://codecov.io/gh/XPRESSyourself/XPRESSpipe/XPRESSpipe.svg?branch=master)](https://codecov.io/gh/XPRESSyourself/XPRESSpipe)
 [![Documentation Status](https://readthedocs.org/projects/xpresspipe/badge/?version=latest)](https://xpresspipe.readthedocs.io/en/latest/?badge=latest)
-[![PyPi Status](https://img.shields.io/pypi/v/XPRESSpipe.svg)](https://pypi.org/project/XPRESSpipe/)
+[![Conda Status](https://anaconda.org/anaconda/xpresspipe/badges/version.svg)](https://anaconda.org/anaconda/xpresspipe)
+[![Docker](https://img.shields.io/docker/build/jordanberg/xpresspipe.svg)](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general)
 
-##### Find documentation [here](https://xpresspipe.readthedocs.io/en/latest/)
-##### Download the latest Docker image [HERE](https://sourceforge.net/projects/xpresspipe/files/docker_images/)
 -----
 
 ### Development Notes:
