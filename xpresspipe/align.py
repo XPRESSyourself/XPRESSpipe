@@ -87,6 +87,8 @@ def se_align(args):
     #Create sam file with only unique hits
     alignment_sort(output, args_dict)
 
+    remove_intermediates(args_dict)
+
 """
 DESCRIPTION:
 """
@@ -109,6 +111,8 @@ def pe_align(args):
     #Create sam file with only unique hits
     alignment_sort(output, args_dict)
 
+    remove_intermediates(args_dict)
+
 """
 DESCRIPTION: Align single-end Illumina RNAseq reads
 """
@@ -129,7 +133,6 @@ def run_seRNAseq(args_dict):
 
         #Align single-end RNAseq reads
         parallelize(se_align, files, args_dict)
-        remove_intermediates(args_dict)
 
         return args_dict
 
@@ -159,7 +162,6 @@ def run_peRNAseq(args_dict):
         else:
             #Align paired-end RNAseq reads
             parallelize_pe(pe_align, files, args_dict)
-            remove_intermediates(args_dict)
 
         return args_dict
 
