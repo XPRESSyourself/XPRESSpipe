@@ -30,7 +30,7 @@ from .parallel import parallelize, parallelize_pe
 """
 def first_star(file, output, args_dict):
 
-    os.system('STAR --genomeDir ' + str(args_dict['reference']) + 'genome --readFilesIn ' + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --outSAMstrandField intronMotif --outSAMtype None --outSAMmode None --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_' + str(args_dict['log']))
+    os.system('STAR --genomeDir ' + str(args_dict['reference']) + 'genome --readFilesIn ' + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --outSAMstrandField intronMotif --outSAMtype None --outSAMmode None --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_' + str(args_dict['log']))
 
 """
 """
@@ -43,7 +43,7 @@ def build_intermediate(output, args_dict):
 """
 def second_star(file, output, args_dict):
 
-    os.system('STAR --genomeDir ' + str(args_dict['intermediate_references']) + str(output) + ' --readFilesIn ' + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --limitBAMsortRAM 0 --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --outSAMstrandField intronMotif --outSAMattributes NH HI NM MD AS XS --outSAMunmapped Within --outSAMtype SAM --outSAMheaderHD @HD VN:1.4 --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_final_' + str(args_dict['log']))
+    os.system('STAR --genomeDir ' + str(args_dict['intermediate_references']) + str(output) + ' --readFilesIn ' + str(file) + ' --runThreadN ' + str(args_dict['threads']) + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) + ' --outFilterMultimapScoreRange 1 --outFilterMultimapNmax 20 --outFilterMismatchNmax 10 --alignIntronMax 500000 --alignMatesGapMax 1000000 --sjdbScore 2 --alignSJDBoverhangMin 1 --genomeLoad NoSharedMemory --limitBAMsortRAM 0 --readFilesCommand cat --outFilterMatchNminOverLread 0.33 --outFilterScoreMinOverLread 0.33 --sjdbOverhang ' + str(args_dict['sjdbOverhang']) + ' --outSAMstrandField intronMotif --outSAMattributes NH HI NM MD AS XS --outSAMunmapped Within --outSAMtype SAM --outSAMheaderHD @HD VN:1.4 --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_final_' + str(args_dict['log']))
 
 """
 """

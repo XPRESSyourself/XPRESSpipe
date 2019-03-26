@@ -290,6 +290,13 @@ def get_arguments(args, __version__):
         default=100,
         required=False)
     se_opts.add_argument(
+        '--seedSearchStartLmax',
+        help='Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter',
+        metavar='<seedSearchStartLmax>',
+        type=int,
+        default=50,
+        required=False)
+    se_opts.add_argument(
         '-m', '--max_processors',
         help='Number of max processors to use for tasks (default: No limit)',
         metavar='<processors>',
@@ -391,6 +398,13 @@ def get_arguments(args, __version__):
         default=100,
         required=False)
     pe_opts.add_argument(
+        '--seedSearchStartLmax',
+        help='Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter',
+        metavar='<seedSearchStartLmax>',
+        type=int,
+        default=50,
+        required=False)
+    pe_opts.add_argument(
         '-m', '--max_processors',
         help='Number of max processors to use for tasks (default: No limit)',
         metavar='<processors>',
@@ -490,6 +504,13 @@ def get_arguments(args, __version__):
         metavar='<sjdbOverhang_amount>',
         type=int,
         default=100,
+        required=False)
+    rp_opts.add_argument(
+        '--seedSearchStartLmax',
+        help='Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter',
+        metavar='<seedSearchStartLmax>',
+        type=int,
+        default=50,
         required=False)
     rp_opts.add_argument(
         '--downstream',
@@ -612,6 +633,13 @@ def get_arguments(args, __version__):
         metavar='<sjdbOverhang_amount>',
         type=int,
         default=100,
+        required=False)
+    align_opts.add_argument(
+        '--seedSearchStartLmax',
+        help='Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter',
+        metavar='<seedSearchStartLmax>',
+        type=int,
+        default=50,
         required=False)
     align_opts.add_argument(
         '-m', '--max_processors',
