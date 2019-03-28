@@ -166,12 +166,12 @@ def get_summary(args_dict):
 Current function: get refFlat from UCSC using case-sensitive organism ID (i.e. hg38 for human, sacCer3 for yeast)
 ####DESCRIPTION: Create flat reference files for each gtf transcript in the input directory
 """
-def create_flat(directory):
+def create_flat(directory, log):
 
     files = get_files(directory, ['.gtf'])
 
     for x in files:
         if x.startswith('transcripts'):
             os.system('gtfToGenePred ' + str(directory) + str(x) + ' ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp' + str(args_dict['log']))
-            os.system("awk -v OFS='\t' '{print $1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' " + str(directory) + str(x[:-4]) + "_refFlat.txt.tmp > " + str(directory) + str(x[:-4]) + "_refFlat.txt" + str(args_dict['log']))
-            os.system('rm ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp' + str(args_dict['log']))
+            os.system("awk -v OFS='\t' '{print $1,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10}' " + str(directory) + str(x[:-4]) + "_refFlat.txt.tmp > " + str(directory) + str(x[:-4]) + "_refFlat.txt" + str(log))
+            os.system('rm ' + str(directory) + str(x[:-4]) + '_refFlat.txt.tmp' + str(log))

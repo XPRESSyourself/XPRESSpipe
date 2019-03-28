@@ -63,8 +63,11 @@ DESCRIPTION: Remove all intermediate alignment files and references after alignm
 """
 def remove_intermediates(args_dict):
 
-    os.system('rm -r ' + str(args_dict['intermediate_references']) + str(args_dict['log']))
     os.system('find ' + str(args_dict['alignments']) + ' ! -name *_final.bam ! -name *_final.sam ! -name *_final_Log.final.out -maxdepth 1 -type f -delete' + str(args_dict['log']))
+
+def clean_directories(args_dict):
+
+    os.system('rm -r ' + str(args_dict['intermediate_references']) + str(args_dict['log']))
 
 """
 DESCRIPTION:
@@ -133,6 +136,7 @@ def run_seRNAseq(args_dict):
 
         #Align single-end RNAseq reads
         parallelize(se_align, files, args_dict)
+        clean_directories(args_dict)
 
         return args_dict
 
@@ -162,7 +166,8 @@ def run_peRNAseq(args_dict):
         else:
             #Align paired-end RNAseq reads
             parallelize_pe(pe_align, files, args_dict)
-
+            clean_directories(args_dict)
+            
         return args_dict
 
     except:

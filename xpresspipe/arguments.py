@@ -167,7 +167,7 @@ def check_inputs(args_dict):
     else:
         cdt = datetime.datetime.now()
         args_dict['log'] = ' >> ' + str(args_dict['log_loc']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + '.log 2>&1'
-        args_dict['log_file'] = str(args_dict['log_loc']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + '.log'
+        args_dict['log_file'] = str(args_dict['log_loc']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's.log'
 
     return args_dict
 
