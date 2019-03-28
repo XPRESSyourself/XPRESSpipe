@@ -110,7 +110,7 @@ def main(args=None):
         args_dict['create_refFlats'] = True
         #Create STAR reference
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
-        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
         #Truncate transcript reference
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(args_dict['output']), sep='\t', return_files=False)
         #Flatten transcript reference files
@@ -120,7 +120,7 @@ def main(args=None):
     elif args.cmd == 'makeReference':
         print('Creating reference files...')
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
-        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
         check_process(args_dict['log_file'], msg_complete(), 'MAKE REFERENCE')
 
     elif args.cmd == 'truncate':

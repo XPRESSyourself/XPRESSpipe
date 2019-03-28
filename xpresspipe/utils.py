@@ -142,18 +142,18 @@ output_directory= Path to output directory (empty directory)
 fasta_files= Path to genome fasta files
 gtf= Path and file name of reference gtf to build reference with
 """
-def create_reference(output_directory, fasta_directory, gtf, threads=1, sjdbOverhang=100):
+def create_reference(output_directory, fasta_directory, gtf, log, threads=1, sjdbOverhang=100):
 
     #Create output directory
     output_directory = check_directories(output_directory)
     fasta_directory = check_directories(fasta_directory)
 
-    os.system('mkdir ' + str(output_directory) + 'genome' + str(args_dict['log']))
+    os.system('mkdir ' + str(output_directory) + 'genome' + str(log))
 
     fasta_list = get_fasta(fasta_directory)
 
     #Create reference
-    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang ' + str(sjdbOverhang) + ' --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads) + str(args_dict['log']))
+    os.system('STAR --runMode genomeGenerate --genomeDir ' + str(output_directory) + 'genome --genomeFastaFiles ' + str(fasta_list) + ' --sjdbOverhang ' + str(sjdbOverhang) + ' --sjdbGTFfile ' + str(gtf) + ' --runThreadN ' + str(threads) + str(log))
 
 """
 DESCRIPTION: Create MultiQC processing summary from all files in args_dict output
