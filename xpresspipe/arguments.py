@@ -19,19 +19,18 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-"""
-IMPORT DEPENDENCIES
-"""
-import os, sys
+"""IMPORT DEPENDENCIES"""
+import os
+import sys
 import argparse
 import datetime
 import multiprocessing
 from textwrap import dedent
+
+"""IMPORT INTERNAL DEPENDENCIES"""
 from .utils import check_directories
 
-"""
-INITIALIZATION PARAMETERS
-"""
+"""INITIALIZATION PARAMETERS"""
 #Retrieve path for scripts used in this pipeline, appended to argument dictionary for every function
 __path__, xpresspipe_arguments = os.path.split(__file__)
 
@@ -40,59 +39,56 @@ DEFAULT_READ_MIN = 18
 DEFAULT_READ_QUALITY = 28
 DEFAULT_MAX_PROCESSORS = None
 
-descrip = """\
-The XPRESSpipe sub-modules can be accessed by executing:
-    'xpresspipe module_name arg1 arg2 ...'
+description_table = """\
+    The XPRESSpipe sub-modules can be accessed by executing:
+        'xpresspipe module_name arg1 arg2 ...'
 
-Sub-module help can be displayed by executing:
+    Sub-module help can be displayed by executing:
     'xpresspipe module_name --help'
 
-Sub-module descriptions:
-    +-----------------------+---------------------------------------------------------------------------------------+
-    |    seRNAseq           |   Trim, align, count, and perform quality control on single-end RNAseq raw data       |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    peRNAseq           |   Trim, align, count, and perform quality control on paired-end RNAseq raw data       |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    riboprof           |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
-    |                       |   raw data                                                                            |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    trim               |   Trim RNAseq reads of adaptors and for quality                                       |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    align              |   Align RNAseq reads to reference genome (memory intensive)                           |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    count              |   Get counts and a counts table from aligned output                                   |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    normalizeMatrix    |   Perform normalization on sequence matrix                                            |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    diffxpress         |   Perform DESeq2 differential expression analysis on counts matrix                    |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    metagene           |   Compile summarized metagene profiles for each sample in a directory                 |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    readDistribution   |   Compile summarized distributions for each sample in a directory                     |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    periodicity        |   Calculate periodicity of transcripts using the most abundant transcript length      |
-    |                       |   for alignments to map per sample                                                    |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    curateReference    |   Run makeReference, truncate, and makeFlat in a single command                       |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    makeReference      |   Create a STAR reference directory (memory intensive)                                |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    truncate           |   Create a coding-only and coding-only truncated reference GTF                        |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    makeFlat           |   Grab flattened reference file from UCSC based on organism ID                        |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
-    |                       |   Run a BLAST search on sequences you choose to use as depletion probes to verify     |
-    |                       |   they are rRNAs)                                                                     |
-    |-----------------------|---------------------------------------------------------------------------------------|
-    |    convertNames       |   Convert gene identifiers using a GTF reference                                      |
-    +-----------------------+---------------------------------------------------------------------------------------+
-
+    Sub-module descriptions:
+        +-----------------------+---------------------------------------------------------------------------------------+
+        |    seRNAseq           |   Trim, align, count, and perform quality control on single-end RNAseq raw data       |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    peRNAseq           |   Trim, align, count, and perform quality control on paired-end RNAseq raw data       |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    riboprof           |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
+        |                       |   raw data                                                                            |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    trim               |   Trim RNAseq reads of adaptors and for quality                                       |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    align              |   Align RNAseq reads to reference genome (memory intensive)                           |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    count              |   Get counts and a counts table from aligned output                                   |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    normalizeMatrix    |   Perform normalization on sequence matrix                                            |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    diffxpress         |   Perform DESeq2 differential expression analysis on counts matrix                    |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    metagene           |   Compile summarized metagene profiles for each sample in a directory                 |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    readDistribution   |   Compile summarized distributions for each sample in a directory                     |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    periodicity        |   Calculate periodicity of transcripts using the most abundant transcript length      |
+        |                       |   for alignments to map per sample                                                    |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    curateReference    |   Run makeReference, truncate, and makeFlat in a single command                       |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    makeReference      |   Create a STAR reference directory (memory intensive)                                |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    truncate           |   Create a coding-only and coding-only truncated reference GTF                        |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    makeFlat           |   Grab flattened reference file from UCSC based on organism ID                        |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
+        |                       |   Run a BLAST search on sequences you choose to use as depletion probes to verify     |
+        |                       |   they are rRNAs)                                                                     |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    convertNames       |   Convert gene identifiers using a GTF reference                                      |
+        +-----------------------+---------------------------------------------------------------------------------------+
 """
 
-"""
-DESCRIPTION: Check arguments provided by user
-"""
+"""Check arguments provided by user"""
 def check_inputs(args_dict):
 
     #Check user-provided directory formatting
@@ -171,9 +167,7 @@ def check_inputs(args_dict):
 
     return args_dict
 
-"""
-DESCRIPTION: Get user arguments to determine sub-module to run and arguments provided
-"""
+"""Get user arguments to determine sub-module to run and arguments provided"""
 def get_arguments(args, __version__):
 
     if args is None:
@@ -182,14 +176,13 @@ def get_arguments(args, __version__):
     """
     INITIALIZE PARSER
     """
-    parser = argparse.ArgumentParser(prog='XPRESSpipe', description=dedent(descrip), formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(prog='XPRESSpipe', description=dedent(description_table), formatter_class=argparse.RawTextHelpFormatter)
     #optional arguments
     parser.add_argument(
         '-v', '--version',
         help='Print installed version to stout',
         action='version',
-        version='%(prog)s ' + str(__version__)
-        )
+        version='%(prog)s ' + str(__version__))
 
     """
     MODULE SUBPARSER PROGRAMS
@@ -199,7 +192,10 @@ def get_arguments(args, __version__):
     """
     SERNASEQ SUBPARSER
     """
-    se_parser = subparser.add_parser('seRNAseq', description='Trim, align, count, and perform quality control on single-end RNAseq raw data', add_help=False)
+    se_parser = subparser.add_parser(
+        'seRNAseq',
+        description='Trim, align, count, and perform quality control on single-end RNAseq raw data',
+        add_help=False)
     #Required arguments
     se_reqs = se_parser.add_argument_group('required arguments')
     se_reqs.add_argument(
@@ -1146,7 +1142,7 @@ def get_arguments(args, __version__):
     COLLECT PARSED ARGUMENTS AND PREPARE FOR DOWNSTREAM USE
     """
     #Print help if no arguments/submodules specified
-    if len(sys.argv[1:])==0:
+    if len(sys.argv[1:]) == 0:
         parser.print_help()
         parser.exit()
 

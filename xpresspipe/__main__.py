@@ -19,11 +19,12 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-"""
-IMPORT DEPENDENCIES
-"""
-import os, sys
+"""IMPORT DEPENDENCIES"""
+import os
+import sys
 import pandas as pd
+
+"""IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__
 from .messages import *
 from .arguments import get_arguments
@@ -36,265 +37,344 @@ from .quality import make_metagene, make_readDistributions, make_periodicity
 from .parallel import get_cores
 from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf, diff_xpress
 
-"""
-DESCRIPTION: Main function to call necessary functions for sub-modules
+"""Main function to call necessary functions for sub-modules
 
-ASSUMPTIONS:
-Proper arguments are provided where some user renaming of files may be required
+ASSUMPTIONS: Proper arguments are provided where some user renaming of files may be required
 """
 def main(args=None):
 
-    #Print license information
-    #msg_license()
+    # Read in arguments
     args, args_dict = get_arguments(args, __version__)
 
-    #Should have already seen check_directory() so should have a trailing '/'
+    # Should have already seen check_directory() so should have a trailing '/'
     if 'input' in args_dict and str(args_dict['input']).endswith('/'):
         unzip_files(args_dict['input'])
 
-    #Execute corresponding functions determined by arguments provided by user
+    # Execute corresponding functions determined by arguments provided by user
     if args.cmd == 'trim':
         print('Trimming reads...')
+
+        # Trim reads
         run_trim(args_dict)
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'TRIM')
 
     elif args.cmd == 'align':
-        #Align
         print('Aligning reads to reference...')
+
+        # Align
         if args_dict['type'].upper() == 'SE':
             args_dict = run_seRNAseq(args_dict)
         elif args_dict['type'].upper() == 'PE':
             args_dict = run_peRNAseq(args_dict)
         else:
             raise Exception('Invalid type argument provided')
-        #Get other formatted files
+
+        # Get other formatted files
         args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
 
     elif args.cmd == 'count':
         print('Counting alignments...')
-        #Count reads for each alignment file
+
+        # Count reads for each alignment file
         args_dict = count_reads(args_dict)
-        #Collect counts into a single table
+
+        # Collect counts into a single table
         print('Collecting and collating counts...')
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'COUNT')
 
     elif args.cmd == 'diffxpress':
         print('Performing differential expression analysis...')
+
+        # Run differential expression analysis via DESeq2
         diff_xpress(str(args_dict['input']), str(args_dict['sample']), equation=str(args_dict['design']))
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'DIFFERENTIAL EXPRESSION')
 
     elif args.cmd == 'metagene':
         print('Performing metagene analysis on SAM files...')
+
+        # Perform metagene analysis
         make_metagene(args_dict)
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'METAGENE')
 
     elif args.cmd == 'readDistribution':
         print('Performing read distribution analysis on fastq files...')
+
+        # Generate read distribution summaries
         make_readDistributions(args_dict)
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'READ DISTRIBUTION')
 
     elif args.cmd == 'periodicity':
         print('Performing periodicity analysis on most abundant read length in SAM files...')
+
+        # Generate periodicity summaries
         make_periodicity(args_dict)
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'PERIODICITY')
 
     elif args.cmd == 'curateReference':
         print('Curating reference')
-        args_dict['create_refFlats'] = True
+
         #Create STAR reference
+        args_dict['create_refFlats'] = True
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
         create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+
         #Truncate transcript reference
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(args_dict['output']), sep='\t', return_files=False)
+
         #Flatten transcript reference files
         create_flat(args_dict['output'], args_dict['log'])
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
 
     elif args.cmd == 'makeReference':
         print('Creating reference files...')
+
+        # Generate reference
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
         create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'MAKE REFERENCE')
 
     elif args.cmd == 'truncate':
         print('Formatting coding only and truncated reference files...')
+
+        # Run reference truncation
         output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
         if 'create_refFlats' in args_dict and args_dict['create_refFlats'] == True:
             create_flat(str(output_path), args_dict['log'])
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
 
     elif args.cmd == 'makeFlat':
         print('Formatting coding only and truncated reference files...')
+
+        # Generate refFlat file
         create_flat(args_dict['input'], args_dict['log'])
+
+        # Check log file for errors and exceptions
         #check_process(args_dict['log_file'], msg_complete(), 'MAKE REFFLAT')
 
     elif args.cmd == 'rrnaProbe':
-        #Get files to probe
+        # Get files to probe
         probe_list = get_probe_files(args_dict, '.zip')
-        #Run rrna_prober, output to outputDir
+
+        # Run rrna_prober, output to outputDir
         print('Probing for most over-represented read sequences...')
-        probe_out = rrnaProbe(probe_list, args_dict['min_overlap']) #use inputDir to get FASTQC files and output to outputDir/analysis
-        #Output summary
+        probe_out = rrnaProbe(probe_list, args_dict['min_overlap']) # Use inputDir to get FASTQC files and output to outputDir/analysis
+
+        # Output summary
         with open(args_dict['output'] + 'rrnaProbe_output.txt', "w") as text_file:
             print(probe_out, file=text_file)
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'RRNA PROBE')
 
     elif args.cmd == 'convertNames':
-        #Convert row names in dataframe
         print('Converting row names...')
+
+        # Convert row names in dataframe
         if str(args_dict['input']).endswith('.csv'):
             delim = ','
             suf = '.csv'
         else:
             delim = '\t'
             suf = '.tsv'
+
         data = pd.read_csv(str(args_dict['input']), sep=delim)
-        data = convert_names_gtf(data, args_dict['gtf'], orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'], new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'], refill=args_dict['refill'], sep='\t')
+        data = convert_names_gtf(data, args_dict['gtf'],
+                                orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'],
+                                new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'],
+                                refill=args_dict['refill'], sep='\t')
         data.to_csv(str(args_dict['input'])[:-4] + '_renamed' + str(suf), sep=delim, index=False)
+
+        # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'CONVERT NAMES')
 
     elif args.cmd == 'normalizeMatrix':
-        #Run in sample normalization
         print('Normalizing matrix...')
+
+        #Run in sample normalization
         run_normalization(args_dict)
+
+        # Check log file for errors and exceptions
         #No os.sys call, no log created when run on own
         #check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
 
     elif args.cmd == 'seRNAseq':
         args_dict['type'] = 'SE'
-        #Trim
+
+        # Trim
         msg_trim()
         args_dict = run_trim(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'TRIM')
-        #Align
+        check_process(args_dict['log_file'], msg_complete(), 'TRIM') # Check log file for errors and exceptions
+
+        # Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_seRNAseq(args_dict)
-        #Get other formatted files
+
+        # Get other formatted files
         args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
-        #Count reads for each alignment file
+        check_process(args_dict['log_file'], msg_complete(), 'ALIGN') # Check log file for errors and exceptions
+
+        # Count reads for each alignment file
         msg_count()
         args_dict = count_reads(args_dict)
-        #Collect counts into a single table
+
+        # Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'COUNT')
-        #Normalize
+        check_process(args_dict['log_file'], msg_complete(), 'COUNT') # Check log file for errors and exceptions
+
+        # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
-        #Run quality control
+        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
+
+        # Run quality control
         msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
         make_metagene(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL')
+        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
+
+        # Get multiqc report and print close message
         get_summary(args_dict)
         msg_finish()
 
     elif args.cmd == 'peRNAseq':
         args_dict['type'] = 'PE'
-        #Trim
+
+        # Trim
         msg_trim()
         args_dict = run_trim(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'TRIM')
-        #Align
+        check_process(args_dict['log_file'], msg_complete(), 'TRIM') # Check log file for errors and exceptions
+
+        # Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_peRNAseq(args_dict)
-        #Get other formatted files
+        # Get other formatted files
         args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
-        #Count reads for each alignment file
+        check_process(args_dict['log_file'], msg_complete(), 'ALIGN') # Check log file for errors and exceptions
+
+        # Count reads for each alignment file
         msg_count()
         args_dict = count_reads(args_dict)
-        #Collect counts into a single table
+
+        # Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'COUNT')
-        #Normalize
+        check_process(args_dict['log_file'], msg_complete(), 'COUNT') # Check log file for errors and exceptions
+
+        # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
-        #Run quality control
+        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
+
+        # Run quality control
         msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
         make_metagene(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL')
+        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
+
+        # Get multiqc report and print close message
         get_summary(args_dict)
         msg_finish()
 
     elif args.cmd == 'riboprof':
         args_dict['type'] = 'SE'
-        #Trim
+
+        # Trim
         msg_trim()
         args_dict = run_trim(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'TRIM')
-        #Align
+        check_process(args_dict['log_file'], msg_complete(), 'TRIM') # Check log file for errors and exceptions
+
+        # Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
         args_dict = run_seRNAseq(args_dict)
-        #Get other formatted files
+        # Get other formatted files
         args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
-        #Count reads for each alignment file
+        check_process(args_dict['log_file'], msg_complete(), 'ALIGN') # Check log file for errors and exceptions
+
+        # Count reads for each alignment file
         msg_count()
         args_dict = count_reads(args_dict)
-        #Collect counts into a single table
+
+        # Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'COUNT')
-        #Normalize
+        check_process(args_dict['log_file'], msg_complete(), 'COUNT') # Check log file for errors and exceptions
+
+        # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE')
-        #Run quality control
+        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
+
+        # Run quality control
         msg_quality()
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
         make_periodicity(args_dict)
         make_metagene(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL')
+        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
+
+        # Get multiqc report and print close message
         get_summary(args_dict)
         msg_finish()
 
     else:
-        raise Exception("Invalid function processing function provided.")
+        raise Exception('Invalid function processing function provided.')
 
-"""
-DESCRIPTION: Run main
-"""
-if __name__ == "__main__":
+"""Run main"""
+if __name__ == '__main__':
 
     sys.exit(main() or 0)

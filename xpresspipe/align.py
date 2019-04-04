@@ -51,8 +51,8 @@ def first_pass_star(
         + ' --outSAMstrandField intronMotif' \
         + ' --outSAMtype None' \
         + ' --outSAMmode None' \
-        + str(args_dict['log']) \ # Record log output (must go last in command)
-        )
+        + str(args_dict['log'])) # Record log output (must go last in command)
+
 
 """Build intermediate STAR alignment reference using splice junction annotations from first pass"""
 def build_star_splice_junction_intermediate(
@@ -61,8 +61,7 @@ def build_star_splice_junction_intermediate(
     os.system('mkdir' \
         + ' ' \
         + str(args_dict['intermediate_references']) + str(output) \ # Make directory for currently processed file
-        + str(args_dict['log']) \ # Record log output (must go last in command)
-        )
+        + str(args_dict['log'])) # Record log output (must go last in command)
     os.system('STAR' \
         + ' --runMode genomeGenerate' \
         + ' --runThreadN ' + str(args_dict['threads']) \
@@ -70,8 +69,8 @@ def build_star_splice_junction_intermediate(
         + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) \ # Input chromosomal fasta files for reference building
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) \ # Location for output revised reference
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \ # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
-        + str(args_dict['log']) \ # Record log output (must go last in command)
-        )
+        + str(args_dict['log'])) # Record log output (must go last in command)
+
 
 """Run second pass STAR alignment to map reads splice-aware"""
 def second_pass_star(
@@ -101,8 +100,8 @@ def second_pass_star(
         + ' --outSAMunmapped Within' \
         + ' --outSAMtype SAM' \
         + ' --outSAMheaderHD @HD VN:1.4' \
-        + str(args_dict['log']) \
-        )
+        + str(args_dict['log']))
+
 
 """Sort reads per file by chromosome position and keep only unique mappers"""
 def alignment_sort(
@@ -113,39 +112,34 @@ def alignment_sort(
         + ' --threads ' + str(args_dict['threads']) \
         + ' ' + str(args_dict['alignments']) + str(output) + '_final_Aligned.out.sam' \
         + ' -o ' + str(args_dict['alignments']) + str(output) + '_sorted.sam' \
-        + str(args_dict['log']) \
-        )
+        + str(args_dict['log']))
 
     # only take unique mappers (q = 255)
     os.system('samtools view' \
         + ' -h -q 255' \
         + ' --threads ' + str(args_dict['threads']) \
         + ' ' + str(args_dict['alignments']) + str(output) + '_sorted.sam' \
-        + ' > ' + str(args_dict['alignments']) + str(output) + '_final.sam' \
-        )
+        + ' > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
 
     # make bam file
     os.system('samtools view' \
         + ' -S -b' \
         + ' --threads ' + str(args_dict['threads']) \
         + ' ' + str(args_dict['alignments']) + str(output) + '_final.sam' \
-        + ' > ' + str(args_dict['alignments']) + str(output) + '_final.bam'
-        )
+        + ' > ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
 """Remove all intermediate alignment files and references after alignment is complete"""
 def remove_intermediates(args_dict):
 
     os.system('find' \
         + ' ' + str(args_dict['alignments']) + ' ! -name *_final.bam ! -name *_final.sam ! -name *_final_Log.final.out -maxdepth 1 -type f -delete' \ # Only keep files matching pattern
-        + str(args_dict['log'])
-        )
+        + str(args_dict['log']))
 
 def clean_directories(args_dict):
 
     os.system('rm -r' \
         + ' ' + str(args_dict['intermediate_references']) \
-        + str(args_dict['log'])
-        )
+        + str(args_dict['log']))
 
 """Single-end RNA-seq pipeline"""
 def se_align(args):
