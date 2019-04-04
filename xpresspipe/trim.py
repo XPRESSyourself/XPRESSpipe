@@ -19,23 +19,22 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-"""
-IMPORT DEPENDENCIES
-"""
-import os, sys
+"""IMPORT DEPENDENCIES"""
+import os
+import sys
+
+"""IMPORT INTERNAL DEPENDENCIES"""
 from .utils import get_files, add_directory
 from .parallel import parallelize, parallelize_pe
 
-"""
-DESCRIPTION: Determine sequencing type based on adaptor list
-"""
+"""Determine sequencing type based on adaptor list"""
 def determine_type(adaptor_list):
 
     try:
         if adaptor_list == None:
             return 'AUTOSE'
         else:
-            #Convert case
+            # Convert case
             adaptor_list = [x.upper() for x in adaptor_list]
             if len(adaptor_list) == 1:
                 if 'NONE' in adaptor_list:
@@ -55,89 +54,129 @@ def determine_type(adaptor_list):
     except:
         raise Exception('Could not determine sequencing type from adaptor list during read trimming')
 
-"""
-DESCRIPTION: Trim adaptors via auto-detect
-"""
+"""Trim adaptors via auto-detect"""
 def auto_trim(args):
 
-    file, args_dict = args[0], args[1]
+    file, args_dict = args[0], args[1] # Parse args
 
-    os.system('fastp -f 1 --thread ' + str(args_dict['threads']) + ' -i ' + str(args_dict['input']) + file + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + file + ' -l ' + str(args_dict['min_length']) + ' -q ' + str(args_dict['quality']) + ' -j ' + str(args_dict['trimmed_fastq']) + file[:-6] + 'fastp.json -h ' + str(args_dict['trimmed_fastq']) + file[:-6] + 'fastp.html' + str(args_dict['log']))
+    os.system('fastp' \
+        + ' -f 1' \
+        + ' --thread ' + str(args_dict['threads']) \
+        + ' -i ' + str(args_dict['input']) + str(file) \
+        + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file) \
+        + ' -l ' + str(args_dict['min_length']) \
+        + ' -q ' + str(args_dict['quality']) \
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.json' \
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.html' \
+        + str(args_dict['log']))
 
-"""
-DESCRIPTION: Trim polyX adaptors
-"""
+"""Trim polyX adaptors"""
 def polyx_trim(args):
 
-    file, args_dict = args[0], args[1]
+    file, args_dict = args[0], args[1] # Parse args
 
-    os.system('fastp -f 1 --thread ' + str(args_dict['threads']) + ' -i ' + str(args_dict['input']) + file + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + file + ' --trim_poly_x -l ' + str(args_dict['min_length']) + ' -q ' + str(args_dict['quality']) + ' -j ' + str(args_dict['trimmed_fastq']) + file[:-6] + 'fastp.json -h ' + str(args_dict['trimmed_fastq']) + file[:-6] + 'fastp.html' + str(args_dict['log']))
+    os.system('fastp' \
+        + ' -f 1' \
+        + ' --thread ' + str(args_dict['threads']) \
+        + ' -i ' + str(args_dict['input']) + file \
+        + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file) \
+        + ' --trim_poly_x' \
+        + ' -l ' + str(args_dict['min_length']) \
+        + ' -q ' + str(args_dict['quality']) \
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.json' \
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.html' \
+        + str(args_dict['log']))
 
-"""
-DESCRIPTION: Trim SE adaptors
-"""
+"""Trim SE adaptors"""
 def se_trim(args):
 
-    file, args_dict = args[0], args[1]
+    file, args_dict = args[0], args[1] # Parse args
 
-    os.system('fastp -f 1 --thread ' + str(args_dict['threads']) + ' -i ' + str(args_dict['input']) + file + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + file + ' -a ' + str(args_dict['adaptors'][0]) + ' -l ' + str(args_dict['min_length']) + ' -q ' + str(args_dict['quality']) + ' -j ' + str(args_dict['trimmed_fastq']) + file[:-6] + 'fastp.json -h ' + str(args_dict['trimmed_fastq']) + file[:-6] + 'fastp.html' + str(args_dict['log']))
+    os.system('fastp' \
+    + ' -f 1' \
+    + ' --thread ' + str(args_dict['threads']) \
+    + ' -i ' + str(args_dict['input']) + str(file) \
+    + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file) \
+    + ' -a ' + str(args_dict['adaptors'][0]) \
+    + ' -l ' + str(args_dict['min_length']) \
+    + ' -q ' + str(args_dict['quality']) \
+    + ' -j ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.json' \
+    + ' -h ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.html' \
+    + str(args_dict['log']))
 
-"""
-DESCRIPTION: Auto-detect and trim PE adaptors
-"""
-def autope_trim(args):
+"""Auto-detect and trim PE adaptors"""
+def auto_pe_trim(args):
 
-    file1, file2, args_dict = args[0], args[1], args[2]
+    file1, file2, args_dict = args[0], args[1], args[2] # Parse args
 
-    os.system('fastp -f 1 --thread ' + str(args_dict['threads']) + ' -i ' + str(args_dict['input']) + file1 + ' -I ' + str(args_dict['input']) + file2 + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + file1 + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + file2 + ' -l ' + str(args_dict['min_length']) + ' -q ' + str(args_dict['quality']) + ' -j ' + str(args_dict['trimmed_fastq']) + file1[:-6] + 'fastp.json -h ' + str(args_dict['trimmed_fastq']) + file1[:-6] + 'fastp.html' + str(args_dict['log']))
+    os.system('fastp' \
+        + ' -f 1' \
+        + ' --thread ' + str(args_dict['threads']) \
+        + ' -i ' + str(args_dict['input']) + str(file1) \
+        + ' -I ' + str(args_dict['input']) + str(file2) \
+        + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file1) \
+        + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file2) \
+        + ' -l ' + str(args_dict['min_length']) \
+        + ' -q ' + str(args_dict['quality']) \
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.json' \
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.html' \
+        + str(args_dict['log']))
 
-"""
-DESCRIPTION: Trim PE adaptors
-"""
+"""Trim PE adaptors"""
 def pe_trim(args):
 
-    file1, file2, args_dict = args[0], args[1], args[2]
+    file1, file2, args_dict = args[0], args[1], args[2] # Parse args
 
-    os.system('fastp -f 1 --thread ' + str(args_dict['threads']) + ' -i ' + str(args_dict['input']) + file1 + ' -I ' + str(args_dict['input']) + file2 + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + file1 + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + file2 + ' -a ' + str(args_dict['adaptors'][0]) + ' --adapter_sequence_r2 ' + str(args_dict['adaptors'][1]) + ' -l ' + str(args_dict['min_length']) + ' -q ' + str(args_dict['quality']) + ' -j ' + str(args_dict['trimmed_fastq']) + file1[:-6] + 'fastp.json -h ' + str(args_dict['trimmed_fastq']) + file1[:-6] + 'fastp.html' + str(args_dict['log']))
+    os.system('fastp' \
+        + ' -f 1' \
+        + ' --thread ' + str(args_dict['threads']) \
+        + ' -i ' + str(args_dict['input']) + str(file1) \
+        + ' -I ' + str(args_dict['input']) + str(file2) \
+        + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file1) \
+        + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file2) \
+        + ' -a ' + str(args_dict['adaptors'][0]) + ' --adapter_sequence_r2 ' + str(args_dict['adaptors'][1]) \
+        + ' -l ' + str(args_dict['min_length']) \
+        + ' -q ' + str(args_dict['quality']) \
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.json' \
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.html' \
+        + str(args_dict['log']))
 
-"""
-DESCRIPTION: Trim RNAseq reads of adaptors and for quality
-"""
+"""Trim RNAseq reads of adaptors and for quality"""
 def run_trim(args_dict):
 
     try:
-        #Add output directories
+        # Add output directories
         args_dict = add_directory(args_dict, 'output', 'trimmed_fastq')
 
-        #Get list of files to trim based on acceptable file types
+        # Get list of files to trim based on acceptable file types
         files = get_files(args_dict['input'], ['.fastq','.fq','.txt'])
 
-        #Determine sequencing type based on args_dict['adaptors']
+        # Determine sequencing type based on args_dict['adaptors']
         if 'type' not in args_dict:
             type = determine_type(args_dict['adaptors'])
         else:
             type = args_dict['type']
 
-        #Auto-detect and trim adaptors
+        # Auto-detect and trim adaptors
         if type == 'AUTOSE':
             parallelize(auto_trim, files, args_dict)
 
-        #Trim polyX adaptors, assumes single-end RNAseq reads
+        # Trim polyX adaptors, assumes single-end RNAseq reads
         if type == 'POLYX':
             parallelize(polyx_trim, files, args_dict)
 
-        #Trim single-end RNAseq reads
+        # Trim single-end RNAseq reads
         if type == 'SE':
             parallelize(se_trim, files, args_dict)
 
-        #Auto-detect adaptors for paired-end reads
+        # Auto-detect adaptors for paired-end reads
         if type == 'AUTOPE':
             if len(files) % 2 != 0:
                 raise Exception('An uneven number of paired-end files were specified in the input directory')
             else:
-                parallelize_pe(autope_trim, files, args_dict)
+                parallelize_pe(auto_pe_trim, files, args_dict)
 
-        #Trim paired-end RNAseq reads
+        # Trim paired-end RNAseq reads
         if type == 'PE':
             if len(files) % 2 != 0:
                 raise Exception('An uneven number of paired-end files were specified in the input directory')

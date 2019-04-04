@@ -30,7 +30,9 @@ from .messages import *
 from .arguments import get_arguments
 from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq
-from .count import create_bed, create_bigwig, count_reads, collect_counts, run_normalization
+from .count import count_reads, collect_counts
+from .normalize import run_normalization
+from .convert import create_bed, create_bigwig
 from .rrnaprobe import rrnaProbe
 from .utils import get_probe_files, create_reference, get_summary, create_flat, unzip_files
 from .quality import make_metagene, make_readDistributions, make_periodicity

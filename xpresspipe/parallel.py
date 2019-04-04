@@ -19,17 +19,14 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-"""
-IMPORT DEPENDENCIES
-"""
+"""IMPORT DEPENDENCIES"""
 import math
 import concurrent.futures
 from multiprocessing import cpu_count
 
-"""
-DESCRIPTION: Determine number of processors to use
-"""
-def get_cores(args_dict, mod_workers):
+"""Determine number of processors to use"""
+def get_cores(
+    args_dict, mod_workers):
 
     if 'max_processors' in args_dict and args_dict['max_processors'] != None:
         cores = args_dict['max_processors']
@@ -43,18 +40,14 @@ def get_cores(args_dict, mod_workers):
 
     return cores, workers
 
-"""
-DESCRIPTION: Run function and files on pools
-"""
+"""Run function and files on pools"""
 def run_pools(func, args_iter, args_dict):
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=args_dict['workers']) as executor:
         for file in zip(args_iter, executor.map(func, args_iter)):
             print(file, "has been processed.")
 
-"""
-DESCRIPTION: Parallelize function on list of files
-"""
+"""Parallelize function on list of files"""
 def parallelize(func, file_list, args_dict, mod_workers=False):
 
     args_iter = ([file, args_dict] for file in file_list)
@@ -63,12 +56,10 @@ def parallelize(func, file_list, args_dict, mod_workers=False):
 
     run_pools(func, args_iter, args_dict)
 
-"""
-DESCRIPTION: Parallelize function on list of files for PE data
-"""
+"""Parallelize function on list of files for PE data"""
 def parallelize_pe(func, file_list, args_dict, mod_workers=False):
 
-    #Pair files for paired-end processing
+    # Pair files for paired-end processing
     c1 = 0
     args_iter = []
     for c in range(int(len(file_list)/2)):

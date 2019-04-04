@@ -20,20 +20,22 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 #All ASCII art from http://ascii.co.uk/art
-import os, sys
+"""IMPORT DEPENDENCIES"""
+import os
+import sys
 import time
 
-"""
-FUNCTIONS
-"""
+"""Check progress report for errors and exceptions"""
 def check_process(log_file, message_func, step):
 
     try:
-        os.system('[[ $(cat ' + log_file + ' | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]] || { echo "Errors or exceptions were present in ' + step + ', please refer to the ' + str(log_file[log_file.rfind('/') + 1:]) + ' file for information concerning errors"; exit 1; }')
+        os.system('[[ $(cat ' + log_file + ' | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]]' \
+        + ' || { echo "Errors or exceptions were present in ' + step + ', please refer to the ' + str(log_file[log_file.rfind('/') + 1:]) \
+        + ' file for information concerning errors"; exit 1; }')
     except:
         message_func
 
-#show license information
+"""Show license information"""
 def msg_license():
     print("""
 XPRESSpipe
@@ -56,12 +58,13 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
     """)
 
+"""Print completed process message"""
 def msg_complete():
     print("""Process complete.
     \n************************
     """)
 
-#trim submodule
+"""Trim submodule message"""
 def msg_trim():
     print("""\nXPRESSpipe initialized...
         \nAdaptor and quality trimming...\n
@@ -74,7 +77,7 @@ def msg_trim():
 
     time.sleep(1)
 
-#align submodule
+"""Align submodule message"""
 def msg_align():
     print("""Aligning...\n
                                                     __________
@@ -115,7 +118,7 @@ def msg_align():
 
     time.sleep(1)
 
-#count submodule
+"""Count submodule message"""
 def msg_count():
     print("""Generating count tables...\n
     1...2...3...4...5...6...7...8...9...
@@ -150,7 +153,7 @@ def msg_count():
         \n""")
     time.sleep(1)
 
-#Normalize
+"""Normalize submodule message"""
 def msg_normalize():
     print("""Normalizing counts based on parameters provided...\n
                            ___,
@@ -178,7 +181,7 @@ _[_]_[_]_[_]_[__j__j__j__j_]_[_]_[_]_[_]_[_]_
 
     time.sleep(1)
 
-#Quality control
+"""Quality control submodule message"""
 def msg_quality():
     print("""Performing quality control on the processed sequencing data...\n
       _               _               _
@@ -191,7 +194,7 @@ def msg_quality():
 
     time.sleep(1)
 
-#final message
+"""Final message"""
 def msg_finish():
     print("""Quality control complete\n
              __

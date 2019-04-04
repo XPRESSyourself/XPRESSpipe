@@ -268,8 +268,8 @@ def get_arguments(args, __version__):
         required=False)
     se_opts.add_argument(
         '--method',
-        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<normalization_type>',
+        help='Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<RPM, TPM, RPKM, FPKM, LOG>',
         type=str,
         required=False)
     se_opts.add_argument(
@@ -376,8 +376,8 @@ def get_arguments(args, __version__):
         required=False)
     pe_opts.add_argument(
         '--method',
-        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<normalization_type>',
+        help='Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<RPM, TPM, RPKM, FPKM, LOG>',
         type=str,
         required=False)
     pe_opts.add_argument(
@@ -484,8 +484,8 @@ def get_arguments(args, __version__):
         required=False)
     rp_opts.add_argument(
         '--method',
-        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar='<normalization_type>',
+        help='Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        metavar='<RPM, TPM, RPKM, FPKM, LOG>',
         type=str,
         required=False)
     rp_opts.add_argument(
@@ -715,8 +715,8 @@ def get_arguments(args, __version__):
         help='Show help message and exit')
     normalize_opts.add_argument(
         '--method',
-        help='Normalization method to perform (options: \"RPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a GTF reference file must be included',
-        metavar='<RPM, RPKM, FPKM, LOG>',
+        help='Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a GTF reference file must be included',
+        metavar='<RPM, TPM, RPKM, FPKM, LOG>',
         type=str,
         required=False)
     normalize_opts.add_argument(

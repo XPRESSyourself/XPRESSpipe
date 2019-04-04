@@ -19,13 +19,16 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+"""IMPORT DEPENDENCIES"""
 from setuptools import setup
 import re
 
+"""Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         fd.read(), re.MULTILINE).group(1)
 
+"""Setup arguments"""
 setup(
     name = 'XPRESSpipe',
     version = version,
@@ -41,8 +44,8 @@ setup(
     license = 'GPL-3.0',
     zip_safe = False,
     install_requires=[
-          
-      ],
+
+    ],
 
     entry_points = {
         'console_scripts': [

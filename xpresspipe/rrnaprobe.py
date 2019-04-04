@@ -19,17 +19,13 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-"""
-IMPORT DEPENDENCIES
-"""
+"""IMPORT DEPENDENCIES"""
 import os
 import re
 import sys
 from zipfile import ZipFile as zf
 
-"""
-DESCRIPTION: Get overrepresented sequences from a given FastQC zip file
-"""
+"""Get overrepresented sequences from a given FastQC zip file"""
 def get_overrep_seqs(zipfile):
     print('************')
     print(zipfile)
@@ -44,14 +40,14 @@ def get_overrep_seqs(zipfile):
         if datafilename == "":
             print ("No fastqc data file found in fastqc folder: " + zipfile)
             sys.exit(1)
-        # if execution makes it to here, should have a valid data filename
+        # If execution makes it to here, should have a valid data filename
         with folder.open(datafilename) as datafile:
             overrep_seqs = []
             store_flag = False
             for bytes_string in datafile:
                 line = str(bytes_string, 'utf-8').strip()
                 if line == ">>Overrepresented sequences	fail":
-                    #this means time to start storing lines
+                    # This means time to start storing lines
                     store_flag = True
                 elif store_flag and line == ">>END_MODULE":
                     break
@@ -68,11 +64,9 @@ def get_overrep_seqs(zipfile):
         sys.exit(1)
     return overrep_seqs
 
-"""
-DESCRIPTION: Check for a match of the sequence on right side of new with anywhere in old
-"""
+"""Check for a match of the sequence on right side of new with anywhere in old"""
 def getMatchRight(seq, freq, combined_seqs, min_ovlp):
-    #take the rightmost chars from the new seq
+    # Take the rightmost chars from the new seq
     match_chars = seq[-min_ovlp:]
     found = False
     to_remove = -1
@@ -85,7 +79,7 @@ def getMatchRight(seq, freq, combined_seqs, min_ovlp):
             if poss_match_len > len(seq):
                 poss_match_len = len(seq)
             if old_seq[:idx+min_ovlp] == seq[-poss_match_len:]:
-                #it's a match so remove old entry and create a new one with the combined seq+freq
+                # It's a match so remove old entry and create a new one with the combined seq+freq
                 to_add = [seq[:-poss_match_len] + old_seq, freq+combined_seqs[i][1]]
                 to_remove = i
                 found = True
@@ -93,11 +87,9 @@ def getMatchRight(seq, freq, combined_seqs, min_ovlp):
         combined_seqs.pop(to_remove)
     return combined_seqs,to_add,found
 
-"""
-DESCRIPTION: Check for a match of the sequence on left side of new with anywhere in old
-"""
+"""Check for a match of the sequence on left side of new with anywhere in old"""
 def getMatchLeft(seq, freq, combined_seqs, min_ovlp):
-    #take the leftmost chars from the new seq
+    # Take the leftmost chars from the new seq
     match_chars = seq[:min_ovlp]
     found = False
     to_remove = -1
@@ -118,9 +110,7 @@ def getMatchLeft(seq, freq, combined_seqs, min_ovlp):
         combined_seqs.pop(to_remove)
     return combined_seqs,to_add,found
 
-"""
-DESCRIPTION: Add entry to list of overrepresented sequences and count
-"""
+"""Add entry to list of overrepresented sequences and count"""
 def addEntry(new_entry, combined_entries, min_ovlp):
     new_seq = new_entry[0]
     new_freq = new_entry[1]
@@ -128,11 +118,11 @@ def addEntry(new_entry, combined_entries, min_ovlp):
     to_add = []
     for i in range(len(combined_entries)):
         old_seq = combined_entries[i][0]
-        #the new seq is a subset of the old one, so combine freqs
+        # The new seq is a subset of the old one, so combine freqs
         if new_seq in old_seq:
             combined_entries[i][1] += new_freq
             found = True
-        #the old seq is a subset of the new one, so combine freqs
+        # The old seq is a subset of the new one, so combine freqs
         elif old_seq in new_seq:
             combined_entries[i][1] += new_freq
             combined_entries[i][0] = new_seq
@@ -161,16 +151,14 @@ def countFreqs(combined_entries):
         count += entry[1]
     return count
 
-"""
-DESCRIPTION: Determine consensus overrepresented sequences between files from list
-"""
+"""Determine consensus overrepresented sequences between files from list"""
 def rrnaProbe(files_list, min_overlap):
     footprint_seqs = []
     for filename in files_list:
         footprint_seqs += get_overrep_seqs(filename)
 
     combined_fp = []
-    #put into uppercase format together, prep for combining (ribosome footprint sequences)
+    # Put into uppercase format together, prep for combining (ribosome footprint sequences)
     count = 0
     for seq,count in footprint_seqs:
         seq = seq.strip().upper()
@@ -186,4 +174,5 @@ def rrnaProbe(files_list, min_overlap):
             "##The sequences included are combined from FASTQC output so that if multiple sequences reported there are exact-match substring of one another, they will be combined and their counts summed\n"+\
             "##These sequences should be checked using a tool such as BLAST to ensure that the most represented sequences are not Illumina artifacts.\n" +\
             "#SEQ\tCOUNT\n"
+            
     return header + "\n".join(results_list)
