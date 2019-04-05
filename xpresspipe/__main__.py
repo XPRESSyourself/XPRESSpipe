@@ -29,13 +29,13 @@ from .__init__ import __version__
 from .messages import *
 from .arguments import get_arguments
 from .trim import run_trim
-from .align import run_seRNAseq, run_peRNAseq
+from .align import run_seRNAseq, run_peRNAseq, create_star_reference
 from .count import count_reads, collect_counts
 from .normalize import run_normalization
 from .convert import create_bed, create_bigwig
 from .rrnaprobe import rrnaProbe
-from .utils import get_probe_files, create_reference, get_summary, create_flat, unzip_files
-from .quality import make_metagene, make_readDistributions, make_periodicity
+from .utils import get_probe_files, unzip_files
+from .quality import get_multiqc_summary, make_metagene, make_readDistributions, make_periodicity, make_complexity
 from .parallel import get_cores
 from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf, diff_xpress
 
@@ -133,19 +133,25 @@ def main(args=None):
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'PERIODICITY')
 
+    elif args.cmd == 'complexity':
+        print('Performing library complexity analysis...')
+
+        # Generate library complexity summaries
+        make_complexity(args_dict)
+
+        # Check log file for errors and exceptions
+        check_process(args_dict['log_file'], msg_complete(), 'COMPLEXITY')
+
     elif args.cmd == 'curateReference':
         print('Curating reference')
 
         #Create STAR reference
         args_dict['create_refFlats'] = True
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
-        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+        create_star_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
 
         #Truncate transcript reference
         truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(args_dict['output']), sep='\t', return_files=False)
-
-        #Flatten transcript reference files
-        create_flat(args_dict['output'], args_dict['log'])
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
@@ -155,7 +161,7 @@ def main(args=None):
 
         # Generate reference
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
-        create_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+        create_star_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'MAKE REFERENCE')
@@ -171,15 +177,6 @@ def main(args=None):
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
-
-    elif args.cmd == 'makeFlat':
-        print('Formatting coding only and truncated reference files...')
-
-        # Generate refFlat file
-        create_flat(args_dict['input'], args_dict['log'])
-
-        # Check log file for errors and exceptions
-        #check_process(args_dict['log_file'], msg_complete(), 'MAKE REFFLAT')
 
     elif args.cmd == 'rrnaProbe':
         # Get files to probe
@@ -270,10 +267,12 @@ def main(args=None):
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
         make_metagene(args_dict)
+        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        make_complexity(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
 
         # Get multiqc report and print close message
-        get_summary(args_dict)
+        get_multiqc_summary(args_dict)
         msg_finish()
 
     elif args.cmd == 'peRNAseq':
@@ -318,10 +317,12 @@ def main(args=None):
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
         make_metagene(args_dict)
+        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        make_complexity(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
 
         # Get multiqc report and print close message
-        get_summary(args_dict)
+        get_multiqc_summary(args_dict)
         msg_finish()
 
     elif args.cmd == 'riboprof':
@@ -367,10 +368,12 @@ def main(args=None):
         args_dict['input'] = args_dict['alignments']
         make_periodicity(args_dict)
         make_metagene(args_dict)
+        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        make_complexity(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
 
         # Get multiqc report and print close message
-        get_summary(args_dict)
+        get_multiqc_summary(args_dict)
         msg_finish()
 
     else:

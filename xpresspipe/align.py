@@ -26,6 +26,31 @@ import sys
 from .utils import get_files, unzip_files, add_directory, get_fasta
 from .parallel import parallelize, parallelize_pe
 
+"""Create STAR reference genome"""
+def create_star_reference(
+    output_directory, fasta_directory, gtf,
+    log, threads=1, sjdbOverhang=100):
+
+    # Create output directory
+    output_directory = check_directories(output_directory)
+    fasta_directory = check_directories(fasta_directory)
+
+    os.system('mkdir' \
+        + ' ' + str(output_directory) + 'genome' \
+        + str(log))
+
+    fasta_list = get_fasta(fasta_directory)
+
+    # Create reference
+    os.system('STAR' \
+        + ' --runMode genomeGenerate' \
+        + ' --genomeDir ' + str(output_directory) + 'genome' \
+        + ' --genomeFastaFiles ' + str(fasta_list) \
+        + ' --sjdbOverhang ' + str(sjdbOverhang) \
+        + ' --sjdbGTFfile ' + str(gtf) \
+        + ' --runThreadN ' + str(threads) \
+        + str(log))
+
 """Run first pass STAR alignment to map splice junctions"""
 def first_pass_star(
     file, output, args_dict):
@@ -35,6 +60,7 @@ def first_pass_star(
         + ' --genomeDir ' + str(args_dict['reference']) \ # Argument for specifying STAR reference directory
         + 'genome --readFilesIn ' + str(file) \ # Argument to dictate directory where pre-processed read files are located
         + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_' \ # Argument to dictate output directory
+        + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) \ # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) \ #
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \ # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
         + ' --outFilterMultimapScoreRange 1' \
@@ -53,7 +79,6 @@ def first_pass_star(
         + ' --outSAMmode None' \
         + str(args_dict['log'])) # Record log output (must go last in command)
 
-
 """Build intermediate STAR alignment reference using splice junction annotations from first pass"""
 def build_star_splice_junction_intermediate(
     output, args_dict):
@@ -62,6 +87,7 @@ def build_star_splice_junction_intermediate(
         + ' ' \
         + str(args_dict['intermediate_references']) + str(output) \ # Make directory for currently processed file
         + str(args_dict['log'])) # Record log output (must go last in command)
+
     os.system('STAR' \
         + ' --runMode genomeGenerate' \
         + ' --runThreadN ' + str(args_dict['threads']) \
@@ -70,7 +96,6 @@ def build_star_splice_junction_intermediate(
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) \ # Location for output revised reference
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \ # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
         + str(args_dict['log'])) # Record log output (must go last in command)
-
 
 """Run second pass STAR alignment to map reads splice-aware"""
 def second_pass_star(
@@ -81,7 +106,9 @@ def second_pass_star(
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) \
         + ' --readFilesIn ' + str(file) \
         + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_final_' \
+        + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) \ # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) \
+        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \
         + ' --outFilterMultimapScoreRange 1' \
         + ' --outFilterMultimapNmax 20' \
         + ' --outFilterMismatchNmax 10' \
@@ -94,14 +121,12 @@ def second_pass_star(
         + ' --readFilesCommand cat' \
         + ' --outFilterMatchNminOverLread 0.33' \
         + ' --outFilterScoreMinOverLread 0.33' \
-        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \
         + ' --outSAMstrandField intronMotif' \
         + ' --outSAMattributes NH HI NM MD AS XS' \
         + ' --outSAMunmapped Within' \
         + ' --outSAMtype SAM' \
         + ' --outSAMheaderHD @HD VN:1.4' \
         + str(args_dict['log']))
-
 
 """Sort reads per file by chromosome position and keep only unique mappers"""
 def alignment_sort(
@@ -114,28 +139,49 @@ def alignment_sort(
         + ' -o ' + str(args_dict['alignments']) + str(output) + '_sorted.sam' \
         + str(args_dict['log']))
 
-    # only take unique mappers (q = 255)
+    # Only take unique mappers (q = 255)
     os.system('samtools view' \
         + ' -h -q 255' \
         + ' --threads ' + str(args_dict['threads']) \
         + ' ' + str(args_dict['alignments']) + str(output) + '_sorted.sam' \
         + ' > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
 
-    # make bam file
+    # Make bam file
     os.system('samtools view' \
         + ' -S -b' \
         + ' --threads ' + str(args_dict['threads']) \
         + ' ' + str(args_dict['alignments']) + str(output) + '_final.sam' \
         + ' > ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
+"""Remove duplicate reads from coordinate sorted BAM file"""
+def mark_duplicates(
+    output, args_dict):
+
+    # Use sorted bam file to find any duplicate reads
+    os.system('samtools markdup' \
+        + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam' \ # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_deduplicated.bam' \ # Output BAM
+        + ' -s' \ # Print some basic stats
+        + str(args_dict['log']))
+
 """Remove all intermediate alignment files and references after alignment is complete"""
 def remove_intermediates(args_dict):
 
     os.system('find' \
-        + ' ' + str(args_dict['alignments']) + ' ! -name *_final.bam ! -name *_final.sam ! -name *_final_Log.final.out -maxdepth 1 -type f -delete' \ # Only keep files matching pattern
+        + ' ' + str(args_dict['alignments']) \
+        + ' ! -name *_final.bam' \
+        + ' ! -name *_deduplicated.bam' \
+        + ' ! -name *_final.sam' \
+        + ' ! -name *_final_Log.final.out' \
+        + ' -maxdepth 1 -type f -delete' \ # Only keep files matching pattern
         + str(args_dict['log']))
 
-def clean_directories(args_dict):
+    # Clear the current file's splice junction intermediate reference
+    os.system('rm -r' \
+        + ' ' + str(args_dict['intermediate_references']) + '*' \
+        + str(args_dict['log']))
+
+def clean_reference_directory(args_dict):
 
     os.system('rm -r' \
         + ' ' + str(args_dict['intermediate_references']) \
@@ -146,20 +192,24 @@ def se_align(args):
 
     file, args_dict = args[0], args[1]
 
-    #STAR first pass
-    output = str(file[:-6]) #get output file name before adding path to file name(s)
+    # STAR first pass
+    output = str(file[:-6]) # Get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file)
     first_pass_star(file, output, args_dict)
 
-    #STAR intermediate reference building
+    # STAR intermediate reference building
     build_star_splice_junction_intermediate(output, args_dict)
 
-    #STAR second pass
+    # STAR second pass
     second_pass_star(file, output, args_dict)
 
-    #Create sam file with only unique hits
+    # Create SAM file with only unique hits
     alignment_sort(output, args_dict)
 
+    # Mark duplicates in BAM file
+    mark_duplicates(output, args_dict)
+
+    # Clean up the output
     remove_intermediates(args_dict)
 
 """Paired-end RNA-seq pipeline"""
@@ -167,42 +217,46 @@ def pe_align(args):
 
     file1, file2, args_dict = args[0], args[1], args[2]
 
-    #STAR first pass
-    output = str(file1[:-7]) #get output file name before adding path to file name(s)
+    # STAR first pass
+    output = str(file1[:-7]) # Get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2)
 
     first_pass_star(file, output, args_dict)
 
-    #STAR intermediate reference building
+    # STAR intermediate reference building
     build_star_splice_junction_intermediate(output, args_dict)
 
-    #STAR second pass
+    # STAR second pass
     second_pass_star(file, output, args_dict)
 
-    #Create sam file with only unique hits
+    # Create SAM file with only unique hits
     alignment_sort(output, args_dict)
 
+    # Mark duplicates in BAM file
+    mark_duplicates(output, args_dict)
+
+    # Clean up the output
     remove_intermediates(args_dict)
 
 """Manage single-end RNA-seq pipeline"""
 def run_seRNAseq(args_dict):
 
     try:
-        #Add output directories
+        # Add output directories
         args_dict = add_directory(args_dict, 'output', 'alignments')
         args_dict = add_directory(args_dict, 'alignments', 'intermediate_references')
 
         args_dict['fasta_list'] = get_fasta(args_dict['reference'])
 
-        #Unzip files
+        # Unzip files
         unzip_files(args_dict['input'])
 
-        #Get list of files to align based on acceptable file types
+        # Get list of files to align based on acceptable file types
         files = get_files(args_dict['input'], ['.fastq','.fq','.txt'])
 
-        #Align single-end RNAseq reads
+        # Align single-end RNAseq reads
         parallelize(se_align, files, args_dict)
-        clean_directories(args_dict)
+        clean_reference_directory(args_dict)
 
         return args_dict
 
@@ -213,24 +267,24 @@ def run_seRNAseq(args_dict):
 def run_peRNAseq(args_dict):
 
     try:
-        #Add output directories
+        # Add output directories
         args_dict = add_directory(args_dict, 'output', 'alignments')
         args_dict = add_directory(args_dict, 'alignments', 'intermediate_references')
 
         args_dict['fasta_list'] = get_fasta(args_dict['reference'])
 
-        #Unzip files
+        # Unzip files
         unzip_files(args_dict['input'])
 
-        #Get list of files to align based on acceptable file types
+        # Get list of files to align based on acceptable file types
         files = get_files(args_dict['input'], ['.fastq','.fq','.txt'])
 
         if len(files) % 2 != 0:
             raise Exception('An uneven number of paired-end files were specified in the input directory')
         else:
-            #Align paired-end RNAseq reads
+            # Align paired-end RNAseq reads
             parallelize_pe(pe_align, files, args_dict)
-            clean_directories(args_dict)
+            clean_reference_directory(args_dict)
 
         return args_dict
 

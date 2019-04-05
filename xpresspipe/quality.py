@@ -28,8 +28,17 @@ from statistics import mode
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .parallel import parallelize
-from .compile import compile_size_distribution
+from .compile import compile_file_metrics, compile_matrix_metrics
 from .utils import add_directory, get_files
+
+"""Create MultiQC processing summary from all files in args_dict output"""
+def get_multiqc_summary(args_dict):
+
+    os.system('multiqc' \
+        + ' ' + str(args_dict['output']) \
+        + ' -i ' + str(args_dict['experiment']) \
+        + ' -o ' + args_dict['output'] \
+        + str(args_dict['log']))
 
 """Generate SAM file for most abundant mapped read length"""
 def dominant_read(args_dict, file):
@@ -127,7 +136,7 @@ def make_periodicity(args_dict):
 
     # Compile images
     files = get_files(args_dict['metrics'], ['_periodicity_metagene_profile.txt'])
-    compile_size_distribution(args_dict, args_dict['metrics'], files,
+    compile_file_metrics(args_dict, str(output_location + 'metrics'), files,
         'metagene_average', str(int(args_dict['downstream'] - 1)), 'position',
         'metagene coverage', 'periodicity',
         args_dict['experiment'], output_location)
@@ -169,7 +178,7 @@ def make_metagene(args_dict):
 
     # Compile images
     files = get_files(args_dict['metrics'], ['_rna_metrics'])
-    compile_size_distribution(args_dict, args_dict['metrics'], files,
+    compile_file_metrics(args_dict, str(output_location + 'metrics'), files,
         'normalized_position', None, 'meta_position',
         'normalized_coverage (all_reads)', 'metagene',
         args_dict['experiment'], output_location)
@@ -209,7 +218,7 @@ def make_readDistributions(args_dict):
     # Compile read distributions
     files = get_files(args_dict['fastqc_output'], ['.zip'])
     files = [str(x[:-4]) + '/fastqc_data.txt' for x in files]
-    compile_size_distribution(args_dict, args_dict['fastqc_output'], files,
+    compile_file_metrics(args_dict, args_dict['fastqc_output'], files,
         '#Length', '>>END_MODULE', 'position',
         'read size (bp)', 'fastqc',
         args_dict['experiment'], output_location)
@@ -219,9 +228,20 @@ def run_complexity(args):
 
     file, args_dict = args[0], args[1]
 
-    os.system('picard EstimateLibraryComplexity' \
-        + ' INPUT=' + str(args_dict['input']) + str(file) \
-        + ' OUTPUT=' + str(args_dict['complexity']) + 'metrics/' + str(file)[:-4] + '_complexity_metrics.txt' \
+    # Determine sequencing type
+    if str(args_dict['type']).upper() == 'PE':
+        paired = 'TRUE'
+    else:
+        paired = 'FALSE'
+
+    # Run dupRadar in R
+    os.system('rscript' \
+        + ' ' + str(__path__) + '/complexity.r' \
+        + ' ' + str(args_dict['input']) + str(file) \
+        + ' ' + str(args_dict['gtf']) \
+        + ' ' + str(paired) \
+        + ' ' + str(args_dict['threads']) \
+        + ' ' + str(args_dict['metrics']) + str(file[:-4]) + 'dupRadar_metrics.txt' \
         + str(args_dict['log']))
 
 """Manager for running complexity summary plotting"""
@@ -231,15 +251,15 @@ def make_complexity(args_dict):
     args_dict = add_directory(args_dict, 'complexity', 'metrics')
     output_location = args_dict['complexity']
 
-    # Get bam files
-    files = get_files(args_dict['input'], ['.bam'])
+    # Get BAM files
+    files = get_files(args_dict['input'], ['_deduplicated.bam'])
 
     # Perform metagene analysis
-    parallelize(run_complexity, files, args_dict, mod_workers=True)
+    parallelize(run_complexity, files, args_dict, mod_workers=False)
 
     # Compile images
-    files = get_files(args_dict['metrics'], ['_complexity_metrics'])
-    compile_size_distribution(args_dict, args_dict['metrics'], files,
-        'normalized_position', None, 'meta_position',
-        'normalized_coverage (all_reads)', 'metagene',
-        args_dict['experiment'], output_location)
+    files = get_files(args_dict['metrics'], ['dupRadar_metrics.txt'])
+    compile_matrix_metrics(args_dict, str(output_location + 'metrics'), files,
+        'dupRateMulti', 'RPKM',
+        'library complexity (all_reads)', args_dict['experiment'],
+        output_location)
