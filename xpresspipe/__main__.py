@@ -24,6 +24,8 @@ import os
 import sys
 import pandas as pd
 
+from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf, diff_xpress
+
 """IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__
 from .messages import *
@@ -34,10 +36,9 @@ from .count import count_reads, collect_counts
 from .normalize import run_normalization
 from .convert import create_bed, create_bigwig
 from .rrnaprobe import rrnaProbe
-from .utils import get_probe_files, unzip_files
 from .quality import get_multiqc_summary, make_metagene, make_readDistributions, make_periodicity, make_complexity
 from .parallel import get_cores
-from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf, diff_xpress
+from .utils import get_probe_files, unzip_files, make_flat
 
 """Main function to call necessary functions for sub-modules
 
@@ -101,7 +102,10 @@ def main(args=None):
         print('Performing differential expression analysis...')
 
         # Run differential expression analysis via DESeq2
-        diff_xpress(str(args_dict['input']), str(args_dict['sample']), equation=str(args_dict['design']))
+        diff_xpress(
+            str(args_dict['input']),
+            str(args_dict['sample']),
+            equation = str(args_dict['design']))
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'DIFFERENTIAL EXPRESSION')
@@ -145,13 +149,27 @@ def main(args=None):
     elif args.cmd == 'curateReference':
         print('Curating reference')
 
-        #Create STAR reference
-        args_dict['create_refFlats'] = True
+        # Create STAR reference
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
-        create_star_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+        create_star_reference(
+            args_dict['output'],
+            args_dict['fasta'],
+            args_dict['gtf'],
+            args_dict['log'],
+            threads = args_dict['threads'],
+            sjdbOverhang = args_dict['sjdbOverhang'])
 
-        #Truncate transcript reference
-        truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(args_dict['output']), save_truncated_path=str(args_dict['output']), sep='\t', return_files=False)
+        # Truncate transcript reference
+        truncate(
+            args_dict['gtf'],
+            truncate_amount = args_dict['truncate_amount'],
+            save_coding_path = str(args_dict['output']),
+            save_truncated_path = str(args_dict['output']),
+            sep = '\t',
+            return_files = False)
+
+        # Make periodicity reference
+        make_flat(arg_dict)
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
@@ -161,7 +179,13 @@ def main(args=None):
 
         # Generate reference
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
-        create_star_reference(args_dict['output'], args_dict['fasta'], args_dict['gtf'], args_dict['log'], threads=args_dict['threads'], sjdbOverhang=args_dict['sjdbOverhang'])
+        create_star_reference(
+            args_dict['output'],
+            args_dict['fasta'],
+            args_dict['gtf'],
+            args_dict['log'],
+            threads = args_dict['threads'],
+            sjdbOverhang = args_dict['sjdbOverhang'])
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'MAKE REFERENCE')
@@ -171,9 +195,13 @@ def main(args=None):
 
         # Run reference truncation
         output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
-        truncate(args_dict['gtf'], truncate_amount=args_dict['truncate_amount'], save_coding_path=str(output_path), save_truncated_path=str(output_path), sep='\t', return_files=False)
-        if 'create_refFlats' in args_dict and args_dict['create_refFlats'] == True:
-            create_flat(str(output_path), args_dict['log'])
+        truncate(
+            args_dict['gtf'],
+            truncate_amount = args_dict['truncate_amount'],
+            save_coding_path = str(output_path),
+            save_truncated_path = str(output_path),
+            sep = '\t',
+            return_files = False)
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
@@ -184,7 +212,9 @@ def main(args=None):
 
         # Run rrna_prober, output to outputDir
         print('Probing for most over-represented read sequences...')
-        probe_out = rrnaProbe(probe_list, args_dict['min_overlap']) # Use inputDir to get FASTQC files and output to outputDir/analysis
+        probe_out = rrnaProbe(
+                        probe_list,
+                        args_dict['min_overlap']) # Use inputDir to get FASTQC files and output to outputDir/analysis
 
         # Output summary
         with open(args_dict['output'] + 'rrnaProbe_output.txt', "w") as text_file:
@@ -205,10 +235,16 @@ def main(args=None):
             suf = '.tsv'
 
         data = pd.read_csv(str(args_dict['input']), sep=delim)
-        data = convert_names_gtf(data, args_dict['gtf'],
-                                orig_name_label=args_dict['orig_name_label'], orig_name_location=args_dict['orig_name_location'],
-                                new_name_label=args_dict['new_name_label'], new_name_location=args_dict['new_name_location'],
-                                refill=args_dict['refill'], sep='\t')
+        data = convert_names_gtf(
+                data,
+                args_dict['gtf'],
+                orig_name_label = args_dict['orig_name_label'],
+                orig_name_location = args_dict['orig_name_location'],
+                new_name_label = args_dict['new_name_label'],
+                new_name_location = args_dict['new_name_location'],
+                refill = args_dict['refill'],
+                sep = '\t')
+
         data.to_csv(str(args_dict['input'])[:-4] + '_renamed' + str(suf), sep=delim, index=False)
 
         # Check log file for errors and exceptions

@@ -6,6 +6,7 @@
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("dupRadar", version = "3.8")
+
 library(dupRadar)
 
 # Get arguments
@@ -14,9 +15,10 @@ library(dupRadar)
 # args[3] = is library paired-end? (TRUE or FALSE)
 # args[4] = number of threads
 # args[5] = output file for metrics
+args = commandArgs(trailingOnly=TRUE)
 
 # Set parameters
-bamDuprm <- args[1]
+bam_no_dups <- args[1]
 gtf <- args[2]
 stranded <- 0 # '0' (unstranded), '1' (stranded) and '2' (reversely stranded)
 paired <- args[3]
@@ -24,7 +26,7 @@ threads <- args[4]
 output <- args[5]
 
 # Duplication rate analysis
-dm <- analyzeDuprates(bamDuprm, gtf, stranded, paired, threads)
+dm <- analyzeDuprates(bam_no_dups, gtf, stranded, paired, threads)
 
 ## Save metrics
 write.table(as.data.frame(dm), file=output, sep='\t', col.names=T, row.names=T)

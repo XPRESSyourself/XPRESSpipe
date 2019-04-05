@@ -80,8 +80,6 @@ description_table  =  """\
         |-----------------------|---------------------------------------------------------------------------------------|
         |    truncate           |   Create a coding-only and coding-only truncated reference GTF                        |
         |-----------------------|---------------------------------------------------------------------------------------|
-        |    makeFlat           |   Grab flattened reference file from UCSC based on organism ID                        |
-        |-----------------------|---------------------------------------------------------------------------------------|
         |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
         |                       |   Run a BLAST search on sequences you choose to use as depletion probes to verify     |
         |                       |   they are rRNAs)                                                                     |
@@ -987,13 +985,13 @@ def get_arguments(args, __version__):
         metavar = '<path>',
         type = str,
         required = True)
-    period_reqs.add_argument(
+    complex_reqs.add_argument(
         '-g', '--gtf',
         help = 'Path and file name to un-edited reference GTF',
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
-    period_reqs.add_argument(
+    complex_reqs.add_argument(
         '-t', '--type',
         help = 'Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
         metavar = '<SE or PE>',

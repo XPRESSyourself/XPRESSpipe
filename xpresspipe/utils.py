@@ -139,3 +139,17 @@ def get_fasta(fasta_directory):
         fasta_list = ''.join(fasta)
 
     return fasta_list
+
+"""Make periodicity flat reference using riboWaltz"""
+def make_flat(args_dict):
+
+    if not str(args_dict['gtf']).endswith('.gtf'):
+        raise Exception('GTF file required')
+
+    os.system('rscript' \
+        + ' ' + str(__path__) + '/periodicity.r' \
+        + ' TRUE' \
+        + ' ' + str(args_dict['gtf']) \
+        + ' NONE' \
+        + ' NONE' \
+        + str(args_dict['log']))

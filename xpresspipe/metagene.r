@@ -6,4 +6,5 @@
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("metagene", version = "3.8")
+
 library(metagene)

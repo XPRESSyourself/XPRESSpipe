@@ -53,7 +53,7 @@ def count_reads(args_dict):
     args_dict = add_directory(args_dict, 'output', 'counts')
 
     # Get list of files to count based on acceptable file types
-    files = get_files(args_dict['input'], ['.sam'])
+    files = get_files(args_dict['input'], ['.bam'])
 
     # Count aligned RNAseq reads
     parallelize(count_file, files, args_dict, mod_workers=True)

@@ -105,7 +105,7 @@ def second_pass_star(
         + ' --runThreadN ' + str(args_dict['threads']) \
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) \
         + ' --readFilesIn ' + str(file) \
-        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_final_' \
+        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_sorted_' \
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) \ # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) \
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \
@@ -124,40 +124,26 @@ def second_pass_star(
         + ' --outSAMstrandField intronMotif' \
         + ' --outSAMattributes NH HI NM MD AS XS' \
         + ' --outSAMunmapped Within' \
-        + ' --outSAMtype SAM' \
+        + ' --outSAMtype BAM SortedByCoordinate' \
         + ' --outSAMheaderHD @HD VN:1.4' \
         + str(args_dict['log']))
 
 """Sort reads per file by chromosome position and keep only unique mappers"""
-def alignment_sort(
+def alignment_process(
     output, args_dict):
-
-    # Sort by coordinate
-    os.system('samtools sort' \
-        + ' --threads ' + str(args_dict['threads']) \
-        + ' ' + str(args_dict['alignments']) + str(output) + '_final_Aligned.out.sam' \
-        + ' -o ' + str(args_dict['alignments']) + str(output) + '_sorted.sam' \
-        + str(args_dict['log']))
 
     # Only take unique mappers (q = 255)
     os.system('samtools view' \
-        + ' -h -q 255' \
+        + ' -q 255' \
         + ' --threads ' + str(args_dict['threads']) \
-        + ' ' + str(args_dict['alignments']) + str(output) + '_sorted.sam' \
-        + ' > ' + str(args_dict['alignments']) + str(output) + '_final.sam')
-
-    # Make bam file
-    os.system('samtools view' \
-        + ' -S -b' \
-        + ' --threads ' + str(args_dict['threads']) \
-        + ' ' + str(args_dict['alignments']) + str(output) + '_final.sam' \
+        + ' ' + str(args_dict['alignments']) + str(output) + '_sorted_Aligned.out.bam' \
         + ' > ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
-"""Remove duplicate reads from coordinate sorted BAM file"""
-def mark_duplicates(
-    output, args_dict):
+    # Index BAM file
+    os.system('samtools index' \
+        + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
-    # Use sorted bam file to find any duplicate reads
+    # Use sorted BAM file to find any duplicate reads
     os.system('samtools markdup' \
         + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam' \ # Input BAM
         + ' ' + str(args_dict['alignments']) + str(output) + '_deduplicated.bam' \ # Output BAM
@@ -171,7 +157,7 @@ def remove_intermediates(args_dict):
         + ' ' + str(args_dict['alignments']) \
         + ' ! -name *_final.bam' \
         + ' ! -name *_deduplicated.bam' \
-        + ' ! -name *_final.sam' \
+        + ' ! -name *_final.bam.bai' \
         + ' ! -name *_final_Log.final.out' \
         + ' -maxdepth 1 -type f -delete' \ # Only keep files matching pattern
         + str(args_dict['log']))
@@ -203,11 +189,8 @@ def se_align(args):
     # STAR second pass
     second_pass_star(file, output, args_dict)
 
-    # Create SAM file with only unique hits
-    alignment_sort(output, args_dict)
-
-    # Mark duplicates in BAM file
-    mark_duplicates(output, args_dict)
+    # Create BAM file with only unique hits, mark duplicates, index
+    alignment_process(output, args_dict)
 
     # Clean up the output
     remove_intermediates(args_dict)
@@ -229,11 +212,8 @@ def pe_align(args):
     # STAR second pass
     second_pass_star(file, output, args_dict)
 
-    # Create SAM file with only unique hits
-    alignment_sort(output, args_dict)
-
-    # Mark duplicates in BAM file
-    mark_duplicates(output, args_dict)
+    # Create BAM file with only unique hits, mark duplicates, index
+    alignment_process(output, args_dict)
 
     # Clean up the output
     remove_intermediates(args_dict)
