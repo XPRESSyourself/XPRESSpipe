@@ -35,97 +35,97 @@ def create_star_reference(
     output_directory = check_directories(output_directory)
     fasta_directory = check_directories(fasta_directory)
 
-    os.system('mkdir' \
-        + ' ' + str(output_directory) + 'genome' \
+    os.system('mkdir'
+        + ' ' + str(output_directory) + 'genome'
         + str(log))
 
     fasta_list = get_fasta(fasta_directory)
 
     # Create reference
-    os.system('STAR' \
-        + ' --runMode genomeGenerate' \
-        + ' --genomeDir ' + str(output_directory) + 'genome' \
-        + ' --genomeFastaFiles ' + str(fasta_list) \
-        + ' --sjdbOverhang ' + str(sjdbOverhang) \
-        + ' --sjdbGTFfile ' + str(gtf) \
-        + ' --runThreadN ' + str(threads) \
+    os.system('STAR'
+        + ' --runMode genomeGenerate'
+        + ' --genomeDir ' + str(output_directory) + 'genome'
+        + ' --genomeFastaFiles ' + str(fasta_list)
+        + ' --sjdbOverhang ' + str(sjdbOverhang)
+        + ' --sjdbGTFfile ' + str(gtf)
+        + ' --runThreadN ' + str(threads)
         + str(log))
 
 """Run first pass STAR alignment to map splice junctions"""
 def first_pass_star(
     file, output, args_dict):
 
-    os.system('STAR' \
-        + ' --runThreadN ' + str(args_dict['threads']) \ # Argument to specify number of threads to use for processing
-        + ' --genomeDir ' + str(args_dict['reference']) \ # Argument for specifying STAR reference directory
-        + 'genome --readFilesIn ' + str(file) \ # Argument to dictate directory where pre-processed read files are located
-        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_' \ # Argument to dictate output directory
-        + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) \ # Mismatch ratio to mapped read length
-        + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) \ #
-        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \ # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
-        + ' --outFilterMultimapScoreRange 1' \
-        + ' --outFilterMultimapNmax 20' \
-        + ' --outFilterMismatchNmax 10' \
-        + ' --alignIntronMax 500000' \
-        + ' --alignMatesGapMax 1000000' \
-        + ' --sjdbScore 2' \
-        + ' --alignSJDBoverhangMin 1' \
-        + ' --genomeLoad NoSharedMemory' \
-        + ' --readFilesCommand cat' \
-        + ' --outFilterMatchNminOverLread 0.33' \
-        + ' --outFilterScoreMinOverLread 0.33' \
-        + ' --outSAMstrandField intronMotif' \
-        + ' --outSAMtype None' \
-        + ' --outSAMmode None' \
+    os.system('STAR'
+        + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
+        + ' --genomeDir ' + str(args_dict['reference']) # Argument for specifying STAR reference directory
+        + 'genome --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
+        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_' # Argument to dictate output directory
+        + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
+        + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) #
+        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
+        + ' --outFilterMultimapScoreRange 1'
+        + ' --outFilterMultimapNmax 20'
+        + ' --outFilterMismatchNmax 10'
+        + ' --alignIntronMax 500000'
+        + ' --alignMatesGapMax 1000000'
+        + ' --sjdbScore 2'
+        + ' --alignSJDBoverhangMin 1'
+        + ' --genomeLoad NoSharedMemory'
+        + ' --readFilesCommand cat'
+        + ' --outFilterMatchNminOverLread 0.33'
+        + ' --outFilterScoreMinOverLread 0.33'
+        + ' --outSAMstrandField intronMotif'
+        + ' --outSAMtype None'
+        + ' --outSAMmode None'
         + str(args_dict['log'])) # Record log output (must go last in command)
 
 """Build intermediate STAR alignment reference using splice junction annotations from first pass"""
 def build_star_splice_junction_intermediate(
     output, args_dict):
 
-    os.system('mkdir' \
-        + ' ' \
-        + str(args_dict['intermediate_references']) + str(output) \ # Make directory for currently processed file
+    os.system('mkdir'
+        + ' '
+        + str(args_dict['intermediate_references']) + str(output) # Make directory for currently processed file
         + str(args_dict['log'])) # Record log output (must go last in command)
 
-    os.system('STAR' \
-        + ' --runMode genomeGenerate' \
-        + ' --runThreadN ' + str(args_dict['threads']) \
-        + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab' \ # Splice junction annotation file output in first pass alignment
-        + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) \ # Input chromosomal fasta files for reference building
-        + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) \ # Location for output revised reference
-        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \ # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
+    os.system('STAR'
+        + ' --runMode genomeGenerate'
+        + ' --runThreadN ' + str(args_dict['threads'])
+        + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab' # Splice junction annotation file output in first pass alignment
+        + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) # Input chromosomal fasta files for reference building
+        + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) # Location for output revised reference
+        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
         + str(args_dict['log'])) # Record log output (must go last in command)
 
 """Run second pass STAR alignment to map reads splice-aware"""
 def second_pass_star(
     file, output, args_dict):
 
-    os.system('STAR' \
-        + ' --runThreadN ' + str(args_dict['threads']) \
-        + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) \
-        + ' --readFilesIn ' + str(file) \
-        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_sorted_' \
-        + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) \ # Mismatch ratio to mapped read length
-        + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) \
-        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) \
-        + ' --outFilterMultimapScoreRange 1' \
-        + ' --outFilterMultimapNmax 20' \
-        + ' --outFilterMismatchNmax 10' \
-        + ' --alignIntronMax 500000' \
-        + ' --alignMatesGapMax 1000000' \
-        + ' --sjdbScore 2' \
-        + ' --alignSJDBoverhangMin 1' \
-        + ' --genomeLoad NoSharedMemory' \
-        + ' --limitBAMsortRAM 0' \
-        + ' --readFilesCommand cat' \
-        + ' --outFilterMatchNminOverLread 0.33' \
-        + ' --outFilterScoreMinOverLread 0.33' \
-        + ' --outSAMstrandField intronMotif' \
-        + ' --outSAMattributes NH HI NM MD AS XS' \
-        + ' --outSAMunmapped Within' \
-        + ' --outSAMtype BAM SortedByCoordinate' \
-        + ' --outSAMheaderHD @HD VN:1.4' \
+    os.system('STAR'
+        + ' --runThreadN ' + str(args_dict['threads'])
+        + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output)
+        + ' --readFilesIn ' + str(file)
+        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_sorted_'
+        + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
+        + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])
+        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang'])
+        + ' --outFilterMultimapScoreRange 1'
+        + ' --outFilterMultimapNmax 20'
+        + ' --outFilterMismatchNmax 10'
+        + ' --alignIntronMax 500000'
+        + ' --alignMatesGapMax 1000000'
+        + ' --sjdbScore 2'
+        + ' --alignSJDBoverhangMin 1'
+        + ' --genomeLoad NoSharedMemory'
+        + ' --limitBAMsortRAM 0'
+        + ' --readFilesCommand cat'
+        + ' --outFilterMatchNminOverLread 0.33'
+        + ' --outFilterScoreMinOverLread 0.33'
+        + ' --outSAMstrandField intronMotif'
+        + ' --outSAMattributes NH HI NM MD AS XS'
+        + ' --outSAMunmapped Within'
+        + ' --outSAMtype BAM SortedByCoordinate'
+        + ' --outSAMheaderHD @HD VN:1.4'
         + str(args_dict['log']))
 
 """Sort reads per file by chromosome position and keep only unique mappers"""
@@ -133,44 +133,44 @@ def alignment_process(
     output, args_dict):
 
     # Only take unique mappers (q = 255)
-    os.system('samtools view' \
-        + ' -q 255' \
-        + ' --threads ' + str(args_dict['threads']) \
-        + ' ' + str(args_dict['alignments']) + str(output) + '_sorted_Aligned.out.bam' \
+    os.system('samtools view'
+        + ' -q 255'
+        + ' --threads ' + str(args_dict['threads'])
+        + ' ' + str(args_dict['alignments']) + str(output) + '_sorted_Aligned.out.bam'
         + ' > ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
     # Index BAM file
-    os.system('samtools index' \
+    os.system('samtools index'
         + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
     # Use sorted BAM file to find any duplicate reads
-    os.system('samtools markdup' \
-        + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam' \ # Input BAM
-        + ' ' + str(args_dict['alignments']) + str(output) + '_deduplicated.bam' \ # Output BAM
-        + ' -s' \ # Print some basic stats
+    os.system('samtools markdup'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_deduplicated.bam' # Output BAM
+        + ' -s' # Print some basic stats
         + str(args_dict['log']))
 
 """Remove all intermediate alignment files and references after alignment is complete"""
 def remove_intermediates(args_dict):
 
-    os.system('find' \
-        + ' ' + str(args_dict['alignments']) \
-        + ' ! -name *_final.bam' \
-        + ' ! -name *_deduplicated.bam' \
-        + ' ! -name *_final.bam.bai' \
-        + ' ! -name *_final_Log.final.out' \
-        + ' -maxdepth 1 -type f -delete' \ # Only keep files matching pattern
+    os.system('find'
+        + ' ' + str(args_dict['alignments'])
+        + ' ! -name *_final.bam'
+        + ' ! -name *_deduplicated.bam'
+        + ' ! -name *_final.bam.bai'
+        + ' ! -name *_final_Log.final.out'
+        + ' -maxdepth 1 -type f -delete' # Only keep files matching pattern
         + str(args_dict['log']))
 
     # Clear the current file's splice junction intermediate reference
-    os.system('rm -r' \
-        + ' ' + str(args_dict['intermediate_references']) + '*' \
+    os.system('rm -r'
+        + ' ' + str(args_dict['intermediate_references']) + '*'
         + str(args_dict['log']))
 
 def clean_reference_directory(args_dict):
 
-    os.system('rm -r' \
-        + ' ' + str(args_dict['intermediate_references']) \
+    os.system('rm -r'
+        + ' ' + str(args_dict['intermediate_references'])
         + str(args_dict['log']))
 
 """Single-end RNA-seq pipeline"""

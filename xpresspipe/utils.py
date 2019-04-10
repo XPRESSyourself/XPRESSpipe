@@ -40,8 +40,8 @@ def check_directories(input):
 def add_directory(
     args_dict, parent, name):
 
-    os.system('mkdir' \
-        + ' ' + str(args_dict[str(parent)]) + str(name) \
+    os.system('mkdir'
+        + ' ' + str(args_dict[str(parent)]) + str(name)
         + str(args_dict['log']))
 
     args_dict[name] = str(str(args_dict[str(parent)]) + str(name) + '/')
@@ -118,12 +118,12 @@ def unzip_files(directory):
             if file.endswith(str(s)):
                 if s == '.gz':
                     os.system('gzip' +
-                        ' -d' \
-                        + ' ' + str(directory) + str(file) \
+                        ' -d'
+                        + ' ' + str(directory) + str(file)
                         + str(args_dict['log']))
                 if s == '.zip':
-                    os.system('unzip' \
-                        + ' ' + str(directory) + str(file) \
+                    os.system('unzip'
+                        + ' ' + str(directory) + str(file)
                         + str(args_dict['log']))
 
 """Get fasta files within directory"""
@@ -139,17 +139,3 @@ def get_fasta(fasta_directory):
         fasta_list = ''.join(fasta)
 
     return fasta_list
-
-"""Make periodicity flat reference using riboWaltz"""
-def make_flat(args_dict):
-
-    if not str(args_dict['gtf']).endswith('.gtf'):
-        raise Exception('GTF file required')
-
-    os.system('rscript' \
-        + ' ' + str(__path__) + '/periodicity.r' \
-        + ' TRUE' \
-        + ' ' + str(args_dict['gtf']) \
-        + ' NONE' \
-        + ' NONE' \
-        + str(args_dict['log']))

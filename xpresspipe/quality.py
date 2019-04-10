@@ -34,10 +34,10 @@ from .utils import add_directory, get_files
 """Create MultiQC processing summary from all files in args_dict output"""
 def get_multiqc_summary(args_dict):
 
-    os.system('multiqc' \
-        + ' ' + str(args_dict['output']) \
-        + ' -i ' + str(args_dict['experiment']) \
-        + ' -o ' + args_dict['output'] \
+    os.system('multiqc'
+        + ' ' + str(args_dict['output'])
+        + ' -i ' + str(args_dict['experiment'])
+        + ' -o ' + args_dict['output']
         + str(args_dict['log']))
 
 """Generate periodicity maps"""
@@ -45,12 +45,12 @@ def get_peaks(args):
 
     file, args_dict = args[0], args[1] # Parse args
 
-    os.system('rscript' \
-        + ' ' + str(__path__) + '/periodicity.r' \
-        + ' FALSE' \
-        + ' ' + str(args_dict['gtf']) \
-        + ' ' + str(args_dict['input']) + ' ' + str(file) \
-        + ' ' + str(args_dict['periodicity']) \
+    os.system('rscript'
+        + ' ' + str(__path__) + '/periodicity.r'
+        + ' FALSE'
+        + ' ' + str(args_dict['gtf'])
+        + ' ' + str(args_dict['input']) + ' ' + str(file)
+        + ' ' + str(args_dict['periodicity'])
         + str(args_dict['log']))
 
 """Manager for running periodicity summary plotting"""
@@ -74,17 +74,17 @@ def make_periodicity(args_dict):
         args_dict['experiment'], output_location)
 
     # Clean output
-    os.system('rm' \
-        + ' ' + str(args_dict['metrics']) + '*_mode*' \
+    os.system('rm'
+        + ' ' + str(args_dict['metrics']) + '*_mode*'
         + str(args_dict['log']))
-    os.system('rm' \
-        + ' ' + str(args_dict['metrics']) + '*png' \
+    os.system('rm'
+        + ' ' + str(args_dict['metrics']) + '*png'
         + str(args_dict['log']))
 
 """Generate metagene profiles"""
 def get_profiles(args):
 
-
+    print('Coming soon')
 
 """Manager for running metagene summary plotting"""
 def make_metagene(args_dict):
@@ -112,9 +112,9 @@ def run_fastqc(args):
 
     file, args_dict = args[0], args[1]
 
-    os.system('fastqc' \
-        + ' -q ' + str(args_dict['input']) + str(file) \
-        + ' -o ' + str(args_dict['fastqc_output']) \
+    os.system('fastqc'
+        + ' -q ' + str(args_dict['input']) + str(file)
+        + ' -o ' + str(args_dict['fastqc_output'])
         + str(args_dict['log']))
 
 """Manager for running read distribution summary plotting"""
@@ -133,10 +133,10 @@ def make_readDistributions(args_dict):
     files = get_files(args_dict['fastqc_output'], ['.zip'])
     for file in files:
         if file.endswith('.zip'):
-            os.system('unzip' \
-                + ' -n -q ' \
-                + str(args_dict['fastqc_output']) + str(file) \
-                + ' -d ' + str(args_dict['fastqc_output']) \
+            os.system('unzip'
+                + ' -n -q '
+                + str(args_dict['fastqc_output']) + str(file)
+                + ' -d ' + str(args_dict['fastqc_output'])
                 + str(args_dict['log']))
 
     # Compile read distributions
@@ -159,13 +159,13 @@ def run_complexity(args):
         paired = 'FALSE'
 
     # Run dupRadar in R
-    os.system('rscript' \
-        + ' ' + str(__path__) + '/complexity.r' \
-        + ' ' + str(args_dict['input']) + str(file) \
-        + ' ' + str(args_dict['gtf']) \
-        + ' ' + str(paired) \
-        + ' ' + str(args_dict['threads']) \
-        + ' ' + str(args_dict['metrics']) + str(file[:-4]) + 'dupRadar_metrics.txt' \
+    os.system('rscript'
+        + ' ' + str(__path__) + '/complexity.r'
+        + ' ' + str(args_dict['input']) + str(file)
+        + ' ' + str(args_dict['gtf'])
+        + ' ' + str(paired)
+        + ' ' + str(args_dict['threads'])
+        + ' ' + str(args_dict['metrics']) + str(file[:-4]) + 'dupRadar_metrics.txt'
         + str(args_dict['log']))
 
 """Manager for running complexity summary plotting"""

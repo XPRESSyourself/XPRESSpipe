@@ -31,11 +31,11 @@ from .parallel import parallelize
 def sam2bam(
     path, file):
 
-    os.system('samtools view -h -S -b' \
-        + ' ' + str(path) + str(file) \
+    os.system('samtools view -h -S -b'
+        + ' ' + str(path) + str(file)
         + ' > ' + str(path) + str(file[:-4]) + '.bam')
-    os.system('samtools index' \
-        + ' ' + str(path) + str(file[:-4]) + '.bam' \
+    os.system('samtools index'
+        + ' ' + str(path) + str(file[:-4]) + '.bam'
         + str(args_dict['log']))
 
 """Convert sorted sam files in directory to bed files"""
@@ -52,8 +52,8 @@ def bed_convert(args):
         raise Exception('Incorrect input file')
 
     # Convert BAM to BED
-    os.system('bedtools bamtobed' \
-        + ' -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam' \
+    os.system('bedtools bamtobed'
+        + ' -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam'
         + ' > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
 
 """Run BED creation manager"""
@@ -84,9 +84,9 @@ def bigwig_convert(args):
         raise Exception('Incorrect input file')
 
     # Convert BAM to bigwig
-    os.system('bamCoverage' \
-        + ' -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam' \
-        + ' -o ' + str(args_dict['bigwig_files']) + str(file[:-4]) + '.bw' \
+    os.system('bamCoverage'
+        + ' -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam'
+        + ' -o ' + str(args_dict['bigwig_files']) + str(file[:-4]) + '.bw'
         + str(args_dict['log']))
 
 """Run Bigwig creation manager"""

@@ -38,6 +38,8 @@ __path__, xpresspipe_arguments  =  os.path.split(__file__)
 DEFAULT_READ_MIN  =  18
 DEFAULT_READ_QUALITY  =  28
 DEFAULT_MAX_PROCESSORS  =  None
+DEFAULT_TRUNCATE_5PRIME = 45
+DEFAULT_TRUNCATE_3PRIME = 15
 
 description_table  =  """\
     The XPRESSpipe sub-modules can be accessed by executing:
@@ -128,9 +130,9 @@ def check_inputs(args_dict):
         args_dict['max_processors'] = int(args_dict['max_processors'])
 
         if multiprocessing.cpu_count() < args_dict['max_processors']:
-            print('Cannot specify more cores than are available -- Specified ' \
-                + str(args_dict['max_processors']) + ' cores, only ' \
-                + str(multiprocessing.cpu_count()) + ' available' \
+            print('Cannot specify more cores than are available -- Specified '
+                + str(args_dict['max_processors']) + ' cores, only '
+                + str(multiprocessing.cpu_count()) + ' available'
                 + 'Setting cores to maximum available')
             args_dict['max_processors'] = multiprocessing.cpu_count()
 
@@ -166,22 +168,23 @@ def check_inputs(args_dict):
         args_dict['log_file'] = str(args_dict['log_loc']) + str(args_dict['experiment']) + '.log'
     else:
         cdt = datetime.datetime.now()
-        args_dict['log'] = ' >> ' + str(args_dict['log_loc']) \
-                                    + str(cdt.year) \
-                                    + '_' + str(cdt.month) \
-                                    + '_' + str(cdt.day) \
-                                    + '_' + str(cdt.hour) \
-                                    + 'h_' + str(cdt.minute) \
-                                    + 'm_' + str(cdt.second) \
-                                    + '.log 2>&1'
-        args_dict['log_file'] = str(args_dict['log_loc']) \
-                                + str(cdt.year) \
-                                + '_' + str(cdt.month) \
-                                + '_' + str(cdt.day) \
-                                + '_' + str(cdt.hour) \
-                                + 'h_' + str(cdt.minute) \
-                                + 'm_' + str(cdt.second) \
-                                + 's.log'
+        args_dict['log'] = (' >> '
+                            + str(args_dict['log_loc'])
+                            + str(cdt.year)
+                            + '_' + str(cdt.month)
+                            + '_' + str(cdt.day)
+                            + '_' + str(cdt.hour)
+                            + 'h_' + str(cdt.minute)
+                            + 'm_' + str(cdt.second)
+                            + '.log 2>&1')
+        args_dict['log_file'] = (str(args_dict['log_loc'])
+                                + str(cdt.year)
+                                + '_' + str(cdt.month)
+                                + '_' + str(cdt.day)
+                                + '_' + str(cdt.hour)
+                                + 'h_' + str(cdt.minute)
+                                + 'm_' + str(cdt.second)
+                                + 's.log')
 
     return args_dict
 
@@ -233,7 +236,7 @@ def get_arguments(args, __version__):
         required = True)
     se_reqs.add_argument(
         '-t', '--reference_type',
-        help = 'GTF type (i.e. \"DEFAULT\", \"CODING\")',
+        help = 'GTF type (i.e, \"DEFAULT\",\"CODING\")',
         metavar = '<DEFAULT, CODING>',
         type = str,
         required = True)
@@ -353,7 +356,7 @@ def get_arguments(args, __version__):
         required = True)
     pe_reqs.add_argument(
         '-t', '--reference_type',
-        help = 'GTF type (i.e. \"DEFAULT\", \"CODING\")',
+        help = 'GTF type (i.e, \"DEFAULT\", \"CODING\")',
         metavar = '<DEFAULT, CODING>',
         type = str,
         required = True)
@@ -371,7 +374,7 @@ def get_arguments(args, __version__):
         help = 'Show help message and exit')
     pe_opts.add_argument(
         '-a', '--adaptors',
-        help = 'Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if \"None None\" is \
+        help = 'Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if"None None\" is \
         provided, software will attempt to auto-detect adaptors',
         metavar = '<adaptor1 adaptor2>',
         type = str,
@@ -404,7 +407,7 @@ def get_arguments(args, __version__):
         required = False)
     pe_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
         metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
         type = str,
         required = False)
@@ -473,7 +476,7 @@ def get_arguments(args, __version__):
         required = True)
     rp_reqs.add_argument(
         '-t', '--reference_type',
-        help = 'GTF type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
+        help = 'GTF type (i.e, \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
         metavar = '<DEFAULT, CODING, CODING_TRUNCATED>',
         type = str,
         required = True)
@@ -491,8 +494,8 @@ def get_arguments(args, __version__):
         help = 'Show help message and exit')
     rp_opts.add_argument(
         '-a', '--adaptors',
-        help = 'Specify adaptor as string (only one allowed) -- if \"None\" is provided, software will attempt to auto-detect adaptors -- \
-        if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
+        help = 'Specify adaptor as string (only one allowed) -- if"None\" is provided, software will attempt to auto-detect adaptors -- \
+        if"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
         metavar = '<adaptor1>',
         type = str,
         nargs = '+',
@@ -524,7 +527,7 @@ def get_arguments(args, __version__):
         required = False)
     rp_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
+        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
         metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
         type = str,
         required = False)
@@ -600,7 +603,7 @@ def get_arguments(args, __version__):
         help = 'Show help message and exit')
     trim_opts.add_argument(
         '-a', '--adaptors',
-        help = 'Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if \"None None\" is \
+        help = 'Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if"None None\" is \
         provided, software will attempt to auto-detect adaptors',
         metavar = '<adaptor1 ...>',
         type = str,
@@ -735,7 +738,7 @@ def get_arguments(args, __version__):
         required = True)
     count_reqs.add_argument(
         '-t', '--reference_type',
-        help = 'GTF type (i.e. \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
+        help = 'GTF type (i.e, \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
         metavar = '<DEFAULT, CODING, CODING_TRUNCATED>',
         type = str,
         required = True)
@@ -780,7 +783,7 @@ def get_arguments(args, __version__):
         help = 'Show help message and exit')
     normalize_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a \
+        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a \
         GTF reference file must be included',
         metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
         type = str,
@@ -1043,11 +1046,29 @@ def get_arguments(args, __version__):
         action = 'help',
         help = 'Show help message and exit')
     curate_opts.add_argument(
-        '-t', '--truncate_amount',
-        help = 'Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
-        default = 45,
-        metavar = '<value>',
+        '--truncate',
+        help = 'Provide argument to truncate gene records',
+        action = 'store_true',
+        required = False)
+    curate_opts.add_argument(
+        '--protein_coding',
+        help = 'Provide argument to remove any gene records not belonging to protein coding genes',
+        type = bool,
+        default = False,
+        required = False)
+    curate_opts.add_argument(
+        '--truncate_5prime',
+        help = 'Amount to truncate from 5\' end of each transcript, only used if --truncate provided (default: %s)' % DEFAULT_TRUNCATE_5PRIME,
+        metavar = '<amount>',
         type = int,
+        default = DEFAULT_TRUNCATE_5PRIME,
+        required = False)
+    curate_opts.add_argument(
+        '--truncate_3prime',
+        help = 'Amount to truncate from 3\' end of each transcript, only used if --truncate provided (default: %s)' % DEFAULT_TRUNCATE_3PRIME,
+        metavar = '<amount>',
+        type = int,
+        default = DEFAULT_TRUNCATE_3PRIME,
         required = False)
     curate_opts.add_argument(
         '--sjdbOverhang',
@@ -1077,7 +1098,7 @@ def get_arguments(args, __version__):
         help = 'Path and file name to reference GTF',
         metavar = '</path/transcripts.gtf>',
         type = str,
-        required = False)
+        required = True)
     # Optional arguments
     truncate_opts = truncate_parser.add_argument_group('optional arguments')
     truncate_opts.add_argument(
@@ -1085,37 +1106,25 @@ def get_arguments(args, __version__):
         action = 'help',
         help = 'Show help message and exit')
     truncate_opts.add_argument(
-        '-t', '--truncate_amount',
-        help = 'Number of nucleotides to truncate from the 5\' end of each transcript (default: %s)' % 45,
-        default = 45,
-        metavar = '<value>',
+        '--truncate_5prime',
+        help = 'Amount to truncate from 5\' end of each transcript, only used if --truncate provided (default: %s)' % DEFAULT_TRUNCATE_5PRIME,
+        metavar = '<amount>',
         type = int,
+        default = DEFAULT_TRUNCATE_5PRIME,
         required = False)
     truncate_opts.add_argument(
-        '-c', '--create_refFlats',
-        help = 'Provide flag to output refFlat files for each transcript reference created',
-        action = 'store_true',
+        '--truncate_3prime',
+        help = 'Amount to truncate from 3\' end of each transcript, only used if --truncate provided (default: %s)' % DEFAULT_TRUNCATE_3PRIME,
+        metavar = '<amount>',
+        type = int,
+        default = DEFAULT_TRUNCATE_3PRIME,
         required = False)
-
-    """MAKEFLAT SUBPARSER"""
-    makeflat_parser = subparser.add_parser(
-                        'makeFlat',
-                        description = 'Grab flattened reference file from UCSC based on organism ID',
-                        add_help = False)
-    # Required arguments
-    makeflat_reqs = makeflat_parser.add_argument_group('required arguments')
-    makeflat_reqs.add_argument(
-        '-i', '--input',
-        help = 'Path where input transcripts*.gtf files are found',
-        metavar = '<path>',
-        type = str,
-        required = True)
-    # Optional arguments
-    makeflat_opts = makeflat_parser.add_argument_group('optional arguments')
-    makeflat_opts.add_argument(
-        '-h', '--help',
-        action = 'help',
-        help = 'Show help message and exit')
+    truncate_opts.add_argument(
+        '--protein_coding',
+        help = 'Provide argument to remove any gene records not belonging to protein coding genes',
+        type = bool,
+        default = False,
+        required = False)
 
     """REFERENCE SUBPARSER"""
     reference_parser = subparser.add_parser(
@@ -1199,7 +1208,7 @@ def get_arguments(args, __version__):
         required = False)
     probe_opts.add_argument(
         '--footprint_only',
-        help = 'Only take zip files that are ribosome profiling footprints (file names must contain \"FP\", \"RPF\", or \"FOOTPRINT\")',
+        help = 'Only take zip files that are ribosome profiling footprints (file names must contain"FP\", \"RPF\", or"FOOTPRINT\")',
         action = 'store_true',
         required = False)
 
@@ -1230,35 +1239,38 @@ def get_arguments(args, __version__):
         help = 'Show help message and exit')
     convert_opts.add_argument(
         '--orig_name_label',
-        help = 'Label of original name (usually \"gene_id \")',
-        default = 'gene_id \"',
+        help = 'Label of original name (usually"gene_id")',
+        default = 'gene_id"',
         metavar = '<label>',
         type = str,
         required = False)
     convert_opts.add_argument(
         '--orig_name_location',
-        help = 'Position in last column of GTF where relevant data is found (i.e. 0 would be the first sub-string before the first comma, 3 would be the third sub-string after the second comma before the third comma)',
+        help = 'Position in last column of GTF where relevant data is found (i.e. 0 would be the first sub-string before the first comma, 3 \
+        would be the third sub-string after the second comma before the third comma)',
         default = 0,
         metavar = '<position>',
         type = int,
         required = False)
     convert_opts.add_argument(
         '--new_name_label',
-        help = 'Label of original name (usually \"gene_name \")',
-        default = 'gene_name \"',
+        help = 'Label of original name (usually"gene_name")',
+        default = 'gene_name"',
         metavar = '<label>',
         type = str,
         required = False)
     convert_opts.add_argument(
         '--new_name_location',
-        help = 'Position in last column of GTF where relevant data is found (i.e. 0 would be the first sub-string before the first comma, 3 would be the third sub-string after the second comma before the third comma)',
+        help = 'Position in last column of GTF where relevant data is found (i.e. 0 would be the first sub-string before the first comma, 3 \
+        would be the third sub-string after the second comma before the third comma)',
         default = 2,
         metavar = '<position>',
         type = int,
         required = False)
     convert_opts.add_argument(
         '--refill',
-        help = 'In some cases, where common gene names are unavailable, the dataframe will fill the gene name with the improper field of the GTF. In this case, specify this improper string and these values will be replaced with the original name',
+        help = 'In some cases, where common gene names are unavailable, the dataframe will fill the gene name with the improper field of \
+        the GTF. In this case, specify this improper string and these values will be replaced with the original name',
         default = None,
         metavar = '<label>',
         type = str,

@@ -24,7 +24,7 @@ import os
 import sys
 import pandas as pd
 
-from xpresstools import truncate, rpm, r_fpkm, log_scale, batch_normalize, convert_names_gtf, diff_xpress
+from xpresstools import rpm, r_fpkm, tpm, log_scale, batch_normalize, convert_names_gtf, diff_xpress, edit_gtf
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__
@@ -38,7 +38,7 @@ from .convert import create_bed, create_bigwig
 from .rrnaprobe import rrnaProbe
 from .quality import get_multiqc_summary, make_metagene, make_readDistributions, make_periodicity, make_complexity
 from .parallel import get_cores
-from .utils import get_probe_files, unzip_files, make_flat
+from .utils import get_probe_files, unzip_files
 
 """Main function to call necessary functions for sub-modules
 
@@ -160,16 +160,22 @@ def main(args=None):
             sjdbOverhang = args_dict['sjdbOverhang'])
 
         # Truncate transcript reference
-        truncate(
-            args_dict['gtf'],
-            truncate_amount = args_dict['truncate_amount'],
-            save_coding_path = str(args_dict['output']),
-            save_truncated_path = str(args_dict['output']),
-            sep = '\t',
-            return_files = False)
-
-        # Make periodicity reference
-        make_flat(arg_dict)
+        if args_dict['truncate'] == True:
+            edit_gtf(
+                args_dict['gtf'],
+                longest_transcript = True,
+                protein_coding = args_dict['protein_coding'],
+                truncate_reference = True,
+                _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
+                _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
+                output = True)
+        else:
+            edit_gtf(
+                args_dict['gtf'],
+                longest_transcript = True,
+                protein_coding = args_dict['protein_coding'],
+                truncate_reference = False,
+                output = True)
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
@@ -191,17 +197,17 @@ def main(args=None):
         check_process(args_dict['log_file'], msg_complete(), 'MAKE REFERENCE')
 
     elif args.cmd == 'truncate':
-        print('Formatting coding only and truncated reference files...')
+        print('Formatting and truncating reference files...')
 
-        # Run reference truncation
-        output_path = args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1]
-        truncate(
+        # Truncate transcript reference
+        edit_gtf(
             args_dict['gtf'],
-            truncate_amount = args_dict['truncate_amount'],
-            save_coding_path = str(output_path),
-            save_truncated_path = str(output_path),
-            sep = '\t',
-            return_files = False)
+            longest_transcript = True,
+            protein_coding = args_dict['protein_coding'],
+            truncate_reference = True,
+            _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
+            _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
+            output = True)
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')

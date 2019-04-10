@@ -36,14 +36,15 @@ def count_file(args):
     file, args_dict = args[0], args[1] # Parse args
 
     # Count
-    os.system('htseq-count' \
-        + ' -q' \
-        + ' -m intersection-nonempty' \
-        + ' -t exon' \
-        + ' -r pos' \
-        + ' -s no' \
-        + ' ' + str(args_dict['input']) + str(file) \
-        + ' ' + str(args_dict['gtf_type']) \
+    os.system('htseq-count'
+        + ' -q'
+        + ' -m intersection-nonempty'
+        + ' -t exon'
+        + ' -i gene_id'
+        + ' -r pos'
+        + ' -s no'
+        + ' ' + str(args_dict['input']) + str(file)
+        + ' ' + str(args_dict['gtf_type'])
         + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 """Run count reads manager"""
