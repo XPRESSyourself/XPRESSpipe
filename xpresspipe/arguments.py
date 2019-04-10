@@ -102,27 +102,8 @@ def check_inputs(args_dict):
         args_dict['reference'] = check_directories(args_dict['reference'])
 
     # Check reference_type
-    if 'reference_type' in args_dict and args_dict['cmd'] == 'seRNAseq' or args_dict['cmd'] == 'peRNAseq':
-        if args_dict['reference_type'].upper() == 'DEFAULT':
-            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
-        elif args_dict['reference_type'].upper() == 'CODING':
-            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
-        else:
-            raise Exception('Invalid reference_type value provided')
-
-    if 'reference_type' in args_dict and args_dict['cmd'] == 'riboprof' or args_dict['cmd'] == 'metagene' or args_dict['cmd'] == 'count':
-        if args_dict['reference_type'].upper() == 'DEFAULT':
-            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_refFlat.txt'
-        elif args_dict['reference_type'].upper() == 'CODING':
-            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_refFlat.txt'
-        elif args_dict['reference_type'].upper() == 'CODING_TRUNCATED':
-            args_dict['gtf_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated.gtf'
-            args_dict['flat_type'] = str(args_dict['reference']) + 'transcripts_coding_truncated_refFlat.txt'
-        else:
+    if 'gtf' in args_dict and args_dict['cmd'] == 'seRNAseq' or args_dict['cmd'] == 'peRNAseq' and args_dict['cmd'] == 'riboprof' or args_dict['cmd'] == 'count':
+        if str(args_dict['gtf'].lower()[-4:]) != '.gtf':
             raise Exception('Invalid reference_type value provided')
 
     # Check max_processor input
@@ -235,9 +216,9 @@ def get_arguments(args, __version__):
         type = str,
         required = True)
     se_reqs.add_argument(
-        '-t', '--reference_type',
-        help = 'GTF type (i.e, \"DEFAULT\",\"CODING\")',
-        metavar = '<DEFAULT, CODING>',
+        '-g', '--gtf',
+        help = 'Path and file name to GTF used for alignment quantification',
+        metavar = '</path/transcript.gtf>',
         type = str,
         required = True)
     se_reqs.add_argument(
@@ -355,9 +336,9 @@ def get_arguments(args, __version__):
         type = str,
         required = True)
     pe_reqs.add_argument(
-        '-t', '--reference_type',
-        help = 'GTF type (i.e, \"DEFAULT\", \"CODING\")',
-        metavar = '<DEFAULT, CODING>',
+        '-g', '--gtf',
+        help = 'Path and file name to GTF used for alignment quantification',
+        metavar = '</path/transcript.gtf>',
         type = str,
         required = True)
     pe_reqs.add_argument(
@@ -475,9 +456,9 @@ def get_arguments(args, __version__):
         type = str,
         required = True)
     rp_reqs.add_argument(
-        '-t', '--reference_type',
-        help = 'GTF type (i.e, \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
-        metavar = '<DEFAULT, CODING, CODING_TRUNCATED>',
+        '-g', '--gtf',
+        help = 'Path and file name to GTF used for alignment quantification',
+        metavar = '</path/transcript.gtf>',
         type = str,
         required = True)
     rp_reqs.add_argument(
@@ -737,9 +718,9 @@ def get_arguments(args, __version__):
         type = str,
         required = True)
     count_reqs.add_argument(
-        '-t', '--reference_type',
-        help = 'GTF type (i.e, \"DEFAULT\", \"CODING\", \"CODING_TRUNCATED\")',
-        metavar = '<DEFAULT, CODING, CODING_TRUNCATED>',
+        '-g', '--gtf',
+        help = 'Path and file name to GTF used for alignment quantification',
+        metavar = '</path/transcript.gtf>',
         type = str,
         required = True)
     # Optional arguments
@@ -1035,7 +1016,7 @@ def get_arguments(args, __version__):
         required = True)
     curate_reqs.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to reference GTF',
+        help = 'Path and file name to reference GTF (DO NOT USE MODIFIED GTF HERE)',
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = False)
@@ -1089,7 +1070,7 @@ def get_arguments(args, __version__):
     """TRUNCATE SUBPARSER"""
     truncate_parser = subparser.add_parser(
                         'truncate',
-                        description = 'Create a coding-only and coding-only truncated reference GTF',
+                        description = 'Create longest isoform, protein coding-only, and truncated reference GTFs',
                         add_help = False)
     # Required arguments
     truncate_reqs = truncate_parser.add_argument_group('required arguments')
@@ -1107,14 +1088,14 @@ def get_arguments(args, __version__):
         help = 'Show help message and exit')
     truncate_opts.add_argument(
         '--truncate_5prime',
-        help = 'Amount to truncate from 5\' end of each transcript, only used if --truncate provided (default: %s)' % DEFAULT_TRUNCATE_5PRIME,
+        help = 'Amount to truncate from 5\' end of each transcript (default: %s)' % DEFAULT_TRUNCATE_5PRIME,
         metavar = '<amount>',
         type = int,
         default = DEFAULT_TRUNCATE_5PRIME,
         required = False)
     truncate_opts.add_argument(
         '--truncate_3prime',
-        help = 'Amount to truncate from 3\' end of each transcript, only used if --truncate provided (default: %s)' % DEFAULT_TRUNCATE_3PRIME,
+        help = 'Amount to truncate from 3\' end of each transcript (default: %s)' % DEFAULT_TRUNCATE_3PRIME,
         metavar = '<amount>',
         type = int,
         default = DEFAULT_TRUNCATE_3PRIME,
@@ -1124,6 +1105,13 @@ def get_arguments(args, __version__):
         help = 'Provide argument to remove any gene records not belonging to protein coding genes',
         type = bool,
         default = False,
+        required = False)
+    truncate_opts.add_argument(
+        '-m', '--max_processors',
+        help = 'Number of max processors to use for tasks (default: No limit)',
+        metavar = '<processors>',
+        type = int,
+        default = DEFAULT_MAX_PROCESSORS,
         required = False)
 
     """REFERENCE SUBPARSER"""
@@ -1147,7 +1135,7 @@ def get_arguments(args, __version__):
         required = True)
     reference_reqs.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to reference GTF',
+        help = 'Path and file name to reference GTF (DO NOT USE MODIFIED GTF HERE)',
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = False)

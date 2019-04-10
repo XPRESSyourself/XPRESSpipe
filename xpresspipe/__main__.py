@@ -175,7 +175,8 @@ def main(args=None):
                 longest_transcript = True,
                 protein_coding = args_dict['protein_coding'],
                 truncate_reference = False,
-                output = True)
+                output = True,
+                cpu_threshold = args_dict['threads'])
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
@@ -200,6 +201,7 @@ def main(args=None):
         print('Formatting and truncating reference files...')
 
         # Truncate transcript reference
+        args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
         edit_gtf(
             args_dict['gtf'],
             longest_transcript = True,
@@ -207,10 +209,11 @@ def main(args=None):
             truncate_reference = True,
             _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
             _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
-            output = True)
+            output = True,
+            cpu_threshold = args_dict['threads'])
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
+        # check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
 
     elif args.cmd == 'rrnaProbe':
         # Get files to probe
@@ -299,7 +302,6 @@ def main(args=None):
         # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
-        args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
 
@@ -349,7 +351,6 @@ def main(args=None):
         # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
-        args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
 
@@ -399,7 +400,6 @@ def main(args=None):
         # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
-        args_dict['gtf'] = args_dict['gtf_type']
         run_normalization(args_dict)
         check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
 

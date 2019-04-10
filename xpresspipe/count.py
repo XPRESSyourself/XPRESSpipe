@@ -44,7 +44,7 @@ def count_file(args):
         + ' -r pos'
         + ' -s no'
         + ' ' + str(args_dict['input']) + str(file)
-        + ' ' + str(args_dict['gtf_type'])
+        + ' ' + str(args_dict['gtf'])
         + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 """Run count reads manager"""

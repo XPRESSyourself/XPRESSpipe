@@ -6,6 +6,8 @@ channels: !!python/tuple
   'conda-forge'
 - !!python/unicode
   'bioconda'
+- !!python/unicode
+  'r'
 dependencies:
 - FastP
 - STAR
@@ -14,6 +16,7 @@ dependencies:
 - deeptools
 - fastqc
 - htseq
+- r
 - pip:
   - pandas
   - numpy
