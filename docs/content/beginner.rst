@@ -73,8 +73,12 @@ Generate Reference Files
 
 .. code-block:: shell
 
-  $ docker run jordanberg/xpresspipe curateReference -o ./ -f fasta_files/ -g ./transcripts.gtf \
-                                                      --longest_transcript --protein_coding --truncate \
+  $ docker run jordanberg/xpresspipe curateReference --output ./ \
+                                                      --fasta fasta_files/ \
+                                                      --gtf ./transcripts.gtf \
+                                                      --longest_transcript \
+                                                      --protein_coding \
+                                                      --truncate \
                                                       --sjdbOverhang 49
 
 | - If running regular single-end sequencing, you will want to leave out the :data:`--truncate` argument and may want to leave out the :data:`--protein_coding` argument if you want to quantify miRNA, etc.
@@ -84,26 +88,104 @@ Generate Reference Files
 =================================
 Process Raw Sequencing Files
 =================================
-| - Now let's get our raw data. Make a new folder, something called :data:`experiment_output` or whatever you like and place your data there.
-| - Make sure the files follow proper naming conventions (see naming conventions :ref:`here <general-usage>`)
-| - Now let's process the data
+| - Now let's get our raw data. Let's follow the following instructions:
+| 1. Make a new folder, something called :data:`raw_data` or whatever you like and place your data there.
+| 2. Make sure the files follow proper naming conventions (see naming conventions :ref:`here <general-usage>`)
+| 3. Now let's process the data
+| 4. Let's also create a folder called something like :data:`output`
+| 5. Also, make sure you have the 3' adaptor sequence handy used when generating your sequencing library
+| 6. We'll feed the program the new GTF file that contains only longest transcript, protein coding, truncated references generating in the reference curation step
+| 7. We'll give the experiment a name and also specify what `method of sample normalization <https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/>`_ we want performed on the count data
+| 8. We also need to specify the :data:`--sjdbOverhang` amount we fed into the reference curation step, so in this case we will use :data:`--sjdbOverhang 49`
 
 .. code-block:: shell
 
-  $ docker run jordanberg/xpresspipe riboprof
+  $ docker run jordanberg/xpresspipe riboprof --input raw_data/ \
+                                              --output output/ \
+                                              --reference reference_folder/ \
+                                              --gtf reference_folder/transcripts_longestTranscript_proteinCoding_truncated.gtf
+                                              --experiment riboprof_test
+                                              --adaptor CTGTAGGCACCATCAAT
+                                              --method RPKM
+                                              --sjdbOverhang 49
+
+| - If you are running a lot of files, especially for human samples, this may take a lot of time. We recommend running this on some kind of server. A situation like yeast with few samples may be feasible to run on a personal computer, but will likely also take some time
+
+======================
+Explore the Data
+======================
+| - Once the data is finished processing, we can start exploring the output.
+
+------------------
+Sequencing Metrics
+------------------
+
+
+------------------
+Library Complexity
+------------------
+
+
+-------------------
+Metagene Analysis
+-------------------
+
+
+--------------------------------
+Periodicity (Ribosome Profiling)
+--------------------------------
+
+
+----------------------------------
+Count Data and Downstream Analysis
+----------------------------------
 
 
 
 
 
 
-Get raw data files
-Run
-Explore
-Personal computer limited, will need to do these steps on supercomputer, talk to your local supercomputer people to help or follow next set of instructions for using Amazon
 
 
 
 
-| - Next, let's download XPRESSpipe.
-| 1.
+
+
+=======================
+Supercomputing
+=======================
+
+---------------
+Getting Started
+---------------
+
+
+---------------
+Load XPRESSpipe
+---------------
+
+
+
+
+
+---------------
+Load Data
+---------------
+
+
+----------------
+Curate Reference
+----------------
+
+
+
+
+---------------
+Process Data
+---------------
+
+
+
+--------------
+Retrieve Data
+--------------
