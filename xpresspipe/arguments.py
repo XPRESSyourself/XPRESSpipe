@@ -80,7 +80,7 @@ description_table  =  """\
         |-----------------------|---------------------------------------------------------------------------------------|
         |    makeReference      |   Create a STAR reference directory (memory intensive)                                |
         |-----------------------|---------------------------------------------------------------------------------------|
-        |    truncate           |   Create a coding-only and coding-only truncated reference GTF                        |
+        |    modifyGTF          |   Create a longest isoform-only, protein-coding only, and/or truncated GTF file       |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
         |                       |   Run a BLAST search on sequences you choose to use as depletion probes to verify     |
@@ -543,13 +543,6 @@ def get_arguments(args, __version__):
         default = 50,
         required = False)
     rp_opts.add_argument(
-        '--downstream',
-        help = 'Number of nucleotides to track after the landmark (default: %s)' % 200,
-        default = 200,
-        metavar = '<value>',
-        type = int,
-        required = False)
-    rp_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -771,7 +764,7 @@ def get_arguments(args, __version__):
         required = False)
     normalize_opts.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to reference GTF',
+        help = 'Path and file name to reference GTF (RECOMMENDED: Do not use modified GTF file)',
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = False)
@@ -1027,15 +1020,19 @@ def get_arguments(args, __version__):
         action = 'help',
         help = 'Show help message and exit')
     curate_opts.add_argument(
-        '--truncate',
-        help = 'Provide argument to truncate gene records',
+        '--longest_transcript',
+        help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
         action = 'store_true',
         required = False)
     curate_opts.add_argument(
         '--protein_coding',
-        help = 'Provide argument to remove any gene records not belonging to protein coding genes',
-        type = bool,
-        default = False,
+        help = 'Provide argument to keep only gene records annotated as protein coding genes',
+        action = 'store_true',
+        required = False)
+    curate_opts.add_argument(
+        '--truncate',
+        help = 'Provide argument to truncate gene records',
+        action = 'store_true',
         required = False)
     curate_opts.add_argument(
         '--truncate_5prime',
@@ -1069,8 +1066,8 @@ def get_arguments(args, __version__):
 
     """TRUNCATE SUBPARSER"""
     truncate_parser = subparser.add_parser(
-                        'truncate',
-                        description = 'Create longest isoform, protein coding-only, and truncated reference GTFs',
+                        'modifyGTF',
+                        description = 'Create longest isoform, protein coding-only, and/or truncated reference GTFs',
                         add_help = False)
     # Required arguments
     truncate_reqs = truncate_parser.add_argument_group('required arguments')
@@ -1087,24 +1084,33 @@ def get_arguments(args, __version__):
         action = 'help',
         help = 'Show help message and exit')
     truncate_opts.add_argument(
+        '--longest_transcript',
+        help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
+        action = 'store_true',
+        required = False)
+    truncate_opts.add_argument(
+        '--protein_coding',
+        help = 'Provide argument to keep only gene records annotated as protein coding genes',
+        action = 'store_true',
+        required = False)
+    truncate_opts.add_argument(
+        '--truncate',
+        help = 'Provide argument to truncate gene records',
+        action = 'store_true',
+        required = False)
+    truncate_opts.add_argument(
         '--truncate_5prime',
-        help = 'Amount to truncate from 5\' end of each transcript (default: %s)' % DEFAULT_TRUNCATE_5PRIME,
+        help = 'Amount to truncate from 5\' end of each transcript, requires --truncate argument (default: %s)' % DEFAULT_TRUNCATE_5PRIME,
         metavar = '<amount>',
         type = int,
         default = DEFAULT_TRUNCATE_5PRIME,
         required = False)
     truncate_opts.add_argument(
         '--truncate_3prime',
-        help = 'Amount to truncate from 3\' end of each transcript (default: %s)' % DEFAULT_TRUNCATE_3PRIME,
+        help = 'Amount to truncate from 3\' end of each transcript, requires --truncate argument (default: %s)' % DEFAULT_TRUNCATE_3PRIME,
         metavar = '<amount>',
         type = int,
         default = DEFAULT_TRUNCATE_3PRIME,
-        required = False)
-    truncate_opts.add_argument(
-        '--protein_coding',
-        help = 'Provide argument to remove any gene records not belonging to protein coding genes',
-        type = bool,
-        default = False,
         required = False)
     truncate_opts.add_argument(
         '-m', '--max_processors',

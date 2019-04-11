@@ -13,7 +13,6 @@ XPRESSpipe Reference Requirements
 | - All chromosomal genome fasta files are in the parent reference directory
 | - A sub-directory, named :data:`genome`, contains the STAR reference files. If :data:`createReference` is used to curate the reference, and the parent reference directory was provided as output location, this formatted will be handled by XPRESSpipe
 | - A transcript reference (GTF), is located in the reference parent directory and is named :data:`transcripts.gtf`. If coding-only or truncated reference GTFs are used, they should also be in this directory (:data:`truncate` will handle file naming and formatting so long as the output location is specified as this parent directory)
-| - If :data:`metagene` analysis is being performed, properly flattened transcript references are located in the parent reference directory. If :data:`makeFlat` was used with this parent reference directory as output location, proper naming and formatted will be handled by XPRESSpipe
 | **A completed reference directory can be created that follows these requirements by creating a directory, placing the transcripts.gtf and chromosome genomic fasta files in the parent directory and running :data:`curateReference` as described below
 
 ============================
@@ -87,11 +86,13 @@ Examples
   $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -t 12
 
 ============================================
-Transcript Reference Curation and Truncation
+Transcript Reference Modification
 ============================================
-| At times, quantification of transcripts to coding-only transcripts or to a modified transcript reference is desirable. Below are two examples:
-| 1. As ribosomal RNA (rRNA) contamination is common in RNAseq, even when a depletion step was performed prior to library preparation, it is sometimes desirable to not count these and other non-coding RNAs in the quantification and analysis.
-| 2. During ribosome profiling library preparation, a 5' transcript bias is common, regardless of library preparation method. It has therefore been suggested to `exclude the first 45-50 nucleotides of each transcript from quantification <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_
+| At times, quantification of transcripts to a modified transcript reference is desirable. Below are some examples:
+| 1. As ribosomal RNA (rRNA) contamination is common in RNA-seq, even when a depletion step was performed prior to library preparation, it is sometimes desirable to not count these and other non-coding RNAs in the quantification and analysis.
+| 2. During ribosome profiling library preparation, a 5' and 3' transcript bias is common, regardless of library preparation method. It has therefore been suggested to `exclude the first 45-50 nucleotides from the 5' end and 15 nucleotides from the 3' end of each transcript during quantification <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_
+| 3. Several genes encode multiple isoforms or transcripts. During quantification, many software packages for counting reads to genes consider a read mapping to multiple transcripts of the same gene as a multi-mapper. Unless interested in alternate isoform usage, it is recommended that transcriptome reference files only contain the longest transcript for each gene.
+| The :data:`modifyGTF` sub-module provides the ability to make the above-mentioned modifications to a GTF transcriptome reference file. The modified GTF file is output at the end and the filename is labeled with the modifications made. Truncations to each transcript reference are stranded-aware.
 
 -----------
 Arguments
@@ -117,55 +118,33 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`-t <value>, --truncate_amount <value>`
-     -  Number of nucleotides to truncate from the 5' end of each transcript (default: :data:`45`)
-   * - :data:`-c, --create_refFlats`
-     - Provide flag to output refFlat files for each transcript reference created
+   * - :data:`--longest_transcript`
+     -  Provide argument to keep only longest transcript per gene record (RECOMMENDED)
+   * - :data:`--protein_coding`
+     -  Provide argument to keep only gene records annotated as protein coding genes
+   * - :data:`--truncate`
+     -  Provide argument to truncate gene records
+   * - :data:`--truncate_5prime <amount>`
+     -  Amount to truncate from 5' end of each transcript, requires --truncate argument (default: 45)
+   * - :data:`--truncate_3prime <amount>`
+     -  Amount to truncate from 3' end of each transcript, requires --truncate argument (default: 15)
+   * - :data:`-m <processors>, --max_processors <processors>`
+     - Number of max processors to use for tasks (default: No limit)
 
 -----------
 Examples
 -----------
-| **Example 1 -- Create coding-only and truncated references:**
-| - Creates a coding only GTF reference file and a truncated coding-only reference file
-| - Truncates the first 50 nucleotides from the first exon of every transcript
+| **Example 1 -- Create longest transcript-only, protein coding-only, truncated reference:**
+| - Keeps the longest transcript for each gene record
+| - Keeps only protein_coding annotated transcripts
+| - Truncates the first 45 nucleotides from the first exon of every transcript (default)
+| - Truncates the last 15 nucleotides from the last exon of every transcript (default)
+| - Each modification desired must be implicitly passed to the sub-module
 
 .. code-block:: shell
 
-  $ xpresspipe truncate -g /path/to/reference/transcripts.gtf -t 50 -c
+  $ xpresspipe truncate -g /path/to/reference/transcripts.gtf --longest_transcript --protein_coding --truncate
 
-============================================
-Flatten Transcript References
-============================================
-| Certain analysis platforms require a RefFlat transcript prediction file. These files can be created with the following command.
-| XPRESSpipe uses the `UCSC-GTFtoGenePred <https://bioconda.github.io/recipes/ucsc-gtftogenepred/README.html>`_ package to perform these conversions.
-
------------
-Arguments
------------
-| The help menu can be accessed by calling the following from the command line:
-
-.. code-block:: shell
-
-  $ xpresspipe makeFlat --help
-
-.. list-table::
-   :widths: 35 50
-   :header-rows: 1
-
-   * - Required Arguments
-     - Description
-   * - :data:`-i \<path\>, --input \<path\>`
-     - Path where input transcripts*.gtf files are found
-
------------
-Examples
------------
-| **Example 1 -- Create refFlat files:**
-| - Creates a refFlat-formatted file for each GTF file in the given input directory
-
-.. code-block:: shell
-
-  $ xpresspipe makeFlat -i /path/to/reference/
 
 ============================================
 Perform Full Reference Curation
@@ -201,31 +180,39 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`-t <value>, --truncate_amount <value>`
-     -  Number of nucleotides to truncate from the 5' end of each transcript (default: :data:`45`)
+   * - :data:`--longest_transcript`
+     -  Provide argument to keep only longest transcript per gene record (RECOMMENDED)
+   * - :data:`--protein_coding`
+     -  Provide argument to keep only gene records annotated as protein coding genes
+   * - :data:`--truncate`
+     -  Provide argument to truncate gene records
+   * - :data:`--truncate_5prime <amount>`
+     -  Amount to truncate from 5' end of each transcript, requires --truncate argument (default: 45)
+   * - :data:`--truncate_3prime <amount>`
+     -  Amount to truncate from 3' end of each transcript, requires --truncate argument (default: 15)
    * - :data:`--sjdbOverhang \<value\>`
      - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
-
 
 -----------
 Examples
 -----------
 | **Example 1 -- Create XPRESSpipe-formatted reference for single-end alignment:**
 | - Creates a star reference for single-end read mapping (1x50bp reads)
-| - Outputs coding-only and truncated coding-only transcripts reference GTFs
-| - Truncates the first 50 nucleotides from the first exon of every transcript
-| - Creates a refFlat-formatted file for each GTF file in the given input directory
+| - Keeps the longest transcript for each gene record
+| - Keeps only protein_coding annotated transcripts
+| - Truncates the first 45 nucleotides from the first exon of every transcript (default)
+| - Truncates the last 15 nucleotides from the last exon of every transcript (default)
 
 .. code-block:: shell
 
-  $ xpresspipe curateReference -o /path/to/se/ref/ -f /path/to/se/ref/ -g /path/to/se/ref/transcripts.gtf -t 50 -m 10 --sjdbOverhang 49
+  $ xpresspipe curateReference -o /path/to/se/ref/ -f /path/to/se/ref/ -g /path/to/se/ref/transcripts.gtf --longest_transcript --protein_coding --truncate --sjdbOverhang 49
 
 | **Example 2 -- Create refFlat files:**
 | - Creates a star reference for paired-end read mapping (2x100bp reads)
-| - Outputs coding-only and truncated coding-only transcripts reference GTFs
-| - Creates a refFlat-formatted file for each GTF file in the given input directory
+| - No modifications are made to the GTF file
+| - Processes are limited to 10 cores
 
 .. code-block:: shell
 

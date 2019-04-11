@@ -3,32 +3,41 @@ Installation
 ############
 
 ====================
-PyPi Install
+Conda Installation
 ====================
 | This feature is not yet available...
 |
-| 1)  Install XPRESSpipe and associated dependencies via pip:
-
-.. code-block:: shell
-
-  $ pip install xpresspipe
-
-====================
-Conda Install
-====================
-| This feature is not yet available...
-|
-| 1)  Install XPRESSpipe and associated dependencies via conda:
+| 1. Install XPRESSpipe and associated dependencies via conda:
 
 .. code-block:: shell
 
   $ conda install -y -c bioconda xpresspipe
 
 ======================
-Manual install
+Docker Container
 ======================
 
-| 1)  Or download XPRESSpipe manually:
+| XPRESSpipe is available as a fully independent `Docker <https://www.docker.com/>`_ container. By downloading the Docker software and using the below command, a image of XPRESSpipe and all associated dependencies localized to a single file for ease of use.
+
+| 1. Download XPRESSpipe Docker image:
+
+.. code-block:: shell
+
+  $ docker image pull jordanberg/xpresspipe:latest
+
+| 2. Run XPRESSpipe:
+
+.. code-block:: shell
+
+  $ docker run jordanberg/xpresspipe --help
+
+| If the help menu prints, XPRESSpipe if functioning properly and you can replace the :data:`--help` option with the appropriate sub-module and arguments.
+
+======================
+Manual installation
+======================
+
+| 1. Or download XPRESSpipe manually:
 
 .. code-block:: shell
 
@@ -36,7 +45,7 @@ Manual install
   $ cd XPRESSpipe
   $ cd python setup.py install
 
-| 2)  Or, to download specific version:
+| 2. Or, to download specific version:
 
 .. code-block:: shell
 
@@ -47,7 +56,7 @@ Manual install
   $ cd xpresspipe
   $ cd python setup.py install
 
-| 3)  At the end of the installation instructions, an installation location will be given. Add this to your $PATH:
+| 3. At the end of the installation instructions, an installation location will be given. Add this to your $PATH:
 
 .. code-block:: shell
 
@@ -69,8 +78,6 @@ Dependencies
 | - bedtools
 | - deeptools
 | - xpresspipe
-| - picard
 | - fastqc
-| - plastid
-| - gtfToGenePred
 | - htseq
+| - R

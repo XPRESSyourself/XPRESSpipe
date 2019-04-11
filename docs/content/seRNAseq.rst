@@ -26,10 +26,15 @@ Single-End RNA-seq Pipeline
      - Normalizes count table based on user-defined input
    * - :data:`make_readDistributions()`
      - Runs fastqc on each sample and generates a summary for read distributions of each sample
-   * - :data:`make_metagene()`
-     - Generates a summary meta-gene report for each sample
    * - :data:`get_summary()`
      - Runs multiqc to generate summary reports for steps in the pipeline
+
+| Run the following for more details:
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe seRNAseq --help
 
 -----------
 Examples
@@ -39,4 +44,12 @@ Examples
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe seRNAseq -i se_test -o se_out -r se_reference -t CODING -e se_test -a CTGTAGGCACCATCAAT --method RPKM --sjdbOverhang 49
+  $ xpresspipe seRNAseq \
+                -i se_test \
+                -o se_out \
+                -r se_reference \
+                --gtf transcripts_longestTranscript.gtf \
+                -e se_test \
+                -a CTGTAGGCACCATCAAT \
+                --method RPKM \
+                --sjdbOverhang 49

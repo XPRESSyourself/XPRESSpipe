@@ -26,10 +26,15 @@ Paired-End RNA-seq Pipeline
      - Normalizes count table based on user-defined input
    * - :data:`make_readDistributions()`
      - Runs fastqc on each sample and generates a summary for read distributions of each sample
-   * - :data:`make_metagene()`
-     - Generates a summary meta-gene report for each sample
    * - :data:`get_summary()`
      - Runs multiqc to generate summary reports for steps in the pipeline
+
+| Run the following for more details:
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe peRNAseq --help
 
 -----------
 Examples
@@ -39,4 +44,12 @@ Examples
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe seRNAseq -i pe_test -o pe_out -r pe_reference -t CODING -e pe_test -a AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC --method FPKM --sjdbOverhang 100
+  $ xpresspipe peRNAseq \
+                -i pe_test \
+                -o pe_out \
+                -r pe_reference \
+                --gtf transcripts.gtf \
+                -e pe_test \
+                -a AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC \
+                --method FPKM \
+                --sjdbOverhang 100

@@ -50,6 +50,10 @@ Arguments
      - Include flag to output bigwig files for each aligned file
    * - :data:`--sjdbOverhang \<sjdbOverhang_amount\>`
      - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
+   * - :data:`--mismatchRatio \<mismatchRatio\>`
+     - Alignment ratio of mismatches to mapped length is less than this value. See STAR documentation for more information on setting this parameter
+   * - :data:`--seedSearchStartLmax \<seedSearchStartLmax\>`
+     - Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 

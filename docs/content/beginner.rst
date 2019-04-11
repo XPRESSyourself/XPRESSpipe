@@ -1,0 +1,109 @@
+############
+Beginners
+############
+
+=================================
+First Step
+=================================
+| If this is your first time doing any programming, congratulations! You are embarking upon a very rewarding path. As with learning any new natural language, there is a learning curve associated with learning a computer language. While XPRESSpipe is aimed at reducing some of this overhead, using this software will still require some effort, just as learning any new language or laboratory technique would require.
+
+| XPRESSpipe is used through something called the `command line interface <https://en.wikipedia.org/wiki/Command-line_interface>`_ (or CLI), or what some people refer to as `"The Matrix" <https://www.youtube.com/watch?v=kqUR3KtWbTk>`_. This may seem daunting, but luckily, several free online courses are available to quickly catch you up to speed on some of the basics that will be required to use this software. We recommend Codecademy's CLI course, which you can find `here <https://www.codecademy.com/learn/learn-the-command-line>`_ and should take only a couple of hours (Codecademy estimates ~10 hours, but you probably don't need to finish the course to use XPRESSpipe, this is more to get you comfortable with the command line).
+
+| Once, you're ready to jump into the command line, we can get rolling! For the steps below, We're going to assume we are on an Mac operating system and provide examples under this pretext, but this software is compatible with any Linux-like operating system (i.e. Ubuntu).
+
+=================================
+Install XPRESSpipe
+=================================
+| - To keep this as simple as possible, we are going to use a program called `Docker <https://www.docker.com/>`_. Docker's purpose is to, as it's referred to in the computer world, containerize a program and all other requirements of the program so that the program is fully self contained. This is great because, say in 5 years you wanted to use the same version of XPRESSpipe and the dependencies it used back then, you could access the same Docker "image" and be good to go, the output given the same input would be fully reproducible! Let's download Docker now. This will likely require you to create a Docker account.
+| 1. Click `here <https://download.docker.com/mac/stable/Docker.dmg>`_ to download Docker (the link is for a Mac)
+| 2. Open and install the file that was downloaded from the link
+
+| - Now its time to enter the command line.
+| 1. Click on the Finder icon the top right side of the screen on your Mac (or wherever else it might be located)
+| 2. Type "Terminal" into the search bar and click on the app icon
+
+| - Great! Now we are in the command line interface. As a review, anything followed by a "$" is a command and you can execute your command by pressing Enter. You can also auto-complete file names using Tab. But be careful, space and characters must be typed exactly and commands are case-sensitive. Let's get the latest version of XPRESSpipe by executing the lines of code in the code block below.
+
+.. code-block:: shell
+
+  $ docker image pull jordanberg/xpresspipe:latest
+
+| - Let's test that this worked by executing the following:
+
+.. code-block:: shell
+
+  $ docker run jordanberg/xpresspipe --help
+
+| - If a help menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!
+
+
+=================================
+Generate Reference Files
+=================================
+| - Before we can actually use XPRESSpipe to process our raw RNA-seq data, we need to create a reference directory. Directory is just programmer lingo for a folder. In this example, we will be working with human-derived RNA-seq data, so let's perform the following in the command line:
+
+.. code-block:: shell
+
+  $ cd ~/Desktop
+  $ mkdir reference_folder
+  $ mkdir reference_folder/fasta_files
+
+| 1. The first command helped us navigate to the Desktop. The "~" icon is a shortcut for the User directory, and every directory needs to be separated by a "/"
+| 2. The second command created a new folder in the Desktop directory called :data:`reference_folder`
+| 3. The third command created a new folder in the reference directory for intermediate reference files
+
+| - Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are kind of long, I used the "\" character to indicate I am continuing the command in the next line. You do not need this in executing the command, they just help in making the code a little more readable.
+
+.. code-block:: shell
+
+  $ cd reference_folder/
+  $ curl ftp://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz -o transcripts.gtf.gz
+  $ gzip -d *.gz
+  $ cd fasta_files/
+  $ for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y MT; \
+      do curl -O ftp://ftp.ensembl.org/pub/release-95/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.${i}.fa.gz; \
+      done
+  $ gzip -d *.gz
+  $ cd ../
+
+| 1. We navigated into the reference folder, downloaded a GTF reference file and unzipped it, then navigated to the :data:`fasta_file` directory to download the raw reference data and unzipped it. Finally, we returned to the main reference directory.
+| 2. If this didn't work, we can navigate to `Ensembl <https://www.ensembl.org/>`_ to get the relevant data. We need to get the `GTF file <ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.gtf.gz>`_ and `each chromosome sequence file <ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/>`_. You can follow the links to download these files and then move them into your reference folder. The link to the chromosome sequence files actually contains more files than we need. We just need the files that start with :data:`Homo_sapiens.GRCh38.dna.chromosome`. If these files were zipped with a :data:`.zip` or :data:`.gz` extension, double click each file to unzip them.
+
+| - Now we need to curate these references files into something the sequencing alignment software can use. Since we are using ribosome profiling data, we want a reference that will allow us to `avoid mapping to the 5' and 3' ends of genes <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. We also don't want to align to anything but protein coding genes. Finally, we want to quantify to the longest transcript. This last bit just helps the software avoid confusion when a gene has multiple splice variants to choose from. Since this is short read sequencing, we also want to factor this into the curation of the reference (see the :data:`--sjdbOverhang` argument below).
+
+.. code-block:: shell
+
+  $ docker run jordanberg/xpresspipe curateReference -o ./ -f fasta_files/ -g ./transcripts.gtf \
+                                                      --longest_transcript --protein_coding --truncate \
+                                                      --sjdbOverhang 49
+
+| - If running regular single-end sequencing, you will want to leave out the :data:`--truncate` argument and may want to leave out the :data:`--protein_coding` argument if you want to quantify miRNA, etc.
+| - If running regular paired-end sequencing, you will want to change the :data:`--sjdbOverhang` argument to be the length of one of the paired-end reads - 1, so if we ran 2x100bp sequencing, we would specify :data:`--sjdbOverhang 99`
+| - This may take awhile, and as we will discuss later, you may want to run these steps on a supercomputer, but this will serve as a preliminary guide for now.
+
+=================================
+Process Raw Sequencing Files
+=================================
+| - Now let's get our raw data. Make a new folder, something called :data:`experiment_output` or whatever you like and place your data there.
+| - Make sure the files follow proper naming conventions (see naming conventions :ref:`here <general-usage>`)
+| - Now let's process the data
+
+.. code-block:: shell
+
+  $ docker run jordanberg/xpresspipe riboprof
+
+
+
+
+
+
+Get raw data files
+Run
+Explore
+Personal computer limited, will need to do these steps on supercomputer, talk to your local supercomputer people to help or follow next set of instructions for using Amazon
+
+
+
+
+| - Next, let's download XPRESSpipe.
+| 1.

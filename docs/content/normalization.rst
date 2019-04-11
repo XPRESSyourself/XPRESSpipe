@@ -16,11 +16,13 @@ Sample Normalize
 | :math:`RPKM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e6\ x\ 1e3}{\#\ mapped\ reads\ per\ sample\ x\ gene\ length\ (bp)}`
 | Perform fragments per kilobase million sample normalization on RNAseq data
 | :math:`FPKM = \frac{\#\ number\ fragments\ per\ gene\ x\ 1e6\ x\ 1e3}{\#\ mapped\ fragments\ per\ sample\ x\ gene\ length\ (bp)}`
+| Perform transcripts per million sample normalization on RNAseq data (same as RPKM, but order of operations is different)
+| :math:`TPM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e3\ x\ 1e6}{\gene\ length\ (bp) x\ #\ mapped\ reads\ per\ sample}`
 |
 | Translation efficiency normalization can be performed within XPRESStools
 |
 | Assumptions:
-|   - R is installed on your machine and is in your $PATH
+|   - R is installed on your machine and is in your $PATH if using the :data:`batch` argument
 |   - All input files are tab-delimited (with .txt or .tsv suffix)
 
 -----------
@@ -48,9 +50,9 @@ Arguments
   * - Optional Arguments
     - Description
   * - :data:`--method \<RPM, RPKM, FPKM, LOG\>`
-    - Normalization method to perform (options: "RPM", "RPKM", "FPKM", "LOG") -- if using either RPKM or FPKM, a GTF reference file must be included
+    - Normalization method to perform (options: "RPM", "TPM", "RPKM", "FPKM", "LOG") -- if using either TPM, RPKM, or FPKM, a GTF reference file must be included
   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
-    - Path and file name to reference GTF
+    - Path and file name to reference GTF (RECOMMENDED: Do not use modified GTF file)
   * - :data:`--batch \</path/filename.tsv\>`
     - Include path and filename of dataframe with batch normalization parameters
 
@@ -96,8 +98,8 @@ Arguments
 
   * - Optional Arguments
     - Description
-  * - :data:`--method \<RPM, RPKM, FPKM, LOG\>`
-    - Normalization method to perform (options: "RPM", "RPKM", "FPKM", "LOG") -- if using either RPKM or FPKM, a GTF reference file must be included
+  * - :data:`--method \<RPM, TPM, RPKM, FPKM, LOG\>`
+    - Normalization method to perform (options: "RPM", "TPM", "RPKM", "FPKM", "LOG") -- if using either RPKM or FPKM, a GTF reference file must be included
   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
     - Path and file name to reference GTF
   * - :data:`--batch \</path/filename.tsv\>`

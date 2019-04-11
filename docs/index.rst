@@ -1,7 +1,7 @@
 ##############
 XPRESSpipe
 ##############
-|build-status| |codecov| |docs| |pypi|
+|build-status| |docs| |Docker|
 
 =================
 About
@@ -13,6 +13,8 @@ About
 | - Meta-analyses, such as metagene profiles for each processed file and 3-codon periodicity of most-abundant footprint length (useful in ribosome profiling library quality control)
 |
 | `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ and the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite is developed and maintained by Jordan Berg in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators.
+|
+| If you don't have any computational experience, please see our "Beginners" guide (link below)
 
 =================
 Table of contents
@@ -26,6 +28,7 @@ Table of contents
    :maxdepth: 1
 
    content/overview
+   content/beginner
    content/installation
    content/general-usage
    content/quickstart
@@ -64,6 +67,10 @@ Questions?
     :target: https://xpresspipe.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. |pypi| image:: https://img.shields.io/pypi/v/XPRESSpipe.svg
-    :target: https://pypi.org/project/XPRESSpipe
-    :alt: PyPi Status
+.. |Docker| image:: https://img.shields.io/docker/build/jordanberg/xpresspipe.svg
+    :target: https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general
+    :alt: Docker
+
+
+
+[![Docker](https://img.shields.io/docker/build/jordanberg/xpresspipe.svg)](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general)

@@ -26,12 +26,15 @@ Ribosome Profiling Pipeline
      - Normalizes count table based on user-defined input
    * - :data:`make_readDistributions()`
      - Runs fastqc on each sample and generates a summary for read distributions of each sample
-   * - :data:`make_periodicity()`
-     - Generates a summary periodicity report for each ribosome profiling footprint sample
-   * - :data:`make_metagene()`
-     - Generates a summary meta-gene report for each sample
    * - :data:`get_summary()`
      - Runs multiqc to generate summary reports for steps in the pipeline
+
+| Run the following for more details:
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe riboprof --help
 
 -----------
 Examples
@@ -41,4 +44,12 @@ Examples
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe riboprof -i riboprof_test -o ribopipe_out -r se_reference -t CODING_TRUNCATED -e riboprof_test -a CTGTAGGCACCATCAAT --method RPKM --sjdbOverhang 49
+  $ xpresspipe riboprof \
+                -i riboprof_test \
+                -o ribopipe_out \
+                -r se_reference \
+                --gtf se_reference/transcript_longestTranscript_codingOnly_truncated.gtf \
+                -e riboprof_test \
+                -a CTGTAGGCACCATCAAT \
+                --method RPKM \
+                --sjdbOverhang 49

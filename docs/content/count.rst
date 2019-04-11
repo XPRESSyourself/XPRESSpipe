@@ -28,6 +28,8 @@ Arguments
      - Path to output directory
    * - :data:`-r \<path\>, --reference \<path\>`
      - Path to parent organism reference directory
+   * - :data:`-g \</path/transcript.gtf\>, --gtf \</path/transcript.gtf\>`
+     - Path and file name to GTF used for alignment quantification
 
 .. list-table::
    :widths: 35 50
@@ -35,10 +37,6 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`-count_coding`
-     - Count reads to coding transcripts only (coding reference should be added to the "reference" parent directory)
-   * - :data:`-truncate`
-     - Count reads to truncated reference (truncated reference should be added to the "reference" parent directory)
    * - :data:`-e <experiment_name>`, :data:`--experiment <experiment_name>`
      - Experiment name
    * - :data:`-m <processors>, --max_processors <processors>`
@@ -54,7 +52,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe count -i riboprof_out/alignments/ -o riboprof_out/ -r se_reference/ -e se_test --count_coding --truncate
+  $ xpresspipe count -i riboprof_out/alignments/ -o riboprof_out/ -r se_reference/ -g se_reference/transcripts_codingOnly_truncated.gtf -e se_test
 
 | **Example 2 -- Count paired-end alignments:**
 | - Input points to directory with SAM alignment files that are sorted by name

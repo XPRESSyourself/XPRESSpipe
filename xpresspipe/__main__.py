@@ -24,7 +24,7 @@ import os
 import sys
 import pandas as pd
 
-from xpresstools import rpm, r_fpkm, tpm, log_scale, batch_normalize, convert_names_gtf, diff_xpress, edit_gtf
+from xpresstools import rpm, r_fpkm, tpm, log_scale, batch_normalize, convert_names_gtf, diff_xpress
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__
@@ -38,6 +38,7 @@ from .convert import create_bed, create_bigwig
 from .rrnaprobe import rrnaProbe
 from .quality import get_multiqc_summary, make_metagene, make_readDistributions, make_periodicity, make_complexity
 from .parallel import get_cores
+from .truncate import edit_gtf
 from .utils import get_probe_files, unzip_files
 
 """Main function to call necessary functions for sub-modules
@@ -160,23 +161,15 @@ def main(args=None):
             sjdbOverhang = args_dict['sjdbOverhang'])
 
         # Truncate transcript reference
-        if args_dict['truncate'] == True:
-            edit_gtf(
-                args_dict['gtf'],
-                longest_transcript = True,
-                protein_coding = args_dict['protein_coding'],
-                truncate_reference = True,
-                _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
-                _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
-                output = True)
-        else:
-            edit_gtf(
-                args_dict['gtf'],
-                longest_transcript = True,
-                protein_coding = args_dict['protein_coding'],
-                truncate_reference = False,
-                output = True,
-                cpu_threshold = args_dict['threads'])
+        edit_gtf(
+            args_dict['gtf'],
+            longest_transcript = args_dict['longest_transcript'],
+            protein_coding = args_dict['protein_coding'],
+            truncate_reference = args_dict['truncate'],
+            _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
+            _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
+            output = True,
+            cpu_threshold = args_dict['threads'])
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
@@ -197,16 +190,16 @@ def main(args=None):
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'MAKE REFERENCE')
 
-    elif args.cmd == 'truncate':
-        print('Formatting and truncating reference files...')
+    elif args.cmd == 'modifyGTF':
+        print('Formatting reference file...')
 
         # Truncate transcript reference
         args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
         edit_gtf(
             args_dict['gtf'],
-            longest_transcript = True,
+            longest_transcript = args_dict['longest_transcript'],
             protein_coding = args_dict['protein_coding'],
-            truncate_reference = True,
+            truncate_reference = args_dict['truncate'],
             _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
             _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
             output = True,
