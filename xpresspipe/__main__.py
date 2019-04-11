@@ -24,7 +24,7 @@ import os
 import sys
 import pandas as pd
 
-from xpresstools import rpm, r_fpkm, tpm, log_scale, batch_normalize, convert_names_gtf, diff_xpress
+from xpresstools import rpm, r_fpkm, tpm, log_scale, batch_normalize, convert_names, diff_xpress
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__
@@ -35,10 +35,10 @@ from .align import run_seRNAseq, run_peRNAseq, create_star_reference
 from .count import count_reads, collect_counts
 from .normalize import run_normalization
 from .convert import create_bed, create_bigwig
-from .rrnaprobe import rrnaProbe
+from .rrnaProbe import rrnaProbe
 from .quality import get_multiqc_summary, make_metagene, make_readDistributions, make_periodicity, make_complexity
 from .parallel import get_cores
-from .truncate import edit_gtf
+from .gtfModify import edit_gtf
 from .utils import get_probe_files, unzip_files
 
 """Main function to call necessary functions for sub-modules
@@ -169,7 +169,7 @@ def main(args=None):
             _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
             _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
             output = True,
-            cpu_threshold = args_dict['threads'])
+            threads = args_dict['threads'])
 
         # Check log file for errors and exceptions
         check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
@@ -203,7 +203,7 @@ def main(args=None):
             _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
             _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
             output = True,
-            cpu_threshold = args_dict['threads'])
+            threads = args_dict['threads'])
 
         # Check log file for errors and exceptions
         # check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
