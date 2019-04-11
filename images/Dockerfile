@@ -13,4 +13,11 @@ ENV PATH /opt/conda/envs/$(head -1 /XPRESSpipe/requirements.yml | cut -d' ' -f2)
 
 RUN cd XPRESSpipe; python setup.py install
 
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+   libfftw3-dev \
+   gcc && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("dupRadar")'
+
 ENTRYPOINT ["xpresspipe"]
