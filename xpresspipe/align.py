@@ -28,8 +28,12 @@ from .parallel import parallelize, parallelize_pe
 
 """Create STAR reference genome"""
 def create_star_reference(
-    output_directory, fasta_directory, gtf,
-    log, threads=1, sjdbOverhang=100):
+    output_directory,
+    fasta_directory,
+    gtf,
+    log,
+    threads=1,
+    sjdbOverhang=100):
 
     # Create output directory
     output_directory = check_directories(output_directory)
@@ -51,9 +55,30 @@ def create_star_reference(
         + ' --runThreadN ' + str(threads)
         + str(log))
 
+"""Build intermediate STAR alignment reference using splice junction annotations from first pass"""
+def build_star_splice_junction_intermediate(
+    output,
+    args_dict):
+
+    os.system('mkdir'
+        + ' '
+        + str(args_dict['intermediate_references']) + str(output) # Make directory for currently processed file
+        + str(args_dict['log'])) # Record log output (must go last in command)
+
+    os.system('STAR'
+        + ' --runMode genomeGenerate'
+        + ' --runThreadN ' + str(args_dict['threads'])
+        + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab' # Splice junction annotation file output in first pass alignment
+        + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) # Input chromosomal fasta files for reference building
+        + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) # Location for output revised reference
+        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
+        + str(args_dict['log'])) # Record log output (must go last in command)
+
 """Run first pass STAR alignment to map splice junctions"""
 def first_pass_star(
-    file, output, args_dict):
+    file,
+    output,
+    args_dict):
 
     os.system('STAR'
         + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
@@ -79,27 +104,11 @@ def first_pass_star(
         + ' --outSAMmode None'
         + str(args_dict['log'])) # Record log output (must go last in command)
 
-"""Build intermediate STAR alignment reference using splice junction annotations from first pass"""
-def build_star_splice_junction_intermediate(
-    output, args_dict):
-
-    os.system('mkdir'
-        + ' '
-        + str(args_dict['intermediate_references']) + str(output) # Make directory for currently processed file
-        + str(args_dict['log'])) # Record log output (must go last in command)
-
-    os.system('STAR'
-        + ' --runMode genomeGenerate'
-        + ' --runThreadN ' + str(args_dict['threads'])
-        + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab' # Splice junction annotation file output in first pass alignment
-        + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) # Input chromosomal fasta files for reference building
-        + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) # Location for output revised reference
-        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
-        + str(args_dict['log'])) # Record log output (must go last in command)
-
 """Run second pass STAR alignment to map reads splice-aware"""
 def second_pass_star(
-    file, output, args_dict):
+    file,
+    output,
+    args_dict):
 
     os.system('STAR'
         + ' --runThreadN ' + str(args_dict['threads'])
@@ -130,13 +139,14 @@ def second_pass_star(
 
 """Sort reads per file by chromosome position and keep only unique mappers"""
 def alignment_process(
-    output, args_dict):
+    output,
+    args_dict):
 
     # Only take unique mappers (q = 255)
     os.system('samtools view'
         + ' -q 255'
         + ' --threads ' + str(args_dict['threads'])
-        + ' ' + str(args_dict['alignments']) + str(output) + '_sorted_Aligned.out.bam'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_sorted_Aligned.sortedByCoord.out.bam'
         + ' > ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
     # Index BAM file
