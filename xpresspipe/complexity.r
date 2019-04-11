@@ -5,7 +5,7 @@
 # Install dependencies
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install("dupRadar", version = "3.8")
+BiocManager::install("dupRadar", version = "3.8", dependencies=c("Depends", "Suggests", "Imports"))
 
 library(dupRadar)
 
