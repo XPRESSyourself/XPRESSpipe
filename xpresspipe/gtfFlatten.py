@@ -36,6 +36,7 @@ def make_flatten(gtf):
 
             gene = gtf.at[index, 8][(gtf.at[index, 8].find('gene_id \"') + 9):].split('\";')[0]
             strand = row[6]
+            chromosome = row[0]
             coordinates = []
 
             # Scan for exons for the given
@@ -59,10 +60,10 @@ def make_flatten(gtf):
             end = max(coordinates)
 
             # Push information to record
-            records.append([gene, strand, start, end, coordinates])
+            records.append([gene, strand, chromosome, start, end, coordinates])
 
     # Push flattened reference into pandas dataframe
-    headers = ['gene', 'strand', 'start', 'end', 'coordinates']
+    headers = ['gene', 'strand', 'chromosome', 'start', 'end', 'coordinates']
     reference = pd.DataFrame(records, columns=headers)
 
     return reference
