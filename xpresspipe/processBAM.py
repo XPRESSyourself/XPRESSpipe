@@ -43,6 +43,8 @@ def read_BAM(
             usecols = list(range(0, 16)),
             low_memory = False)
 
+    sam[2] = sam[2].astype(str)
+
     os.system('rm '
               + str(bam_file)[:-4] + '.tmp')
 
