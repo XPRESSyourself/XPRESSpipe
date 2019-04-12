@@ -6,8 +6,7 @@
 [![Build Status](https://travis-ci.org/XPRESSyourself/XPRESSpipe.svg?branch=master)](https://travis-ci.org/XPRESSyourself/XPRESSpipe)
 [![codecov.io](https://codecov.io/gh/XPRESSyourself/XPRESSpipe/XPRESSpipe.svg?branch=master)](https://codecov.io/gh/XPRESSyourself/XPRESSpipe)
 [![Documentation Status](https://readthedocs.org/projects/xpresspipe/badge/?version=latest)](https://xpresspipe.readthedocs.io/en/latest/?badge=latest)
-[![Conda Status](https://anaconda.org/anaconda/xpresspipe/badges/version.svg)](https://anaconda.org/anaconda/xpresspipe)
-[![Docker](https://img.shields.io/docker/build/jordanberg/xpresspipe.svg)](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general)
+[![Docker](https://img.shields.io/static/v1.svg?label=docker&message=dowload&color=informational)](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general)
 
 -----
 
@@ -21,10 +20,8 @@ Berg, JA (2019). XPRESSyourself suite: Gene expression processing and analysis m
 ```
 
 ### Installation:   
-Installation options not currently available   
-```
-pip install xpresspipe
-```
+Installation options not currently available, please use the Docker container
+
 ```
 conda install -c bioconda xpresspipe
 ```
