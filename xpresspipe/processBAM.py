@@ -24,9 +24,9 @@ import os
 import sys
 import pandas as pd
 
-"""Read in BAM file to Pandas dataframe"""
+"""Read in indexed BAM file to Pandas dataframe"""
 def read_BAM(
-    bam_file,
+    bam_file, # Must be indexed before reading in
     threads=1):
 
     # Read in BAM file
