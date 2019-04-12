@@ -25,6 +25,16 @@ import pandas as pd
 """IMPORT INTERNAL DEPENDENCIES"""
 from .gtfModify import get_chunks, run_chunks, longest_transcripts, protein_gtf
 
+"""Flatten nested list"""
+def flat_list(nested_list):
+
+    flat = []
+    for x in nested_list:
+        for y in x:
+            flat.append(y)
+
+    return flat
+
 """Make a flat reference from parsed GTF file"""
 def make_flatten(gtf):
 
@@ -51,13 +61,12 @@ def make_flatten(gtf):
                     item = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
 
                     if gtf.at[index + n, 2] == 'exon': # Append coordinate paires for each exon of the transcript
-                        coordinates.append(gtf.at[index + n, 3])
-                        coordinates.append(gtf.at[index + n, 4])
+                        coordinates.append([gtf.at[index + n, 3], gtf.at[index + n, 4]])
 
             # Get start and end positions for transcript/gene
             # Assumes start and stop will be start and end of a protein coding transcript
-            start = min(coordinates)
-            end = max(coordinates)
+            start = min(flat_list(coordinates))
+            end = max(flat_list(coordinates))
 
             # Push information to record
             records.append([gene, strand, chromosome, start, end, coordinates])
@@ -65,7 +74,8 @@ def make_flatten(gtf):
     # Push flattened reference into pandas dataframe
     headers = ['gene', 'strand', 'chromosome', 'start', 'end', 'coordinates']
     reference = pd.DataFrame(records, columns=headers)
-
+    reference.chromosome = reference.chromosome.astype(str)
+    
     return reference
 
 """Read in coordinate reference from GTF"""
