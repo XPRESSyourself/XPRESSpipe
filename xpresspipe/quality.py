@@ -22,9 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """IMPORT DEPENDENCIES"""
 import os
 import sys
-import csv
 import pandas as pd
-from statistics import mode
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .parallel import parallelize
@@ -78,7 +76,7 @@ def make_periodicity(args_dict):
 def get_profiles(args):
 
     file, args_dict = args[0], args[1] # Parse args
-    
+
 
 """Manager for running metagene summary plotting"""
 def make_metagene(args_dict):
