@@ -23,3 +23,4 @@ __version__ = '0.0.1-beta'
 
 from .gtfFlatten import *
 from .gtfModify import *
+from .processBAM import *
