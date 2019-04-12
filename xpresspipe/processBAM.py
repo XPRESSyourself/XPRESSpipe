@@ -37,7 +37,7 @@ def read_BAM(
 
     #read sorted, unique only sam files, get most abundant length and make new file
     sam = pd.read_csv(
-            str(file)[:-4] + '.tmp',
+            str(bam_file)[:-4] + '.tmp',
             sep = '\t',
             header = None,
             usecols = list(range(0, 16)),
