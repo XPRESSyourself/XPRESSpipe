@@ -45,13 +45,6 @@ def get_peaks(args):
 
     file, args_dict = args[0], args[1] # Parse args
 
-    os.system('rscript'
-        + ' ' + str(__path__) + '/periodicity.r'
-        + ' FALSE'
-        + ' ' + str(args_dict['gtf'])
-        + ' ' + str(args_dict['input']) + ' ' + str(file)
-        + ' ' + str(args_dict['periodicity'])
-        + str(args_dict['log']))
 
 """Manager for running periodicity summary plotting"""
 def make_periodicity(args_dict):
@@ -84,7 +77,8 @@ def make_periodicity(args_dict):
 """Generate metagene profiles"""
 def get_profiles(args):
 
-    print('Coming soon')
+    file, args_dict = args[0], args[1] # Parse args
+    
 
 """Manager for running metagene summary plotting"""
 def make_metagene(args_dict):
