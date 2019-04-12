@@ -174,5 +174,5 @@ def rrnaProbe(files_list, min_overlap):
             "##The sequences included are combined from FASTQC output so that if multiple sequences reported there are exact-match substring of one another, they will be combined and their counts summed\n"+\
             "##These sequences should be checked using a tool such as BLAST to ensure that the most represented sequences are not Illumina artifacts.\n" +\
             "#SEQ\tCOUNT\n"
-            
+
     return header + "\n".join(results_list)
