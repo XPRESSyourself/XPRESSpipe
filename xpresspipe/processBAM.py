@@ -30,7 +30,9 @@ import math
 # samtools
 
 """Read in indexed BAM file to Pandas dataframe"""
-def read_bam(file, threads = 1):
+def read_bam(
+    file,
+    threads = 1):
 
     # Read in BAM file
     os.system('samtools view'
@@ -46,7 +48,7 @@ def read_bam(file, threads = 1):
             usecols = list(range(0, 16)),
             low_memory = False)
 
-    bam[2] = bam[2].astype(str)
+    bam[2] = bam[2].astype(str) # Make chromosome info consisitent with reference file
 
     os.system('rm'
               ' ' + str(file)[:-4] + '.tmp')
@@ -54,7 +56,9 @@ def read_bam(file, threads = 1):
     return bam
 
 """"""
-def bam_sample(bam, number):
+def bam_sample(
+    bam,
+    number):
 
     if bam.shape[0] < int(number):
         raise Exception('Not enough alignments to sample')
@@ -62,13 +66,30 @@ def bam_sample(bam, number):
     return bam.sample(n = int(number))
 
 """"""
-def mid_coordinates(bam):
+def meta_coordinates(
+    bam):
 
+    # Map middle point of each read as left-most position plus half of read length
     bam[16] = bam[3] + (bam[9].str.len() / 2).apply(np.floor).astype('int64')
+
+    # Return as array
     mid_coordinates = bam[[2,16]]
     return mid_coordinates.values.tolist()
 
 """P site coordinate for 28-30mers"""
-def phased_coordinates(bam):
+def psite_coordinates(
+    bam):
 
+    # Keep only optimal footprint size
+    bam = bam[(bam[9].str.len() == 28) | (bam[9].str.len() == 29) | (bam[9].str.len() == 30)]
+
+    # Map P-site to 16 nt upstream of 3' end of footprint
+    bam[16] = bam.apply(
+                lambda row:
+                bam[3] + bam[9].str.len() - 16 if bam[2] is '+'
+                else bam[3] + 16,
+                axis = 1)
+
+    # Return as array
+    phased_coordinates = bam[[2,16]]
     return phased_coordinates.values.tolist()
