@@ -31,12 +31,14 @@ from .utils import get_files, add_directory
 from .parallel import parallelize
 
 """Compile counts tables from HTseq output files"""
-def count_file(args):
+def count_file(
+        args):
 
     file, args_dict = args[0], args[1] # Parse args
 
     # Count
-    os.system('htseq-count'
+    os.system(
+        'htseq-count'
         + ' -q'
         + ' -m intersection-nonempty'
         + ' -t exon'
@@ -48,27 +50,43 @@ def count_file(args):
         + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
 """Run count reads manager"""
-def count_reads(args_dict):
+def count_reads(
+        args_dict):
 
     # Add output directories
-    args_dict = add_directory(args_dict, 'output', 'counts')
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'counts')
 
     # Get list of files to count based on acceptable file types
-    files = get_files(args_dict['input'], ['.bam'])
+    files = get_files(
+        args_dict['input'],
+        ['.bam'])
 
     # Count aligned RNAseq reads
-    parallelize(count_file, files, args_dict, mod_workers=True)
+    parallelize(
+        count_file,
+        files,
+        args_dict,
+        mod_workers = True)
 
     return args_dict
 
 """Take directory of single counts files and collate into single table"""
-def collect_counts(args_dict):
+def collect_counts(
+        args_dict):
 
     # Add output directories
-    args_dict = add_directory(args_dict, 'output', 'counts')
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'counts')
 
     # Get list of files to count based on acceptable file types
-    files = get_files(args_dict['input'], ['.tsv'])
+    files = get_files(
+        args_dict['input'],
+        ['.tsv'])
 
     # Append path to file list
     count_files = []
@@ -80,7 +98,12 @@ def collect_counts(args_dict):
 
     # Output data
     if 'experiment' in args_dict and args_dict['experiment'] != None:
-        counts.to_csv(str(args_dict['counts']) + str(args_dict['experiment']) + '_counts_table.tsv', sep='\t')
+        counts.to_csv(
+            str(args_dict['counts']) + str(args_dict['experiment']) + '_counts_table.tsv',
+            sep = '\t')
     else:
         cdt = datetime.datetime.now()
-        counts.to_csv(str(args_dict['counts']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.tsv', sep='\t')
+        counts.to_csv(
+            str(args_dict['counts']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) \
+            + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.tsv',
+            sep = '\t')

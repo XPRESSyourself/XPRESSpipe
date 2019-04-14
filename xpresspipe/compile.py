@@ -33,11 +33,17 @@ matplotlib.rcParams['font.sans-serif'] = 'Arial'
 
 """Compile images from a list of metrics files using start and stop keys"""
 def compile_file_metrics(
-    args_dict, path, file_list,
-    line2find, line2stop,
-    lab_x, lab_y,
-    plot_type, experiment,
-    plot_output, dpi=600):
+        args_dict,
+        path,
+        file_list,
+        line2find,
+        line2stop,
+        lab_x,
+        lab_y,
+        plot_type,
+        experiment,
+        plot_output,
+        dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
     # Auto formats figure summary size based on number of plots
@@ -49,8 +55,12 @@ def compile_file_metrics(
         fig_size = (15, (8 * (int(len(file_list) / 2))))
 
     # Set up figure space
-    fig, axes = plt.subplots(nrows=plot_rows, ncols=2, figsize=fig_size)
-    plt.subplots_adjust(bottom = 0.3)
+    fig, axes = plt.subplots(
+        nrows = plot_rows,
+        ncols = 2,
+        figsize = fig_size)
+    plt.subplots_adjust(
+        bottom = 0.3)
 
     # Initialize file and axis counters for formatting summary figure
     file_number = 0
@@ -59,7 +69,9 @@ def compile_file_metrics(
     # Parse files for relevant data
     for file in file_list:
         x = 0
-        df = pd.DataFrame(pd.DataFrame(columns=[lab_x,lab_y])) # Initialize dataframe for relevant data
+        df = pd.DataFrame(
+            pd.DataFrame(
+                columns = [lab_x,lab_y])) # Initialize dataframe for relevant data
 
         with open(path + file, 'r') as f:
             for line in f: # Find first line of dataframe
@@ -108,14 +120,23 @@ def compile_file_metrics(
 
     # Save catenated figure
     plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
-    fig.savefig(str(plot_output) + plot_title + '_summary.pdf', dpi=dpi)
+    fig.savefig(
+        str(plot_output) + plot_title + '_summary.pdf',
+        dpi = dpi,
+        bbox_inches = 'tight')
 
 """Compile images from a list of metrics matrices"""
 def compile_matrix_metrics(
-    args_dict, path, file_list,
-    column_x, column_y,
-    plot_type, experiment,
-    plot_output, sep='\t', dpi=600):
+        args_dict,
+        path,
+        file_list,
+        column_x,
+        column_y,
+        plot_type,
+        experiment,
+        plot_output,
+        sep = '\t',
+        dpi = 600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
     # Auto formats figure summary size based on number of plots
@@ -127,8 +148,12 @@ def compile_matrix_metrics(
         fig_size = (15, (8 * (int(len(file_list) / 2))))
 
     # Set up figure space
-    fig, axes = plt.subplots(nrows=plot_rows, ncols=2, figsize=fig_size)
-    plt.subplots_adjust(bottom = 0.3)
+    fig, axes = plt.subplots(
+        nrows = plot_rows,
+        ncols = 2,
+        figsize = fig_size)
+    plt.subplots_adjust(
+        bottom = 0.3)
 
     # Initialize file and axis counters for formatting summary figure
     file_number = 0
@@ -136,8 +161,12 @@ def compile_matrix_metrics(
 
     for file in file_list:
         x = 0
-        df = pd.DataFrame(str(path + file), sep=sep) # Initialize dataframe for relevant data
-        df = df.dropna(axis=0, subset=[str(column_x), str(column_y)]) # Remove rows where pertinent information is missing
+        df = pd.DataFrame(
+            str(path + file),
+            sep = sep) # Initialize dataframe for relevant data
+        df = df.dropna(
+            axis = 0,
+            subset = [str(column_x), str(column_y)]) # Remove rows where pertinent information is missing
 
         # Prepare subplots
         if (file_number % 2) == 0:
@@ -174,4 +203,7 @@ def compile_matrix_metrics(
 
     # Save catenated figure
     plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
-    fig.savefig(str(plot_output) + plot_title + '_summary.pdf', dpi=dpi)
+    fig.savefig(
+        str(plot_output) + plot_title + '_summary.pdf',
+        dpi = dpi,
+        bbox_inches = 'tight')

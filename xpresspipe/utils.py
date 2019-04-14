@@ -24,7 +24,8 @@ import os
 import sys
 
 """Check directory formatting"""
-def check_directories(input):
+def check_directories(
+        input):
 
     # Check input directory name is formatted correctly and fix if necessary
     if input.endswith('/'):
@@ -38,9 +39,12 @@ def check_directories(input):
 
 """Create output directory"""
 def add_directory(
-    args_dict, parent, name):
+        args_dict,
+        parent,
+        name):
 
-    os.system('mkdir'
+    os.system(
+        'mkdir'
         + ' ' + str(args_dict[str(parent)]) + str(name)
         + str(args_dict['log']))
 
@@ -50,7 +54,9 @@ def add_directory(
 
 """Make a list of the files in a given directory, based on list of acceptable file suffixes"""
 def get_files(
-    directory, suffix, omit=[]):
+        directory,
+        suffix,
+        omit=[]):
 
     # Initialize blank file list to fill
     file_list = []
@@ -82,7 +88,8 @@ def get_files(
 
 """Get files to perform rRNA prober upon"""
 def get_probe_files(
-    args_dict, suffix):
+        args_dict,
+        suffix):
 
     # Initialize blank file list to fill
     probe_list = []
@@ -107,7 +114,8 @@ def get_probe_files(
     return tuple(probe_list)
 
 """Unzip all files from directory"""
-def unzip_files(directory):
+def unzip_files(
+        directory):
 
     suffix = ['.gz', '.zip']
 
@@ -117,20 +125,26 @@ def unzip_files(directory):
         for s in suffix:
             if file.endswith(str(s)):
                 if s == '.gz':
-                    os.system('gzip' +
+                    os.system(
+                        'gzip' +
                         ' -d'
                         + ' ' + str(directory) + str(file)
                         + str(args_dict['log']))
                 if s == '.zip':
-                    os.system('unzip'
+                    os.system(
+                        'unzip'
                         + ' ' + str(directory) + str(file)
                         + str(args_dict['log']))
 
 """Get fasta files within directory"""
-def get_fasta(fasta_directory):
+def get_fasta(
+        fasta_directory):
 
     # Make space separated list of fasta files
-    fasta = get_files(fasta_directory, ['.txt', '.fasta', '.fa'], omit=['refFlat', 'rois'])
+    fasta = get_files(
+        fasta_directory,
+        ['.txt', '.fasta', '.fa'],
+        omit = ['refFlat', 'rois'])
     fasta = [fasta_directory + x for x in fasta]
 
     if len(fasta) > 1:

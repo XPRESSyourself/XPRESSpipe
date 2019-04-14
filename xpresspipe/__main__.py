@@ -45,13 +45,17 @@ from .utils import get_probe_files, unzip_files
 
 ASSUMPTIONS: Proper arguments are provided where some user renaming of files may be required
 """
-def main(args=None):
+def main(
+        args=None):
 
     # Read in arguments
-    args, args_dict = get_arguments(args, __version__)
+    args, args_dict = get_arguments(
+        args,
+        __version__)
 
     # Should have already seen check_directory() so should have a trailing '/'
-    if 'input' in args_dict and str(args_dict['input']).endswith('/'):
+    if 'input' in args_dict \
+    and str(args_dict['input']).endswith('/'):
         unzip_files(args_dict['input'])
 
     # Execute corresponding functions determined by arguments provided by user
@@ -62,7 +66,10 @@ def main(args=None):
         run_trim(args_dict)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'TRIM')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'TRIM')
 
     elif args.cmd == 'align':
         print('Aligning reads to reference...')
@@ -83,7 +90,10 @@ def main(args=None):
             create_bigwig(args_dict)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'ALIGN')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'ALIGN')
 
     elif args.cmd == 'count':
         print('Counting alignments...')
@@ -97,7 +107,10 @@ def main(args=None):
         collect_counts(args_dict)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'COUNT')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'COUNT')
 
     elif args.cmd == 'diffxpress':
         print('Performing differential expression analysis...')
@@ -109,7 +122,10 @@ def main(args=None):
             equation = str(args_dict['design']))
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'DIFFERENTIAL EXPRESSION')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'DIFFERENTIAL EXPRESSION')
 
     elif args.cmd == 'metagene':
         print('Performing metagene analysis on SAM files...')
@@ -118,7 +134,10 @@ def main(args=None):
         make_metagene(args_dict)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'METAGENE')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'METAGENE')
 
     elif args.cmd == 'readDistribution':
         print('Performing read distribution analysis on fastq files...')
@@ -127,7 +146,10 @@ def main(args=None):
         make_readDistributions(args_dict)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'READ DISTRIBUTION')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'READ DISTRIBUTION')
 
     elif args.cmd == 'periodicity':
         print('Performing periodicity analysis on most abundant read length in SAM files...')
@@ -136,7 +158,10 @@ def main(args=None):
         make_periodicity(args_dict)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'PERIODICITY')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'PERIODICITY')
 
     elif args.cmd == 'complexity':
         print('Performing library complexity analysis...')
@@ -145,13 +170,18 @@ def main(args=None):
         make_complexity(args_dict)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'COMPLEXITY')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'COMPLEXITY')
 
     elif args.cmd == 'curateReference':
         print('Curating reference')
 
         # Create STAR reference
-        args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
+        args_dict['threads'], args_dict['workers'] = get_cores(
+            args_dict,
+            mod_workers = True)
         create_star_reference(
             args_dict['output'],
             args_dict['fasta'],
@@ -172,13 +202,18 @@ def main(args=None):
             threads = args_dict['threads'])
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'CURATE REFERENCE')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'CURATE REFERENCE')
 
     elif args.cmd == 'makeReference':
         print('Creating reference files...')
 
         # Generate reference
-        args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
+        args_dict['threads'], args_dict['workers'] = get_cores(
+            args_dict,
+            mod_workers = True)
         create_star_reference(
             args_dict['output'],
             args_dict['fasta'],
@@ -188,13 +223,18 @@ def main(args=None):
             sjdbOverhang = args_dict['sjdbOverhang'])
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'MAKE REFERENCE')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'MAKE REFERENCE')
 
     elif args.cmd == 'modifyGTF':
         print('Formatting reference file...')
 
         # Truncate transcript reference
-        args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers=True)
+        args_dict['threads'], args_dict['workers'] = get_cores(
+            args_dict,
+            mod_workers=True)
         edit_gtf(
             args_dict['gtf'],
             longest_transcript = args_dict['longest_transcript'],
@@ -210,20 +250,25 @@ def main(args=None):
 
     elif args.cmd == 'rrnaProbe':
         # Get files to probe
-        probe_list = get_probe_files(args_dict, '.zip')
+        probe_list = get_probe_files(
+            args_dict,
+            '.zip')
 
         # Run rrna_prober, output to outputDir
         print('Probing for most over-represented read sequences...')
         probe_out = rrnaProbe(
-                        probe_list,
-                        args_dict['min_overlap']) # Use inputDir to get FASTQC files and output to outputDir/analysis
+            probe_list,
+            args_dict['min_overlap']) # Use inputDir to get FASTQC files and output to outputDir/analysis
 
         # Output summary
         with open(args_dict['output'] + 'rrnaProbe_output.txt', "w") as text_file:
-            print(probe_out, file=text_file)
+            print(probe_out, file = text_file)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'RRNA PROBE')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'RRNA PROBE')
 
     elif args.cmd == 'convertNames':
         print('Converting row names...')
@@ -238,19 +283,25 @@ def main(args=None):
 
         data = pd.read_csv(str(args_dict['input']), sep=delim)
         data = convert_names_gtf(
-                data,
-                args_dict['gtf'],
-                orig_name_label = args_dict['orig_name_label'],
-                orig_name_location = args_dict['orig_name_location'],
-                new_name_label = args_dict['new_name_label'],
-                new_name_location = args_dict['new_name_location'],
-                refill = args_dict['refill'],
-                sep = '\t')
+            data,
+            args_dict['gtf'],
+            orig_name_label = args_dict['orig_name_label'],
+            orig_name_location = args_dict['orig_name_location'],
+            new_name_label = args_dict['new_name_label'],
+            new_name_location = args_dict['new_name_location'],
+            refill = args_dict['refill'],
+            sep = '\t')
 
-        data.to_csv(str(args_dict['input'])[:-4] + '_renamed' + str(suf), sep=delim, index=False)
+        data.to_csv(
+            str(args_dict['input'])[:-4] + '_renamed' + str(suf),
+            sep = delim,
+            index = False)
 
         # Check log file for errors and exceptions
-        check_process(args_dict['log_file'], msg_complete(), 'CONVERT NAMES')
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'CONVERT NAMES')
 
     elif args.cmd == 'normalizeMatrix':
         print('Normalizing matrix...')
@@ -268,7 +319,10 @@ def main(args=None):
         # Trim
         msg_trim()
         args_dict = run_trim(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'TRIM') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'TRIM') # Check log file for errors and exceptions
 
         # Align
         msg_align()
@@ -281,7 +335,10 @@ def main(args=None):
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'ALIGN') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'ALIGN') # Check log file for errors and exceptions
 
         # Count reads for each alignment file
         msg_count()
@@ -290,13 +347,19 @@ def main(args=None):
         # Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'COUNT') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'COUNT') # Check log file for errors and exceptions
 
         # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         run_normalization(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'NORMALIZE') # Check log file for errors and exceptions
 
         # Run quality control
         msg_quality()
@@ -306,7 +369,10 @@ def main(args=None):
         make_metagene(args_dict)
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'QUALITY CONTROL') # Check log file for errors and exceptions
 
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)
@@ -318,7 +384,10 @@ def main(args=None):
         # Trim
         msg_trim()
         args_dict = run_trim(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'TRIM') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'TRIM') # Check log file for errors and exceptions
 
         # Align
         msg_align()
@@ -330,7 +399,10 @@ def main(args=None):
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'ALIGN') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'ALIGN') # Check log file for errors and exceptions
 
         # Count reads for each alignment file
         msg_count()
@@ -339,13 +411,19 @@ def main(args=None):
         # Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'COUNT') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'COUNT') # Check log file for errors and exceptions
 
         # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         run_normalization(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'NORMALIZE') # Check log file for errors and exceptions
 
         # Run quality control
         msg_quality()
@@ -355,7 +433,10 @@ def main(args=None):
         make_metagene(args_dict)
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'QUALITY CONTROL') # Check log file for errors and exceptions
 
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)
@@ -367,7 +448,10 @@ def main(args=None):
         # Trim
         msg_trim()
         args_dict = run_trim(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'TRIM') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'TRIM') # Check log file for errors and exceptions
 
         # Align
         msg_align()
@@ -379,7 +463,10 @@ def main(args=None):
             create_bed(args_dict)
         if args_dict['output_bigwig'] == True:
             create_bigwig(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'ALIGN') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'ALIGN') # Check log file for errors and exceptions
 
         # Count reads for each alignment file
         msg_count()
@@ -388,13 +475,19 @@ def main(args=None):
         # Collect counts into a single table
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'COUNT') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'COUNT') # Check log file for errors and exceptions
 
         # Normalize
         msg_normalize()
         args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
         run_normalization(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'NORMALIZE') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'NORMALIZE') # Check log file for errors and exceptions
 
         # Run quality control
         msg_quality()
@@ -405,7 +498,10 @@ def main(args=None):
         make_metagene(args_dict)
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
-        check_process(args_dict['log_file'], msg_complete(), 'QUALITY CONTROL') # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'QUALITY CONTROL') # Check log file for errors and exceptions
 
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)

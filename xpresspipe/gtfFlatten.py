@@ -26,7 +26,8 @@ import pandas as pd
 from .gtfModify import get_chunks, run_chunks, longest_transcripts, protein_gtf
 
 """Flatten nested list"""
-def flat_list(nested_list):
+def flat_list(
+        nested_list):
 
     flat = []
     for x in nested_list:
@@ -36,7 +37,8 @@ def flat_list(nested_list):
     return flat
 
 """Make a flat reference from parsed GTF file"""
-def make_flatten(gtf):
+def make_flatten(
+        gtf):
 
     records = []
 
@@ -75,43 +77,43 @@ def make_flatten(gtf):
     headers = ['gene', 'strand', 'chromosome', 'start', 'end', 'coordinates']
     reference = pd.DataFrame(records, columns=headers)
     reference.chromosome = reference.chromosome.astype(str)
-    
+
     return reference
 
 """Read in coordinate reference from GTF"""
 def flatten_reference(
-    gtf,
-    threads=None):
+        gtf,
+        threads=None):
 
     # Import GTF reference file
     if isinstance(gtf, pd.DataFrame) and len(gtf.columns) == 9:
         pass
     elif str(gtf).endswith('.gtf'):
         gtf = pd.read_csv(
-                str(gtf),
-                sep = '\t',
-                header = None,
-                comment = '#',
-                low_memory = False)
+            str(gtf),
+            sep = '\t',
+            header = None,
+            comment = '#',
+            low_memory = False)
     else:
         raise Exception('Error: A GTF-formatted file or dataframe was not provided')
 
     # Get chunks
     chunks = get_chunks(
-                    gtf,
-                    threads = threads)
+        gtf,
+        threads = threads)
 
     # Get longest transcripts
     chunks = run_chunks(
-                longest_transcripts,
-                chunks,
-                target_message = 'longest transcripts')
+        longest_transcripts,
+        chunks,
+        target_message = 'longest transcripts')
 
     # Get only protein coding annotated records
     chunks = run_chunks(
-                protein_gtf,
-                chunks,
-                target_message = 'protein coding genes')
+        protein_gtf,
+        chunks,
+        target_message = 'protein coding genes')
 
     # Rejoin chunks into single GTF and flatten
     if len(chunks) > 0:
@@ -120,5 +122,6 @@ def flatten_reference(
         gtf = make_flatten(gtf)
 
         return gtf
+        
     else:
         return

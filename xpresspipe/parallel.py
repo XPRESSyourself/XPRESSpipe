@@ -26,7 +26,8 @@ from multiprocessing import cpu_count
 
 """Determine number of processors to use"""
 def get_cores(
-    args_dict, mod_workers):
+        args_dict,
+        mod_workers):
 
     if 'max_processors' in args_dict and args_dict['max_processors'] != None:
         cores = args_dict['max_processors']
@@ -41,23 +42,39 @@ def get_cores(
     return cores, workers
 
 """Run function and files on pools"""
-def run_pools(func, args_iter, args_dict):
+def run_pools(
+        func,
+        args_iter,
+        args_dict):
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=args_dict['workers']) as executor:
         for file in zip(args_iter, executor.map(func, args_iter)):
             print(file, "has been processed.")
 
 """Parallelize function on list of files"""
-def parallelize(func, file_list, args_dict, mod_workers=False):
+def parallelize(
+        func,
+        file_list,
+        args_dict,
+        mod_workers=False):
 
     args_iter = ([file, args_dict] for file in file_list)
 
-    args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers)
+    args_dict['threads'], args_dict['workers'] = get_cores(
+        args_dict,
+        mod_workers)
 
-    run_pools(func, args_iter, args_dict)
+    run_pools(
+        func,
+        args_iter,
+        args_dict)
 
 """Parallelize function on list of files for PE data"""
-def parallelize_pe(func, file_list, args_dict, mod_workers=False):
+def parallelize_pe(
+        func,
+        file_list,
+        args_dict,
+        mod_workers=False):
 
     # Pair files for paired-end processing
     c1 = 0
@@ -69,6 +86,11 @@ def parallelize_pe(func, file_list, args_dict, mod_workers=False):
 
     args_iter = ([x[0], x[1], x[2]] for x in args_iter)
 
-    args_dict['threads'], args_dict['workers'] = get_cores(args_dict, mod_workers)
+    args_dict['threads'], args_dict['workers'] = get_cores(
+        args_dict,
+        mod_workers)
 
-    run_pools(func, args_iter, args_dict)
+    run_pools(
+        func,
+        args_iter,
+        args_dict)

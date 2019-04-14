@@ -28,12 +28,12 @@ from .parallel import parallelize, parallelize_pe
 
 """Create STAR reference genome"""
 def create_star_reference(
-    output_directory,
-    fasta_directory,
-    gtf,
-    log,
-    threads=1,
-    sjdbOverhang=100):
+        output_directory,
+        fasta_directory,
+        gtf,
+        log,
+        threads=1,
+        sjdbOverhang=100):
 
     # Create output directory
     output_directory = check_directories(output_directory)
@@ -46,7 +46,8 @@ def create_star_reference(
     fasta_list = get_fasta(fasta_directory)
 
     # Create reference
-    os.system('STAR'
+    os.system(
+        'STAR'
         + ' --runMode genomeGenerate'
         + ' --genomeDir ' + str(output_directory) + 'genome'
         + ' --genomeFastaFiles ' + str(fasta_list)
@@ -57,15 +58,17 @@ def create_star_reference(
 
 """Build intermediate STAR alignment reference using splice junction annotations from first pass"""
 def build_star_splice_junction_intermediate(
-    output,
-    args_dict):
+        output,
+        args_dict):
 
-    os.system('mkdir'
+    os.system(
+        'mkdir'
         + ' '
         + str(args_dict['intermediate_references']) + str(output) # Make directory for currently processed file
         + str(args_dict['log'])) # Record log output (must go last in command)
 
-    os.system('STAR'
+    os.system(
+        'STAR'
         + ' --runMode genomeGenerate'
         + ' --runThreadN ' + str(args_dict['threads'])
         + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab' # Splice junction annotation file output in first pass alignment
@@ -76,11 +79,12 @@ def build_star_splice_junction_intermediate(
 
 """Run first pass STAR alignment to map splice junctions"""
 def first_pass_star(
-    file,
-    output,
-    args_dict):
+        file,
+        output,
+        args_dict):
 
-    os.system('STAR'
+    os.system(
+        'STAR'
         + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
         + ' --genomeDir ' + str(args_dict['reference']) # Argument for specifying STAR reference directory
         + 'genome --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
@@ -106,11 +110,12 @@ def first_pass_star(
 
 """Run second pass STAR alignment to map reads splice-aware"""
 def second_pass_star(
-    file,
-    output,
-    args_dict):
+        file,
+        output,
+        args_dict):
 
-    os.system('STAR'
+    os.system(
+        'STAR'
         + ' --runThreadN ' + str(args_dict['threads'])
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output)
         + ' --readFilesIn ' + str(file)
@@ -139,31 +144,36 @@ def second_pass_star(
 
 """Sort reads per file by chromosome position and keep only unique mappers"""
 def alignment_process(
-    output,
-    args_dict):
+        output,
+        args_dict):
 
     # Only take unique mappers (q = 255)
-    os.system('samtools view'
+    os.system(
+        'samtools view'
         + ' -q 255'
         + ' --threads ' + str(args_dict['threads'])
         + ' ' + str(args_dict['alignments']) + str(output) + '_sorted_Aligned.sortedByCoord.out.bam'
         + ' > ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
     # Index BAM file
-    os.system('samtools index'
+    os.system(
+        'samtools index'
         + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam')
 
     # Use sorted BAM file to find any duplicate reads
-    os.system('samtools markdup'
+    os.system(
+        'samtools markdup'
         + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam' # Input BAM
         + ' ' + str(args_dict['alignments']) + str(output) + '_deduplicated.bam' # Output BAM
         + ' -s' # Print some basic stats
         + str(args_dict['log']))
 
 """Remove all intermediate alignment files and references after alignment is complete"""
-def remove_intermediates(args_dict):
+def remove_intermediates(
+        args_dict):
 
-    os.system('find'
+    os.system(
+        'find'
         + ' ' + str(args_dict['alignments'])
         + ' ! -name *_final.bam'
         + ' ! -name *_deduplicated.bam'
@@ -173,40 +183,56 @@ def remove_intermediates(args_dict):
         + str(args_dict['log']))
 
     # Clear the current file's splice junction intermediate reference
-    os.system('rm -r'
+    os.system(
+        'rm -r'
         + ' ' + str(args_dict['intermediate_references']) + '*'
         + str(args_dict['log']))
 
-def clean_reference_directory(args_dict):
+def clean_reference_directory(
+        args_dict):
 
-    os.system('rm -r'
+    os.system(
+        'rm -r'
         + ' ' + str(args_dict['intermediate_references'])
         + str(args_dict['log']))
 
 """Single-end RNA-seq pipeline"""
-def se_align(args):
+def se_align(
+        args):
 
     file, args_dict = args[0], args[1]
 
     # STAR first pass
     output = str(file[:-6]) # Get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file)
-    first_pass_star(file, output, args_dict)
+    first_pass_star(
+        file,
+        output,
+        args_dict)
 
     # STAR intermediate reference building
-    build_star_splice_junction_intermediate(output, args_dict)
+    build_star_splice_junction_intermediate(
+        output,
+        args_dict)
 
     # STAR second pass
-    second_pass_star(file, output, args_dict)
+    second_pass_star(
+        file,
+        output,
+        args_dict)
 
     # Create BAM file with only unique hits, mark duplicates, index
-    alignment_process(output, args_dict)
+    alignment_process(
+        output,
+        args_dict)
 
     # Clean up the output
-    remove_intermediates(args_dict)
+    remove_intermediates(
+        args_dict)
 
 """Paired-end RNA-seq pipeline"""
-def pe_align(args):
+def pe_align(
+        args):
 
     file1, file2, args_dict = args[0], args[1], args[2]
 
@@ -214,27 +240,45 @@ def pe_align(args):
     output = str(file1[:-7]) # Get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2)
 
-    first_pass_star(file, output, args_dict)
+    first_pass_star(
+        file,
+        output,
+        args_dict)
 
     # STAR intermediate reference building
-    build_star_splice_junction_intermediate(output, args_dict)
+    build_star_splice_junction_intermediate(
+        output,
+        args_dict)
 
     # STAR second pass
-    second_pass_star(file, output, args_dict)
+    second_pass_star(
+        file,
+        output,
+        args_dict)
 
     # Create BAM file with only unique hits, mark duplicates, index
-    alignment_process(output, args_dict)
+    alignment_process(
+        output,
+        args_dict)
 
     # Clean up the output
-    remove_intermediates(args_dict)
+    remove_intermediates(
+        args_dict)
 
 """Manage single-end RNA-seq pipeline"""
-def run_seRNAseq(args_dict):
+def run_seRNAseq(
+        args_dict):
 
     try:
         # Add output directories
-        args_dict = add_directory(args_dict, 'output', 'alignments')
-        args_dict = add_directory(args_dict, 'alignments', 'intermediate_references')
+        args_dict = add_directory(
+            args_dict,
+            'output',
+            'alignments')
+        args_dict = add_directory(
+            args_dict,
+            'alignments',
+            'intermediate_references')
 
         args_dict['fasta_list'] = get_fasta(args_dict['reference'])
 
@@ -242,10 +286,15 @@ def run_seRNAseq(args_dict):
         unzip_files(args_dict['input'])
 
         # Get list of files to align based on acceptable file types
-        files = get_files(args_dict['input'], ['.fastq','.fq','.txt'])
+        files = get_files(
+            args_dict['input'],
+            ['.fastq','.fq','.txt'])
 
         # Align single-end RNAseq reads
-        parallelize(se_align, files, args_dict)
+        parallelize(
+            se_align,
+            files,
+            args_dict)
         clean_reference_directory(args_dict)
 
         return args_dict
@@ -254,12 +303,19 @@ def run_seRNAseq(args_dict):
         raise Exception('Single-end alignment failed')
 
 """Manage paired-end RNA-seq pipeline"""
-def run_peRNAseq(args_dict):
+def run_peRNAseq(
+        args_dict):
 
     try:
         # Add output directories
-        args_dict = add_directory(args_dict, 'output', 'alignments')
-        args_dict = add_directory(args_dict, 'alignments', 'intermediate_references')
+        args_dict = add_directory(
+            args_dict,
+            'output',
+            'alignments')
+        args_dict = add_directory(
+            args_dict,
+            'alignments',
+            'intermediate_references')
 
         args_dict['fasta_list'] = get_fasta(args_dict['reference'])
 
@@ -267,13 +323,18 @@ def run_peRNAseq(args_dict):
         unzip_files(args_dict['input'])
 
         # Get list of files to align based on acceptable file types
-        files = get_files(args_dict['input'], ['.fastq','.fq','.txt'])
+        files = get_files(
+            args_dict['input'],
+            ['.fastq','.fq','.txt'])
 
         if len(files) % 2 != 0:
             raise Exception('An uneven number of paired-end files were specified in the input directory')
         else:
             # Align paired-end RNAseq reads
-            parallelize_pe(pe_align, files, args_dict)
+            parallelize_pe(
+                pe_align,
+                files,
+                args_dict)
             clean_reference_directory(args_dict)
 
         return args_dict

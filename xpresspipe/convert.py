@@ -29,17 +29,21 @@ from .parallel import parallelize
 
 """Convert a sorted sam file to a bam file"""
 def sam2bam(
-    path, file):
+        path,
+        file):
 
-    os.system('samtools view -h -S -b'
+    os.system(
+        'samtools view -h -S -b'
         + ' ' + str(path) + str(file)
         + ' > ' + str(path) + str(file[:-4]) + '.bam')
-    os.system('samtools index'
+    os.system(
+        'samtools index'
         + ' ' + str(path) + str(file[:-4]) + '.bam'
         + str(args_dict['log']))
 
 """Convert sorted sam files in directory to bed files"""
-def bed_convert(args):
+def bed_convert(
+        args):
 
     file, args_dict = args[0], args[1] # Parse args
 
@@ -52,53 +56,76 @@ def bed_convert(args):
         raise Exception('Incorrect input file')
 
     # Convert BAM to BED
-    os.system('bedtools bamtobed'
+    os.system(
+        'bedtools bamtobed'
         + ' -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam'
         + ' > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
 
 """Run BED creation manager"""
-def create_bed(args_dict):
+def create_bed(
+        args_dict):
 
     # Add output directories
-    args_dict = add_directory(args_dict, 'output', 'bed_files')
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'bed_files')
 
     # Get list of files to convert based on acceptable file types
-    files = get_files(args_dict['input'], ['.sam', '.bam'])
+    files = get_files(
+        args_dict['input'],
+        ['.sam', '.bam'])
 
     # Convert aligned RNAseq reads to BED files
-    parallelize(bed_convert, files, args_dict)
+    parallelize(
+        bed_convert,
+        files,
+        args_dict)
 
     return args_dict
 
 """Convert sorted sam files in directory to bigwig files"""
-def bigwig_convert(args):
+def bigwig_convert(
+        args):
 
     file, args_dict = args[0], args[1] # Parse args
 
     # Ensure input file is properly formatted as a sorted and indexed BAM file
     if file.endswith('.sam'):
-        sam2bam(args_dict['input'], file)
+        sam2bam(
+            args_dict['input'],
+            file)
     elif file.endswith('.bam'):
         pass
     else:
         raise Exception('Incorrect input file')
 
     # Convert BAM to bigwig
-    os.system('bamCoverage'
+    os.system(
+        'bamCoverage'
         + ' -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam'
         + ' -o ' + str(args_dict['bigwig_files']) + str(file[:-4]) + '.bw'
         + str(args_dict['log']))
 
 """Run Bigwig creation manager"""
-def create_bigwig(args_dict):
+def create_bigwig(
+        args_dict):
 
     # Add output directories
-    args_dict = add_directory(args_dict, 'output', 'bigwig_files')
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'bigwig_files')
 
     # Get list of files to convert based on acceptable file types
-    files = get_files(args_dict['input'], ['.sam', '.bam'])
+    files = get_files(
+        args_dict['input'],
+        ['.sam', '.bam'])
 
     # Convert aligned RNAseq reads to bigwig files
-    parallelize(bigwig_convert, files, args_dict)
+    parallelize(
+        bigwig_convert,
+        files,
+        args_dict)
 
     return args_dict

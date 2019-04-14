@@ -31,7 +31,7 @@ from .gtfTruncate import truncate_gtf
 
 """Parse  GTF dataframe for longest transcript per gene record and keep only those transcript records"""
 def longest_transcripts(
-    gtf):
+        gtf):
 
     long_transcripts = []
 
@@ -87,7 +87,7 @@ def longest_transcripts(
 
 """Only keep GTF records that are annotated as protein_coding"""
 def protein_gtf(
-    gtf):
+        gtf):
 
     # Take only records that are annotated as 'protein coding'
     gtf_coding = gtf[gtf.iloc[:, 8].str.contains('protein_coding') == True]
@@ -97,8 +97,8 @@ def protein_gtf(
 
 """Parse GTF down to chunks per cores for multiprocessing"""
 def get_chunks(
-    gtf,
-    threads=None):
+        gtf,
+        threads=None):
 
     # Get chunking params
     cores = cpu_count() # Number of CPU cores on your system
@@ -146,9 +146,9 @@ def get_chunks(
 
 """Run a given function on chunks"""
 def run_chunks(
-    func,
-    chunks,
-    target_message=''):
+        func,
+        chunks,
+        target_message=''):
 
     if target_message == '':
         print('Parsing record')
@@ -167,14 +167,14 @@ def run_chunks(
 
 """Run all GTF-editing functions"""
 def edit_gtf(
-    gtf, # Dataframe of file path and name to GTF reference
-    longest_transcript=True,
-    protein_coding=True,
-    truncate_reference=True,
-    _5prime=45, # If no 5' truncation desired, set to 0
-    _3prime=15, # If no 3' truncation desired, set to 0
-    output=True, # True will output all intermediates, not possible if inputting a GTF as pandas dataframe
-    threads=None): # Give int for core threshold if desired
+        gtf, # Dataframe of file path and name to GTF reference
+        longest_transcript=True,
+        protein_coding=True,
+        truncate_reference=True,
+        _5prime=45, # If no 5' truncation desired, set to 0
+        _3prime=15, # If no 3' truncation desired, set to 0
+        output=True, # True will output all intermediates, not possible if inputting a GTF as pandas dataframe
+        threads=None): # Give int for core threshold if desired
 
     # Import GTF reference file
     if isinstance(gtf, pd.DataFrame) and len(gtf.columns) == 9:
@@ -182,26 +182,26 @@ def edit_gtf(
     elif str(gtf).endswith('.gtf'):
         file_name = gtf[:-4] # Get rid of GTF extension for now
         gtf = pd.read_csv(
-                str(gtf),
-                sep = '\t',
-                header = None,
-                comment = '#',
-                low_memory = False)
+            str(gtf),
+            sep = '\t',
+            header = None,
+            comment = '#',
+            low_memory = False)
     else:
         raise Exception('Error: A GTF-formatted file or dataframe was not provided')
 
     # Get chunks
     chunks = get_chunks(
-                    gtf,
-                    threads = threads)
+        gtf,
+        threads = threads)
 
     # Run GTF modifications
     # Parse each gene record for longest transcript
     if longest_transcript == True:
         chunks = run_chunks(
-                    longest_transcripts,
-                    chunks,
-                    target_message = 'longest transcripts')
+            longest_transcripts,
+            chunks,
+            target_message = 'longest transcripts')
 
         if output == True:
             file_name = str(file_name) + '_longestTranscripts'
@@ -209,9 +209,9 @@ def edit_gtf(
     # Get only protein coding annotated records
     if protein_coding == True:
         chunks = run_chunks(
-                    protein_gtf,
-                    chunks,
-                    target_message = 'protein coding genes')
+            protein_gtf,
+            chunks,
+            target_message = 'protein coding genes')
 
         if output == True:
             file_name = str(file_name) + '_proteinCoding'
@@ -220,14 +220,14 @@ def edit_gtf(
     # If file has not been parsed for longest transcript per gene, will truncate each isoform
     if truncate_reference == True:
         func = partial(
-                truncate_gtf,
-                _5prime = _5prime,
-                _3prime = _3prime)
+            truncate_gtf,
+            _5prime = _5prime,
+            _3prime = _3prime)
         chunks = run_chunks(
-                    func,
-                    chunks,
-                    cores,
-                    target_message = 'truncation')
+            func,
+            chunks,
+            cores,
+            target_message = 'truncation')
 
         if output == True:
             file_name = str(file_name) + '_truncated'

@@ -91,27 +91,37 @@ description_table  =  """\
 """
 
 """Check arguments provided by user"""
-def check_inputs(args_dict):
+def check_inputs(
+        args_dict):
 
     # Check user-provided directory formatting
     if 'input' in args_dict:
-        args_dict['input'] = check_directories(args_dict['input'])
+        args_dict['input'] = check_directories(
+            args_dict['input'])
     if 'output' in args_dict:
-        args_dict['output'] = check_directories(args_dict['output'])
+        args_dict['output'] = check_directories(
+            args_dict['output'])
     if 'reference' in args_dict:
-        args_dict['reference'] = check_directories(args_dict['reference'])
+        args_dict['reference'] = check_directories(
+            args_dict['reference'])
 
     # Check reference_type
-    if 'gtf' in args_dict and args_dict['cmd'] == 'seRNAseq' or args_dict['cmd'] == 'peRNAseq' and args_dict['cmd'] == 'riboprof' or args_dict['cmd'] == 'count':
+    if 'gtf' in args_dict \
+    and args_dict['cmd'] == 'seRNAseq' \
+    or args_dict['cmd'] == 'peRNAseq' \
+    and args_dict['cmd'] == 'riboprof' \
+    or args_dict['cmd'] == 'count':
         if str(args_dict['gtf'].lower()[-4:]) != '.gtf':
             raise Exception('Invalid reference_type value provided')
 
     # Check max_processor input
-    if 'max_processors' in args_dict and args_dict['max_processors'] !=  None:
+    if 'max_processors' in args_dict \
+    and args_dict['max_processors'] !=  None:
         args_dict['max_processors'] = int(args_dict['max_processors'])
 
         if multiprocessing.cpu_count() < args_dict['max_processors']:
-            print('Cannot specify more cores than are available -- Specified '
+            print(
+                'Cannot specify more cores than are available -- Specified '
                 + str(args_dict['max_processors']) + ' cores, only '
                 + str(multiprocessing.cpu_count()) + ' available'
                 + 'Setting cores to maximum available')
@@ -134,52 +144,60 @@ def check_inputs(args_dict):
             pass
 
     # Determine output directory for log file
-    if 'output' in args_dict and args_dict['output'] != None:
+    if 'output' in args_dict \
+    and args_dict['output'] != None:
         args_dict['log_loc'] = args_dict['output']
     else:
-        if 'input' in args_dict and args_dict['input'] != None:
+        if 'input' in args_dict \
+        and args_dict['input'] != None:
             args_dict['log_loc'] = str(args_dict['input'][:args_dict['input'].rfind('/') + 1])
-        elif 'gtf' in args_dict and args_dict['gtf'] != None:
+        elif 'gtf' in args_dict \
+        and args_dict['gtf'] != None:
             args_dict['log_loc'] = str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1])
         else:
             args_dict['log_loc'] = './'
 
-    if 'experiment' in args_dict and args_dict['experiment'] != None:
+    if 'experiment' in args_dict \
+    and args_dict['experiment'] != None:
         args_dict['log'] = ' >> ' + str(args_dict['log_loc']) + str(args_dict['experiment']) + '.log 2>&1'
         args_dict['log_file'] = str(args_dict['log_loc']) + str(args_dict['experiment']) + '.log'
     else:
         cdt = datetime.datetime.now()
-        args_dict['log'] = (' >> '
-                            + str(args_dict['log_loc'])
-                            + str(cdt.year)
-                            + '_' + str(cdt.month)
-                            + '_' + str(cdt.day)
-                            + '_' + str(cdt.hour)
-                            + 'h_' + str(cdt.minute)
-                            + 'm_' + str(cdt.second)
-                            + '.log 2>&1')
-        args_dict['log_file'] = (str(args_dict['log_loc'])
-                                + str(cdt.year)
-                                + '_' + str(cdt.month)
-                                + '_' + str(cdt.day)
-                                + '_' + str(cdt.hour)
-                                + 'h_' + str(cdt.minute)
-                                + 'm_' + str(cdt.second)
-                                + 's.log')
+        args_dict['log'] = (
+            ' >> '
+            + str(args_dict['log_loc'])
+            + str(cdt.year)
+            + '_' + str(cdt.month)
+            + '_' + str(cdt.day)
+            + '_' + str(cdt.hour)
+            + 'h_' + str(cdt.minute)
+            + 'm_' + str(cdt.second)
+            + '.log 2>&1')
+        args_dict['log_file'] = (
+            str(args_dict['log_loc'])
+            + str(cdt.year)
+            + '_' + str(cdt.month)
+            + '_' + str(cdt.day)
+            + '_' + str(cdt.hour)
+            + 'h_' + str(cdt.minute)
+            + 'm_' + str(cdt.second)
+            + 's.log')
 
     return args_dict
 
 """Get user arguments to determine sub-module to run and arguments provided"""
-def get_arguments(args, __version__):
+def get_arguments(
+    args,
+    __version__):
 
     if args is None:
         args = sys.argv[1:] # Requires user input
 
     """INITIALIZE PARSER"""
     parser = argparse.ArgumentParser(
-                prog = 'XPRESSpipe',
-                description = dedent(description_table),
-                formatter_class = argparse.RawTextHelpFormatter)
+        prog = 'XPRESSpipe',
+        description = dedent(description_table),
+        formatter_class = argparse.RawTextHelpFormatter)
     # Optional arguments
     parser.add_argument(
         '-v', '--version',
@@ -192,9 +210,9 @@ def get_arguments(args, __version__):
 
     """SERNASEQ SUBPARSER"""
     se_parser = subparser.add_parser(
-                'seRNAseq',
-                description = 'Trim, align, count, and perform quality control on single-end RNAseq raw data',
-                add_help = False)
+        'seRNAseq',
+        description = 'Trim, align, count, and perform quality control on single-end RNAseq raw data',
+        add_help = False)
     # Required arguments
     se_reqs  =  se_parser.add_argument_group('required arguments')
     se_reqs.add_argument(
@@ -312,9 +330,9 @@ def get_arguments(args, __version__):
 
     """PERNASEQ SUBPARSER"""
     pe_parser = subparser.add_parser(
-                'peRNAseq',
-                description = 'Trim, align, count, and perform quality control on paired-end RNAseq raw data',
-                add_help = False)
+        'peRNAseq',
+        description = 'Trim, align, count, and perform quality control on paired-end RNAseq raw data',
+        add_help = False)
     # Required arguments
     pe_reqs = pe_parser.add_argument_group('required arguments')
     pe_reqs.add_argument(
@@ -432,9 +450,9 @@ def get_arguments(args, __version__):
 
     """RIBOPROF SUBPARSER"""
     rp_parser = subparser.add_parser(
-                'riboprof',
-                description = 'Trim, align, count, and perform quality control on single-end Ribosome Profiling raw data',
-                add_help = False)
+        'riboprof',
+        description = 'Trim, align, count, and perform quality control on single-end Ribosome Profiling raw data',
+        add_help = False)
     # Required arguments
     rp_reqs = rp_parser.add_argument_group('required arguments')
     rp_reqs.add_argument(
@@ -552,9 +570,9 @@ def get_arguments(args, __version__):
 
     """TRIM SUBPARSER"""
     trim_parser = subparser.add_parser(
-                    'trim',
-                    description = 'Trim RNAseq reads of adaptors and for quality',
-                    add_help = False)
+        'trim',
+        description = 'Trim RNAseq reads of adaptors and for quality',
+        add_help = False)
     # Required arguments
     trim_reqs = trim_parser.add_argument_group('required arguments')
     trim_reqs.add_argument(
@@ -608,9 +626,9 @@ def get_arguments(args, __version__):
 
     """ALIGN SUBPARSER"""
     align_parser = subparser.add_parser(
-                    'align',
-                    description = 'Align RNAseq reads to reference genome',
-                    add_help = False)
+        'align',
+        description = 'Align RNAseq reads to reference genome',
+        add_help = False)
     # Required arguments
     align_reqs = align_parser.add_argument_group('required arguments')
     align_reqs.add_argument(
@@ -687,9 +705,9 @@ def get_arguments(args, __version__):
 
     """COUNT SUBPARSER"""
     count_parser = subparser.add_parser(
-                    'count',
-                    description = 'Get counts and a counts table from aligned output',
-                    add_help = False)
+        'count',
+        description = 'Get counts and a counts table from aligned output',
+        add_help = False)
     # Required arguments
     count_reqs = count_parser.add_argument_group('required arguments')
     count_reqs.add_argument(
@@ -738,9 +756,9 @@ def get_arguments(args, __version__):
 
     """NORMALIZE SUBPARSER"""
     normalize_parser = subparser.add_parser(
-                        'normalizeMatrix',
-                        description = 'Perform normalization on sequence matrix',
-                        add_help = False)
+        'normalizeMatrix',
+        description = 'Perform normalization on sequence matrix',
+        add_help = False)
     # Required arguments
     normalize_reqs = normalize_parser.add_argument_group('required arguments')
     normalize_reqs.add_argument(
@@ -777,9 +795,9 @@ def get_arguments(args, __version__):
 
     """DIFFXPRESS SUBPARSER"""
     diffx_parser = subparser.add_parser(
-                    'diffxpress',
-                    description = 'Perform DESeq2 differential expression analysis on counts matrix',
-                    add_help = False)
+        'diffxpress',
+        description = 'Perform DESeq2 differential expression analysis on counts matrix',
+        add_help = False)
     # Required arguments
     diffx_reqs = diffx_parser.add_argument_group('required arguments')
     diffx_reqs.add_argument(
@@ -810,9 +828,9 @@ def get_arguments(args, __version__):
 
     """METAGENE SUBPARSER"""
     metagene_parser = subparser.add_parser(
-                        'metagene',
-                        description = 'Compile summarized metagene profiles for each sample in a directory',
-                        add_help = False)
+        'metagene',
+        description = 'Compile summarized metagene profiles for each sample in a directory',
+        add_help = False)
     # Required arguments
     metagene_reqs = metagene_parser.add_argument_group('required arguments')
     metagene_reqs.add_argument(
@@ -855,9 +873,9 @@ def get_arguments(args, __version__):
 
     """READ DISTRIBUTION SUBPARSER"""
     distribution_parser = subparser.add_parser(
-                            'readDistribution',
-                            description = 'Compile summarized distributions for each sample in a directory',
-                            add_help = False)
+        'readDistribution',
+        description = 'Compile summarized distributions for each sample in a directory',
+        add_help = False)
     # Required arguments
     distribution_reqs = distribution_parser.add_argument_group('required arguments')
     distribution_reqs.add_argument(
@@ -887,9 +905,9 @@ def get_arguments(args, __version__):
 
     """PERIODICITY SUBPARSER"""
     period_parser = subparser.add_parser(
-                    'periodicity',
-                    description = 'Calculate periodicity of transcripts using the most abundant transcript length for alignments to map per sample',
-                    add_help = False)
+        'periodicity',
+        description = 'Calculate periodicity of transcripts using the most abundant transcript length for alignments to map per sample',
+        add_help = False)
     # Required arguments
     period_reqs = period_parser.add_argument_group('required arguments')
     period_reqs.add_argument(
@@ -944,10 +962,10 @@ def get_arguments(args, __version__):
 
     """COMPLEXITY SUBPARSER"""
     complex_parser = subparser.add_parser(
-                    'complexity',
-                    description = 'Calculate library complexity of a directory of BAM files coordinate sorted and marked for \
-                    duplicates (files should end as "_deduplicated.bam")',
-                    add_help = False)
+        'complexity',
+        description = 'Calculate library complexity of a directory of BAM files coordinate sorted and marked for \
+        duplicates (files should end as "_deduplicated.bam")',
+        add_help = False)
     # Required arguments
     complex_reqs = complex_parser.add_argument_group('required arguments')
     complex_reqs.add_argument(
@@ -990,9 +1008,9 @@ def get_arguments(args, __version__):
 
     """CURATE SUBPARSER"""
     curate_parser = subparser.add_parser(
-                    'curateReference',
-                    description = 'Run makeReference, truncate, and makeFlat in a single command',
-                    add_help = False)
+        'curateReference',
+        description = 'Run makeReference, truncate, and makeFlat in a single command',
+        add_help = False)
     # Required arguments
     curate_reqs = curate_parser.add_argument_group('required arguments')
     curate_reqs.add_argument(
@@ -1066,9 +1084,9 @@ def get_arguments(args, __version__):
 
     """TRUNCATE SUBPARSER"""
     truncate_parser = subparser.add_parser(
-                        'modifyGTF',
-                        description = 'Create longest isoform, protein coding-only, and/or truncated reference GTFs',
-                        add_help = False)
+        'modifyGTF',
+        description = 'Create longest isoform, protein coding-only, and/or truncated reference GTFs',
+        add_help = False)
     # Required arguments
     truncate_reqs = truncate_parser.add_argument_group('required arguments')
     truncate_reqs.add_argument(
@@ -1122,9 +1140,9 @@ def get_arguments(args, __version__):
 
     """REFERENCE SUBPARSER"""
     reference_parser = subparser.add_parser(
-                        'makeReference',
-                        description = 'Create a STAR reference directory',
-                        add_help = False)
+        'makeReference',
+        description = 'Create a STAR reference directory',
+        add_help = False)
     # Required arguments
     reference_reqs = reference_parser.add_argument_group('required arguments')
     reference_reqs.add_argument(
@@ -1169,10 +1187,10 @@ def get_arguments(args, __version__):
 
     """RRNAPROBE SUBPARSER"""
     probe_parser = subparser.add_parser(
-                    'rrnaProbe',
-                    description = 'Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT: Run a \
-                    BLAST search on sequences you choose to use as depletion probes to verify they are rRNAs)',
-                    add_help = False)
+        'rrnaProbe',
+        description = 'Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT: Run a \
+        BLAST search on sequences you choose to use as depletion probes to verify they are rRNAs)',
+        add_help = False)
     # Required arguments
     probe_reqs = probe_parser.add_argument_group('required arguments')
     probe_reqs.add_argument(
@@ -1208,9 +1226,9 @@ def get_arguments(args, __version__):
 
     """CONVERTNAMES SUBPARSER"""
     convert_parser = subparser.add_parser(
-                        'convertNames',
-                        description = 'Convert gene identifiers using a GTF reference',
-                        add_help = False)
+        'convertNames',
+        description = 'Convert gene identifiers using a GTF reference',
+        add_help = False)
     # Required arguments
     convert_reqs = convert_parser.add_argument_group('required arguments')
     convert_reqs.add_argument(

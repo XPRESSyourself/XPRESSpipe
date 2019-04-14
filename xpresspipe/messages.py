@@ -26,12 +26,17 @@ import sys
 import time
 
 """Check progress report for errors and exceptions"""
-def check_process(log_file, message_func, step):
+def check_process(
+        log_file,
+        message_func,
+        step):
 
     try:
-        os.system('[[ $(cat ' + log_file + ' | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]]'
-        + ' || { echo "Errors or exceptions were present in ' + step + ', please refer to the ' + str(log_file[log_file.rfind('/') + 1:])
-        + ' file for information concerning errors"; exit 1; }')
+        os.system(
+            '[[ $(cat ' + log_file + ' | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]]'
+            + ' || { echo "Errors or exceptions were present in ' + step + ', please refer to the '
+            + str(log_file[log_file.rfind('/') + 1:])
+            + ' file for information concerning errors"; exit 1; }')
     except:
         message_func
 

@@ -24,15 +24,15 @@ import pandas as pd
 
 """Scan first exons recursively by chromosome position and truncate"""
 def scan_forward(
-    gtf,
-    index,
-    bad_exons,
-    search_string,
-    stop_string,
-    annotation,
-    _5prime,
-    _3prime,
-    penalty=0):
+        gtf,
+        index,
+        bad_exons,
+        search_string,
+        stop_string,
+        annotation,
+        _5prime,
+        _3prime,
+        penalty=0):
 
     # Forward scan for first exon
     n = 0 + penalty
@@ -54,31 +54,33 @@ def scan_forward(
             # Exon 1 will be first exon
             if gtf.at[index + n, 6] == '+':
                 gtf, bad_exons = plus_5prime(
-                                    gtf,
-                                    index,
-                                    n,
-                                    _5prime,
-                                    _3prime,
-                                    bad_exons,
-                                    search_string,
-                                    stop_string,
-                                    annotation,
-                                    penalty)
+                    gtf,
+                    index,
+                    n,
+                    _5prime,
+                    _3prime,
+                    bad_exons,
+                    search_string,
+                    stop_string,
+                    annotation,
+                    penalty)
+
                 return gtf, bad_exons
 
             # Exon 1 will be last exon
             elif gtf.at[index + n, 6] == '-':
                 gtf, bad_exons = minus_3prime(
-                                    gtf,
-                                    index,
-                                    n,
-                                    _5prime,
-                                    _3prime,
-                                    bad_exons,
-                                    search_string,
-                                    stop_string,
-                                    annotation,
-                                    penalty)
+                    gtf,
+                    index,
+                    n,
+                    _5prime,
+                    _3prime,
+                    bad_exons,
+                    search_string,
+                    stop_string,
+                    annotation,
+                    penalty)
+
                 return gtf, bad_exons
 
             # Exon 1 does not have a strandedness annotation
@@ -87,16 +89,16 @@ def scan_forward(
 
 """Truncate 5' amount from the first listed positive stranded exon"""
 def plus_5prime(
-    gtf,
-    index,
-    counter,
-    _5prime,
-    _3prime,
-    bad_exons,
-    search_string,
-    stop_string,
-    annotation,
-    penalty):
+        gtf,
+        index,
+        counter,
+        _5prime,
+        _3prime,
+        bad_exons,
+        search_string,
+        stop_string,
+        annotation,
+        penalty):
 
     # Edit location and exit the recursive loop
     if gtf.at[index + counter, 3] + _5prime <= gtf.at[index + counter, 4]:
@@ -110,28 +112,28 @@ def plus_5prime(
         remainder = _5prime \
                     - abs(gtf.at[index + counter, 4] - gtf.at[index + counter, 3]) # Take what's left over
         return scan_forward( # Recursive scan to next exon until no remainder
-                gtf,
-                index,
-                bad_exons,
-                search_string,
-                stop_string,
-                annotation,
-                remainder,
-                _3prime,
-                penalty + 1)
+            gtf,
+            index,
+            bad_exons,
+            search_string,
+            stop_string,
+            annotation,
+            remainder,
+            _3prime,
+            penalty + 1)
 
 """Truncate 3' amount from the first listed minus stranded exon"""
 def minus_3prime(
-    gtf,
-    index,
-    counter,
-    _5prime,
-    _3prime,
-    bad_exons,
-    search_string,
-    stop_string,
-    annotation,
-    penalty):
+        gtf,
+        index,
+        counter,
+        _5prime,
+        _3prime,
+        bad_exons,
+        search_string,
+        stop_string,
+        annotation,
+        penalty):
 
     # Edit location and exit the recursive loop
     if gtf.at[index + counter, 3] + _3prime <= gtf.at[index + counter, 4]:
@@ -145,27 +147,27 @@ def minus_3prime(
         remainder = _3prime \
                     - abs(gtf.at[index + counter, 4] - gtf.at[index + counter, 3]) # Take what's left over
         return scan_forward( # Recursive scan to next exon until no remainder
-                gtf,
-                index,
-                bad_exons,
-                search_string,
-                stop_string,
-                annotation,
-                _5prime,
-                remainder,
-                penalty + 1)
+            gtf,
+            index,
+            bad_exons,
+            search_string,
+            stop_string,
+            annotation,
+            _5prime,
+            remainder,
+            penalty + 1)
 
 """Scan last exons recursively by chromosome position and truncate"""
 def scan_backward(
-    gtf,
-    index,
-    bad_exons,
-    search_string,
-    stop_string,
-    annotation,
-    _5prime,
-    _3prime,
-    penalty=0):
+        gtf,
+        index,
+        bad_exons,
+        search_string,
+        stop_string,
+        annotation,
+        _5prime,
+        _3prime,
+        penalty=0):
 
     n = 0
     item = ''
@@ -188,33 +190,37 @@ def scan_backward(
                 # Exon 1 will be first exon
                 if gtf.at[index + n + y, 6] == '+':
                     gtf, bad_exons = plus_3prime(
-                                        gtf,
-                                        index,
-                                        n,
-                                        y,
-                                        _5prime,
-                                        _3prime,
-                                        bad_exons,
-                                        search_string,
-                                        stop_string,
-                                        annotation,
-                                        penalty)
+                        gtf,
+                        index,
+                        n,
+                        y,
+                        _5prime,
+                        _3prime,
+                        bad_exons,
+                        search_string,
+                        stop_string,
+                        annotation,
+                        penalty)
+
                     return gtf, bad_exons
+
                 # Exon 1 will be last exon
                 elif gtf.at[index + n + y, 6] == '-':
                     gtf, bad_exons = minus_5prime(
-                                        gtf,
-                                        index,
-                                        n,
-                                        y,
-                                        _5prime,
-                                        _3prime,
-                                        bad_exons,
-                                        search_string,
-                                        stop_string,
-                                        annotation,
-                                        penalty)
+                        gtf,
+                        index,
+                        n,
+                        y,
+                        _5prime,
+                        _3prime,
+                        bad_exons,
+                        search_string,
+                        stop_string,
+                        annotation,
+                        penalty)
+
                     return gtf, bad_exons
+
                 else:
                     raise Exception('Unstranded transcript record present')
 
@@ -238,51 +244,56 @@ def scan_backward(
                         # Exon last will be last exon
                         if gtf.at[index + n + y, 6] == '+':
                             gtf, bad_exons = plus_3prime(
-                                                gtf,
-                                                index,
-                                                n,
-                                                y,
-                                                _5prime,
-                                                _3prime,
-                                                bad_exons,
-                                                search_string,
-                                                stop_string,
-                                                annotation,
-                                                penalty)
+                                gtf,
+                                index,
+                                n,
+                                y,
+                                _5prime,
+                                _3prime,
+                                bad_exons,
+                                search_string,
+                                stop_string,
+                                annotation,
+                                penalty)
+
                             return gtf, bad_exons
+
                         # Exon last will be first exon
                         elif gtf.at[index + n + y, 6] == '-':
                             gtf, bad_exons = minus_5prime(
-                                                gtf,
-                                                index,
-                                                n,
-                                                y,
-                                                _5prime,
-                                                _3prime,
-                                                bad_exons,
-                                                search_string,
-                                                stop_string,
-                                                annotation,
-                                                penalty)
+                                gtf,
+                                index,
+                                n,
+                                y,
+                                _5prime,
+                                _3prime,
+                                bad_exons,
+                                search_string,
+                                stop_string,
+                                annotation,
+                                penalty)
+
                             return gtf, bad_exons
+
                         else:
                             raise Exception('Unstranded transcript record present')
+
                     else:
                         pass
 
 """Truncate 3' amount from the first listed positive stranded exon"""
 def plus_3prime(
-    gtf,
-    index,
-    counter,
-    inner_counter,
-    _5prime,
-    _3prime,
-    bad_exons,
-    search_string,
-    stop_string,
-    annotation,
-    penalty):
+        gtf,
+        index,
+        counter,
+        inner_counter,
+        _5prime,
+        _3prime,
+        bad_exons,
+        search_string,
+        stop_string,
+        annotation,
+        penalty):
 
     # Edit location and exit the recursive loop
     if gtf.at[index + counter + inner_counter, 4] - _3prime >= gtf.at[index + counter + inner_counter, 3]:
@@ -296,29 +307,29 @@ def plus_3prime(
         remainder = _3prime \
                     - abs(gtf.at[index + counter + inner_counter, 4] - gtf.at[index + counter + inner_counter, 3]) # Take what's left over
         return scan_backward( # Recursive scan to next exon until no remainder
-                gtf,
-                index + counter + inner_counter,
-                bad_exons,
-                search_string,
-                stop_string,
-                annotation,
-                _5prime,
-                remainder,
-                penalty + 1)
+            gtf,
+            index + counter + inner_counter,
+            bad_exons,
+            search_string,
+            stop_string,
+            annotation,
+            _5prime,
+            remainder,
+            penalty + 1)
 
 """Truncate 5' amount from the first listed minus stranded exon"""
 def minus_5prime(
-    gtf,
-    index,
-    counter,
-    inner_counter,
-    _5prime,
-    _3prime,
-    bad_exons,
-    search_string,
-    stop_string,
-    annotation,
-    penalty):
+        gtf,
+        index,
+        counter,
+        inner_counter,
+        _5prime,
+        _3prime,
+        bad_exons,
+        search_string,
+        stop_string,
+        annotation,
+        penalty):
 
     # Edit location and exit the recursive loop
     if gtf.at[index + counter + inner_counter, 4] - _5prime >= gtf.at[index + counter + inner_counter, 3]:
@@ -332,21 +343,21 @@ def minus_5prime(
         remainder = _5prime \
                     - abs(gtf.at[index + counter + inner_counter, 4] - gtf.at[index + counter + inner_counter, 3]) # Take what's left over
         return scan_backward( # Recursive scan to next exon until no remainder
-                gtf,
-                index + counter + inner_counter,
-                bad_exons,
-                search_string,
-                stop_string,
-                annotation,
-                remainder,
-                _3prime,
-                penalty + 1)
+            gtf,
+            index + counter + inner_counter,
+            bad_exons,
+            search_string,
+            stop_string,
+            annotation,
+            remainder,
+            _3prime,
+            penalty + 1)
 
 """Run MAIN function for GTF truncation"""
 def truncate_gtf(
-    gtf,
-    _5prime=45,
-    _3prime=15):
+        gtf,
+        _5prime=45,
+        _3prime=15):
 
     # Initialize
     gtf_c = gtf.copy() # Make copy in order to edit dataframe
@@ -359,10 +370,26 @@ def truncate_gtf(
         if row[2] == 'transcript':
 
             # Recursively scan forward in the transcript to truncate n nucleotides
-            gtf_c, bad_exons = scan_forward(gtf_c, index, bad_exons, 'exon', 'transcript', 'exon_number \"', _5prime, _3prime)
+            gtf_c, bad_exons = scan_forward(
+                gtf_c,
+                index,
+                bad_exons,
+                'exon',
+                'transcript',
+                'exon_number \"',
+                _5prime,
+                _3prime)
 
             # Forward scan for next transcript, then backtrack to last exon record for transcript
-            gtf_c, bad_exons = scan_backward(gtf_c, index, bad_exons, 'exon', 'transcript', 'exon_number \"', _5prime, _3prime)
+            gtf_c, bad_exons = scan_backward(
+                gtf_c,
+                index,
+                bad_exons,
+                'exon',
+                'transcript',
+                'exon_number \"',
+                _5prime,
+                _3prime)
 
     # Drop exons that are completely truncated
     print(str(len(bad_exons)) + ' exons records removed from reference chunk for being too short.')
