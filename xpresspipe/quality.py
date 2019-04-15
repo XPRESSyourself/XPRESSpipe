@@ -28,6 +28,29 @@ import pandas as pd
 from .parallel import parallelize
 from .compile import compile_file_metrics, compile_matrix_metrics
 from .utils import add_directory, get_files
+from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index, get_meta_profile, get_periodicity_profile
+from .processBAM import read_bam, bam_sample, meta_coordinates, psite_coordinates
+
+"""Get meta and periodicity indices from GTF"""
+def get_indices(args_dict):
+
+    # Read in GTF
+    gtf = pd.read_csv(str(args_dict['gtf']),
+       sep='\t',
+       header=None,
+       comment='#',
+       low_memory=False)
+
+    # Flatten GTF
+    gtf_flat = flatten_reference(
+        gtf,
+        threads = None)
+
+    # Get GTF indices
+    chromosome_index = xp.create_chromosome_index(gtf_flat)
+    coordinate_index = xp.create_coordinate_index(gtf_flat)
+
+    return chromosome_index, coordinate_index
 
 """Create MultiQC processing summary from all files in args_dict output"""
 def get_multiqc_summary(
@@ -42,10 +65,26 @@ def get_multiqc_summary(
 
 """Generate periodicity maps"""
 def get_peaks(
-        args):
+        args,
+        chromosome_index,
+        coordinate_index):
 
     file, args_dict = args[0], args[1] # Parse args
 
+    # Read in indexed bam file
+    bam = read_bam(
+        str(args_dict['input']) + str(file))
+    bam_coordinates = psite_coordinates(bam)
+
+    # Get profile
+    profile_data = get_periodicity_profile(
+        bam_coordinates,
+        coordinate_index,
+        chromosome_index)
+    profile['index'] = profile.index
+    profile_data.to_csv(
+        str(args_dict['periodicity']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
+        sep='\t')
 
 """Manager for running periodicity summary plotting"""
 def make_periodicity(
@@ -64,30 +103,56 @@ def make_periodicity(
     # Get list of bam files from user input
     files = get_files(args_dict['input'], ['.bam'])
 
-    # Perform metagene analysis
-    parallelize(get_peaks, files, args_dict, mod_workers=True)
+    # Get indices
+    chromosome_index, coordinate_index = get_indices(args_dict)
+
+    # Perform periodicity analysis
+    func = partial(
+        get_peaks,
+        chromosome_index = chromosome_index,
+        coordinate_index = coordinate_index)
+    parallelize(
+        func,
+        files,
+        args_dict,
+        mod_workers = True)
 
     # Get metrics to plot
-    files = get_files(args_dict['metrics'], ['_periodicity_metagene_profile.txt'])
+    files = get_files(args_dict['metrics'], ['_metrics.txt'])
 
     # Plot metrics for each file
-    compile_file_metrics(
+    compile_matrix_metrics(
         args_dict,
         str(output_location + 'metrics'),
         files,
-        'metagene_average',
-        str(int(args_dict['downstream'] - 1)),
-        'position',
-        'metagene coverage',
+        'index',
+        'metacount',
         'periodicity',
         args_dict['experiment'],
         output_location)
 
 """Generate metagene profiles"""
-def get_profiles(
-        args):
+def get_metagene(
+        args,
+        chromosome_index,
+        coordinate_index):
 
     file, args_dict = args[0], args[1] # Parse args
+
+    # Read in indexed bam file
+    bam = read_bam(
+        str(args_dict['input']) + str(file))
+    bam_coordinates = meta_coordinates(bam)
+
+    # Get profile
+    profile_data = get_meta_profile(
+        bam_coordinates,
+        coordinate_index,
+        chromosome_index)
+    profile['index'] = profile.index
+    profile_data.to_csv(
+        str(args_dict['metagene']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
+        sep='\t')
 
 """Manager for running metagene summary plotting"""
 def make_metagene(
@@ -109,9 +174,16 @@ def make_metagene(
         args_dict['input'],
         ['.bam'])
 
+    # Get indices
+    chromosome_index, coordinate_index = get_indices(args_dict)
+
     # Perform metagene analysis
+    func = partial(
+        get_metagene,
+        chromosome_index = chromosome_index,
+        coordinate_index = coordinate_index)
     parallelize(
-        get_profiles,
+        func,
         files,
         args_dict,
         mod_workers = True)
@@ -119,17 +191,15 @@ def make_metagene(
     # Compile metrics to plot
     files = get_files(
         args_dict['metrics'],
-        ['_rna_metrics'])
+        ['_metrics'])
 
     # Plot metrics for each file
-    compile_file_metrics(
+    compile_matrix_metrics(
         args_dict,
         str(output_location + 'metrics'),
         files,
-        'normalized_position',
-        None,
-        'meta_position',
-        'normalized_coverage (all_reads)',
+        'index',
+        'metacount',
         'metagene',
         args_dict['experiment'],
         output_location)
