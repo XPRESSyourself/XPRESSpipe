@@ -35,7 +35,7 @@ from .processBAM import read_bam, bam_sample, meta_coordinates, psite_coordinate
 def get_indices(args_dict):
 
     # Read in GTF
-    gtf = pd.read_csv(str(args_dict['gtf']),
+    gtf = pd.read_csv(str(args_dict['reference']) + 'transcripts.gtf',
        sep='\t',
        header=None,
        comment='#',
