@@ -66,19 +66,19 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """Print completed process message"""
 def msg_complete():
     print("""Process complete.
-   n************************
+************************
     """)
 
 """Trim submodule message"""
 def msg_trim():
     print("""\nXPRESSpipe initialized...
-       nAdaptor and quality trimming...\n
+    \nAdaptor and quality trimming...\n
   _       ,/'
  (_).  ,/'
   __  ::
  (__)'  `\.
            `\.
-       n""")
+       """)
 
     time.sleep(1)
 
@@ -119,7 +119,7 @@ def msg_align():
 |                                `================'  `.                     |
 
 
-       n""")
+       """)
 
     time.sleep(1)
 
@@ -155,7 +155,7 @@ def msg_count():
 |--'  `.\;  |--|-. ____IGNIS  _|_/|`._>' `-_,'  )`-   AER `-' ,  (""\      |
 |______________________________________________________________________________|
 
-       n""")
+       """)
     time.sleep(1)
 
 """Normalize submodule message"""
@@ -182,7 +182,7 @@ def msg_normalize():
 _[_]_[_]_[_]_[__j__j__j__j_]_[_]_[_]_[_]_[_]_
   _j__j__j__j[_j__j__j__j__]j__j__j__j__j_
      j  j  j [  j  j  j  j ] j  j  j  j
-       n""")
+       """)
 
     time.sleep(1)
 
@@ -195,7 +195,7 @@ def msg_quality():
  / __| '_ / _/ __| |/ / _| | | | __|
 | (__| | | |  __/ (__|   < (_) | |_| | |_
 ___|_| |_|\___|\___|_|\_\___/__,_|\__|
-n""")
+\n""")
 
     time.sleep(1)
 
@@ -207,12 +207,12 @@ def msg_finish():
            / /
           / /
  __      / /
-    / /
-   / /
-  / /
-   __/
+ \ \    / /
+  \ \  / /
+   \ \/ /
+    \__/
 
-   nXPRESSpipe processing complete
+   XPRESSpipe processing complete
 
                                     ..
                                      .(  )`-._
@@ -250,5 +250,5 @@ def msg_finish():
    _.-` ``--..  ..  `.-._  `._  `- `-._ .-_. ._.- -._ --.._`` _.-`---`-.
 
 
-   n
+
         """)
