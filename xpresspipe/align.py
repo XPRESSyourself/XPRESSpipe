@@ -142,6 +142,17 @@ def second_pass_star(
         + ' --outSAMheaderHD @HD VN:1.4'
         + str(args_dict['log']))
 
+"""Remove intermediate reference files for the file being processed in the instance"""
+def remove_intermediate_reference(
+        output,
+        args_dict):
+
+    # Clear the current file's splice junction intermediate reference
+    os.system(
+        'rm -r'
+        + ' ' + str(args_dict['intermediate_references']) + str(output)
+        + str(args_dict['log']))
+
 """Sort reads per file by chromosome position and keep only unique mappers"""
 def alignment_process(
         output,
@@ -153,26 +164,29 @@ def alignment_process(
         + ' -h' # Keep SAM header in output
         + ' -q 255' # Keep unique mappers
         + ' --threads ' + str(args_dict['threads'])
+        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
         + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam'
-        + ' > ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam')
+        + str(args_dict['log']))
 
     # Sort SAM file
     os.system(
-    'samtools sort'
-    + ' --threads ' + str(args_dict['threads'])
-    + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
-    + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam')
+        'samtools sort'
+        + ' --threads ' + str(args_dict['threads'])
+        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
+        + str(args_dict['log']))
 
     # Index BAM file
     os.system(
         'samtools index'
         + ' -@ ' + str(args_dict['threads'])
-        + ' ' + str(args_dict['alignments']) + str(output) + '_final.sort.bam')
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+        + str(args_dict['log']))
 
     # Use sorted BAM file to find any duplicate reads
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_final.sort.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam' # Input BAM
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupMarked.bam' # Output BAM
         + ' -s' # Print some basic stats
         + str(args_dict['log']))
@@ -180,7 +194,7 @@ def alignment_process(
     # Create sorted BAM file with duplicates removed
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_final.sort.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam' # Input BAM
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam' # Output BAM
         + ' -s' # Print some basic stats to STDOUT
         + ' -r' # Remove duplicate reads
@@ -191,20 +205,14 @@ def remove_intermediates(
         args_dict):
 
     os.system(
-        'find'
-        + ' ' + str(args_dict['alignments'])
-        + ' ! -name *_final.sort.bam'
-        + ' ! -name *_final.sort.bam.bai'
-        + ' ! -name *_dedupMarked.bam'
-        + ' ! -name *_dedupRemoved.bam'
-        + ' ! -name *_Log.final.out'
-        + ' -maxdepth 1 -type f -delete' # Only keep files matching pattern
-        + str(args_dict['log']))
-
-    # Clear the current file's splice junction intermediate reference
-    os.system(
-        'rm -r'
-        + ' ' + str(args_dict['intermediate_references']) + '*'
+        "find"
+        + " " + str(args_dict['alignments'])
+        + " ! -name '*_Aligned.sort.bam'"
+        + " ! -name '*_Aligned.sort.bam.bai'"
+        + " ! -name '*_dedupMarked.bam'"
+        + " ! -name '*_dedupRemoved.bam'"
+        + " ! -name '*_Log.final.out'"
+        + " -maxdepth 1 -type f -delete" # Only keep files matching pattern
         + str(args_dict['log']))
 
 def clean_reference_directory(
@@ -240,6 +248,11 @@ def se_align(
         output,
         args_dict)
 
+    # Remove intermediate reference for the file
+    remove_intermediate_reference(
+        output,
+        args_dict)
+
     # Create BAM file with only unique hits, mark duplicates, index
     alignment_process(
         output,
@@ -272,6 +285,11 @@ def pe_align(
     # STAR second pass
     second_pass_star(
         file,
+        output,
+        args_dict)
+
+    # Remove intermediate reference for the file
+    remove_intermediate_reference(
         output,
         args_dict)
 
