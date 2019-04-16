@@ -119,7 +119,7 @@ def second_pass_star(
         + ' --runThreadN ' + str(args_dict['threads'])
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output)
         + ' --readFilesIn ' + str(file)
-        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_sorted_'
+        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_'
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang'])
@@ -138,7 +138,7 @@ def second_pass_star(
         + ' --outSAMstrandField intronMotif'
         + ' --outSAMattributes NH HI NM MD AS XS'
         + ' --outSAMunmapped Within'
-        + ' --outSAMtype BAM SortedByCoordinate'
+        + ' --outSAMtype BAM Unsorted' # Allow for multithreading STAR run without file overload
         + ' --outSAMheaderHD @HD VN:1.4'
         + str(args_dict['log']))
 
@@ -150,22 +150,40 @@ def alignment_process(
     # Only take unique mappers (q = 255)
     os.system(
         'samtools view'
-        + ' -q 255'
+        + ' -h' # Keep SAM header in output
+        + ' -q 255' # Keep unique mappers
         + ' --threads ' + str(args_dict['threads'])
-        + ' ' + str(args_dict['alignments']) + str(output) + '_sorted_Aligned.sortedByCoord.out.bam'
-        + ' > ' + str(args_dict['alignments']) + str(output) + '_final.bam')
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam'
+        + ' > ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam')
+
+    # Sort SAM file
+    os.system(
+    'samtools sort'
+    + ' --threads ' + str(args_dict['threads'])
+    + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+    + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam')
 
     # Index BAM file
     os.system(
         'samtools index'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam')
+        + ' -@ ' + str(args_dict['threads'])
+        + ' ' + str(args_dict['alignments']) + str(output) + '_final.sort.bam')
 
     # Use sorted BAM file to find any duplicate reads
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_final.bam' # Input BAM
-        + ' ' + str(args_dict['alignments']) + str(output) + '_deduplicated.bam' # Output BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_final.sort.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_dedupMarked.bam' # Output BAM
         + ' -s' # Print some basic stats
+        + str(args_dict['log']))
+
+    # Create sorted BAM file with duplicates removed
+    os.system(
+        'samtools markdup'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_final.sort.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam' # Output BAM
+        + ' -s' # Print some basic stats to STDOUT
+        + ' -r' # Remove duplicate reads
         + str(args_dict['log']))
 
 """Remove all intermediate alignment files and references after alignment is complete"""
@@ -175,10 +193,11 @@ def remove_intermediates(
     os.system(
         'find'
         + ' ' + str(args_dict['alignments'])
-        + ' ! -name *_final.bam'
-        + ' ! -name *_deduplicated.bam'
-        + ' ! -name *_final.bam.bai'
-        + ' ! -name *_final_Log.final.out'
+        + ' ! -name *_final.sort.bam'
+        + ' ! -name *_final.sort.bam.bai'
+        + ' ! -name *_dedupMarked.bam'
+        + ' ! -name *_dedupRemoved.bam'
+        + ' ! -name *_Log.final.out'
         + ' -maxdepth 1 -type f -delete' # Only keep files matching pattern
         + str(args_dict['log']))
 
