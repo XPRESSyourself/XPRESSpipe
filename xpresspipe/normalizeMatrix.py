@@ -33,16 +33,17 @@ def run_normalization(
     # Run sample normalization
     if 'method' in args_dict and args_dict['method'] != None:
 
+        df = pd.read_csv(
+            str(args_dict['input']),
+            sep = sep,
+            header = 0,
+            index_col = 0,
+            comment = '#',
+            low_memory = False)
+
         # RPM normalization
         if args_dict['method'].upper() == 'RPM':
             type = 'rpm'
-            df = pd.read_csv(
-                str(args_dict['input']),
-                sep = sep,
-                header = 0,
-                index_col = 0,
-                comment = '#',
-                low_memory = False)
             df = rpm(df)
             df.to_csv(
                 str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv',
@@ -54,13 +55,6 @@ def run_normalization(
             if args_dict['gtf'] == None:
                 raise Exception('A GTF reference file is required for RPKM and FPKM normalization')
             type = 'r_fpkm'
-            df = pd.read_csv(
-                str(args_dict['input']),
-                sep = sep,
-                header = 0,
-                index_col = 0,
-                comment = '#',
-                low_memory = False)
             df = r_fpkm(
                 df,
                 args_dict['gtf'])
@@ -71,13 +65,6 @@ def run_normalization(
             if args_dict['gtf'] == None:
                 raise Exception('A GTF reference file is required for RPKM and FPKM normalization')
             type = 'tpm'
-            df = pd.read_csv(
-                str(args_dict['input']),
-                sep = sep,
-                header = 0,
-                index_col = 0,
-                comment = '#',
-                low_memory = False)
             df = tpm(
                 df,
                 args_dict['gtf'])
@@ -88,13 +75,6 @@ def run_normalization(
         # Log normalization
         elif args_dict['method'].upper() == 'LOG':
             type = 'log'
-            df = pd.read_csv(
-                str(args_dict['input']),
-                sep = sep,
-                header = 0,
-                index_col = 0,
-                comment = '#',
-                low_memory = False)
             df = log_scale(
                 df,
                 log_base = 10)
