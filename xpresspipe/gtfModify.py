@@ -226,7 +226,6 @@ def edit_gtf(
         chunks = run_chunks(
             func,
             chunks,
-            cores,
             target_message = 'truncation')
 
         if output == True:
