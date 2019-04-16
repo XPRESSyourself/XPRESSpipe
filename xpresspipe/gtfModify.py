@@ -180,7 +180,7 @@ def edit_gtf(
     if isinstance(gtf, pd.DataFrame) and len(gtf.columns) == 9:
         output = False # Turn off intermediates output
     elif str(gtf).endswith('.gtf'):
-        file_name = gtf[:-4] # Get rid of GTF extension for now
+        file_name = str(gtf[:-4]) + '_' # Get rid of GTF extension for now
         gtf = pd.read_csv(
             str(gtf),
             sep = '\t',
@@ -204,7 +204,7 @@ def edit_gtf(
             target_message = 'longest transcripts')
 
         if output == True:
-            file_name = str(file_name) + '_longestTranscripts'
+            file_name = str(file_name) + 'L'
 
     # Get only protein coding annotated records
     if protein_coding == True:
@@ -214,7 +214,7 @@ def edit_gtf(
             target_message = 'protein coding genes')
 
         if output == True:
-            file_name = str(file_name) + '_proteinCoding'
+            file_name = str(file_name) + 'C'
 
     # Truncate by unique transcript
     # If file has not been parsed for longest transcript per gene, will truncate each isoform
@@ -229,7 +229,7 @@ def edit_gtf(
             target_message = 'truncation')
 
         if output == True:
-            file_name = str(file_name) + '_truncated'
+            file_name = str(file_name) + 'T'
 
     # Merge final GTF from chunks and output
     if len(chunks) > 0:
