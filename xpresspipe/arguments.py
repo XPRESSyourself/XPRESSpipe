@@ -1038,17 +1038,17 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     curate_opts.add_argument(
-        '--longest_transcript',
+        '-l', '--longest_transcript',
         help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
         action = 'store_true',
         required = False)
     curate_opts.add_argument(
-        '--protein_coding',
+        '-p', '--protein_coding',
         help = 'Provide argument to keep only gene records annotated as protein coding genes',
         action = 'store_true',
         required = False)
     curate_opts.add_argument(
-        '--truncate',
+        '-t', '--truncate',
         help = 'Provide argument to truncate gene records',
         action = 'store_true',
         required = False)
@@ -1102,17 +1102,17 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     truncate_opts.add_argument(
-        '--longest_transcript',
+        '-l', '--longest_transcript',
         help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
         action = 'store_true',
         required = False)
     truncate_opts.add_argument(
-        '--protein_coding',
+        '-p', '--protein_coding',
         help = 'Provide argument to keep only gene records annotated as protein coding genes',
         action = 'store_true',
         required = False)
     truncate_opts.add_argument(
-        '--truncate',
+        '-t', '--truncate',
         help = 'Provide argument to truncate gene records',
         action = 'store_true',
         required = False)
