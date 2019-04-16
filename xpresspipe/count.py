@@ -40,6 +40,7 @@ def count_file(
     os.system(
         'htseq-count'
         + ' -q'
+        + ' -f bam'
         + ' -m intersection-nonempty'
         + ' -t exon'
         + ' -i gene_id'
@@ -62,7 +63,7 @@ def count_reads(
     # Get list of files to count based on acceptable file types
     files = get_files(
         args_dict['input'],
-        ['.bam'])
+        ['_dedupRemoved.bam'])
 
     # Count aligned RNAseq reads
     parallelize(
