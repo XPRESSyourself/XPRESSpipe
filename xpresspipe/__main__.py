@@ -36,7 +36,11 @@ from .count import count_reads, collect_counts
 from .normalizeMatrix import run_normalization
 from .convert import create_bed, create_bigwig
 from .rrnaProbe import rrnaProbe
-from .quality import get_multiqc_summary, make_metagene, make_readDistributions, make_periodicity, make_complexity
+from .quality import get_multiqc_summary
+from .metagene import make_metagene
+from .readDistribution import make_readDistributions
+from .periodicity import make_periodicity
+from .complexity import make_complexity
 from .parallel import get_cores
 from .gtfModify import edit_gtf
 from .utils import get_probe_files, unzip_files
