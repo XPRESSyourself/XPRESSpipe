@@ -27,13 +27,14 @@ from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .parallel import parallelize
-from .compile import compile_file_metrics, compile_matrix_metrics
+from .compile import compile_file_metrics, compile_matrix_metrics, compile_complexity_metrics
 from .utils import add_directory, get_files
 from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index, get_meta_profile, get_periodicity_profile
 from .processBAM import read_bam, bam_sample, meta_coordinates, psite_coordinates
 
 """Get meta and periodicity indices from GTF"""
-def get_indices(args_dict):
+def get_indices(
+        args_dict):
 
     # Read in GTF
     gtf = pd.read_csv(str(args_dict['reference']) + 'transcripts.gtf',
@@ -82,7 +83,7 @@ def get_peaks(
         bam_coordinates,
         coordinate_index,
         chromosome_index)
-    profile['index'] = profile.index
+    profile_data['index'] = profile_data.index
     profile_data.to_csv(
         str(args_dict['periodicity']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
         sep='\t')
@@ -99,10 +100,11 @@ def make_periodicity(
         args_dict,
         'periodicity',
         'metrics')
-    output_location = args_dict['periodicity']
 
     # Get list of bam files from user input
-    files = get_files(args_dict['input'], ['.bam'])
+    files = get_files(
+        args_dict['input'],
+        ['_dedupRemoved.bam'])
 
     # Get indices
     chromosome_index, coordinate_index = get_indices(args_dict)
@@ -119,18 +121,20 @@ def make_periodicity(
         mod_workers = True)
 
     # Get metrics to plot
-    files = get_files(args_dict['metrics'], ['_metrics.txt'])
+    files = get_files(
+        str(args_dict['periodicity']) + 'metrics/',
+        ['_metrics.txt'])
 
     # Plot metrics for each file
     compile_matrix_metrics(
         args_dict,
-        str(output_location + 'metrics'),
+        str(args_dict['periodicity']) + 'metrics/',
         files,
         'index',
         'metacount',
         'periodicity',
         args_dict['experiment'],
-        output_location)
+        args_dict['periodicity'])
 
 """Generate metagene profiles"""
 def get_metagene(
@@ -150,7 +154,7 @@ def get_metagene(
         bam_coordinates,
         coordinate_index,
         chromosome_index)
-    profile['index'] = profile.index
+    profile_data['index'] = profile_data.index
     profile_data.to_csv(
         str(args_dict['metagene']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
         sep='\t')
@@ -168,12 +172,11 @@ def make_metagene(
         args_dict,
         'metagene',
         'metrics')
-    output_location = args_dict['metagene']
 
     # Get list of bam files from user input
     files = get_files(
         args_dict['input'],
-        ['.bam'])
+        ['_dedupRemoved.bam'])
 
     # Get indices
     chromosome_index, coordinate_index = get_indices(args_dict)
@@ -191,19 +194,19 @@ def make_metagene(
 
     # Compile metrics to plot
     files = get_files(
-        args_dict['metrics'],
-        ['_metrics'])
+        str(args_dict['metagene']) + 'metrics/',
+        ['_metrics.txt'])
 
     # Plot metrics for each file
     compile_matrix_metrics(
         args_dict,
-        str(output_location + 'metrics'),
+        str(args_dict['metagene']) + 'metrics/',
         files,
         'index',
         'metacount',
         'metagene',
         args_dict['experiment'],
-        output_location)
+        args_dict['metagene'])
 
 """Generate read distribution profiles"""
 def run_fastqc(
@@ -229,7 +232,6 @@ def make_readDistributions(
         args_dict,
         'read_distributions',
         'fastqc_output')
-    output_location = args_dict['read_distributions']
 
     # Get FASTQC file list and unzip
     files = get_files(
@@ -275,7 +277,7 @@ def make_readDistributions(
         'read size (bp)',
         'fastqc',
         args_dict['experiment'],
-        output_location)
+        args_dict['read_distributions'])
 
 """Measure library complexity"""
 def run_complexity(
@@ -311,12 +313,11 @@ def make_complexity(args_dict):
         args_dict,
         'complexity',
         'metrics')
-    output_location = args_dict['complexity']
 
     # Get BAM files
     files = get_files(
         args_dict['input'],
-        ['_deduplicated.bam'])
+        ['_dedupMarked.bam'])
 
     # Perform metagene analysis
     parallelize(
@@ -327,16 +328,16 @@ def make_complexity(args_dict):
 
     # Get metrics to plot
     files = get_files(
-        args_dict['metrics'],
+        str(args_dict['complexity']) + 'metrics/',
         ['dupRadar_metrics.txt'])
 
     # Plot metrics for each file
-    compile_matrix_metrics(
+    compile_complexity_metrics(
         args_dict,
-        str(output_location + 'metrics'),
+        str(args_dict['complexity']) + 'metrics/',
         files,
         'dupRateMulti',
         'RPKM',
         'library complexity (all_reads)',
         args_dict['experiment'],
-        output_location)
+        args_dict['complexity'])
