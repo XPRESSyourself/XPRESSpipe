@@ -21,6 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """IMPORT DEPENDENCIES"""
 import pandas as pd
+import numpy as np
 
 import math
 from scipy.stats import gaussian_kde
@@ -130,13 +131,12 @@ def compile_matrix_metrics(
         args_dict,
         path,
         file_list,
-        column_x,
-        column_y,
+        lab_x,
+        lab_y,
         plot_type,
         experiment,
         plot_output,
-        sep = '\t',
-        dpi = 600):
+        dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
     # Auto formats figure summary size based on number of plots
@@ -161,9 +161,78 @@ def compile_matrix_metrics(
 
     for file in file_list:
         x = 0
-        df = pd.DataFrame(
+        df = pd.read_csv(
             str(path + file),
-            sep = sep) # Initialize dataframe for relevant data
+            sep = '\t') # Initialize dataframe for relevant data
+        df = df.dropna(
+            axis = 0,
+            subset = [str(lab_x), str(lab_y)]) # Remove rows where pertinent information is missing
+
+        # Prepare subplots
+        if (file_number % 2) == 0:
+            ax_x = 0
+        else:
+            ax_x = 1
+
+        if file_number != 0:
+            if (file_number % 2) == 0:
+                ax_y += 1
+
+        # Plot figure
+        df.plot.line(
+            x = lab_x,
+            y = lab_y,
+            title = file[:-4],
+            ax = axes[ax_y, ax_x])
+
+        file_number += 1
+        del df
+
+    # Save catenated figure
+    plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
+    fig.savefig(
+        str(plot_output) + plot_title + '_summary.pdf',
+        dpi = dpi,
+        bbox_inches = 'tight')
+
+""""""
+def compile_complexity_metrics(
+        args_dict,
+        path,
+        file_list,
+        column_x,
+        column_y,
+        plot_type,
+        experiment,
+        plot_output,
+        dpi=600):
+
+    # Keep axes happy to avoid 'IndexError: too many indices for array' error
+    # Auto formats figure summary size based on number of plots
+    if (len(file_list) / 2) < 2:
+        plot_rows = 2
+        fig_size = (15, 16)
+    else:
+        plot_rows = ceil(len(file_list) / 2)
+        fig_size = (15, (8 * (int(len(file_list) / 2))))
+
+    # Set up figure space
+    fig, axes = plt.subplots(
+        nrows = plot_rows,
+        ncols = 2,
+        figsize = fig_size)
+    plt.subplots_adjust(
+        bottom = 0.3)
+
+    # Initialize file and axis counters for formatting summary figure
+    file_number = 0
+    ax_y = 0
+
+    for file in file_list:
+        x = 0
+        df = pd.read_csv(
+            str(path + file),
+            sep = '\t') # Initialize dataframe for relevant data
         df = df.dropna(
             axis = 0,
             subset = [str(column_x), str(column_y)]) # Remove rows where pertinent information is missing
@@ -184,7 +253,6 @@ def compile_matrix_metrics(
 
         xy = np.vstack([x,y])
         z = gaussian_kde(xy)(xy)
-
 
         idx = z.argsort() # Sort points by density
         x, y, z = x[idx], y[idx], z[idx]
