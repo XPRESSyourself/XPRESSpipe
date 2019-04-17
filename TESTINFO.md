@@ -1,5 +1,4 @@
 # Information for User Testing
-Thanks for being willing to help polish this package up for publication! Preliminary validation for the purposes of publication and user testing is an essential part of software development and in my opinion is deserving of authorship on the submitting manuscript. If you feel otherwise or have questions, we can discuss further.
 
 ### Features
 - Currently I have only tested most aspects of the pipeline as a pipeline, running an individual sub-modules alone may still be a bit buggy in how the inputs are passed
@@ -28,4 +27,4 @@ $ R
 ```
 
 ### Getting Started
-- Please refer to [this](https://xpresspipe.readthedocs.io/en/latest/content/general-usage.html) page and [this](https://xpresspipe.readthedocs.io/en/latest/content/reference-building.html) page in the docs to help with getting started 
+- Please refer to [this](https://xpresspipe.readthedocs.io/en/latest/content/general-usage.html) page and [this](https://xpresspipe.readthedocs.io/en/latest/content/reference-building.html) page in the docs to help with getting started
