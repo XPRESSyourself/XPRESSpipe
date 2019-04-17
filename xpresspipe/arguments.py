@@ -992,6 +992,12 @@ def get_arguments(
         metavar = '<SE or PE>',
         type = str,
         required = True)
+    complex_reqs.add_argument(
+        '-e', '--experiment',
+        help = 'Experiment name',
+        metavar = '<experiment_name>',
+        type = str,
+        required = True)
     # Optional arguments
     complex_opts = complex_parser.add_argument_group('optional arguments')
     complex_opts.add_argument(
