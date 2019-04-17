@@ -47,8 +47,8 @@ def get_indices(args_dict):
         threads = None)
 
     # Get GTF indices
-    chromosome_index = xp.create_chromosome_index(gtf_flat)
-    coordinate_index = xp.create_coordinate_index(gtf_flat)
+    chromosome_index = create_chromosome_index(gtf_flat)
+    coordinate_index = create_coordinate_index(gtf_flat)
 
     return chromosome_index, coordinate_index
 
