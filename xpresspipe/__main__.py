@@ -366,8 +366,8 @@ def main(
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
-        make_metagene(args_dict)
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        make_metagene(args_dict)
         make_complexity(args_dict)
         check_process(
             args_dict['log_file'],
@@ -430,8 +430,8 @@ def main(
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
-        make_metagene(args_dict)
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        make_metagene(args_dict)
         make_complexity(args_dict)
         check_process(
             args_dict['log_file'],
@@ -494,9 +494,9 @@ def main(
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
         args_dict['input'] = args_dict['alignments']
+        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_periodicity(args_dict)
         make_metagene(args_dict)
-        args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
         check_process(
             args_dict['log_file'],
