@@ -3,8 +3,6 @@ RUN conda create -n env python=3.6
 RUN echo "source activate env" > ~/.bashrc
 ENV PATH /opt/conda/envs/env/bin:$PATH
 
-RUN git clone https://github.com/XPRESSyourself/XPRESStools.git; cd XPRESStools; python setup.py install
-
 RUN git clone https://github.com/XPRESSyourself/XPRESSpipe.git
 
 RUN conda env create -f ./XPRESSpipe/requirements.yml
@@ -22,5 +20,7 @@ RUN apt-get update \
 RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("Rsubread")'
 RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("dupRadar")'
 RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("DESeq2")'
+
+RUN git clone https://github.com/XPRESSyourself/XPRESStools.git; cd XPRESStools; python setup.py install
 
 ENTRYPOINT ["xpresspipe"]
