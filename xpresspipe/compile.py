@@ -59,7 +59,8 @@ def compile_file_metrics(
     fig, axes = plt.subplots(
         nrows = plot_rows,
         ncols = 2,
-        figsize = fig_size)
+        figsize = fig_size,
+        subplot_kw = {'facecolor':'none'})
     plt.subplots_adjust(
         bottom = 0.3)
 
@@ -114,7 +115,19 @@ def compile_file_metrics(
             x = lab_x,
             y = lab_y,
             title = file[:-4],
-            ax = axes[ax_y, ax_x])
+            ax = axes[ax_y, ax_x],
+            grid = None)
+
+        axes[ax_y, ax_x].axhline(
+            0,
+            xmin = 0.048,
+            ls = '-',
+            color = 'black')
+        axes[ax_y, ax_x].axvline(
+            0,
+            ymin = 0.048,
+            ls = '-',
+            color = 'black')
 
         file_number += 1
         del df
@@ -151,7 +164,8 @@ def compile_matrix_metrics(
     fig, axes = plt.subplots(
         nrows = plot_rows,
         ncols = 2,
-        figsize = fig_size)
+        figsize = fig_size,
+        subplot_kw = {'facecolor':'none'})
     plt.subplots_adjust(
         bottom = 0.3)
 
@@ -183,7 +197,19 @@ def compile_matrix_metrics(
             x = lab_x,
             y = lab_y,
             title = file[:-4],
-            ax = axes[ax_y, ax_x])
+            ax = axes[ax_y, ax_x],
+            grid = None)
+
+        axes[ax_y, ax_x].axhline(
+            0,
+            xmin = 0.048,
+            ls = '-',
+            color = 'black')
+        axes[ax_y, ax_x].axvline(
+            0,
+            ymin = 0.048,
+            ls = '-',
+            color = 'black')
 
         file_number += 1
         del df
@@ -220,7 +246,8 @@ def compile_complexity_metrics(
     fig, axes = plt.subplots(
         nrows = plot_rows,
         ncols = 2,
-        figsize = fig_size)
+        figsize = fig_size,
+        subplot_kw = {'facecolor':'none'})
     plt.subplots_adjust(
         bottom = 0.3)
 
@@ -233,9 +260,10 @@ def compile_complexity_metrics(
         df = pd.read_csv(
             str(path + file),
             sep = '\t') # Initialize dataframe for relevant data
-        df = df.dropna(
-            axis = 0,
-            subset = [str(column_x), str(column_y)]) # Remove rows where pertinent information is missing
+        df = df[[column_x, column_y]]
+        df = df.dropna(axis = 0) # Remove rows where pertinent information is missing
+        df[column_x] = np.log10(df[column_x] + 1)
+        df[column_y] = df[column_y] * 100
 
         # Prepare subplots
         if (file_number % 2) == 0:
@@ -248,8 +276,8 @@ def compile_complexity_metrics(
                 ax_y += 1
 
         # Calculate the point density (adapted from: Joe Kington, https://stackoverflow.com/a/20107592/9571488)
-        x = df[str(column_x)].values.tolist()
-        y = df[str(column_y)].values.tolist()
+        x = df[str(column_x)].values
+        y = df[str(column_y)].values
 
         xy = np.vstack([x,y])
         z = gaussian_kde(xy)(xy)
@@ -257,6 +285,16 @@ def compile_complexity_metrics(
         idx = z.argsort() # Sort points by density
         x, y, z = x[idx], y[idx], z[idx]
 
+        axes[ax_y, ax_x].axhline(
+            -0.5,
+            xmin = 0.048,
+            ls = '-',
+            color = 'black')
+        axes[ax_y, ax_x].axvline(
+            0,
+            ymin = 0.048,
+            ls = '-',
+            color = 'black')
         axes[ax_y, ax_x].scatter(
             x,
             y,
@@ -265,6 +303,7 @@ def compile_complexity_metrics(
             alpha = 0.7)
 
         axes[ax_y, ax_x].set_title(str(file[:-4]))
+        axes[ax_y, ax_x].grid(False)
 
         file_number += 1
         del df
