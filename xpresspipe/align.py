@@ -199,6 +199,11 @@ def alignment_process(
         + ' -s' # Print some basic stats to STDOUT
         + ' -r' # Remove duplicate reads
         + str(args_dict['log']))
+    os.system(
+        'samtools index'
+        + ' -@ ' + str(args_dict['threads'])
+        + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam'
+        + str(args_dict['log']))
 
 """Remove all intermediate alignment files and references after alignment is complete"""
 def remove_intermediates(
@@ -211,6 +216,7 @@ def remove_intermediates(
         + " ! -name '*_Aligned.sort.bam.bai'"
         + " ! -name '*_dedupMarked.bam'"
         + " ! -name '*_dedupRemoved.bam'"
+        + " ! -name '*_dedupRemoved.bam.bai'"
         + " ! -name '*_Log.final.out'"
         + " -maxdepth 1 -type f -delete" # Only keep files matching pattern
         + str(args_dict['log']))
