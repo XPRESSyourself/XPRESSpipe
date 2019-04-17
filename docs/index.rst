@@ -67,10 +67,6 @@ Questions?
     :target: https://xpresspipe.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. |Docker| image:: https://img.shields.io/docker/build/jordanberg/xpresspipe.svg
+.. |Docker| image:: https://img.shields.io/static/v1.svg?label=docker&message=dowload&color=informational
     :target: https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general
     :alt: Docker
-
-
-
-[![Docker](https://img.shields.io/static/v1.svg?label=docker&message=dowload&color=informational)](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general)
