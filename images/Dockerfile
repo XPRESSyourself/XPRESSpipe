@@ -18,6 +18,9 @@ RUN apt-get update \
    libfftw3-dev \
    gcc && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("Rsubread")'
 RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("dupRadar")'
+RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("DESeq2")'
 
 ENTRYPOINT ["xpresspipe"]
