@@ -26,3 +26,6 @@ $ R
 > BiocManager::install("dupRadar", version = "3.8")
 > BiocManager::install("DESeq2", version = "3.8")
 ```
+
+### Getting Started
+- Please refer to [this](https://xpresspipe.readthedocs.io/en/latest/content/general-usage.html) page and [this](https://xpresspipe.readthedocs.io/en/latest/content/reference-building.html) page in the docs to help with getting started 
