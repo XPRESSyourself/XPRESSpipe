@@ -286,13 +286,13 @@ def compile_complexity_metrics(
         x, y, z = x[idx], y[idx], z[idx]
 
         axes[ax_y, ax_x].axhline(
-            -0.5,
+            -2,
             xmin = 0.048,
             ls = '-',
             color = 'black')
         axes[ax_y, ax_x].axvline(
             0,
-            ymin = 0.048,
+            ymin = 0.063,
             ls = '-',
             color = 'black')
         axes[ax_y, ax_x].scatter(
