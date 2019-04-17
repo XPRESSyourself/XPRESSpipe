@@ -7,3 +7,4 @@ In order to create a tagged version of the software, perform the following:
 5. ```git tag -a v1.4```
 6. Fill out the comments section and save
 7. ```git push```
+8. ```git push origin <tag_id>```
