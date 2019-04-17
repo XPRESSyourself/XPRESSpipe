@@ -29,8 +29,9 @@ from functools import partial
 from .parallel import parallelize
 from .compile import compile_file_metrics, compile_matrix_metrics, compile_complexity_metrics
 from .utils import add_directory, get_files
-from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index, get_meta_profile, get_periodicity_profile
-from .processBAM import read_bam, bam_sample, meta_coordinates, psite_coordinates
+from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index
+from .processBAM import read_bam, bam_sample
+from .metaFeatures import meta_coordinates, psite_ranges, get_meta_profile, get_periodicity_profile
 
 """Get meta and periodicity indices from GTF"""
 def get_indices(
@@ -76,8 +77,12 @@ def get_peaks(
     # Read in indexed bam file
     bam = read_bam(
         str(args_dict['input']) + str(file))
-    bam_coordinates = psite_coordinates(bam)
 
+    bam_coordinates = psite_ranges(bam)
+    if bam_coordinates == None:
+        print('Warning: No reads passed filtering (28-30 nt) for file ' + str(file))
+        return
+  
     # Get profile
     profile_data = get_periodicity_profile(
         bam_coordinates,
@@ -131,7 +136,7 @@ def make_periodicity(
         str(args_dict['periodicity']) + 'metrics/',
         files,
         'index',
-        'metacount',
+        'phasing',
         'periodicity',
         args_dict['experiment'],
         args_dict['periodicity'])
