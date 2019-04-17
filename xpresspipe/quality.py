@@ -23,6 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import sys
 import pandas as pd
+from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .parallel import parallelize
