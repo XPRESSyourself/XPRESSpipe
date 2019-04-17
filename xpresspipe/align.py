@@ -236,7 +236,7 @@ def se_align(
     file, args_dict = args[0], args[1]
 
     # STAR first pass
-    output = str(file[:-6]) # Get output file name before adding path to file name(s)
+    output = str(file[8:-6]) # Get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file)
     first_pass_star(
         file,
@@ -275,7 +275,7 @@ def pe_align(
     file1, file2, args_dict = args[0], args[1], args[2]
 
     # STAR first pass
-    output = str(file1[:-7]) # Get output file name before adding path to file name(s)
+    output = str(file1[8:-7]) # Get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2)
 
     first_pass_star(
