@@ -105,14 +105,8 @@ def check_inputs(
         args_dict['reference'] = check_directories(
             args_dict['reference'])
 
-    # Check reference_type
-    if 'gtf' in args_dict \
-    and args_dict['cmd'] == 'seRNAseq' \
-    or args_dict['cmd'] == 'peRNAseq' \
-    and args_dict['cmd'] == 'riboprof' \
-    or args_dict['cmd'] == 'count':
-        if str(args_dict['gtf'].lower()[-4:]) != '.gtf':
-            raise Exception('Invalid reference_type value provided')
+    if 'gtf' in args_dict and str(args_dict['gtf'].lower()[-4:]) != '.gtf':
+        raise Exception('Invalid reference_type value provided')
 
     # Check max_processor input
     if 'max_processors' in args_dict \
@@ -835,7 +829,7 @@ def get_arguments(
     metagene_reqs = metagene_parser.add_argument_group('required arguments')
     metagene_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of SAM alignment files',
+        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _dedupRemoved.bam)',
         metavar = '<path>',
         type = str,
         required = True)
@@ -846,9 +840,9 @@ def get_arguments(
         type = str,
         required = True)
     metagene_reqs.add_argument(
-        '-r', '--reference',
-        help = 'Path to parent organism reference directory',
-        metavar = '<path>',
+        '-g', '--gtf',
+        help = 'Path and file name to reference GTF',
+        metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
     metagene_reqs.add_argument(
@@ -863,13 +857,6 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
-    metagene_opts.add_argument(
-        '--min_length',
-        help = 'Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
-        metavar = '<length_value>',
-        type = int,
-        default = DEFAULT_READ_MIN,
-        required = False)
 
     """READ DISTRIBUTION SUBPARSER"""
     distribution_parser = subparser.add_parser(
@@ -912,7 +899,7 @@ def get_arguments(
     period_reqs = period_parser.add_argument_group('required arguments')
     period_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of SAM alignment files',
+        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _dedupRemoved.bam)',
         metavar = '<path>',
         type = str,
         required = True)
@@ -940,25 +927,6 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
-    period_opts.add_argument(
-        '--landmark',
-        help = 'Metagene count landmark variable (Plastid-valid) for landmark anchor of periodicity analysis (default: %s)' % 'cds_start',
-        default = 'cds_start',
-        metavar = '<landmark>',
-        type = str,
-        required = False)
-    period_opts.add_argument(
-        '--downstream',
-        help = 'Number of nucleotides to track after the landmark (default: %s)' % 200,
-        default = 200,
-        metavar = '<value>',
-        type = int,
-        required = False)
-    period_opts.add_argument(
-        '--generate_ref',
-        help = 'Provide flag to generate periodicity reference using GTF file provided',
-        action = 'store_true',
-        required = False)
 
     """COMPLEXITY SUBPARSER"""
     complex_parser = subparser.add_parser(
@@ -970,7 +938,7 @@ def get_arguments(
     complex_reqs = complex_parser.add_argument_group('required arguments')
     complex_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of BAM alignment files',
+        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _dedupRemoved.bam)',
         metavar = '<path>',
         type = str,
         required = True)
