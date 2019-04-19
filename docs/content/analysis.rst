@@ -184,10 +184,8 @@ Metagene Analysis
      - Path to input directory of SAM alignment files
    * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
-   * - :data:`-r \<path\>, --reference \<path\>`
-     - Path to parent organism reference directory
-   * - :data:`-t <DEFAULT, CODING, CODING_TRUNCATED>`, :data:`--reference_type <DEFAULT, CODING, CODING_TRUNCATED>`
-     - RefFlat type (i.e. "DEFAULT", "CODING", "CODING_TRUNCATED")
+   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
+     - Path and file name to reference GTF
    * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
      - Experiment name
 
@@ -200,7 +198,7 @@ Examples
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe metagene -i riboprof_out/alignments/ -o riboprof_out -r se_reference -t DEFAULT -e se_test
+  $ xpresspipe metagene -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
 
 .. image:: se_test_metagene_summary.png
   :width: 450px
@@ -229,18 +227,6 @@ Codon Periodicitiy Analysis
    * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
      - Experiment name
 
-.. list-table::
-  :widths: 35 50
-  :header-rows: 1
-
-  * - Optional Arguments
-    - Description
-  * - :data:`--landmark \<landmark\>`
-    -  Metagene count landmark variable (Plastid-valid) for landmark anchor of periodicity analysis (default: cds_start)
-  * - :data:`--downstream \<value\>`
-    - Number of nucleotides to track after the landmark (default: 200)
-  * - :data:`--generate_ref`
-    - Provide flag to generate periodicity reference using GTF file provided
 
 -----------
 Examples

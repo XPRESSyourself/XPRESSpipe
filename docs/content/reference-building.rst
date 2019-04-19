@@ -101,7 +101,7 @@ Arguments
 
 .. code-block:: shell
 
-  $ xpresspipe truncate --help
+  $ xpresspipe modifyGTF --help
 
 .. list-table::
    :widths: 35 50
@@ -118,11 +118,11 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`--longest_transcript`
+   * - :data:`-l, --longest_transcript`
      -  Provide argument to keep only longest transcript per gene record (RECOMMENDED)
-   * - :data:`--protein_coding`
+   * - :data:`-p, --protein_coding`
      -  Provide argument to keep only gene records annotated as protein coding genes
-   * - :data:`--truncate`
+   * - :data:`-t, --truncate`
      -  Provide argument to truncate gene records
    * - :data:`--truncate_5prime <amount>`
      -  Amount to truncate from 5' end of each transcript, requires --truncate argument (default: 45)
@@ -143,7 +143,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe truncate -g /path/to/reference/transcripts.gtf --longest_transcript --protein_coding --truncate
+  $ xpresspipe modifyGTF -g /path/to/reference/transcripts.gtf --longest_transcript --protein_coding --truncate
 
 
 ============================================
@@ -180,11 +180,11 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`--longest_transcript`
+   * - :data:`-l, --longest_transcript`
      -  Provide argument to keep only longest transcript per gene record (RECOMMENDED)
-   * - :data:`--protein_coding`
+   * - :data:`-p, --protein_coding`
      -  Provide argument to keep only gene records annotated as protein coding genes
-   * - :data:`--truncate`
+   * - :data:`-t, --truncate`
      -  Provide argument to truncate gene records
    * - :data:`--truncate_5prime <amount>`
      -  Amount to truncate from 5' end of each transcript, requires --truncate argument (default: 45)
