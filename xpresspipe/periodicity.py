@@ -155,6 +155,10 @@ def make_periodicity(
         args_dict,
         'periodicity',
         'metrics')
+    args_dict = add_directory(
+        args_dict,
+        'periodicity',
+        'individual_plots')
 
     # Get list of bam files from user input
     files = get_files(
@@ -189,4 +193,5 @@ def make_periodicity(
         'count',
         'periodicity',
         args_dict['experiment'],
-        args_dict['periodicity'])
+        args_dict['periodicity'],
+        str(args_dict['periodicity']) + 'individual_plots/')

@@ -41,6 +41,10 @@ def make_readDistributions(
         args_dict,
         'read_distributions',
         'fastqc_output')
+    args_dict = add_directory(
+        args_dict,
+        'read_distributions',
+        'individual_plots')
 
     # Get FASTQC file list and unzip
     files = get_files(
@@ -86,4 +90,5 @@ def make_readDistributions(
         'read size (bp)',
         'fastqc',
         args_dict['experiment'],
-        args_dict['read_distributions'])
+        args_dict['read_distributions'],
+        str(args_dict['read_distributions']) + 'individual_plots/')

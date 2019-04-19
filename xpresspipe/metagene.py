@@ -133,6 +133,10 @@ def make_metagene(
         args_dict,
         'metagene',
         'metrics')
+    args_dict = add_directory(
+        args_dict,
+        'metagene',
+        'individual_plots')
 
     # Get list of bam files from user input
     files = get_files(
@@ -167,4 +171,5 @@ def make_metagene(
         'metacount',
         'metagene',
         args_dict['experiment'],
-        args_dict['metagene'])
+        args_dict['metagene'],
+        str(args_dict['metagene']) + 'individual_plots/')
