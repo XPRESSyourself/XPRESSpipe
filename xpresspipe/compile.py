@@ -20,6 +20,8 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 """IMPORT DEPENDENCIES"""
+import os
+import sys
 import pandas as pd
 import numpy as np
 
@@ -31,6 +33,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
+
+"""IMPORT INTERNAL DEPENDENCIES"""
+from .utils import add_directory
 
 """Compile images from a list of metrics files using start and stop keys"""
 def compile_file_metrics(
@@ -44,6 +49,7 @@ def compile_file_metrics(
         plot_type,
         experiment,
         plot_output,
+        individual_output,
         dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
@@ -129,6 +135,11 @@ def compile_file_metrics(
             ls = '-',
             color = 'black')
 
+        fig.savefig(
+            str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
+            dpi = dpi,
+            bbox_inches = 'tight')
+
         file_number += 1
         del df
 
@@ -149,6 +160,7 @@ def compile_matrix_metrics(
         plot_type,
         experiment,
         plot_output,
+        individual_output,
         dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
@@ -211,6 +223,11 @@ def compile_matrix_metrics(
             ls = '-',
             color = 'black')
 
+        fig.savefig(
+            str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
+            dpi = dpi,
+            bbox_inches = 'tight')
+
         file_number += 1
         del df
 
@@ -231,6 +248,7 @@ def compile_complexity_metrics(
         plot_type,
         experiment,
         plot_output,
+        individual_output,
         dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
@@ -304,6 +322,12 @@ def compile_complexity_metrics(
 
         axes[ax_y, ax_x].set_title(str(file[:-4]))
         axes[ax_y, ax_x].grid(False)
+
+        # Output individual plot
+        fig.savefig(
+            str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
+            dpi = dpi,
+            bbox_inches = 'tight')
 
         file_number += 1
         del df
