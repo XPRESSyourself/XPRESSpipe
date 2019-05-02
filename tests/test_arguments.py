@@ -1,6 +1,7 @@
 # Initialize functions
 from xpresspipe.arguments import check_inputs
 import multiprocessing
+import unittest
 
 # Test some input/output directory formatting checks
 truth_dict = {
@@ -44,7 +45,48 @@ assert type(t3['max_processors']) is int, 'check_inputs() failed checking max_pr
 adap1 = 'CTGTAGGCACCATCAAT'
 adap2 = 'CTGTAGGCACCATCAAT CTGTAGGCACCATCAAG'
 adap3 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG']
-adap4 = None 
+adap4 = [None]
+adap5 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG', 'ACCATCAAG']
+adap6 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCA262343CCATCAaAG']
+adap7 = False
+
+test_dict = {'adaptors': adap1}
+try:
+    t = check_inputs(test_dict)
+except:
+    pass # Tests that non-list input is caught, note that user can input non-list and parser will read in as list
+
+test_dict = {'adaptors': adap2}
+try:
+    t = check_inputs(test_dict)
+except:
+    pass # Tests that non-list input is caught, note that user can input non-list and parser will read in as list
+
+test_dict = {'adaptors': adap3} # Check that expected case works
+t = check_inputs(test_dict)
+assert t['adaptors'] == adap3
+
+test_dict = {'adaptors': adap4} # Check the None input works
+t = check_inputs(test_dict)
+assert t['adaptors'] == adap4
+
+test_dict = {'adaptors': adap5} # Make sure >= 2 adaptors provided
+try:
+    t = check_inputs(test_dict)
+except:
+    pass
+
+test_dict = {'adaptors': adap6}
+try:
+    t = check_inputs(test_dict) ############ How to make sure that this is wrong, right now its just going to get ignored
+except:
+    pass
+
+
+
+
+
+
 
 
 # Check log file formatting and location
