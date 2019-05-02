@@ -117,7 +117,7 @@ def check_inputs(
             print(
                 'Cannot specify more cores than are available -- Specified '
                 + str(args_dict['max_processors']) + ' cores, only '
-                + str(multiprocessing.cpu_count()) + ' available'
+                + str(multiprocessing.cpu_count()) + ' available. '
                 + 'Setting cores to maximum available')
             args_dict['max_processors'] = multiprocessing.cpu_count()
 
@@ -127,15 +127,20 @@ def check_inputs(
             pass
         elif type(args_dict['adaptors']) != list:
             raise Exception('Adaptors must be provided as a list of strings')
-
+        else:
             for x in args_dict['adaptors']:
                 if type(x) != str:
                     raise Exception('Adaptors must be provided as a list of strings')
 
+                if any(char.isdigit() for char in x):
+                    raise Exception('Adaptors must not contain numerics')
+
+                if any(char not in ['A','a','T','t','G','g','C','c','N','n'] for char in x):
+                    raise Exception('Adaptors sequence contains an invalid character')
+
             if len(args_dict['adaptors']) > 2:
                 raise Exception('A maximum of 2 adaptors may be provided')
-        else:
-            pass
+
 
     # Determine output directory for log file
     if 'output' in args_dict \
