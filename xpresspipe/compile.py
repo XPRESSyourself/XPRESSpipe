@@ -135,8 +135,9 @@ def compile_file_metrics(
             ls = '-',
             color = 'black')
 
+        print(str(individual_output) + str(file[:-16]) + '_' + str(plot_type) + '.pdf')
         fig.savefig(
-            str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
+            str(individual_output) + str(file[:-16]) + '_' + str(plot_type) + '.pdf',
             dpi = dpi,
             bbox_inches = 'tight')
 
