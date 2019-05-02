@@ -5,24 +5,24 @@ Beginners
 =================================
 First Step
 =================================
-| If this is your first time doing any programming, congratulations! You are embarking upon a very rewarding path. As with learning any new natural language, there is a learning curve associated with learning a computer language. While XPRESSpipe is aimed at reducing some of this overhead, using this software will still require some effort, just as learning any new language or laboratory technique would require.
+| If this is your first time doing any programming, congratulations! You are embarking upon a very rewarding path. As with learning any new natural language, there is a learning curve associated with learning a computer language. While XPRESSpipe is aimed at reducing majority of the overhead associated with processing this data, using this software will still require some effort, just as would learning any new language or laboratory technique.
 
-| XPRESSpipe is used through something called the `command line interface <https://en.wikipedia.org/wiki/Command-line_interface>`_ (or CLI), or what some people refer to as `"The Matrix" <https://www.youtube.com/watch?v=kqUR3KtWbTk>`_. This may seem daunting, but luckily, several free online courses are available to quickly catch you up to speed on some of the basics that will be required to use this software. We recommend Codecademy's CLI course, which you can find `here <https://www.codecademy.com/learn/learn-the-command-line>`_ and should take only a couple of hours (Codecademy estimates ~10 hours, but you probably don't need to finish the course to use XPRESSpipe, this is more to get you comfortable with the command line).
+| XPRESSpipe is used through something called the `command line interface <https://en.wikipedia.org/wiki/Command-line_interface>`_ (or CLI), or what some people refer to as `"The Matrix" <https://www.youtube.com/watch?v=kqUR3KtWbTk>`_. This may seem daunting, but luckily, several free online courses are available to quickly catch you up to speed on some of the basics that will be required to use this software. We recommend Codecademy's CLI course, which you can find `here <https://www.codecademy.com/learn/learn-the-command-line>`_ and should take only a couple of hours (Codecademy estimates ~10 hours, but you probably don't need to finish the course to use XPRESSpipe. The purpose of this is to help you become more comfortable with the command line).
 
-| Once, you're ready to jump into the command line, we can get rolling! For the steps below, We're going to assume we are on an Mac operating system and provide examples under this pretext, but this software is compatible with any Linux-like operating system (i.e. Ubuntu).
+| Once, you're ready to jump into the command line, we can get rolling! For the steps below, we're going to assume we are on an Mac operating system and provide examples under this pretext, but this software is compatible with any Linux-like operating system (sorry Windows users).
 
 =================================
 Install XPRESSpipe
 =================================
-| - To keep this as simple as possible, we are going to use a program called `Docker <https://www.docker.com/>`_. Docker's purpose is to, as it's referred to in the computer world, containerize a program and all other requirements of the program so that the program is fully self contained. This is great because, say in 5 years you wanted to use the same version of XPRESSpipe and the dependencies it used back then, you could access the same Docker "image" and be good to go, the output given the same input would be fully reproducible! Let's download Docker now. This will likely require you to create a Docker account.
-| 1. Click `here <https://download.docker.com/mac/stable/Docker.dmg>`_ to download Docker (the link is for a Mac)
-| 2. Open and install the file that was downloaded from the link
+| - To keep this as simple as possible, we are going to use a program called `Docker <https://www.docker.com/>`_. Docker's purpose is to, as it's referred to in the computer world, "containerize" a program and all other requirements of the software so that it is fully self-contained. This is great because, say in 5 years you wanted to use the same version of XPRESSpipe and the dependencies used at the time of use for a publication, you could access and run the same Docker "image" version and reproduce the output! Let's download Docker now. This will likely require you to create a Docker account.
+| 1. Click `here <https://download.docker.com/mac/stable/Docker.dmg>`_ to download Docker (the link is for a Mac, but a Linux version is also available)
+| 2. Open and install the file that was downloaded from the link following the relevant instructions.
 
 | - Now its time to enter the command line.
 | 1. Click on the Finder icon the top right side of the screen on your Mac (or wherever else it might be located)
 | 2. Type "Terminal" into the search bar and click on the app icon
 
-| - Great! Now we are in the command line interface. As a review, anything followed by a "$" is a command and you can execute your command by pressing Enter. You can also auto-complete file names using Tab. But be careful, space and characters must be typed exactly and commands are case-sensitive. Let's get the latest version of XPRESSpipe by executing the lines of code in the code block below.
+| - Great! Now we are in the command line interface. As a review, anything followed by a "$" in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, space and characters must be typed exactly and commands are case-sensitive. Let's get the latest version of XPRESSpipe by executing the lines of code in the code block below.
 
 .. code-block:: shell
 
@@ -52,7 +52,7 @@ Generate Reference Files
 | 2. The second command created a new folder in the Desktop directory called :data:`reference_folder`
 | 3. The third command created a new folder in the reference directory for intermediate reference files
 
-| - Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are kind of long, I used the "\" character to indicate I am continuing the command in the next line. You do not need this in executing the command, they just help in making the code a little more readable.
+| - Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are a bit long, I used the "\" character to indicate I am continuing the command in the next line. You do not need this in executing the command, they just help make the code a little more readable.
 
 .. code-block:: shell
 
