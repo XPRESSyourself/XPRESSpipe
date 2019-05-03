@@ -27,10 +27,15 @@ import sys
 def check_directories(
         input):
 
+    # Check that a file wasn't passed in
+    if '.' in input:
+        if input.startswith('.'):
+            pass
+        else:
+            raise Exception('It appears you passed a file instead of a directory as input')
+
     # Check input directory name is formatted correctly and fix if necessary
     if input.endswith('/'):
-        pass
-    elif '.' in input: # Assumes this is a file input and not a directory input
         pass
     else:
         input += '/'
@@ -42,6 +47,17 @@ def add_directory(
         args_dict,
         parent,
         name):
+
+    # Check that parent is valid directory
+    if os.path.exists(args_dict[str(parent)]) == False:
+        raise Exception('Invalid parent directory provided')
+
+    # Check that name is valid
+    if '.' in name:
+        raise Exception('Invalid new directory name provided')
+
+    if name.endswith('/'):
+        name = name[:-1]
 
     os.system(
         'mkdir'
