@@ -31,10 +31,10 @@ from textwrap import dedent
 from .utils import check_directories
 
 """INITIALIZATION PARAMETERS"""
-#Retrieve path for scripts used in this pipeline, appended to argument dictionary for every function
+# Retrieve path for scripts used in this pipeline, appended to argument dictionary for every function
 __path__, xpresspipe_arguments  =  os.path.split(__file__)
 
-#Set default values for arguments
+# Set default values for arguments
 DEFAULT_READ_MIN  =  18
 DEFAULT_READ_QUALITY  =  28
 DEFAULT_MAX_PROCESSORS  =  None

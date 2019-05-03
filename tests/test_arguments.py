@@ -51,14 +51,19 @@ adap8 = False
 test_dict = {'adaptors': adap1}
 try:
     t = check_inputs(test_dict)
-except:
-    pass # Tests that non-list input is caught, note that user can input non-list and parser will read in as list
+except Exception:
+    pass
+else:
+    raise Error('check_inputs() failed to catch non-list input')
+
 
 test_dict = {'adaptors': adap2}
 try:
     t = check_inputs(test_dict)
-except:
-    pass # Tests that non-list input is caught, note that user can input non-list and parser will read in as list
+except Exception:
+    pass
+else:
+    raise Error('check_inputs() failed to catch non-list input')
 
 test_dict = {'adaptors': adap3} # Check that expected case works
 t = check_inputs(test_dict)
@@ -68,29 +73,37 @@ test_dict = {'adaptors': adap4} # Check the None input works
 t = check_inputs(test_dict)
 assert t['adaptors'] == adap4
 
-test_dict = {'adaptors': adap5} # Make sure >= 2 adaptors provided
+test_dict = {'adaptors': adap5}
 try:
     t = check_inputs(test_dict)
-except:
+except Exception:
     pass
+else:
+    raise Error('check_inputs() failed to catch input list with greater than two adaptors')
 
 test_dict = {'adaptors': adap6}
 try:
-    t = check_inputs(test_dict) # Make sure input adaptors only contain valid characters
-except:
+    t = check_inputs(test_dict)
+except Exception:
     pass
+else:
+    raise Error('check_inputs() failed to make sure input adaptors only contain valid characters')
 
 test_dict = {'adaptors': adap7}
 try:
-    t = check_inputs(test_dict) # Make sure input adaptors only contain valid characters
-except:
+    t = check_inputs(test_dict)
+except Exception:
     pass
+else:
+    raise Error('check_inputs() failed to make sure input adaptors only contain valid characters')
 
 test_dict = {'adaptors': adap8}
 try:
-    t = check_inputs(test_dict) # Make sure input adaptors only contain valid characters
-except:
+    t = check_inputs(test_dict)
+except Exception:
     pass
+else:
+    raise Error('check_inputs() failed to make sure input adaptors only contain valid characters')
 
 # Check log file formatting and location
 test0_dict = {
