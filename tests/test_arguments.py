@@ -22,11 +22,8 @@ assert truth_dict['reference'] == t['reference'], 'check_inputs() failed at dire
 
 # Check max_processors argument
 test0_dict = {'max_processors': 1000000} # Where input is more than available cores
-
 test1_dict = {'max_processors': None} # Where no limit is specified
-
 test2_dict = {'max_processors': multiprocessing.cpu_count()} # Where limit equals available cores
-
 test3_dict = {'max_processors': multiprocessing.cpu_count() - 1} # Where limit is less than available cores
 
 try:
@@ -48,7 +45,8 @@ adap3 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG']
 adap4 = [None]
 adap5 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG', 'ACCATCAAG']
 adap6 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCA262343CCATCAaAG']
-adap7 = False
+adap7 = ['GCTCGCGCHATC']
+adap8 = False
 
 test_dict = {'adaptors': adap1}
 try:
@@ -78,16 +76,21 @@ except:
 
 test_dict = {'adaptors': adap6}
 try:
-    t = check_inputs(test_dict) ############ How to make sure that this is wrong, right now its just going to get ignored
+    t = check_inputs(test_dict) # Make sure input adaptors only contain valid characters
 except:
     pass
 
+test_dict = {'adaptors': adap7}
+try:
+    t = check_inputs(test_dict) # Make sure input adaptors only contain valid characters
+except:
+    pass
 
-
-
-
-
-
+test_dict = {'adaptors': adap8}
+try:
+    t = check_inputs(test_dict) # Make sure input adaptors only contain valid characters
+except:
+    pass
 
 # Check log file formatting and location
 test0_dict = {

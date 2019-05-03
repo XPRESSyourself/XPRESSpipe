@@ -126,7 +126,7 @@ def check_inputs(
         if args_dict['adaptors'] == None or args_dict['adaptors'] == [None]:
             pass
         elif type(args_dict['adaptors']) != list:
-            raise Exception('Adaptors must be provided as a list of strings')
+            raise Exception('Adaptors must be provided as a list of strings or None')
         else:
             for x in args_dict['adaptors']:
                 if type(x) != str:
