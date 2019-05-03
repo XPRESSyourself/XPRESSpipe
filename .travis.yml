@@ -28,6 +28,10 @@ install:
 script:
   - cd tests/
   - bash test.sh  # will run all tests in the package
+  - coverage run test_utils.py
+  - coverage run test_arguments.py
+  - bash <(curl -s https://codecov.io/bash) -cF python
   - cd ../
+
 after_success:
   - test $TRAVIS_BRANCH = "master" && conda install conda-build && conda install anaconda-client && conda build .

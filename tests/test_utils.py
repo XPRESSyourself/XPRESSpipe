@@ -3,7 +3,14 @@ from xpresspipe.utils import check_directories, add_directory, get_files, get_pr
 import os
 import sys
 __path__, xpresspipe_arguments  =  os.path.split(__file__)
-__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
+#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests'
+__path__ = __path__ + '/'
+
+def make_file(path, name, file_list):
+
+    file = open(str(path) + str(name), 'w')
+    file.close()
+    files.append(str(path) + str(name))
 
 # Check directory
 str1 = '/path/to/files'
@@ -53,13 +60,39 @@ assert add_directory(args_dict, parent1, child3)['test_make'][-5:] == 'make/', '
 os.system('rm -r ' + str(args_dict[child1]))
 
 # Get files
+files = []
+make_file(__path__, 'reg.txt', files)
+make_file(__path__, 'reg_dedup.txt', files)
+make_file(__path__, 'reg1.txt', files)
+make_file(__path__, 'reg1_dedup.txt', files)
 
+assert get_files(__path__, '.txt', omit=['dedup']) == ('reg.txt', 'reg1.txt'), 'make_file() failed to omit'
+for f in files:
+    os.system('rm ' + str(f))
 
+files = []
+make_file(__path__, 'reg.txt', files)
+make_file(__path__, 'reg_dedup.fasta', files)
+make_file(__path__, 'reg1.txt', files)
+make_file(__path__, 'reg1_dedup.fasta', files)
 
+assert get_files(__path__, ['.txt','.fasta']) == ('reg.txt','reg1.txt','reg1_dedup.fasta','reg_dedup.fasta'), 'make_file() failed to include multiple suffixes'
+for f in files:
+    os.system('rm ' + str(f))
 
 # Get prober files
+"""args_dict = {}
+args_dict['input'] = __path__
+files = []
+make_file(__path__, 'reg.txt', files)
+make_file(__path__, 'reg_dedup.fasta', files)
+make_file(__path__, 'reg1.txt', files)
+make_file(__path__, 'reg1_dedup.fasta', files)
+for x in files:
+    os.system('zip ' + str(__path__) + str(x) + '.zip ' + str(__path__) + str(x))
 
-
+for f in files:
+    os.system('rm ' + str(f))"""
 
 
 
@@ -68,17 +101,11 @@ os.system('rm -r ' + str(args_dict[child1]))
 
 
 # Get FASTA files
-files = []
-def make_file(path, name):
-
-    file = open(str(path) + str(name), 'w')
-    file.close()
-    files.append(str(path) + str(name))
-
-make_file(__path__, 'fast1.txt')
+"""files = []
+make_file(__path__, 'fast1.txt', files)
 
 
 
 
 for f in files:
-    os.system('rm ' + str(f))
+    os.system('rm ' + str(f))"""

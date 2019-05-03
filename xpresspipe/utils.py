@@ -78,11 +78,9 @@ def get_files(
     file_list = []
 
     # Walk through raw data files within given directory
-    for file in os.listdir(directory):
-
-        for s in suffix:
-            if file.endswith(str(s)):
-                file_list.append(file) # Do not append directory, files in list will be modified and output to different locations
+    for file in next(os.walk(directory))[2]:
+        if file.endswith(tuple(suffix)):
+            file_list.append(file) # Do not append directory, files in list will be modified and output to different locations
 
     # Sort files in alphabetical order (helps in formatting the count tables correctly)
     file_list = sorted(file_list)
@@ -90,9 +88,7 @@ def get_files(
     # Get rid of bad grabs
     omit_drop = []
     if len(omit) > 0:
-
         for x in file_list:
-
             for o in omit:
                 if str(o) in x:
                     omit_drop.append(x)
