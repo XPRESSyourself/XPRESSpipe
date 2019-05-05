@@ -3,7 +3,7 @@ from xpresspipe.utils import check_directories, add_directory, get_files, get_pr
 import os
 import sys
 __path__, xpresspipe_arguments  =  os.path.split(__file__)
-#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests'
+__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests'
 __path__ = __path__ + '/'
 
 def make_file(path, name, file_list):
@@ -39,7 +39,12 @@ child1 = 'test_make'
 child2 = 'filename.txt'
 child3 = 'test_make/'
 
-assert os.path.exists(add_directory(args_dict, parent1, child1)[child1]) == True, 'add_directory() failed to add directory' # Make sure a properly formatted directory can be added
+dir_new = add_directory(args_dict, parent1, child1)[child1]
+if os.path.exists(dir_new) == True:
+    pass
+else:
+    raise Exception('add_directory() failed to add directory') # Make sure a properly formatted directory can be added
+
 os.system('rm -r ' + str(args_dict[child1]))
 
 try:
@@ -81,31 +86,35 @@ for f in files:
     os.system('rm ' + str(f))
 
 # Get prober files
-"""args_dict = {}
+
+
+
+# Unzip files
+args_dict = {}
 args_dict['input'] = __path__
 files = []
 make_file(__path__, 'reg.txt', files)
 make_file(__path__, 'reg_dedup.fasta', files)
 make_file(__path__, 'reg1.txt', files)
 make_file(__path__, 'reg1_dedup.fasta', files)
-for x in files:
-    os.system('zip ' + str(__path__) + str(x) + '.zip ' + str(__path__) + str(x))
+#for x in files:
+#    os.system('zip ' + str(__path__) + str(x) + '.zip ' + str(__path__) + str(x))
 
 for f in files:
-    os.system('rm ' + str(f))"""
-
-
-
-# Unzip files
-
+    os.system('rm ' + str(f))
 
 
 # Get FASTA files
-"""files = []
+files = []
+make_file(__path__, 'fast1.txt', files)
+make_file(__path__, 'fast1.txt', files)
+make_file(__path__, 'fast1.txt', files)
+make_file(__path__, 'fast1.txt', files)
+make_file(__path__, 'fast1.txt', files)
 make_file(__path__, 'fast1.txt', files)
 
 
 
 
 for f in files:
-    os.system('rm ' + str(f))"""
+    os.system('rm ' + str(f))
