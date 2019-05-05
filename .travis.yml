@@ -4,9 +4,24 @@ python:
 - 3.5
 - 3.6
 - 3.7
-os:
-  - linux
-  - osx
+matrix:
+  include:
+    - name: "Python on Xenial Linux"
+      python:
+        - 2.7
+        - 3.5
+        - 3.6
+        - 3.7
+      dist: xenial
+    - os: osx
+      language: generic
+      env: PYTHON_VERSION=3.6
+    - os: osx
+      language: generic
+      env: PYTHON_VERSION=2.5
+    - os: osx
+      language: generic
+      env: PYTHON_VERSION=2.7
 before_install:
   #Install Conda
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
