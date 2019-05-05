@@ -17,7 +17,6 @@ dependencies:
 - fastqc
 - htseq
 - r
-- pip 
 - pip:
   - pandas
   - numpy
