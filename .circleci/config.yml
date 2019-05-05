@@ -29,9 +29,8 @@ variables:
   run_tests: &run_tests
     run:
       name: Run tests
-      command: |
-      coverage run -m tests/test_arguments.py
-      
+      command: coverage run -m tests/test_arguments.py
+
 
   store_artis: &store_artis
     store_artifacts:
