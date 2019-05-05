@@ -31,8 +31,7 @@ variables:
       name: Run tests
       command: |
       coverage run -m tests/test_arguments.py
-      coverage report
-      coverage html
+      
 
   store_artis: &store_artis
     store_artifacts:
