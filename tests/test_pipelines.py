@@ -25,4 +25,18 @@ assert os.system('xpresspipe modifyGTF --help') == 0, 'modifyGTF help call not w
 assert os.system('xpresspipe rrnaProbe --help') == 0, 'rrnaProbe help call not working'
 assert os.system('xpresspipe convertNames --help') == 0, 'convertNames help call not working'
 
-# Test riboprof pipeline on test data 
+# Test riboprof pipeline on test data
+input = str(__path__) + 'riboprof_test'
+output = str(__path__) + 'riboprof_out'
+reference = str(__path__) + 'se_reference'
+gtf = str(__path__) + 'se_reference/transcripts_longestTranscripts_proteinCoding_truncated.gtf'
+assert os.system(
+    'xpresspipe riboprof' \
+    + ' -i ' + str(input) \
+    + ' -o ' + str(output) \
+    + ' -r ' + str(reference) \
+    + ' -g ' + str(gtf) \
+    + ' -e riboprof_test' \
+    + ' -a CTGTAGGCACCATCAAT' \
+    + ' --method RPKM' \
+    + ' --sjdbOverhang 49') == 0, 'riboprof pipeline encountered an error'
