@@ -245,7 +245,7 @@ xpresspipe convertNames -d riboprof_out/counts/se_test_counts_table.csv -g se_re
 xpresspipe riboprof --help
 
 rm -r riboprof_out/
-mkdir ribopipe_out
+mkdir riboprof_out
 
 xpresspipe riboprof -i riboprof_test -o riboprof_out -r se_reference -g se_reference/transcripts_longestTranscripts_proteinCoding_truncated.gtf -e riboprof_test -a CTGTAGGCACCATCAAT --method RPKM --sjdbOverhang 49
 

@@ -1,6 +1,6 @@
 # Information for User Testing
 
-### Round 1: v0.1.0-beta
+### Round 1: v0.1.1-beta
 ##### Features
 - Currently I have only tested most aspects of the pipeline as a pipeline, running an individual sub-modules alone may still be a bit buggy in how the inputs are passed
 - This works best on a supercomputer -- if you need access and are a member of the Rutter lab, fill out this [form](https://www.chpc.utah.edu/role/user/account_request.php) and have Jared submit it to CHPC @ helpdesk@chpc.utah.edu or whatever relevant form the application suggests (sorry, I can't view the application since I already have an account)
