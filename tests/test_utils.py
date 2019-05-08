@@ -40,9 +40,10 @@ child2 = 'filename.txt'
 child3 = 'test_make/'
 
 dir_new = add_directory(args_dict, parent1, child1)[child1]
-if os.path.exists(dir_new) == True:
-    pass
-else:
+
+try:
+    os.system('echo "Test this" > ' + str(args_dict[child1]) + 'test.txt')
+except:
     raise Exception('add_directory() failed to add directory') # Make sure a properly formatted directory can be added
 
 os.system('rm -r ' + str(args_dict[child1]))
