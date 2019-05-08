@@ -1,6 +1,10 @@
 import os
 import sys
 
+__path__, xpresspipe_arguments  =  os.path.split(__file__)
+#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests'
+__path__ = __path__ + '/'
+
 # Test software install
 assert os.system('xpresspipe --help') == 0, 'xpresspipe help call not working'
 assert os.system('xpresspipe seRNAseq --help') == 0, 'seRNAseq help call not working'
@@ -20,3 +24,5 @@ assert os.system('xpresspipe makeReference --help') == 0, 'makeReference help ca
 assert os.system('xpresspipe modifyGTF --help') == 0, 'modifyGTF help call not working'
 assert os.system('xpresspipe rrnaProbe --help') == 0, 'rrnaProbe help call not working'
 assert os.system('xpresspipe convertNames --help') == 0, 'convertNames help call not working'
+
+# Test riboprof pipeline on test data 
