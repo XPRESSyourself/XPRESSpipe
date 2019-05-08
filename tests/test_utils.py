@@ -40,13 +40,8 @@ child2 = 'filename.txt'
 child3 = 'test_make/'
 
 dir_new = add_directory(args_dict, parent1, child1)[child1]
-
-try:
-    os.system('echo "Test this" > ' + str(args_dict[child1]) + 'test.txt')
-except:
-    raise Exception('add_directory() failed to add directory') # Make sure a properly formatted directory can be added
-
-os.system('rm -r ' + str(args_dict[child1]))
+assert dir_new == str(__path__) + 'test_make/', 'add_directory() failed'
+os.system('rm -r ' + str(args_dict[child1])) # Only including for non-Travis testing
 
 try:
     add_directory(args_dict, parent2, child1) # Make sure Exception is caught when invalid parent directory is provided
@@ -63,7 +58,7 @@ else:
     raise Error('add_directory() failed')
 
 assert add_directory(args_dict, parent1, child3)['test_make'][-5:] == 'make/', 'add_directory() failed to properly format new directory name' # Make sure removes trailing '/' from new name
-os.system('rm -r ' + str(args_dict[child1]))
+os.system('rm -r ' + str(args_dict[child1])) # Only including for non-Travis testing
 
 # Get files
 files = []
