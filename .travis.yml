@@ -5,31 +5,48 @@ python:
   - 3.6
   - 3.7
 dist: xenial
+env:
+  - OS="linux"
 
 matrix:
   include:
     - os: osx
       language: shell
-      env: PYTHON_VERSION=3.7
-      env: TRAVIS_PYTHON_VERSION=3.7
+      env:
+        - PYTHON_VERSION=3.7
+        - TRAVIS_PYTHON_VERSION=3.7
+        - OS="macos"
     - os: osx
       language: shell
-      env: PYTHON_VERSION=3.6
-      env: TRAVIS_PYTHON_VERSION=3.6
+      env:
+        - PYTHON_VERSION=3.6
+        - TRAVIS_PYTHON_VERSION=3.6
+        - OS="macos"
     - os: osx
       language: shell
-      env: PYTHON_VERSION=3.5
-      env: TRAVIS_PYTHON_VERSION=3.5
+      env:
+        - PYTHON_VERSION=3.5
+        - TRAVIS_PYTHON_VERSION=3.5
+        - OS="macos"
     - os: osx
       language: shell
-      env: PYTHON_VERSION=2.7
-      env: TRAVIS_PYTHON_VERSION=2.7
+      env:
+        - PYTHON_VERSION=2.7
+        - TRAVIS_PYTHON_VERSION=2.7
+        - OS="macos"
 before_install:
   #Install Conda
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+  - if [[ ("$TRAVIS_PYTHON_VERSION" == "2.7") && ("$OS" == "linux") ]]; then
         wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh ;
-    else
+    elif [[ ("$TRAVIS_PYTHON_VERSION" == "2.7") && ("$OS" == "macos") ]]; then
+        wget https://repo.anaconda.com/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O miniconda.sh ;
+    elif [[ ("$TRAVIS_PYTHON_VERSION" != "2.7") && ("$OS" == "linux") ]]; then
         wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh ;
+    elif [[ ("$TRAVIS_PYTHON_VERSION" != "2.7") && ("$OS" == "macos") ]]; then
+        wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh ;
+    else
+        echo -e "Incompatible Python version or OS option indicated\n" ;
+        exit 1;
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH=$HOME/miniconda/bin:$PATH
