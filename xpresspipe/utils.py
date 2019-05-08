@@ -27,6 +27,8 @@ import sys
 def check_directories(
         input):
 
+    input = os.path.abspath(str(input))
+
     # Check that a file wasn't passed in
     if '.' in input:
         if input.startswith('.'):
@@ -47,10 +49,6 @@ def add_directory(
         args_dict,
         parent,
         name):
-
-    # Check that parent is valid directory
-    if os.path.exists(args_dict[str(parent)]) == False:
-        raise Exception('Invalid parent directory provided')
 
     # Check that name is valid
     if '.' in name:
