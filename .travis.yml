@@ -1,3 +1,4 @@
+# Set linux environments
 language: python
 python:
   - 2.7
@@ -8,6 +9,7 @@ dist: xenial
 env:
   - OS="linux"
 
+# Set macos environments
 matrix:
   include:
     - os: osx
@@ -34,8 +36,9 @@ matrix:
         - PYTHON_VERSION=2.7
         - TRAVIS_PYTHON_VERSION=2.7
         - OS="macos"
+
+#Install Conda
 before_install:
-  #Install Conda
   - if [[ ("$TRAVIS_PYTHON_VERSION" == "2.7") && ("$OS" == "linux") ]]; then
         wget https://repo.anaconda.com/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh ;
     elif [[ ("$TRAVIS_PYTHON_VERSION" == "2.7") && ("$OS" == "macos") ]]; then
@@ -52,8 +55,9 @@ before_install:
   - export PATH=$HOME/miniconda/bin:$PATH
   - hash -r
   - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
-  # Install packages
   - conda info -a
+
+# Install dependencies
 install:
   - conda env create -n test --file requirements.yml
   - source activate test
@@ -62,13 +66,13 @@ install:
   - pip install codecov
   - pip install .
   - python setup.py install
+
+# Run tests
 script:
   - cd tests/
-  - bash test.sh  # will run all tests in the package
   - coverage run test_utils.py
   - coverage run test_arguments.py
-  - bash <(curl -s https://codecov.io/bash) -cF python
-  - cd ../
+  - coverage run test_pipelines.py
 
 after_success:
-  - test $TRAVIS_BRANCH = "master" && conda install conda-build && conda install anaconda-client && conda build .
+  - codecov
