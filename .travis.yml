@@ -71,8 +71,8 @@ install:
 script:
   - cd tests/
   # Build references
-  - cd se_reference
-  - cd pe_reference
+  - mkdir se_reference
+  - mkdir pe_reference
   - cp -r test_reference se_reference
   - cp -r test_reference pe_reference
   - xpresspipe curateReference -o se_reference/ -f se_reference/ -g se_reference/transcripts.gtf -t 45 -m 10 --sjdbOverhang 49
