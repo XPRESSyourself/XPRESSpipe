@@ -42,7 +42,7 @@ from .readDistribution import make_readDistributions
 from .periodicity import make_periodicity
 from .complexity import make_complexity
 from .parallel import get_cores
-from .gtfModify import edit_gtf
+from .gtfModify import edit_gtf, convert_gtf
 from .utils import get_probe_files, unzip_files
 
 """Main function to call necessary functions for sub-modules
@@ -204,6 +204,11 @@ def main(
             _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
             output = True,
             threads = args_dict['threads'])
+
+        # Create Salmon fasta reference
+        convert_gtf(
+            args_dict['gtf'],
+            args_dict['fasta'])
 
         # Check log file for errors and exceptions
         check_process(

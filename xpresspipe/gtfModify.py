@@ -20,14 +20,18 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 """IMPORT DEPENDENCIES"""
+import os
+import sys
 import csv
 import pandas as pd
 pd.options.mode.chained_assignment = None
 from multiprocessing import cpu_count, Pool
 from functools import partial
+from Bio import SeqIO
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .gtfTruncate import truncate_gtf
+from .utils import get_files
 
 """Parse  GTF dataframe for longest transcript per gene record and keep only those transcript records"""
 def longest_transcripts(
@@ -246,3 +250,65 @@ def edit_gtf(
         return
     else:
         return
+
+"""Convert GTF coordinates to fasta file"""
+def convert_gtf(
+        gtf,
+        fasta_directory): # Dataframe of file path and name to GTF reference
+
+    os.system(
+        'gtf2bed' \
+        ' < ' + str(gtf) \
+        + ' > ' \
+        + str(gtf)[:-4] + '.bed')
+
+    fasta = get_files(
+        fasta_directory,
+        ['.txt', '.fasta', '.fa'],
+        omit = ['refFlat', 'rois'])
+
+    # Convert each transcript fasta file
+    counter = 0
+    for x in fasta:
+        os.system(
+            'bedtools getfasta' \
+            + ' -fi ' + str(fasta_directory) + str(x) \
+            + ' -bed ' + str(gtf) \
+            + ' -fo ' + str(fasta_directory) + 'intermediate_' + str(counter) + '_transcripts.fa')
+        counter += 1
+
+    # Get intermediate files and compile
+    files = get_files(
+        fasta_directory,
+        ['_transcripts.fa'])
+
+    for x in files :
+        os.system(
+            'cat' \
+            + ' ' +  str(fasta_directory) + str(x) \
+            + ' >> ' + str(fasta_directory) + 'salmon_gtf_intermediate.fasta')
+
+    # Remove duplicate fasta records
+    with open(str(fasta_directory) + 'salmon_gtf.fasta', 'a') as out:
+        record_ids = list()
+        for record in SeqIO.parse(str(fasta_directory) + 'salmon_gtf_intermediate.fasta', 'fasta'):
+            if record.id not in record_ids:
+                record_ids.append(record.id)
+                SeqIO.write(
+                    record,
+                    out,
+                    'fasta')
+
+    # Remove intermediate files
+    os.system(
+        'rm' \
+        + ' ' + str(gtf)[:-4] + '.bed')
+    os.system(
+        'rm' \
+        + ' ' + str(fasta_directory) + 'salmon_gtf_intermediate.fasta')
+    os.system(
+        'rm' \
+        + ' ' + str(fasta_directory) + 'intermediate_*_transcripts.fa')
+    os.system(
+        'rm' \
+        + ' ' + str(fasta_directory) + '*.fa.fai')

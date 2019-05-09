@@ -16,6 +16,8 @@ dependencies:
 - deeptools
 - fastqc
 - htseq
+- salmon
+- biopython
 - r
 - pip
 - pip:

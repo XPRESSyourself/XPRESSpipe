@@ -104,6 +104,12 @@ def check_inputs(
     if 'reference' in args_dict:
         args_dict['reference'] = check_directories(
             args_dict['reference'])
+    if 'gtf' in args_dict:
+        args_dict['gtf'] = os.path.abspath(args_dict['gtf'])
+    if 'fasta' in args_dict:
+        args_dict['fasta'] = check_directories(
+            args_dict['fasta'])
+
 
     if 'gtf' in args_dict and str(args_dict['gtf'].lower()[-4:]) != '.gtf':
         raise Exception('Invalid reference_type value provided')
