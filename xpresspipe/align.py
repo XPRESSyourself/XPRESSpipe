@@ -142,6 +142,41 @@ def second_pass_star(
         + ' --outSAMheaderHD @HD VN:1.4'
         + str(args_dict['log']))
 
+"""Run one-pass STAR with GTF reference annotation to guide mapping to splice regions"""
+def guided_star(
+    file,
+    output,
+    args_dict):
+
+    os.system(
+        'STAR'
+        + ' --runThreadN ' + str(args_dict['threads'])
+        + ' --genomeDir ' + str(args_dict['reference'])
+        + ' --sjdbGTFfile ' + str(args_dict['gtf'])
+        + ' --readFilesIn ' + str(file)
+        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_'
+        + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
+        + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])
+        + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang'])
+        + ' --outFilterMultimapScoreRange 1'
+        + ' --outFilterMultimapNmax 20'
+        + ' --outFilterMismatchNmax 10'
+        + ' --alignIntronMax 500000'
+        + ' --alignMatesGapMax 1000000'
+        + ' --sjdbScore 2'
+        + ' --alignSJDBoverhangMin 1'
+        + ' --genomeLoad NoSharedMemory'
+        + ' --limitBAMsortRAM 0'
+        + ' --readFilesCommand cat'
+        + ' --outFilterMatchNminOverLread 0.33'
+        + ' --outFilterScoreMinOverLread 0.33'
+        + ' --outSAMstrandField intronMotif'
+        + ' --outSAMattributes NH HI NM MD AS XS'
+        + ' --outSAMunmapped Within'
+        + ' --outSAMtype BAM Unsorted' # Allow for multithreading STAR run without file overload
+        + ' --outSAMheaderHD @HD VN:1.4'
+        + str(args_dict['log']))
+
 """Remove intermediate reference files for the file being processed in the instance"""
 def remove_intermediate_reference(
         output,
@@ -179,7 +214,6 @@ def alignment_process(
     # Index BAM file
     os.system(
         'samtools index'
-        + ' -@ ' + str(args_dict['threads'])
         + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
         + str(args_dict['log']))
 
@@ -201,7 +235,6 @@ def alignment_process(
         + str(args_dict['log']))
     os.system(
         'samtools index'
-        + ' -@ ' + str(args_dict['threads'])
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam'
         + str(args_dict['log']))
 
@@ -235,29 +268,37 @@ def se_align(
 
     file, args_dict = args[0], args[1]
 
-    # STAR first pass
     output = str(file[8:-6]) # Get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file)
-    first_pass_star(
-        file,
-        output,
-        args_dict)
 
-    # STAR intermediate reference building
-    build_star_splice_junction_intermediate(
-        output,
-        args_dict)
+    if 'two-pass' in args_dict and args_dict['two-pass'] == True:
+        # STAR first pass
+        first_pass_star(
+            file,
+            output,
+            args_dict)
 
-    # STAR second pass
-    second_pass_star(
-        file,
-        output,
-        args_dict)
+        # STAR intermediate reference building
+        build_star_splice_junction_intermediate(
+            output,
+            args_dict)
 
-    # Remove intermediate reference for the file
-    remove_intermediate_reference(
-        output,
-        args_dict)
+        # STAR second pass
+        second_pass_star(
+            file,
+            output,
+            args_dict)
+
+        # Remove intermediate reference for the file
+        remove_intermediate_reference(
+            output,
+            args_dict)
+    else:
+        # One-pass STAR with GTF guiding splice mapping
+        guided_star(
+            file,
+            output,
+            args_dict)
 
     # Create BAM file with only unique hits, mark duplicates, index
     alignment_process(

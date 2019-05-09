@@ -257,6 +257,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     se_opts.add_argument(
+        '--two-pass',
+        help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        action = 'store_true',
+        required = False)
+    se_opts.add_argument(
         '-a', '--adaptors',
         help = 'Specify adaptor as string (only one allowed) -- if \"None\" is provided, software will attempt to auto-detect adaptors -- \
         if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
@@ -377,6 +382,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     pe_opts.add_argument(
+        '--guided',
+        help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
         '-a', '--adaptors',
         help = 'Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if"None None\" is \
         provided, software will attempt to auto-detect adaptors',
@@ -496,6 +506,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    rp_opts.add_argument(
+        '--guided',
+        help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        action = 'store_true',
+        required = False)
     rp_opts.add_argument(
         '-a', '--adaptors',
         help = 'Specify adaptor as string (only one allowed) -- if"None\" is provided, software will attempt to auto-detect adaptors -- \
@@ -666,6 +681,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    align_opts.add_argument(
+        '--guided',
+        help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        action = 'store_true',
+        required = False)
     align_opts.add_argument(
         '--output_bed',
         help = 'Include option to output BED files for each aligned file',
