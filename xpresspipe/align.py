@@ -153,7 +153,7 @@ def guided_star(
         + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
         + ' --genomeDir ' + str(args_dict['reference']) + 'genome' # Argument for specifying STAR reference directory
         + ' --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
-        + ' --sjdbGTFfile ' + str(args_dict['gtf'])
+        + ' --sjdbGTFfile ' + str(args_dict['reference']) + 'transcripts.gtf'
         + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_'
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])
