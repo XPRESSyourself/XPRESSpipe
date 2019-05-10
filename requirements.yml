@@ -3,11 +3,11 @@ channels: !!python/tuple
 - !!python/unicode
   'defaults'
 - !!python/unicode
+  'r'
+- !!python/unicode
   'conda-forge'
 - !!python/unicode
   'bioconda'
-- !!python/unicode
-  'r'
 dependencies:
 - FastP
 - STAR
@@ -21,6 +21,10 @@ dependencies:
 - r
 - openssl=1.0
 - conda-forge::ncurses
+- libiconv
+- bioconductor-rsubread
+- bioconductor-dupradar
+- bioconductor-deseq2
 - pip
 - pip:
   - pandas
@@ -32,4 +36,5 @@ dependencies:
   - xpresstools
   - matplotlib<3.0.0,>=2.1.1
   - multiqc
+  - numpydoc
 prefix: .miniconda2/envs/test

@@ -1,0 +1,5 @@
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("Rsubread", version = "3.8")
+BiocManager::install("dupRadar", version = "3.8")
+BiocManager::install("DESeq2", version = "3.8")

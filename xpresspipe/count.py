@@ -79,10 +79,11 @@ def collect_counts(
         args_dict):
 
     # Add output directories
-    args_dict = add_directory(
-        args_dict,
-        'output',
-        'counts')
+    if 'counts' not in args_dict:
+        args_dict = add_directory(
+            args_dict,
+            'output',
+            'counts')
 
     # Get list of files to count based on acceptable file types
     files = get_files(
