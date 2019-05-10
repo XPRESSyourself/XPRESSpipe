@@ -23,7 +23,7 @@ import os
 import sys
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .utils import get_files, unzip_files, add_directory, get_fasta
+from .utils import get_files, unzip_files, add_directory, get_fasta, check_directories
 from .parallel import parallelize, parallelize_pe
 
 """Create STAR reference genome"""
@@ -86,8 +86,8 @@ def first_pass_star(
     os.system(
         'STAR'
         + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
-        + ' --genomeDir ' + str(args_dict['reference']) # Argument for specifying STAR reference directory
-        + 'genome --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
+        + ' --genomeDir ' + str(args_dict['reference']) + 'genome' # Argument for specifying STAR reference directory
+        + ' --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
         + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_' # Argument to dictate output directory
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) #
@@ -150,10 +150,10 @@ def guided_star(
 
     os.system(
         'STAR'
-        + ' --runThreadN ' + str(args_dict['threads'])
-        + ' --genomeDir ' + str(args_dict['reference'])
+        + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
+        + ' --genomeDir ' + str(args_dict['reference']) + 'genome' # Argument for specifying STAR reference directory
+        + ' --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
         + ' --sjdbGTFfile ' + str(args_dict['gtf'])
-        + ' --readFilesIn ' + str(file)
         + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_'
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])

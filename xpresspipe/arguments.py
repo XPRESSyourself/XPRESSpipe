@@ -177,7 +177,7 @@ def check_inputs(
             + '_' + str(cdt.hour)
             + 'h_' + str(cdt.minute)
             + 'm_' + str(cdt.second)
-            + '.log 2>&1')
+            + 's.log 2>&1')
         args_dict['log_file'] = (
             str(args_dict['log_loc'])
             + str(cdt.year)

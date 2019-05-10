@@ -19,6 +19,8 @@ dependencies:
 - salmon
 - biopython
 - r
+- openssl=1.0
+- conda-forge::ncurses
 - pip
 - pip:
   - pandas
