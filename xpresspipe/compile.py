@@ -25,7 +25,7 @@ import sys
 import pandas as pd
 import numpy as np
 
-import math
+from math import ceil
 from scipy.stats import gaussian_kde
 
 import matplotlib
