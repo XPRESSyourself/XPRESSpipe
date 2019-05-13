@@ -290,11 +290,6 @@ def get_arguments(
         action = 'store_true',
         required = False)
     se_opts.add_argument(
-        '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file',
-        action = 'store_true',
-        required = False)
-    se_opts.add_argument(
         '--method',
         help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
         metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
@@ -415,11 +410,6 @@ def get_arguments(
         action = 'store_true',
         required = False)
     pe_opts.add_argument(
-        '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file',
-        action = 'store_true',
-        required = False)
-    pe_opts.add_argument(
         '--method',
         help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
         metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
@@ -537,11 +527,6 @@ def get_arguments(
     rp_opts.add_argument(
         '--output_bed',
         help = 'Include option to output BED files for each aligned file',
-        action = 'store_true',
-        required = False)
-    rp_opts.add_argument(
-        '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file',
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
@@ -689,11 +674,6 @@ def get_arguments(
     align_opts.add_argument(
         '--output_bed',
         help = 'Include option to output BED files for each aligned file',
-        action = 'store_true',
-        required = False)
-    align_opts.add_argument(
-        '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
