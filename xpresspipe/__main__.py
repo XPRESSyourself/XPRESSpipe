@@ -340,7 +340,8 @@ def main(
 
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']
-        create_bigwig(args_dict)
+        if args_dict['output_bigwig'] == True:
+            create_bigwig(args_dict)
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(
@@ -403,7 +404,8 @@ def main(
         args_dict = run_peRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']
-        create_bigwig(args_dict)
+        if args_dict['output_bigwig'] == True:
+            create_bigwig(args_dict)
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(
@@ -466,7 +468,8 @@ def main(
         args_dict = run_seRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']
-        create_bigwig(args_dict)
+        if args_dict['output_bigwig'] == True:
+            create_bigwig(args_dict)
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(

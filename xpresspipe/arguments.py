@@ -285,6 +285,11 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     se_opts.add_argument(
+        '--output_bigwig',
+        help = 'Include flag to output bigwig files for each aligned file',
+        action = 'store_true',
+        required = False)
+    se_opts.add_argument(
         '--output_bed',
         help = 'Include option to output BED files for each aligned file',
         action = 'store_true',
@@ -405,6 +410,11 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     pe_opts.add_argument(
+        '--output_bigwig',
+        help = 'Include flag to output bigwig files for each aligned file',
+        action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
         '--output_bed',
         help = 'Include option to output BED files for each aligned file',
         action = 'store_true',
@@ -523,6 +533,11 @@ def get_arguments(
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_READ_MIN,
+        required = False)
+    rp_opts.add_argument(
+        '--output_bigwig',
+        help = 'Include flag to output bigwig files for each aligned file',
+        action = 'store_true',
         required = False)
     rp_opts.add_argument(
         '--output_bed',
@@ -669,6 +684,11 @@ def get_arguments(
     align_opts.add_argument(
         '--guided',
         help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        action = 'store_true',
+        required = False)
+    align_opts.add_argument(
+        '--output_bigwig',
+        help = 'Include flag to output bigwig files for each aligned file',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
