@@ -23,7 +23,7 @@ import os
 import sys
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .utils import get_files, unzip_files, add_directory, get_fasta, check_directories
+from .utils import get_files, add_directory, get_fasta, check_directories
 from .parallel import parallelize, parallelize_pe
 
 """Create STAR reference genome"""
@@ -370,9 +370,6 @@ def run_seRNAseq(
 
         args_dict['fasta_list'] = get_fasta(args_dict['reference'])
 
-        # Unzip files
-        unzip_files(args_dict['input'])
-
         # Get list of files to align based on acceptable file types
         files = get_files(
             args_dict['input'],
@@ -406,9 +403,6 @@ def run_peRNAseq(
             'intermediate_references')
 
         args_dict['fasta_list'] = get_fasta(args_dict['reference'])
-
-        # Unzip files
-        unzip_files(args_dict['input'])
 
         # Get list of files to align based on acceptable file types
         files = get_files(
