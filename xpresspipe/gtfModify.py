@@ -26,6 +26,7 @@ import csv
 import pandas as pd
 pd.options.mode.chained_assignment = None
 from multiprocessing import cpu_count, Pool
+import gc
 from functools import partial
 from Bio import SeqIO
 
@@ -166,6 +167,7 @@ def run_chunks(
 
     pool.close()
     pool.join()
+    gc.collect()
 
     return chunks
 
@@ -247,11 +249,14 @@ def edit_gtf(
             index = False,
             quoting = csv.QUOTE_NONE)
 
+        gc.collect()
         return
     else:
+        gc.collect()
         return
 
 """Convert GTF coordinates to fasta file"""
+"""!!!Untested!!!"""
 def convert_gtf(
         gtf,
         fasta_directory): # Dataframe of file path and name to GTF reference

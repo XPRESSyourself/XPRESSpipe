@@ -24,6 +24,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+import gc
 from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
@@ -196,3 +197,5 @@ def make_periodicity(
         args_dict['experiment'],
         args_dict['periodicity'],
         str(args_dict['periodicity']) + 'individual_plots/')
+
+    gc.collect()

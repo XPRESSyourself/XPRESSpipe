@@ -24,6 +24,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+import gc
 from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
@@ -174,3 +175,5 @@ def make_metagene(
         args_dict['experiment'],
         args_dict['metagene'],
         str(args_dict['metagene']) + 'individual_plots/')
+
+    gc.collect()

@@ -21,6 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """IMPORT DEPENDENCIES"""
 import pandas as pd
+import gc
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .gtfModify import get_chunks, run_chunks, longest_transcripts, protein_gtf
@@ -156,6 +157,8 @@ def flatten_reference(
         gtf = gtf.reset_index(drop=True)
         gtf = make_flatten(gtf)
 
+        del chunks
+        gc.collect()
         return gtf
 
     else:
