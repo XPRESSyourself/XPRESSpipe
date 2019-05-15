@@ -147,6 +147,7 @@ def get_peaks(
 def make_periodicity(
         args_dict):
 
+    print('\nGenerating periodicity profiles...')
     args_dict = add_directory(
         args_dict,
         'output',

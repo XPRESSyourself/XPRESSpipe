@@ -124,6 +124,7 @@ def get_metagene(
 def make_metagene(
         args_dict):
 
+    print('\nGenerating metagene profiles...')
     # Add output directory to output for metagene profiles
     args_dict = add_directory(
         args_dict,
