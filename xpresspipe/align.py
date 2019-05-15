@@ -224,6 +224,10 @@ def alignment_process(
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupMarked.bam' # Output BAM
         + ' -s' # Print some basic stats
         + str(args_dict['log']))
+    os.system(
+        'samtools index'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_dedupMarked.bam'
+        + str(args_dict['log']))
 
     # Create sorted BAM file with duplicates removed
     os.system(
