@@ -32,7 +32,7 @@ from .utils import check_directories
 
 """INITIALIZATION PARAMETERS"""
 # Retrieve path for scripts used in this pipeline, appended to argument dictionary for every function
-__path__, xpresspipe_arguments  =  os.path.split(__file__)
+__path__  =  os.path.dirname(os.path.realpath(__file__))
 
 # Set default values for arguments
 DEFAULT_READ_MIN  =  18
@@ -97,18 +97,22 @@ def check_inputs(
     # Check user-provided directory formatting
     if 'input' in args_dict:
         args_dict['input'] = check_directories(
-            args_dict['input'])
+            args_dict['input'],
+            'input')
     if 'output' in args_dict:
         args_dict['output'] = check_directories(
-            args_dict['output'])
+            args_dict['output'],
+            'output')
     if 'reference' in args_dict:
         args_dict['reference'] = check_directories(
-            args_dict['reference'])
+            args_dict['reference'],
+            'reference')
     if 'gtf' in args_dict:
         args_dict['gtf'] = os.path.abspath(args_dict['gtf'])
     if 'fasta' in args_dict:
         args_dict['fasta'] = check_directories(
-            args_dict['fasta'])
+            args_dict['fasta'],
+            'fasta')
 
 
     if 'gtf' in args_dict and str(args_dict['gtf'].lower()[-4:]) != '.gtf':
@@ -1304,7 +1308,7 @@ def get_arguments(
 
     #Collect subargs and package, add XPRESSpipe script path to argument dictionary
     args_dict = vars(args)
-    args_dict['path'] = __path__
+    args_dict['path'] = str(__path__) + '/'
 
     #Check inputs validity
     args_dict = check_inputs(args_dict)
