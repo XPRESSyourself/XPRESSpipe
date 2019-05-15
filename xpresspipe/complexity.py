@@ -42,8 +42,8 @@ def run_complexity(
 
     # Run dupRadar in R
     os.system(
-        'rscript'
-        + ' ' + str(args_dict['path']) + '/Rcomplexity.r'
+        'Rscript'
+        + ' ' + str(args_dict['path']) + 'Rcomplexity.r'
         + ' ' + str(args_dict['input']) + str(file)
         + ' ' + str(args_dict['gtf'])
         + ' ' + str(paired)
