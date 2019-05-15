@@ -115,7 +115,7 @@ def get_metagene(
         bam_coordinates,
         coordinate_index,
         chromosome_index)
-    profile_data['index'] = profile_data.index
+    profile_data['meta-transcript'] = profile_data.index
     profile_data.to_csv(
         str(args_dict['metagene']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
         sep='\t')
@@ -167,7 +167,7 @@ def make_metagene(
         args_dict,
         str(args_dict['metagene']) + 'metrics/',
         files,
-        'index',
+        'meta-transcript',
         'metacount',
         'metagene',
         args_dict['experiment'],

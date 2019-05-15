@@ -138,7 +138,7 @@ def get_peaks(
         bam_coordinates,
         coordinate_index,
         chromosome_index)
-    profile_data['index'] = profile_data.index
+    profile_data['position from start'] = profile_data.index
     profile_data.to_csv(
         str(args_dict['periodicity']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
         sep='\t')
@@ -189,7 +189,7 @@ def make_periodicity(
         args_dict,
         str(args_dict['periodicity']) + 'metrics/',
         files,
-        'index',
+        'position from start',
         'count',
         'periodicity',
         args_dict['experiment'],
