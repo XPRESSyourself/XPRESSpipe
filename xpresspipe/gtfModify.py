@@ -25,6 +25,7 @@ import sys
 import csv
 import pandas as pd
 pd.options.mode.chained_assignment = None
+import multiprocessing # For debugging
 from multiprocessing import cpu_count, Pool
 import gc
 from functools import partial
@@ -39,12 +40,14 @@ def longest_transcripts(
         gtf):
 
     long_transcripts = []
+    print(multiprocessing.current_process())
+    print('-----\n' , gtf , '\n-----------------')
 
     for index, row in gtf.iterrows():
 
         # Find next gene record
         if row[2] == 'gene':
-
+            print(index,'LLLLL')
             # Forward scan to next gene record
             n = 0
             gene_id_original = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
@@ -53,18 +56,23 @@ def longest_transcripts(
             while gene_id_next == gene_id_original:
 
                 if index + n + 1 > gtf.index[-1]:
+                    print(multiprocessing.current_process())
+                    print('????????',index + n)
                     break
                 else:
                     n += 1
                     gene_id_next = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
-
+            print(gene_id_next)
             # Parse out current gene record
             gene_start_index = index
             if gtf.at[index + n, 2] == 'gene':
                 gene_stop_index = index + n - 1
+                print('next')
             else:
                 gene_stop_index = index + n
-
+                print('final')
+            print(multiprocessing.current_process())
+            print(gene_stop_index)
             if gene_start_index < gene_stop_index:
                 gtf_record = gtf.loc[gene_start_index:gene_stop_index]
 
@@ -80,7 +88,7 @@ def longest_transcripts(
                 # Append longest transcript records to list of records to keep
                 long_transcripts.append(gtf_record.loc[gtf_record[8].str.contains(longest_transcript_id)])
 
-    gtf = None # Garbage management
+    #gtf = None # Garbage management
     gc.collect()
 
     if len(long_transcripts) > 0:
@@ -90,6 +98,9 @@ def longest_transcripts(
         long_transcripts = None
         gc.collect()
 
+        print(':::::::::::::::::')
+        print(gtf_longest)
+        print('{{{{{{{{{}}}}}}}}}')
         return gtf_longest
 
     else:
@@ -175,7 +186,6 @@ def run_chunks(
     cores = len(chunks) # Modify worker numbers
     pool = Pool(cores) # Initialize workers
     chunks = pool.map(func, chunks) # Run function on chunks
-
     pool.close()
     pool.join()
     gc.collect()
@@ -196,6 +206,7 @@ def edit_gtf(
     # Import GTF reference file
     if isinstance(gtf, pd.DataFrame) and len(gtf.columns) == 9:
         output = False # Turn off intermediates output
+        file_name = None
     elif str(gtf).endswith('.gtf'):
         file_name = str(gtf[:-4]) + '_' # Get rid of GTF extension for now
         gtf = pd.read_csv(
@@ -256,76 +267,18 @@ def edit_gtf(
         gtf = pd.concat(chunks)
         gtf = gtf.reset_index(drop=True)
 
-        gtf.to_csv(
-            str(file_name) + '.gtf',
-            sep = '\t',
-            header = None,
-            index = False,
-            quoting = csv.QUOTE_NONE)
+        chunks = None # Garbage management
+        gc.collect()
 
-    chunks = None # Garbage management
-    gc.collect()
-    return
+        if output == True:
+            gtf.to_csv(
+                str(file_name) + '.gtf',
+                sep = '\t',
+                header = None,
+                index = False,
+                quoting = csv.QUOTE_NONE)
+        else:
+            return gtf
 
-"""Convert GTF coordinates to fasta file"""
-"""!!!Untested!!!"""
-def convert_gtf(
-        gtf,
-        fasta_directory): # Dataframe of file path and name to GTF reference
-
-    os.system(
-        'gtf2bed' \
-        ' < ' + str(gtf) \
-        + ' > ' \
-        + str(gtf)[:-4] + '.bed')
-
-    fasta = get_files(
-        fasta_directory,
-        ['.txt', '.fasta', '.fa'],
-        omit = ['refFlat', 'rois'])
-
-    # Convert each transcript fasta file
-    counter = 0
-    for x in fasta:
-        os.system(
-            'bedtools getfasta' \
-            + ' -fi ' + str(fasta_directory) + str(x) \
-            + ' -bed ' + str(gtf) \
-            + ' -fo ' + str(fasta_directory) + 'intermediate_' + str(counter) + '_transcripts.fa')
-        counter += 1
-
-    # Get intermediate files and compile
-    files = get_files(
-        fasta_directory,
-        ['_transcripts.fa'])
-
-    for x in files :
-        os.system(
-            'cat' \
-            + ' ' +  str(fasta_directory) + str(x) \
-            + ' >> ' + str(fasta_directory) + 'salmon_gtf_intermediate.fasta')
-
-    # Remove duplicate fasta records
-    with open(str(fasta_directory) + 'salmon_gtf.fasta', 'a') as out:
-        record_ids = list()
-        for record in SeqIO.parse(str(fasta_directory) + 'salmon_gtf_intermediate.fasta', 'fasta'):
-            if record.id not in record_ids:
-                record_ids.append(record.id)
-                SeqIO.write(
-                    record,
-                    out,
-                    'fasta')
-
-    # Remove intermediate files
-    os.system(
-        'rm' \
-        + ' ' + str(gtf)[:-4] + '.bed')
-    os.system(
-        'rm' \
-        + ' ' + str(fasta_directory) + 'salmon_gtf_intermediate.fasta')
-    os.system(
-        'rm' \
-        + ' ' + str(fasta_directory) + 'intermediate_*_transcripts.fa')
-    os.system(
-        'rm' \
-        + ' ' + str(fasta_directory) + '*.fa.fai')
+    else:
+        raise Warning('0 chunks of the original file remain')
