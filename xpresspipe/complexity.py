@@ -22,6 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """IMPORT DEPENDENCIES"""
 import os
 import sys
+from math import ceil
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .parallel import parallelize
@@ -84,14 +85,26 @@ def make_complexity(args_dict):
         str(args_dict['complexity']) + 'metrics/',
         ['_metrics.txt'])
 
-    # Plot metrics for each file
-    compile_complexity_metrics(
-        args_dict,
-        str(args_dict['complexity']) + 'metrics/',
-        files,
-        'RPK',
-        'dupRate',
-        'library_complexity',
-        args_dict['experiment'],
-        args_dict['complexity'],
-        str(args_dict['complexity']) + 'individual_plots/')
+    file_number = ceil(len(files) / 6)
+    file_lists = []
+
+    y = 0
+    for x in range(file_number):
+        file_lists.append(files[y:y+6])
+        y += 6
+
+    y = 1
+    for file_list in file_lists:
+
+        compile_complexity_metrics(
+            args_dict,
+            str(args_dict['complexity']) + 'metrics/',
+            file_list,
+            'RPK',
+            'dupRate',
+            'library_complexity_plot' + str(y),
+            args_dict['experiment'],
+            args_dict['complexity'],
+            str(args_dict['complexity']) + 'individual_plots/')
+
+        y += 1

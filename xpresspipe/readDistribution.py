@@ -22,6 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """IMPORT DEPENDENCIES"""
 import os
 import sys
+from math import ceil
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .parallel import parallelize
@@ -79,16 +80,29 @@ def make_readDistributions(
     # Get metrics to plot
     files = [str(x[:-4]) + '/fastqc_data.txt' for x in files]
 
-    # Plot metrics for each file
-    compile_file_metrics(
-        args_dict,
-        args_dict['fastqc_output'],
-        files,
-        '#Length',
-        '>>END_MODULE',
-        'position',
-        'read size (bp)',
-        'fastqc',
-        args_dict['experiment'],
-        args_dict['read_distributions'],
-        str(args_dict['read_distributions']) + 'individual_plots/')
+    file_number = ceil(len(files) / 6)
+    file_lists = []
+
+    y = 0
+    for x in range(file_number):
+        file_lists.append(files[y:y+6])
+        y += 6
+
+    y = 1
+    for file_list in file_lists:
+
+        # Plot metrics for each file
+        compile_file_metrics(
+            args_dict,
+            args_dict['fastqc_output'],
+            file_list,
+            '#Length',
+            '>>END_MODULE',
+            'position',
+            'read size (bp)',
+            'fastqc',
+            args_dict['experiment'],
+            args_dict['read_distributions'],
+            str(args_dict['read_distributions']) + 'individual_plots/')
+
+        y += 1

@@ -24,6 +24,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+from math import ceil
 import gc
 from functools import partial
 
@@ -164,17 +165,30 @@ def make_metagene(
         str(args_dict['metagene']) + 'metrics/',
         ['_metrics.txt'])
 
-    # Plot metrics for each file
-    compile_matrix_metrics(
-        args_dict,
-        str(args_dict['metagene']) + 'metrics/',
-        files,
-        'meta-transcript',
-        'metacount',
-        'metagene',
-        args_dict['experiment'],
-        args_dict['metagene'],
-        str(args_dict['metagene']) + 'individual_plots/')
+    file_number = ceil(len(files) / 6)
+    file_lists = []
+
+    y = 0
+    for x in range(file_number):
+        file_lists.append(files[y:y+6])
+        y += 6
+
+    y = 1
+    for file_list in file_lists:
+
+        # Plot metrics for each file
+        compile_matrix_metrics(
+            args_dict,
+            str(args_dict['metagene']) + 'metrics/',
+            file_list,
+            'meta-transcript',
+            'metacount',
+            'metagene',
+            args_dict['experiment'],
+            args_dict['metagene'],
+            str(args_dict['metagene']) + 'individual_plots/')
+
+        y += 1
 
     chromosome_index = None
     coordinate_index = None

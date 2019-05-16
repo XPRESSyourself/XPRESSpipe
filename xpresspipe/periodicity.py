@@ -25,6 +25,7 @@ import sys
 import pandas as pd
 import numpy as np
 import gc
+from math import ceil
 from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
@@ -186,17 +187,30 @@ def make_periodicity(
         str(args_dict['periodicity']) + 'metrics/',
         ['_metrics.txt'])
 
-    # Plot metrics for each file
-    compile_matrix_metrics(
-        args_dict,
-        str(args_dict['periodicity']) + 'metrics/',
-        files,
-        'position from start',
-        'count',
-        'periodicity',
-        args_dict['experiment'],
-        args_dict['periodicity'],
-        str(args_dict['periodicity']) + 'individual_plots/')
+    file_number = ceil(len(files) / 6)
+    file_lists = []
+
+    y = 0
+    for x in range(file_number):
+        file_lists.append(files[y:y+6])
+        y += 6
+
+    y = 1
+    for file_list in file_lists:
+
+        # Plot metrics for each file
+        compile_matrix_metrics(
+            args_dict,
+            str(args_dict['periodicity']) + 'metrics/',
+            file_list,
+            'position from start',
+            'count',
+            'periodicity',
+            args_dict['experiment'],
+            args_dict['periodicity'],
+            str(args_dict['periodicity']) + 'individual_plots/')
+
+        y += 1
 
     chromosome_index = None
     coordinate_index = None
