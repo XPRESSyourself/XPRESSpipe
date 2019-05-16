@@ -16,7 +16,6 @@ dependencies:
 - deeptools
 - fastqc
 - htseq
-- salmon
 - biopython
 - r
 - openssl=1.0
