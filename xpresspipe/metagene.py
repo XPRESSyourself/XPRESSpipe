@@ -176,4 +176,6 @@ def make_metagene(
         args_dict['metagene'],
         str(args_dict['metagene']) + 'individual_plots/')
 
+    chromosome_index = None
+    coordinate_index = None
     gc.collect()

@@ -198,4 +198,6 @@ def make_periodicity(
         args_dict['periodicity'],
         str(args_dict['periodicity']) + 'individual_plots/')
 
+    chromosome_index = None
+    coordinate_index = None
     gc.collect()

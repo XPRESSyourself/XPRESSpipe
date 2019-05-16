@@ -58,7 +58,6 @@ def longest_transcripts(
                     n += 1
                     gene_id_next = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
 
-
             # Parse out current gene record
             gene_start_index = index
             if gtf.at[index + n, 2] == 'gene':
@@ -81,9 +80,15 @@ def longest_transcripts(
                 # Append longest transcript records to list of records to keep
                 long_transcripts.append(gtf_record.loc[gtf_record[8].str.contains(longest_transcript_id)])
 
+    gtf = None # Garbage management
+    gc.collect()
+
     if len(long_transcripts) > 0:
         gtf_longest = pd.concat(long_transcripts)
         gtf_longest = gtf_longest.reset_index(drop=True)
+
+        long_transcripts = None
+        gc.collect()
 
         return gtf_longest
 
@@ -97,6 +102,9 @@ def protein_gtf(
     # Take only records that are annotated as 'protein coding'
     gtf_coding = gtf[gtf.iloc[:, 8].str.contains('protein_coding') == True]
     gtf_coding = gtf_coding.reset_index(drop=True)
+
+    gtf = None # Garbage management
+    gc.collect()
 
     return gtf_coding
 
@@ -147,6 +155,9 @@ def get_chunks(
             chunks.append(new_chunk)
 
     print('Dataframe split into ' + str(len(chunks)) + ' chunks for parallelization')
+    gtf = None # Garbage management
+    gc.collect()
+
     return chunks
 
 """Run a given function on chunks"""
@@ -201,6 +212,9 @@ def edit_gtf(
         gtf,
         threads = threads)
 
+    gtf = None # Garbage management
+    gc.collect()
+
     # Run GTF modifications
     # Parse each gene record for longest transcript
     if longest_transcript == True:
@@ -249,11 +263,9 @@ def edit_gtf(
             index = False,
             quoting = csv.QUOTE_NONE)
 
-        gc.collect()
-        return
-    else:
-        gc.collect()
-        return
+    chunks = None # Garbage management
+    gc.collect()
+    return
 
 """Convert GTF coordinates to fasta file"""
 """!!!Untested!!!"""
