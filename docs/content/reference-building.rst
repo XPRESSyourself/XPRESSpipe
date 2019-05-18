@@ -93,6 +93,7 @@ Transcript Reference Modification
 | 2. During ribosome profiling library preparation, a 5' and 3' transcript bias is common, regardless of library preparation method. It has therefore been suggested to `exclude the first 45-50 nucleotides from the 5' end and 15 nucleotides from the 3' end of each transcript during quantification <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_
 | 3. Several genes encode multiple isoforms or transcripts. During quantification, many software packages for counting reads to genes consider a read mapping to multiple transcripts of the same gene as a multi-mapper. Unless interested in alternate isoform usage, it is recommended that transcriptome reference files only contain the longest transcript for each gene.
 | The :data:`modifyGTF` sub-module provides the ability to make the above-mentioned modifications to a GTF transcriptome reference file. The modified GTF file is output at the end and the filename is labeled with the modifications made. Truncations to each transcript reference are stranded-aware.
+| NOTE: This only looks at transcript start and end position. It does not factor in longest exon space or stop sites within the transcript space, so does not necessarily conform to Ensembl's definition of `canonical transcript <https://uswest.ensembl.org/Multi/Help/Glossary?db=core>`_
 
 -----------
 Arguments
