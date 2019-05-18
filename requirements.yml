@@ -16,24 +16,22 @@ dependencies:
 - deeptools
 - fastqc
 - htseq
+- pandas
+- numpy
 - biopython
+- scipy
+- plotly
 - r
-- openssl=1.0
 - conda-forge::ncurses
 - libiconv
 - bioconductor-rsubread
 - bioconductor-dupradar
 - bioconductor-deseq2
+- matplotlib=2.2.3
 - pip
 - pip:
-  - pandas
-  - numpy
-  - scipy
-  - seaborn
-  - plotly
   - git-lfs
   - xpresstools
-  - matplotlib<3.0.0,>=2.1.1
   - multiqc
   - numpydoc
-prefix: .miniconda2/envs/test
+prefix: .miniconda3/envs/test
