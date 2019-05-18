@@ -6,6 +6,7 @@
 *.soft.gz
 **.DS_Store
 **.tar
+**mock_test.py
 /tests/*out*
 /tests/pe_out/**
 /tests/pe_test_archive/**
