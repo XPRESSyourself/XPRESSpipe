@@ -107,8 +107,11 @@ def make_flatten(
             records.append([gene, strand, chromosome, start, end, coordinates])
 
     # Push flattened reference into pandas dataframe
+    gtf = None
     headers = ['gene', 'strand', 'chromosome', 'start', 'end', 'coordinates']
     reference = pd.DataFrame(records, columns=headers)
+    records = None
+    gc.collect()
     reference.chromosome = reference.chromosome.astype(str)
 
     # Get length of each transcripts exon space
@@ -116,7 +119,10 @@ def make_flatten(
 
     return reference
 
-"""Read in coordinate reference from GTF"""
+"""
+Read in coordinate reference from GTF
+Requires an unmodified GTF file
+"""
 def flatten_reference(
         gtf,
         threads=None):

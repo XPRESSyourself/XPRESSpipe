@@ -85,7 +85,7 @@ def get_position(
                 next_coordinate = max(y)
             else: # '-'
                 next_coordinate =  min(y)
-                
+
 """Create MultiQC processing summary from all files in args_dict output"""
 def get_multiqc_summary(
         args_dict):

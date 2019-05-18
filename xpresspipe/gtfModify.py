@@ -23,6 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import sys
 import csv
+import warnings
 import pandas as pd
 pd.options.mode.chained_assignment = None
 import multiprocessing # For debugging
@@ -35,19 +36,19 @@ from Bio import SeqIO
 from .gtfTruncate import truncate_gtf
 from .utils import get_files
 
-"""Parse  GTF dataframe for longest transcript per gene record and keep only those transcript records"""
+"""
+Parse  GTF dataframe for longest transcript per gene record and keep only those transcript records
+Input: GTF formatted as pandas dataframe
+"""
 def longest_transcripts(
         gtf):
 
     long_transcripts = []
-    print(multiprocessing.current_process())
-    print('-----\n' , gtf , '\n-----------------')
 
     for index, row in gtf.iterrows():
 
         # Find next gene record
         if row[2] == 'gene':
-            print(index,'LLLLL')
             # Forward scan to next gene record
             n = 0
             gene_id_original = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
@@ -56,23 +57,18 @@ def longest_transcripts(
             while gene_id_next == gene_id_original:
 
                 if index + n + 1 > gtf.index[-1]:
-                    print(multiprocessing.current_process())
-                    print('????????',index + n)
                     break
                 else:
                     n += 1
                     gene_id_next = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
-            print(gene_id_next)
+
             # Parse out current gene record
             gene_start_index = index
             if gtf.at[index + n, 2] == 'gene':
                 gene_stop_index = index + n - 1
-                print('next')
             else:
                 gene_stop_index = index + n
-                print('final')
-            print(multiprocessing.current_process())
-            print(gene_stop_index)
+
             if gene_start_index < gene_stop_index:
                 gtf_record = gtf.loc[gene_start_index:gene_stop_index]
 
@@ -98,9 +94,6 @@ def longest_transcripts(
         long_transcripts = None
         gc.collect()
 
-        print(':::::::::::::::::')
-        print(gtf_longest)
-        print('{{{{{{{{{}}}}}}}}}')
         return gtf_longest
 
     else:
@@ -119,17 +112,31 @@ def protein_gtf(
 
     return gtf_coding
 
-"""Parse GTF down to chunks per cores for multiprocessing"""
+"""
+Parse GTF down to chunks per cores for multiprocessing
+Requires unmodified GTF with gene records intact
+"""
 def get_chunks(
         gtf,
         threads=None):
 
-    # Get chunking params
+    # Determine number of chunks to create based on indicated or available cpus
     cores = cpu_count() # Number of CPU cores on your system
     if threads == None or threads >= cores:
         pass
+    elif threads < 1:
+        warnings.warn('Indicated less than 1 CPU, setting to 1')
+        cores = 1
     else:
         cores = int(threads)
+
+    # Get number of times 'gene' is references in column 2 of GTF and if cores > #genes, limit
+    gene_instances = gtf[gtf[2] == 'gene'][2].shape[0]
+    if gene_instances == 0:
+        raise Exception('No gene records found in GTF')
+
+    if cores > gene_instances:
+        cores = gene_instances
 
     start = 0 # Get first start coordinate for chunk
     batch = round(len(gtf.index) / cores) # Approx. number of samples in a chunk
@@ -138,29 +145,30 @@ def get_chunks(
     chunks = [] # Initialize chunk storage
     for y in range(cores):
 
-        end = start + batch # Set tentative end
+        # If the last chunk, get the remainder of the GTF dataframe
+        if y == cores - 1:
+            new_chunk = gtf.loc[start:]
 
-        if end > len(gtf.index) - 1: # If end of dataframe, end there
-            end = len(gtf.index) - 1
+        else:
+            end = start + batch  # Set tentative end of next chunk
 
-        else: # To to tentative end and search until next gene record
-            gtf_remainder = gtf.iloc[end:]
+            if end > len(gtf.index) - 1: # If end of dataframe, end there
+                end = len(gtf.index) - 1
 
-            gene_id_original = gtf_remainder.at[end, 8][(gtf_remainder.at[end, 8].find('gene_id \"') + 9):].split('\";')[0]
-            gene_id_next = gene_id_original
-            n = 0
+            else: # Go to tentative end of next chunk and search until previous gene record
+                gtf_remainder = gtf.iloc[start:end]
 
-            while gene_id_next == gene_id_original:
+                n = -1 # Start at current record
+                gene_id_original = gtf_remainder.at[end + n, 8][(gtf_remainder.at[end + n, 8].find('gene_id \"') + 9):].split('\";')[0]
+                gene_id_next = gene_id_original
 
-                if end + n + 1 > len(gtf.index) - 1:
-                    break
-                else:
-                    n += 1
+                while gene_id_next == gene_id_original:
+                    n -= 1 # Take another step back until a new gene_id is found
                     gene_id_next = gtf_remainder.at[end + n, 8][(gtf_remainder.at[end + n, 8].find('gene_id \"') + 9):].split('\";')[0]
 
-        # Parse out current gene record
-        new_chunk = gtf.loc[start:end + n]
-        start = end + n + 1 # End coordinate for last chunk to start with next
+            # Parse out current chunk
+            new_chunk = gtf.loc[start:end + n]
+            start = end + n + 1 # End coordinate for last chunk to start with next
 
         if new_chunk.empty == False:
             chunks.append(new_chunk)

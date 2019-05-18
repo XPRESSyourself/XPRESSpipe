@@ -24,16 +24,17 @@ import pandas as pd
 
 """Scan first exons recursively by chromosome position and truncate"""
 def scan_forward(
-        gtf,
-        index,
-        bad_exons,
-        search_string,
-        stop_string,
-        annotation,
-        _5prime,
-        _3prime,
-        penalty=0):
+    gtf,
+    index,
+    bad_exons,
+    search_string,
+    stop_string,
+    annotation,
+    _5prime,
+    _3prime,
+    penalty=0):
 
+    print('forward')
     # Forward scan for first exon
     n = 0 + penalty
     item = gtf.at[index, 2]
@@ -89,16 +90,16 @@ def scan_forward(
 
 """Truncate 5' amount from the first listed positive stranded exon"""
 def plus_5prime(
-        gtf,
-        index,
-        counter,
-        _5prime,
-        _3prime,
-        bad_exons,
-        search_string,
-        stop_string,
-        annotation,
-        penalty):
+    gtf,
+    index,
+    counter,
+    _5prime,
+    _3prime,
+    bad_exons,
+    search_string,
+    stop_string,
+    annotation,
+    penalty):
 
     # Edit location and exit the recursive loop
     if gtf.at[index + counter, 3] + _5prime <= gtf.at[index + counter, 4]:
@@ -159,15 +160,15 @@ def minus_3prime(
 
 """Scan last exons recursively by chromosome position and truncate"""
 def scan_backward(
-        gtf,
-        index,
-        bad_exons,
-        search_string,
-        stop_string,
-        annotation,
-        _5prime,
-        _3prime,
-        penalty=0):
+    gtf,
+    index,
+    bad_exons,
+    search_string,
+    stop_string,
+    annotation,
+    _5prime,
+    _3prime,
+    penalty=0):
 
     n = 0
     item = ''
@@ -283,17 +284,17 @@ def scan_backward(
 
 """Truncate 3' amount from the first listed positive stranded exon"""
 def plus_3prime(
-        gtf,
-        index,
-        counter,
-        inner_counter,
-        _5prime,
-        _3prime,
-        bad_exons,
-        search_string,
-        stop_string,
-        annotation,
-        penalty):
+    gtf,
+    index,
+    counter,
+    inner_counter,
+    _5prime,
+    _3prime,
+    bad_exons,
+    search_string,
+    stop_string,
+    annotation,
+    penalty):
 
     # Edit location and exit the recursive loop
     if gtf.at[index + counter + inner_counter, 4] - _3prime >= gtf.at[index + counter + inner_counter, 3]:
@@ -319,17 +320,17 @@ def plus_3prime(
 
 """Truncate 5' amount from the first listed minus stranded exon"""
 def minus_5prime(
-        gtf,
-        index,
-        counter,
-        inner_counter,
-        _5prime,
-        _3prime,
-        bad_exons,
-        search_string,
-        stop_string,
-        annotation,
-        penalty):
+    gtf,
+    index,
+    counter,
+    inner_counter,
+    _5prime,
+    _3prime,
+    bad_exons,
+    search_string,
+    stop_string,
+    annotation,
+    penalty):
 
     # Edit location and exit the recursive loop
     if gtf.at[index + counter + inner_counter, 4] - _5prime >= gtf.at[index + counter + inner_counter, 3]:
@@ -355,20 +356,23 @@ def minus_5prime(
 
 """Run MAIN function for GTF truncation"""
 def truncate_gtf(
-        gtf,
-        _5prime=45,
-        _3prime=15):
+    gtf,
+    _5prime=45,
+    _3prime=15):
 
     # Initialize
     gtf_c = gtf.copy() # Make copy in order to edit dataframe
 
     bad_exons = [] # Make list of indicies with bad exons (too short)
-
     for index, row in gtf.iterrows():
 
         # Find records for transcripts
         if row[2] == 'transcript':
-
+            print(type(gtf_c))
+            print(type(index))
+            print(type(bad_exons))
+            print(type(_5prime))
+            print(type(_3prime))
             # Recursively scan forward in the transcript to truncate n nucleotides
             gtf_c, bad_exons = scan_forward(
                 gtf_c,
