@@ -80,6 +80,11 @@ script:
   # Run tests
   - coverage run test_utils.py
   - coverage run test_arguments.py
+  - coverage run test_bam.py
+  - coverage run test_flattenGTF.py
+  - coverage run test_modifyGTF.py
+  - coverage run test_truncateGTF.py
+  # Include analysis tests here
   - mkdir riboprof_out
   - coverage run test_pipelines.py
 
