@@ -289,6 +289,11 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     se_opts.add_argument(
+        '--count_duplicates',
+        help = 'Include flag to quantify reads without de-duplication',
+        action = 'store_true',
+        required = False)
+    se_opts.add_argument(
         '--output_bigwig',
         help = 'Include flag to output bigwig files for each aligned file',
         action = 'store_true',
@@ -414,6 +419,11 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     pe_opts.add_argument(
+        '--count_duplicates',
+        help = 'Include flag to quantify reads without de-duplication',
+        action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
         '--output_bigwig',
         help = 'Include flag to output bigwig files for each aligned file',
         action = 'store_true',
@@ -537,6 +547,11 @@ def get_arguments(
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_READ_MIN,
+        required = False)
+    rp_opts.add_argument(
+        '--count_duplicates',
+        help = 'Include flag to quantify reads without de-duplication',
+        action = 'store_true',
         required = False)
     rp_opts.add_argument(
         '--output_bigwig',
@@ -774,6 +789,11 @@ def get_arguments(
         help = 'Experiment name',
         metavar = '<experiment_name>',
         type = str,
+        required = False)
+    count_opts.add_argument(
+        '--count_duplicates',
+        help = 'Include flag to quantify reads without de-duplication',
+        action = 'store_true',
         required = False)
     count_opts.add_argument(
         '-m', '--max_processors',

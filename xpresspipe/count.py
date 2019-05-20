@@ -52,7 +52,8 @@ def count_file(
 
 """Run count reads manager"""
 def count_reads(
-        args_dict):
+        args_dict,
+        suffix='_dedupRemoved.bam'):
 
     # Add output directories
     args_dict = add_directory(
@@ -60,10 +61,13 @@ def count_reads(
         'output',
         'counts')
 
+    if 'count_duplicates' in args_dict and args_dict['count_duplicates'] == True:
+        suffix = '_Aligned.sort.bam'
+
     # Get list of files to count based on acceptable file types
     files = get_files(
         args_dict['input'],
-        ['_dedupRemoved.bam'])
+        [str(suffix)])
 
     # Count aligned RNAseq reads
     parallelize(
