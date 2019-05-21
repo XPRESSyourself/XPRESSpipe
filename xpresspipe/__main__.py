@@ -358,12 +358,13 @@ def main(
 
         # Normalize
         msg_normalize()
-        args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
-        run_normalization(args_dict)
-        check_process(
-            args_dict['log_file'],
-            msg_complete(),
-            'NORMALIZE') # Check log file for errors and exceptions
+        if args_dict['quantification_method'] != 'cufflinks':
+            args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_count_table.tsv'
+            run_normalization(args_dict)
+            check_process(
+                args_dict['log_file'],
+                msg_complete(),
+                'NORMALIZE') # Check log file for errors and exceptions
 
         # Run quality control
         msg_quality()
@@ -422,12 +423,13 @@ def main(
 
         # Normalize
         msg_normalize()
-        args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
-        run_normalization(args_dict)
-        check_process(
-            args_dict['log_file'],
-            msg_complete(),
-            'NORMALIZE') # Check log file for errors and exceptions
+        if args_dict['quantification_method'] != 'cufflinks':
+            args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_count_table.tsv'
+            run_normalization(args_dict)
+            check_process(
+                args_dict['log_file'],
+                msg_complete(),
+                'NORMALIZE') # Check log file for errors and exceptions
 
         # Run quality control
         msg_quality()
@@ -486,12 +488,13 @@ def main(
 
         # Normalize
         msg_normalize()
-        args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_counts_table.tsv'
-        run_normalization(args_dict)
-        check_process(
-            args_dict['log_file'],
-            msg_complete(),
-            'NORMALIZE') # Check log file for errors and exceptions
+        if args_dict['quantification_method'] != 'cufflinks':
+            args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_count_table.tsv'
+            run_normalization(args_dict)
+            check_process(
+                args_dict['log_file'],
+                msg_complete(),
+                'NORMALIZE') # Check log file for errors and exceptions
 
         # Run quality control
         msg_quality()
