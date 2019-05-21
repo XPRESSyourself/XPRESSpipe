@@ -27,7 +27,7 @@ import pandas as pd
 from xpresstools import count_table
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .utils import get_files, get directories, add_directory
+from .utils import get_files, get_directories, add_directory
 from .parallel import parallelize
 
 """Parse cufflinks table for FPKM info"""
@@ -95,8 +95,8 @@ def count_file_cufflinks(
         'cufflinks'
         + ' ' + str(args_dict['input']) + str(file)
         + ' --output-dir ' + str(args_dict['counts']) + str(file[:-4]) + '_cufflinks_counts'
-        + ' --GTF ' + str(args_dict['reference']) + 'transcripts_masked.gtf'
-        + ' --mask-file ' + str(args_dict['gtf'])
+        + ' --GTF ' + str(args_dict['gtf'])
+        + ' --mask-file ' + str(args_dict['reference']) + 'transcripts_masked.gtf'
         + ' --num-threads 1'
         + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 

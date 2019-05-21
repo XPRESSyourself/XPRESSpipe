@@ -115,7 +115,9 @@ def check_inputs(
             'fasta')
 
     if 'quantification_method' in args_dict:
-        if str(args_dict['quantification_method']).lower() != 'cufflinks' or str(args_dict['quantification_method']).lower() != 'htseq':
+        if str(args_dict['quantification_method']).lower() == 'cufflinks' or str(args_dict['quantification_method']).lower() == 'htseq':
+            pass
+        else:
             raise Exception('Invalid quantification method provided: must be \"cufflinks\" or \"htseq\"')
 
     if 'gtf' in args_dict and str(args_dict['gtf'].lower()[-4:]) != '.gtf':
@@ -307,7 +309,7 @@ def get_arguments(
         action = 'store_true',
         required = False)
     se_opts.add_argument(
-        '-q', '--quantification_method',
+        '-c', '--quantification_method',
         help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
         default = 'cufflinks',
@@ -444,7 +446,7 @@ def get_arguments(
         action = 'store_true',
         required = False)
     pe_opts.add_argument(
-        '-q', '--quantification_method',
+        '-c', '--quantification_method',
         help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
         default = 'cufflinks',
@@ -581,7 +583,7 @@ def get_arguments(
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
-        '-q', '--quantification_method',
+        '-c', '--quantification_method',
         help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
         default = 'cufflinks',
@@ -815,7 +817,7 @@ def get_arguments(
         type = str,
         required = False)
     count_opts.add_argument(
-        '-q', '--quantification_method',
+        '-c', '--quantification_method',
         help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
         default = 'cufflinks',
