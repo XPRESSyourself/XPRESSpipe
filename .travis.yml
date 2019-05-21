@@ -84,7 +84,7 @@ script:
   - coverage run test_flattenGTF.py
   - coverage run test_modifyGTF.py
   - coverage run test_truncateGTF.py
-  # Include analysis tests here
+  - coverage run test_analysis.py
   - mkdir riboprof_out
   - coverage run test_pipelines.py
 
