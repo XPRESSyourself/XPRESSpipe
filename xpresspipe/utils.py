@@ -25,8 +25,8 @@ import sys
 
 """Check directory formatting"""
 def check_directories(
-        input,
-        type=None):
+    input,
+    type=None):
 
     input = os.path.abspath(str(input))
     if os.path.isdir(str(input)) == False:
@@ -49,9 +49,9 @@ def check_directories(
 
 """Create output directory"""
 def add_directory(
-        args_dict,
-        parent,
-        name):
+    args_dict,
+    parent,
+    name):
 
     # Check that name is valid
     if '.' in name:
@@ -71,9 +71,9 @@ def add_directory(
 
 """Make a list of the files in a given directory, based on list of acceptable file suffixes"""
 def get_files(
-        directory,
-        suffix,
-        omit=[]):
+    directory,
+    suffix,
+    omit=[]):
 
     # Initialize blank file list to fill
     file_list = []
@@ -99,10 +99,43 @@ def get_files(
 
     return tuple(file_list)
 
+"""Make a list of the directories in a given directory, based on list of acceptable suffixes"""
+def get_directories(
+    directory,
+    suffix,
+    omit=[]):
+
+    # Initialize blank file list to fill
+    directory_list = []
+
+    # Walk through raw data files within given directory
+    for dir in next(os.walk(directory))[1]:
+        if dir.endswith(tuple(suffix)):
+            directory_list.append(dir) # Do not append directory, files in list will be modified and output to different locations
+
+    # Get full path for each directory
+    directory_list = [str(directory) + str(x) + '/' for x in directory_list]
+
+    # Sort files in alphabetical order (helps in formatting the count tables correctly)
+    directory_list = sorted(directory_list)
+
+    # Get rid of bad grabs
+    omit_drop = []
+    if len(omit) > 0:
+        for x in directory_list:
+            for o in omit:
+                if str(o) in x:
+                    omit_drop.append(x)
+
+    for x in omit_drop:
+        directory_list.remove(x)
+
+    return tuple(directory_list)
+
 """Get files to perform rRNA prober upon"""
 def get_probe_files(
-        args_dict,
-        suffix):
+    args_dict,
+    suffix):
 
     # Initialize blank file list to fill
     probe_list = []
@@ -128,7 +161,7 @@ def get_probe_files(
 
 """Unzip all files from directory"""
 def unzip_files(
-        directory):
+    directory):
 
     suffix = ['.gz', '.zip']
 
@@ -151,7 +184,7 @@ def unzip_files(
 
 """Get fasta files within directory"""
 def get_fasta(
-        fasta_directory):
+    fasta_directory):
 
     # Make space separated list of fasta files
     fasta = get_files(

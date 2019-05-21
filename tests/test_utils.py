@@ -1,5 +1,5 @@
 # Initialize functions
-from xpresspipe.utils import check_directories, add_directory, get_files, get_probe_files, unzip_files, get_fasta
+from xpresspipe.utils import check_directories, add_directory, get_files, get_probe_files, unzip_files
 import os
 import sys
 __path__, xpresspipe_arguments  =  os.path.split(__file__)
@@ -101,6 +101,7 @@ for f in files:
 
 
 # Get FASTA files
+from xpresspipe.utils import  get_fasta
 files = []
 make_file(__path__, 'fast1.txt', files)
 make_file(__path__, 'fast1.txt', files)
@@ -114,3 +115,13 @@ make_file(__path__, 'fast1.txt', files)
 
 for f in files:
     os.system('rm ' + str(f))
+
+
+from xpresspipe.utils import get_directories
+__path__
+truth_directories = ('/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/other/',
+ '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/pe_test/',
+ '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboprof_test/')
+
+test_directories = get_directories(__path__, ['test', 'other'])
+assert truth_directories == test_directories, 'get_directories() failed'
