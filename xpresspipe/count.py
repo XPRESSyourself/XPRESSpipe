@@ -27,12 +27,40 @@ import pandas as pd
 from xpresstools import count_table
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .utils import get_files, add_directory
+from .utils import get_files, get directories, add_directory
 from .parallel import parallelize
 
-"""Compile counts tables from HTseq output files"""
-def count_file(
-        args):
+"""Parse cufflinks table for FPKM info"""
+def parse_table(
+    directory,
+    output,
+    file):
+
+    # file will be at str(directory) + str(file)
+    # output will be to str(output) as directory_name.tsv from second to last /
+    output_file = str(output) + str(directory)[:-1].split('/')[-1] + '_fpkm_counts.tsv'
+
+    # Read in cufflinks quantification table
+    cufflinks_table = pd.read_csv(
+        str(directory) + str(file),
+        sep = '\t')
+
+    # Get relevant information
+    cufflinks_out = cufflinks_table[['tracking_id','FPKM']]
+    cufflinks_out.columns = [0,1]
+
+    # Output table to specified directory with XPRESSpipe parsable file name
+    cufflinks_out.to_csv(
+        str(output_file),
+        sep = '\t',
+        index = False,
+        header = False)
+
+    return 0
+
+"""Create counts tables from HTseq"""
+def count_file_htseq(
+    args):
 
     file, args_dict = args[0], args[1] # Parse args
 
@@ -50,10 +78,32 @@ def count_file(
         + ' ' + str(args_dict['gtf'])
         + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
 
+"""Create counts tables from cufflinks"""
+def count_file_cufflinks(
+    args):
+
+    file, args_dict = args[0], args[1] # Parse args
+
+    # Add output directories
+    args_dict = add_directory(
+        args_dict,
+        'counts',
+        str(file[:-4]) + '_cufflinks_counts')
+
+    # Count
+    os.system(
+        'cufflinks'
+        + ' ' + str(args_dict['input']) + str(file)
+        + ' --output-dir ' + str(args_dict['counts']) + str(file[:-4]) + '_cufflinks_counts'
+        + ' --GTF ' + str(args_dict['reference']) + 'transcripts_masked.gtf'
+        + ' --mask-file ' + str(args_dict['gtf'])
+        + ' --num-threads 1'
+        + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+
 """Run count reads manager"""
 def count_reads(
-        args_dict,
-        suffix='_dedupRemoved.bam'):
+    args_dict,
+    suffix='_dedupRemoved.bam'):
 
     # Add output directories
     args_dict = add_directory(
@@ -70,8 +120,15 @@ def count_reads(
         [str(suffix)])
 
     # Count aligned RNAseq reads
-    parallelize(
-        count_file,
+    if args_dict['quantification_method'] == 'cufflinks':
+        parallelize(
+        count_file_cufflinks,
+        files,
+        args_dict,
+        mod_workers = True)
+    else:
+        parallelize(
+        count_file_htseq,
         files,
         args_dict,
         mod_workers = True)
@@ -80,7 +137,7 @@ def count_reads(
 
 """Take directory of single counts files and collate into single table"""
 def collect_counts(
-        args_dict):
+    args_dict):
 
     # Add output directories
     if 'counts' not in args_dict:
@@ -90,9 +147,26 @@ def collect_counts(
             'counts')
 
     # Get list of files to count based on acceptable file types
-    files = get_files(
-        args_dict['input'],
-        ['.tsv'])
+    if args_dict['quantification_method'] == 'cufflinks':
+
+        directories = get_directories(
+            args_dict['input'],
+            ['_cufflinks_counts'])
+
+        for dir in directories:
+            parse_table(
+                dir,
+                args_dict['input'],
+                'genes.fpkm_tracking')
+
+        files = get_files(
+            args_dict['input'],
+            ['fpkm_counts.tsv'])
+
+    else:
+        files = get_files(
+            args_dict['input'],
+            ['.tsv'])
 
     # Append path to file list
     count_files = []
@@ -103,13 +177,18 @@ def collect_counts(
     counts = count_table(count_files)
 
     # Output data
+    if args_dict['quantification_method'] == 'cufflinks':
+        count_suffix = '_cufflinksFPKM_table.tsv'
+    else:
+        count_suffix = '_count_table.tsv'
+
     if 'experiment' in args_dict and args_dict['experiment'] != None:
         counts.to_csv(
-            str(args_dict['counts']) + str(args_dict['experiment']) + '_counts_table.tsv',
+            str(args_dict['counts']) + str(args_dict['experiment']) + str(count_suffix),
             sep = '\t')
     else:
         cdt = datetime.datetime.now()
         counts.to_csv(
             str(args_dict['counts']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) \
-            + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's_counts_table.tsv',
+            + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's' + str(count_suffix),
             sep = '\t')
