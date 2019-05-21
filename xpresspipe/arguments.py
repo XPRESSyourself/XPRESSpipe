@@ -76,9 +76,11 @@ description_table  =  """\
         |-----------------------|---------------------------------------------------------------------------------------|
         |    complexity         |   Generate summary of library complexity                                              |
         |-----------------------|---------------------------------------------------------------------------------------|
-        |    curateReference    |   Run makeReference, truncate, and makeFlat in a single command                       |
+        |    curateReference    |   Run makeReference, makeReference, and modifyGTF in a single command                 |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    makeReference      |   Create a STAR reference directory (memory intensive)                                |
+        |-----------------------|---------------------------------------------------------------------------------------|
+        |    maskReference      |   Create a masking STAR reference directory (memory intensive)                        |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    modifyGTF          |   Create a longest isoform-only, protein-coding only, and/or truncated GTF file       |
         |-----------------------|---------------------------------------------------------------------------------------|
@@ -267,7 +269,12 @@ def get_arguments(
         help = 'Show help message and exit')
     se_opts.add_argument(
         '--two-pass',
-        help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        help = 'Use a two-pass STAR alignment for novel splice junction discovery',
+        action = 'store_true',
+        required = False)
+    se_opts.add_argument(
+        '--mask',
+        help = 'Set to False if you wish to align out ncRNA before alignment (requires a ncRNA STAR index be created in reference curation)',
         action = 'store_true',
         required = False)
     se_opts.add_argument(
@@ -403,8 +410,13 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     pe_opts.add_argument(
-        '--guided',
-        help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        '--two-pass',
+        help = 'Use a two-pass STAR alignment for novel splice junction discovery',
+        action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
+        '--mask',
+        help = 'Set to False if you wish to align out ncRNA before alignment (requires a ncRNA STAR index be created in reference curation)',
         action = 'store_true',
         required = False)
     pe_opts.add_argument(
@@ -540,8 +552,13 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     rp_opts.add_argument(
-        '--guided',
-        help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        '--two-pass',
+        help = 'Use a two-pass STAR alignment for novel splice junction discovery',
+        action = 'store_true',
+        required = False)
+    rp_opts.add_argument(
+        '--mask',
+        help = 'Set to False if you wish to align out ncRNA before alignment (requires a ncRNA STAR index be created in reference curation)',
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
@@ -727,8 +744,13 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     align_opts.add_argument(
-        '--guided',
-        help = 'Use a one-pass STAR alignment guided by GTF annotation file for splice mapping',
+        '--two-pass',
+        help = 'Use a two-pass STAR alignment for novel splice junction discovery',
+        action = 'store_true',
+        required = False)
+    align_opts.add_argument(
+        '--mask',
+        help = 'Set to False if you wish to align out ncRNA before alignment (requires a ncRNA STAR index be created in reference curation)',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
@@ -1071,7 +1093,7 @@ def get_arguments(
     """CURATE SUBPARSER"""
     curate_parser = subparser.add_parser(
         'curateReference',
-        description = 'Run makeReference, truncate, and makeFlat in a single command',
+        description = 'Run makeReference, maskReference, and modifyGTF',
         add_help = False)
     # Required arguments
     curate_reqs = curate_parser.add_argument_group('required arguments')
@@ -1099,6 +1121,19 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    curate_reqs.add_argument(
+        '--mask_fasta',
+        help = 'Path to directory containing masking fasta files (NOTE: Cannot be the same directory where genomic fasta files are located)',
+        metavar = '<path>',
+        type = str,
+        required = True)
+    curate_reqs.add_argument(
+        '--masked_index',
+        help = 'Path to directory containing masking fasta files (NOTE: Cannot be the same directory where genomic fasta files are located) (default: None)',
+        metavar = '<path>',
+        type = str,
+        default = None,
+        required = False)
     curate_opts.add_argument(
         '-l', '--longest_transcript',
         help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
@@ -1240,6 +1275,39 @@ def get_arguments(
         type = int,
         required = False)
     reference_opts.add_argument(
+        '-m', '--max_processors',
+        help = 'Number of max processors to use for tasks (default: No limit)',
+        metavar = '<processors>',
+        type = int,
+        default = DEFAULT_MAX_PROCESSORS,
+        required = False)
+
+    """MASK SUBPARSER"""
+    mask_parser = subparser.add_parser(
+        'maskReference',
+        description = 'Create a masked STAR reference directory',
+        add_help = False)
+    # Required arguments
+    mask_reqs = mask_parser.add_argument_group('required arguments')
+    mask_reqs.add_argument(
+        '-o', '--output',
+        help = 'Path to output directory',
+        metavar = '<path>',
+        type = str,
+        required = True)
+    mask_reqs.add_argument(
+        '--mask_fasta',
+        help = 'Path to directory containing masking fasta files (NOTE: Cannot be the same directory where genomic fasta files are located)',
+        metavar = '<path>',
+        type = str,
+        required = True)
+    # Optional arguments
+    mask_opts = mask_parser.add_argument_group('optional arguments')
+    mask_opts.add_argument(
+        '-h', '--help',
+        action = 'help',
+        help = 'Show help message and exit')
+    mask_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',

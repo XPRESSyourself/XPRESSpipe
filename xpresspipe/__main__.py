@@ -31,7 +31,7 @@ from .__init__ import __version__
 from .messages import *
 from .arguments import get_arguments
 from .trim import run_trim
-from .align import run_seRNAseq, run_peRNAseq, create_star_reference
+from .align import run_seRNAseq, run_peRNAseq, create_star_reference, create_mask_reference
 from .count import count_reads, collect_counts
 from .normalizeMatrix import run_normalization
 from .convert import create_bed, create_bigwig
@@ -207,6 +207,19 @@ def main(
             output = True,
             threads = args_dict['threads'])
 
+        # Create masked index for STAR
+        if 'masked_index' in args_dict and args_dict['masked_index'] != None:
+
+            # Generate reference
+            args_dict['threads'], args_dict['workers'] = get_cores(
+                args_dict,
+                mod_workers = True)
+            create_mask_reference(
+                args_dict['output'],
+                args_dict['masked_index'],
+                args_dict['log'],
+                threads = args_dict['threads'])
+
         # Check log file for errors and exceptions
         check_process(
             args_dict['log_file'],
@@ -233,6 +246,19 @@ def main(
             args_dict['log_file'],
             msg_complete(),
             'MAKE REFERENCE')
+
+    elif args.cmd == 'maskReference':
+        print('Creating masked reference files...')
+
+        # Generate reference
+        args_dict['threads'], args_dict['workers'] = get_cores(
+            args_dict,
+            mod_workers = True)
+        create_mask_reference(
+            args_dict['output'],
+            args_dict['mask_fasta'],
+            args_dict['log'],
+            threads = args_dict['threads'])
 
     elif args.cmd == 'modifyGTF':
         print('Formatting reference file...')
