@@ -50,12 +50,14 @@ from .utils import get_probe_files, unzip_files
 ASSUMPTIONS: Proper arguments are provided where some user renaming of files may be required
 """
 def main(
-        args=None):
+    args=None):
 
     # Read in arguments
     args, args_dict = get_arguments(
         args,
         __version__)
+
+    # print(args_dict) # For debugging purposes
 
     # Should have already seen check_directory() so should have a trailing '/'
     if 'input' in args_dict \

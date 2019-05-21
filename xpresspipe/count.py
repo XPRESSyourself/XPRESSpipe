@@ -30,6 +30,9 @@ from xpresstools import count_table
 from .utils import get_files, get_directories, add_directory
 from .parallel import parallelize
 
+__path__ = str(os.path.dirname(os.path.realpath(__file__)))[:-10]
+os.environ["PATH"] += os.pathsep + str(__path__) + 'cufflinks'
+
 """Parse cufflinks table for FPKM info"""
 def parse_table(
     directory,
@@ -96,9 +99,8 @@ def count_file_cufflinks(
         + ' ' + str(args_dict['input']) + str(file)
         + ' --output-dir ' + str(args_dict['counts']) + str(file[:-4]) + '_cufflinks_counts'
         + ' --GTF ' + str(args_dict['gtf'])
-        + ' --mask-file ' + str(args_dict['reference']) + 'transcripts_masked.gtf'
         + ' --num-threads 1'
-        + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+        + str(args_dict['log']))
 
 """Run count reads manager"""
 def count_reads(
