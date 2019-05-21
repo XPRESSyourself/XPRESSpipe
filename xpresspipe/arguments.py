@@ -114,6 +114,9 @@ def check_inputs(
             args_dict['fasta'],
             'fasta')
 
+    if 'quantification_method' in args_dict:
+        if str(args_dict['quantification_method']).lower() != 'cufflinks' or str(args_dict['quantification_method']).lower() != 'htseq':
+            raise Exception('Invalid quantification method provided: must be \"cufflinks\" or \"htseq\"')
 
     if 'gtf' in args_dict and str(args_dict['gtf'].lower()[-4:]) != '.gtf':
         raise Exception('Invalid reference_type value provided')
@@ -295,13 +298,20 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file',
+        help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
         required = False)
     se_opts.add_argument(
         '--output_bed',
-        help = 'Include option to output BED files for each aligned file',
+        help = 'Include option to output BED files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
+        required = False)
+    se_opts.add_argument(
+        '-q', '--quantification_method',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        metavar = '<method>',
+        default = 'cufflinks',
+        type = str,
         required = False)
     se_opts.add_argument(
         '--method',
@@ -425,13 +435,20 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file',
+        help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
         required = False)
     pe_opts.add_argument(
         '--output_bed',
-        help = 'Include option to output BED files for each aligned file',
+        help = 'Include option to output BED files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
+        '-q', '--quantification_method',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        metavar = '<method>',
+        default = 'cufflinks',
+        type = str,
         required = False)
     pe_opts.add_argument(
         '--method',
@@ -555,13 +572,20 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file',
+        help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
         '--output_bed',
-        help = 'Include option to output BED files for each aligned file',
+        help = 'Include option to output BED files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
+        required = False)
+    rp_opts.add_argument(
+        '-q', '--quantification_method',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        metavar = '<method>',
+        default = 'cufflinks',
+        type = str,
         required = False)
     rp_opts.add_argument(
         '--method',
@@ -707,12 +731,12 @@ def get_arguments(
         required = False)
     align_opts.add_argument(
         '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file',
+        help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
         '--output_bed',
-        help = 'Include option to output BED files for each aligned file',
+        help = 'Include option to output BED files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
@@ -788,6 +812,13 @@ def get_arguments(
         '-e', '--experiment',
         help = 'Experiment name',
         metavar = '<experiment_name>',
+        type = str,
+        required = False)
+    count_opts.add_argument(
+        '-q', '--quantification_method',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        metavar = '<method>',
+        default = 'cufflinks',
         type = str,
         required = False)
     count_opts.add_argument(
