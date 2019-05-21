@@ -45,6 +45,7 @@ Table of contents
    content/seRNAseq
    content/peRNAseq
    content/riboprof
+   content/faqs
 
 =======
 License
