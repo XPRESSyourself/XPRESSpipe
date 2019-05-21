@@ -12,13 +12,13 @@ __path__ = __path__ + '/'
 
 # Input file will test chunking to make sure GTF structure is conserved
 gtf = pd.read_csv(
-    str(__path__) + 'other/gtfFlat_test.gtf',
+    str(__path__) + 'other/gtf_test.gtf',
     sep = '\t',
     header = None,
     comment = '#',
     low_memory = False)
 
-gtf_file = str(__path__) + 'other/gtfFlat_test.gtf'
+gtf_file = str(__path__) + 'other/gtf_test.gtf'
 
 
 # Flatten GTF

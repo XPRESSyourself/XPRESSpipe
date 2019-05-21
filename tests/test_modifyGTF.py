@@ -7,12 +7,11 @@ __path__  =  os.path.dirname(os.path.realpath(__file__))
 #__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests'
 __path__ = __path__ + '/'
 
-print(__path__)
 """gtfModify functions"""
 
 # Input file will test chunking to make sure GTF structure is conserved
 gtf = pd.read_csv(
-    str(__path__) + 'other/gtfFlat_test.gtf',
+    str(__path__) + 'other/gtf_test.gtf',
     sep = '\t',
     header = None,
     comment = '#',
