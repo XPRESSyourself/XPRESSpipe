@@ -183,7 +183,7 @@ def scan_backward(
         if (index + n) <= (len(gtf.index) - 1): # Make sure next selection not out of bounds
             item = gtf.at[index + n, 2]
         else:
-            bad_exons.append(index + n - 2)
+            bad_exons.append(index + n - 2) # Can't remember the need for this
             return gtf, bad_exons
 
         if item == str(stop_string) \
