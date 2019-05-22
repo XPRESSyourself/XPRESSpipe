@@ -49,6 +49,9 @@ from .utils import get_probe_files, unzip_files
 
 ASSUMPTIONS: Proper arguments are provided where some user renaming of files may be required
 """
+# For eventual GUI integration
+# from gooey import Gooey
+# @Gooey
 def main(
     args=None):
 
