@@ -12,7 +12,6 @@
 
 ### Development Notes:
 - <b><i>XPRESSpipe is still in beta production</i></b>  
-- All metagene modules are currently broken due to Picard CollectRnaSeqMetrics memory handling issues with refFlat files
 
 ### Citation:    
 ```
@@ -20,11 +19,9 @@ Berg, JA (2019). XPRESSyourself suite: Gene expression processing and analysis m
 ```
 
 ### Installation:   
-Installation options not currently available, please use the Docker container
 
-```
-conda install -c bioconda xpresspipe
-```
+Please use the Docker container or install from source
+
 
 ### Other Requirements:
 If using this package to perform batch effect normalization or differential expression analysis, you must install [R](https://www.r-project.org/)

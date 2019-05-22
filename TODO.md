@@ -24,12 +24,13 @@
 
 
 # Truncator
-[ ] Find exon space per transcript and anything less than or equal to \_5prime + \_3prime remove all associated gene records
-
+[X] Find exon space per transcript and anything less than or equal to \_5prime + \_3prime remove all associated gene records
+[ ] Calculate longest transcript to keep by exon space and remove all others
 
 # Analysis
 [ ] Check logic
 [ ] Check function
+[ ] Check output and formatting
 
 ## Metagene
 
@@ -55,3 +56,14 @@
 
 ## riboprof
 [ ] Run without errors and expected output (parse from log file?)
+
+
+# Package new version of xpresstools for use with xpresspipe
+
+
+
+# Re-explore conda install or include install script
+
+
+
+# Docker

@@ -1,0 +1,42 @@
+package:
+  name: xpresspipe
+  version: 0.1.2b
+
+source:
+  fn: XPRESSpipe-v0.1.2b1.tar.gz
+  url: https://github.com/XPRESSyourself/XPRESSpipe/archive/XPRESSpipe-v0.1.2b1.tar.gz
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - pip
+    - setuptools
+  run:
+    - FastP
+    - STAR
+    - samtools
+    - bedtools
+    - deeptools
+    - fastqc
+    - htseq
+    - pandas
+    - numpy
+    - biopython
+    - scipy
+    - plotly
+    - r
+    - conda-forge::ncurses
+    - libiconv
+    - bioconductor-rsubread
+    - bioconductor-dupradar
+    - bioconductor-deseq2
+    - matplotlib=2.2.3
+    - pip
+    - pip:
+      - git-lfs
+      - xpresstools
+      - multiqc
+      - numpydoc

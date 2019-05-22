@@ -69,24 +69,23 @@ install:
 
 # Run tests
 script:
-  - cd tests/
   # Build references
-  - mkdir se_reference
-  - mkdir pe_reference
-  - cp -r test_reference se_reference
-  - cp -r test_reference pe_reference
-  - xpresspipe curateReference -o se_reference/ -f se_reference/ -g se_reference/transcripts.gtf -t 45 -m 10 --sjdbOverhang 49
-  - xpresspipe curateReference -o pe_reference/ -f pe_reference/ -g pe_reference/transcripts.gtf -m 10
+  - mkdir tests/se_reference
+  - mkdir tests/pe_reference
+  - cp -r tests/test_reference tests/se_reference
+  - cp -r tests/test_reference tests/pe_reference
+  - xpresspipe curateReference -o tests/se_reference/ -f tests/se_reference/ -g tests/se_reference/transcripts.gtf -t 45 -m 10 --sjdbOverhang 49
+  - xpresspipe curateReference -o tests/pe_reference/ -f tests/pe_reference/ -g tests/pe_reference/transcripts.gtf -m 10
   # Run tests
-  - coverage run test_utils.py
-  - coverage run test_arguments.py
-  - coverage run test_bam.py
-  - coverage run test_flattenGTF.py
-  - coverage run test_modifyGTF.py
-  - coverage run test_truncateGTF.py
-  - coverage run test_analysis.py
+  - coverage run tests/test_utils.py
+  - coverage run tests/test_arguments.py
+  - coverage run tests/test_bam.py
+  - coverage run tests/test_flattenGTF.py
+  - coverage run tests/test_modifyGTF.py
+  - coverage run tests/test_truncateGTF.py
+  - coverage run tests/test_analysis.py
   - mkdir riboprof_out
-  - coverage run test_pipelines.py
+  - coverage run tests/test_pipelines.py
 
 after_success:
   - codecov
