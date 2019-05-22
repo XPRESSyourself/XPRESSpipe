@@ -202,14 +202,14 @@ def run_chunks(
 
 """Run all GTF-editing functions"""
 def edit_gtf(
-        gtf, # Dataframe of file path and name to GTF reference
-        longest_transcript=True,
-        protein_coding=True,
-        truncate_reference=True,
-        _5prime=45, # If no 5' truncation desired, set to 0
-        _3prime=15, # If no 3' truncation desired, set to 0
-        output=True, # True will output all intermediates, not possible if inputting a GTF as pandas dataframe
-        threads=None): # Give int for core threshold if desired
+    gtf, # Dataframe of file path and name to GTF reference
+    longest_transcript=True,
+    protein_coding=True,
+    truncate_reference=True,
+    _5prime=45, # If no 5' truncation desired, set to 0
+    _3prime=15, # If no 3' truncation desired, set to 0
+    output=True, # True will output all intermediates, not possible if inputting a GTF as pandas dataframe
+    threads=None): # Give int for core threshold if desired
 
     # Import GTF reference file
     if isinstance(gtf, pd.DataFrame) and len(gtf.columns) == 9:

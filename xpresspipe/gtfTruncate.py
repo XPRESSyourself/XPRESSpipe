@@ -21,6 +21,56 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 
 """IMPORT DEPENDENCIES"""
 import pandas as pd
+import gc
+
+"""Remove short exon spaces prior to truncation"""
+def remove_short(
+    gtf,
+    _5prime,
+    _3prime):
+
+    bad_indices = []
+
+    for index, row in gtf.iterrows():
+
+        # Find next gene record
+        if row[2] == 'transcript':
+            # Forward scan to next gene record
+            n = 1
+            transcript_next = gtf.at[index + n, 2]
+
+            # Parse until next transcript
+            while transcript_next != 'transcript':
+
+                if index + n + 1 > gtf.index[-1]:
+                    break
+                else:
+                    n += 1
+                    transcript_next = gtf.at[index + n, 2]
+
+            # Parse out current gene record
+            transcript_start_index = index
+            if gtf.at[index + n, 2] == 'transcript':
+                transcript_stop_index = index + n - 1
+            else:
+                transcript_stop_index = index + n
+
+            if transcript_start_index < transcript_stop_index:
+                gtf_record = gtf.loc[transcript_start_index:transcript_stop_index]
+
+                # Find longest transcript for the current gene record
+                exon_lengths = gtf_record.loc[gtf_record[2] == 'exon'][4] \
+                                    - gtf_record.loc[gtf_record[2] == 'exon'][3]
+
+                if exon_lengths.sum() <= _5prime + _3prime:
+                    print(range(transcript_start_index, transcript_stop_index + 1))
+                    for x in range(transcript_start_index, transcript_stop_index + 1):
+                        if x + 1 > gtf.index[-1] or gtf.at[x, 2] == 'exon':
+                            bad_indices.append(x)
+
+    gtf = None # Garbage management
+    gc.collect()
+    return bad_indices
 
 """Scan first exons recursively by chromosome position and truncate"""
 def scan_forward(
@@ -180,6 +230,8 @@ def scan_backward(
     while item != str(stop_string):
 
         n += 1
+        print(index + n)
+        print(bad_exons)
         if (index + n) <= (len(gtf.index) - 1): # Make sure next selection not out of bounds
             item = gtf.at[index + n, 2]
         else:
@@ -373,35 +425,76 @@ def truncate_gtf(
     # Initialize
     gtf_c = gtf.copy() # Make copy in order to edit dataframe
 
+    # Do an initial pruning of transcripts that are shorter than total truncation amount
+    bad_indices = remove_short(
+        gtf_c,
+        _5prime,
+        _3prime)
+
+    gtf_c = gtf_c.drop(gtf_c.index[bad_indices])
+    gtf_c = gtf_c.reset_index(drop=True)
+    gtf_cc = gtf_c.copy()
+
+    gtf = None
+    gc.collect()
+
+    # Truncate exon records
     bad_exons = [] # Make list of indicies with bad exons (too short)
-    for index, row in gtf.iterrows():
+    for index, row in gtf_c.iterrows():
         # Find records for transcripts
         if row[2] == 'transcript':
-            # Recursively scan forward in the transcript to truncate n nucleotides
-            gtf_c, bad_exons = scan_forward(
-                gtf_c,
-                index,
-                bad_exons,
-                'exon',
-                'transcript',
-                'exon_number \"',
-                _5prime,
-                _3prime)
+            # Check there are exon records to prune
+            n = 1
+            transcript_next = gtf_c.at[index + n, 2]
 
-            # Forward scan for next transcript, then backtrack to last exon record for transcript
-            gtf_c, bad_exons = scan_backward(
-                gtf_c,
-                index,
-                bad_exons,
-                'exon',
-                'transcript',
-                'exon_number \"',
-                _5prime,
-                _3prime)
+            # Parse until next transcript
+            while transcript_next != 'transcript':
+
+                if index + n + 1 > gtf_c.index[-1]:
+                    break
+                else:
+                    n += 1
+                    transcript_next = gtf_c.at[index + n, 2]
+
+            # Parse out current gene record
+            transcript_start_index = index
+            if gtf_c.at[index + n, 2] == 'transcript':
+                transcript_stop_index = index + n - 1
+            else:
+                transcript_stop_index = index + n
+
+            if transcript_start_index < transcript_stop_index:
+                gtf_record = gtf_c.loc[transcript_start_index:transcript_stop_index]
+                if 'exon' in gtf_record[2]:
+                    pass
+                else:
+                    # Recursively scan forward in the transcript to truncate n nucleotides
+                    gtf_cc, bad_exons = scan_forward(
+                        gtf_cc,
+                        index,
+                        bad_exons,
+                        'exon',
+                        'transcript',
+                        'exon_number \"',
+                        _5prime,
+                        _3prime)
+
+                    # Forward scan for next transcript, then backtrack to last exon record for transcript
+                    gtf_cc, bad_exons = scan_backward(
+                        gtf_cc,
+                        index,
+                        bad_exons,
+                        'exon',
+                        'transcript',
+                        'exon_number \"',
+                        _5prime,
+                        _3prime)
+            else:
+                raise Exception('Something went wrong while parsing pre-truncation')
 
     # Drop exons that are completely truncated
-    print(str(len(bad_exons)) + ' exons records removed from reference chunk for being too short.')
+    print(str(len(bad_exons) + len(bad_indices)) + ' exons records removed from reference chunk for being too short.')
 
-    gtf_c = gtf_c.drop(gtf_c.index[bad_exons])
+    gtf_cc = gtf_cc.drop(gtf_cc.index[bad_exons])
 
-    return gtf_c
+    return gtf_cc

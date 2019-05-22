@@ -225,23 +225,28 @@ gtf_truth2 = [
 ]
 gtf_truth2 = pd.DataFrame(gtf_truth2)
 
-
 from xpresspipe.gtfTruncate import truncate_gtf
-# Truth0
+# Test0
 truncated_gtf0 = truncate_gtf(gtf)
 truncated_gtf0 = truncated_gtf0.reset_index(drop=True)
+
+print(gtf)
+print('----------------------')
+print(truncated_gtf0)
+print('----------------------')
+print(gtf_truth0)
+
 assert truncated_gtf0.equals(gtf_truth0), 'truncate_gtf() failed'
 
-# Truth1
+# Test1
 truncated_gtf1 = truncate_gtf(gtf, _5prime=50, _3prime=5)
 truncated_gtf1 = truncated_gtf1.reset_index(drop=True)
 assert truncated_gtf1.equals(gtf_truth1), 'truncate_gtf() failed'
 
-# Truth2
-
-print(gtf2)
+# Test2
 truncated_gtf2 = truncate_gtf(gtf2)
 
+print(gtf2)
 print('----------------------')
 print(truncated_gtf2)
 print('----------------------')
