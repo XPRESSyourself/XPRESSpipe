@@ -89,7 +89,7 @@ setup(
     include_package_data = True,
     license = 'GPL-3.0',
     zip_safe = False,
-    install_require = [
+    install_requires = [
         'xpresstools',
         'multiqc',
         'numpydoc'
