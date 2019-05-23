@@ -28,10 +28,6 @@ def check_directories(
     input,
     type=None):
 
-    input = os.path.abspath(str(input))
-    if os.path.isdir(str(input)) == False:
-        raise Exception('It appears the ' + str(type) + ' directory you provided does not exist')
-
     # Check that a file wasn't passed in
     if '.' in input:
         if input.startswith('.'):

@@ -29,99 +29,14 @@ try:
 except:
     pass
 
-# Add directory
-args_dict = {}
-args_dict['log'] = ''
-args_dict['old_dir'] = __path__
-parent1 = 'old_dir'
-parent2 = 'log'
-child1 = 'test_make'
-child2 = 'filename.txt'
-child3 = 'test_make/'
 
-dir_new = add_directory(args_dict, parent1, child1)[child1]
-assert dir_new == str(__path__) + 'test_make/', 'add_directory() failed'
-os.system('rm -r ' + str(args_dict[child1])) # Only including for non-Travis testing
-
-try:
-    add_directory(args_dict, parent2, child1) # Make sure Exception is caught when invalid parent directory is provided
-except Exception:
-    pass
-else:
-    raise Error('add_directory() failed')
-
-try:
-    add_directory(args_dict, parent1, child2) # Make sure Exception is caught when invalid child directory is provided
-except Exception:
-    pass
-else:
-    raise Error('add_directory() failed')
-
-assert add_directory(args_dict, parent1, child3)['test_make'][-5:] == 'make/', 'add_directory() failed to properly format new directory name' # Make sure removes trailing '/' from new name
-os.system('rm -r ' + str(args_dict[child1])) # Only including for non-Travis testing
-
-# Get files
-files = []
-make_file(__path__, 'reg.txt', files)
-make_file(__path__, 'reg_dedup.txt', files)
-make_file(__path__, 'reg1.txt', files)
-make_file(__path__, 'reg1_dedup.txt', files)
-
-assert get_files(__path__, '.txt', omit=['dedup']) == ('reg.txt', 'reg1.txt'), 'make_file() failed to omit'
-for f in files:
-    os.system('rm ' + str(f))
-
-files = []
-make_file(__path__, 'reg.txt', files)
-make_file(__path__, 'reg_dedup.fasta', files)
-make_file(__path__, 'reg1.txt', files)
-make_file(__path__, 'reg1_dedup.fasta', files)
-
-assert get_files(__path__, ['.txt','.fasta']) == ('reg.txt','reg1.txt','reg1_dedup.fasta','reg_dedup.fasta'), 'make_file() failed to include multiple suffixes'
-for f in files:
-    os.system('rm ' + str(f))
 
 # Get prober files
 
 
 
 # Unzip files
-args_dict = {}
-args_dict['input'] = __path__
-files = []
-make_file(__path__, 'reg.txt', files)
-make_file(__path__, 'reg_dedup.fasta', files)
-make_file(__path__, 'reg1.txt', files)
-make_file(__path__, 'reg1_dedup.fasta', files)
-#for x in files:
-#    os.system('zip ' + str(__path__) + str(x) + '.zip ' + str(__path__) + str(x))
 
-for f in files:
-    os.system('rm ' + str(f))
 
 
 # Get FASTA files
-from xpresspipe.utils import  get_fasta
-files = []
-make_file(__path__, 'fast1.txt', files)
-make_file(__path__, 'fast1.txt', files)
-make_file(__path__, 'fast1.txt', files)
-make_file(__path__, 'fast1.txt', files)
-make_file(__path__, 'fast1.txt', files)
-make_file(__path__, 'fast1.txt', files)
-
-
-
-
-for f in files:
-    os.system('rm ' + str(f))
-
-
-from xpresspipe.utils import get_directories
-__path__
-truth_directories = ('/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/other/',
- '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/pe_test/',
- '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboprof_test/')
-
-test_directories = get_directories(__path__, ['test', 'other'])
-assert truth_directories == test_directories, 'get_directories() failed'

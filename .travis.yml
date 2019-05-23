@@ -74,8 +74,8 @@ script:
   - mkdir tests/pe_reference
   - cp -r tests/test_reference tests/se_reference
   - cp -r tests/test_reference tests/pe_reference
-  - xpresspipe curateReference -o tests/se_reference/ -f tests/se_reference/ -g tests/se_reference/transcripts.gtf -t 45 -m 10 --sjdbOverhang 49
-  - xpresspipe curateReference -o tests/pe_reference/ -f tests/pe_reference/ -g tests/pe_reference/transcripts.gtf -m 10
+  #- xpresspipe curateReference -o tests/se_reference/ -f tests/se_reference/ -g tests/se_reference/transcripts.gtf -t 45 -m 10 --sjdbOverhang 49
+  #- xpresspipe curateReference -o tests/pe_reference/ -f tests/pe_reference/ -g tests/pe_reference/transcripts.gtf -m 10
   # Run tests
   - coverage run tests/test_utils.py
   - coverage run tests/test_arguments.py
@@ -84,8 +84,8 @@ script:
   - coverage run tests/test_modifyGTF.py
   - coverage run tests/test_truncateGTF.py
   - coverage run tests/test_analysis.py
-  - mkdir riboprof_out
-  - coverage run tests/test_pipelines.py
+  #- mkdir riboprof_out
+  #- coverage run tests/test_pipelines.py
 
 after_success:
   - codecov
