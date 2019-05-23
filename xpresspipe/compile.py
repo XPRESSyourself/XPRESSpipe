@@ -24,10 +24,8 @@ import os
 import sys
 import pandas as pd
 import numpy as np
-
 from math import ceil
 from scipy.stats import gaussian_kde
-
 import matplotlib
 #matplotlib.use('agg') #remove need for -X server connect
 import matplotlib.pyplot as plt

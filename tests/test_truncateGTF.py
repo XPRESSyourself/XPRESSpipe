@@ -2,7 +2,6 @@ from __future__ import print_function
 
 import os
 import sys
-from __future__ import print_function
 import pandas as pd
 import numpy as np
 __path__  =  os.path.dirname(os.path.realpath(__file__))
