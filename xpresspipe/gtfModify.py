@@ -25,6 +25,7 @@ import os
 import sys
 import csv
 import warnings
+from __future__ import print_function
 import pandas as pd
 pd.options.mode.chained_assignment = None
 import multiprocessing # For debugging

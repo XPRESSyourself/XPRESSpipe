@@ -23,6 +23,7 @@ from __future__ import print_function
 """IMPORT DEPENDENCIES"""
 import os
 import sys
+from __future__ import print_function
 
 """Check directory formatting"""
 def check_directories(

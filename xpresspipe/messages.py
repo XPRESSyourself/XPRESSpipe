@@ -25,6 +25,7 @@ from __future__ import print_function
 import os
 import sys
 import time
+from __future__ import print_function
 
 """Check progress report for errors and exceptions"""
 def check_process(

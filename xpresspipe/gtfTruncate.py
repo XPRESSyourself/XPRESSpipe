@@ -21,6 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import print_function
 
 """IMPORT DEPENDENCIES"""
+from __future__ import print_function
 import pandas as pd
 import gc
 
