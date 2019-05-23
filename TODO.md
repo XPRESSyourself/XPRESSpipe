@@ -57,13 +57,8 @@
 ## riboprof
 [ ] Run without errors and expected output (parse from log file?)
 
-
-# Package new version of xpresstools for use with xpresspipe
-
-
-
-# Re-explore conda install or include install script
-
-
-
-# Docker
+# Other
+[ ] Package new version of xpresstools for use with xpresspipe
+[ ] Make option to provide sample table and convert names, etc
+[ ] Re-explore conda install or include install script
+[ ] Docker

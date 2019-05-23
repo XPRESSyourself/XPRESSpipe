@@ -6,8 +6,8 @@ python:
   - 3.6
   - 3.7
 dist: xenial
-#env:
-#  - OS="linux"
+env:
+  - OS="linux"
 
 # Set macos environments
 #matrix:
