@@ -327,8 +327,6 @@ def align(
     output,
     file):
 
-    print(args_dict)
-
     if 'mask' in args_dict and args_dict['mask'] == True:
         file = masking_star(
             file,
