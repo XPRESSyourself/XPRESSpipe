@@ -21,6 +21,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """IMPORT DEPENDENCIES"""
 import os
 import sys
+from __future__ import print_function
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .utils import get_files, add_directory, get_fasta, check_directories

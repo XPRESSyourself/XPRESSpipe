@@ -23,6 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import sys
 import pandas as pd
+from __future__ import print_function
 
 from xpresstools import rpm, r_fpkm, batch_normalize, convert_names, diff_xpress #tpm, add back when pip install updated
 

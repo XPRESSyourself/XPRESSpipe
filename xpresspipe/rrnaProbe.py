@@ -23,6 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import re
 import sys
+from __future__ import print_function
 from zipfile import ZipFile as zf
 
 """Get overrepresented sequences from a given FastQC zip file"""

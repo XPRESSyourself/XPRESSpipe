@@ -26,6 +26,7 @@ import argparse
 import datetime
 import multiprocessing
 from textwrap import dedent
+from __future__ import print_function
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .utils import check_directories
