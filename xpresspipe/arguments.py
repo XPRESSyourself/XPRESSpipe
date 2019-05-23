@@ -324,8 +324,8 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
+        help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
+        metavar = '<RPM, TPM, RPKM, FPKM>',
         type = str,
         required = False)
     se_opts.add_argument(
@@ -466,8 +466,8 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
+        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
+        metavar = '<RPM, TPM, RPKM, FPKM>',
         type = str,
         required = False)
     pe_opts.add_argument(
@@ -608,8 +608,8 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\")',
-        metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
+        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
+        metavar = '<RPM, TPM, RPKM, FPKM>',
         type = str,
         required = False)
     rp_opts.add_argument(
@@ -879,9 +879,9 @@ def get_arguments(
         help = 'Show help message and exit')
     normalize_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\", \"LOG\") -- if using either RPKM or FPKM, a \
+        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\") -- if using either RPKM or FPKM, a \
         GTF reference file must be included',
-        metavar = '<RPM, TPM, RPKM, FPKM, LOG>',
+        metavar = '<RPM, TPM, RPKM, FPKM>',
         type = str,
         required = False)
     normalize_opts.add_argument(

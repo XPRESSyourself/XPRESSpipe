@@ -24,7 +24,7 @@ import os
 import sys
 import pandas as pd
 
-from xpresstools import rpm, r_fpkm, log_scale, batch_normalize, convert_names, diff_xpress #tpm, add back when pip install updated
+from xpresstools import rpm, r_fpkm, batch_normalize, convert_names, diff_xpress #tpm, add back when pip install updated
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__
