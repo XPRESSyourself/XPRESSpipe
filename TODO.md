@@ -22,6 +22,9 @@
   - ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/ncrna/
 [ ] Test on HPC
 
+# Other Processing
+[ ] Throttle de-dup
+[ ] Test DESeq2
 
 # Truncator
 [X] Find exon space per transcript and anything less than or equal to \_5prime + \_3prime remove all associated gene records
@@ -62,3 +65,4 @@
 [ ] Make option to provide sample table and convert names, etc
 [ ] Re-explore conda install or include install script
 [ ] Docker
+[ ] If UMI is used, don't de-duplicate

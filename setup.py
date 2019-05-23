@@ -90,7 +90,7 @@ setup(
     license = 'GPL-3.0',
     zip_safe = False,
     install_requires = [
-        'xpresstools',
+        'xpressplot',
         'multiqc',
         'numpydoc'
 

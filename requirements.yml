@@ -31,7 +31,7 @@ dependencies:
 - pip
 - pip:
   - git-lfs
-  - xpresstools
+  - xpressplot
   - multiqc
   - numpydoc
 prefix: .miniconda3/envs/test
