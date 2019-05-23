@@ -86,6 +86,7 @@ script:
   - coverage run tests/test_analysis.py
   #- mkdir riboprof_out
   #- coverage run tests/test_pipelines.py
+  - bash <(curl -s https://codecov.io/bash) -cF python
 
 after_success:
   - codecov
