@@ -23,7 +23,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 import sys
 import pandas as pd
-from xpresstools import batch_normalize, rpm, tpm, r_fpkm, log_scale
+from xpresstools import batch_normalize, rpm, tpm, r_fpkm
 
 """Run normalization of count dataframe"""
 def run_normalization(
