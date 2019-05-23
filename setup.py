@@ -26,7 +26,7 @@ from setuptools.command.install import install
 import re
 import os
 import sys
-import subprocess
+import subprocess 
 
 """Test system for cufflinks compatibility"""
 __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
