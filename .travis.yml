@@ -6,36 +6,36 @@ python:
   - 3.6
   - 3.7
 dist: xenial
-env:
-  - OS="linux"
+#env:
+#  - OS="linux"
 
 # Set macos environments
-matrix:
-  include:
-    - os: osx
-      language: shell
-      env:
-        - PYTHON_VERSION=3.7
-        - TRAVIS_PYTHON_VERSION=3.7
-        - OS="macos"
-    - os: osx
-      language: shell
-      env:
-        - PYTHON_VERSION=3.6
-        - TRAVIS_PYTHON_VERSION=3.6
-        - OS="macos"
-    - os: osx
-      language: shell
-      env:
-        - PYTHON_VERSION=3.5
-        - TRAVIS_PYTHON_VERSION=3.5
-        - OS="macos"
-    - os: osx
-      language: shell
-      env:
-        - PYTHON_VERSION=2.7
-        - TRAVIS_PYTHON_VERSION=2.7
-        - OS="macos"
+#matrix:
+#  include:
+#    - os: osx
+#      language: shell
+#      env:
+#        - PYTHON_VERSION=3.7
+#        - TRAVIS_PYTHON_VERSION=3.7
+#        - OS="macos"
+#    - os: osx
+#      language: shell
+#      env:
+#        - PYTHON_VERSION=3.6
+#        - TRAVIS_PYTHON_VERSION=3.6
+#        - OS="macos"
+#    - os: osx
+#      language: shell
+#      env:
+#        - PYTHON_VERSION=3.5
+#        - TRAVIS_PYTHON_VERSION=3.5
+#        - OS="macos"
+#    - os: osx
+#      language: shell
+#      env:
+#        - PYTHON_VERSION=2.7
+#        - TRAVIS_PYTHON_VERSION=2.7
+#        - OS="macos"
 
 #Install Conda
 before_install:
