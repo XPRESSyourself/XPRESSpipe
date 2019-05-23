@@ -47,7 +47,6 @@ gtf_protein = protein_gtf(gtf_long)
 assert gtf_protein.iloc[:,:5].equals(gtf_protein_truth), 'protein_gtf() failed'
 
 # Run whole gambit together
-print('//////////////////////////////////////')
 
 from xpresspipe.gtfModify import edit_gtf
 gtf_edit = edit_gtf(
