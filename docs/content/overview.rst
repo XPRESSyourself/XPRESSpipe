@@ -23,7 +23,44 @@ Ribosome Profiling
    :align: center
 
 ===========================
-Batch Effect Normalization
+Software
 ===========================
-| **Batch Effect**: When using larger RNAseq libraries where multiple people prepared sequence libraries or where libraries were prepared on different days, batch effect normalization must be performed to remove these effects on sequence counts and make libraries that are comparable to one another. This step can be performed using the :data:`xpresspipe batchNormalize` sub-module.
-| **Sample Variability**: Other sample inherent biases, such as variable total read counts per sample on the same sequencing chip, should be normalized using the :data:`xpresspipe normalizeMatrix` sub-module.
+| XPRESSpipe aims to use the most up-to-date iterations of a software type required for high-throughput genomics processing and analysis. In order to design XPRESSpipe, we referred to a variety of benchmarking studies comparing the software we chose with others to verify that performance and speed would be optimal. Below is a rationale for each package chosen. As software continues to improve and benchmarking studies are published, XPRESSpipe will also be updated to reflect these improvements.
+
+| `fastp <https://github.com/OpenGene/fastp>`_ -- Read pre-processing
+
+| `STAR <https://github.com/alexdobin/STAR>`_ -- Masking and Alignment
+
+| `samtools <https://github.com/samtools/samtools>`_/`bedtools <https://github.com/arq5x/bedtools2>`_/`deepTools <https://github.com/deeptools/deepTools>`_ -- Alignment file handling
+
+| `Cufflinks <https://github.com/cole-trapnell-lab/cufflinks>`_ -- Read quantification (Recommended)
+| Using v2.1.1 as v2.2.1 suffers from a persistent Seg Fault 11 error on MacOS. No significant changes occurred between these versions influencing performance of Cufflinks quantification
+
+| `HTSeq <https://github.com/simon-anders/htseq>`_ -- Read quantification
+
+| `dupRadar <https://bioconductor.org/packages/release/bioc/html/dupRadar.html>`_ -- Library complexity
+
+| `MultiQC <https://github.com/ewels/MultiQC>`_ -- Summary reports
+
+
+
+
+
+
+=======================
+Methodology
+=======================
+
+| Additionally, we seek to provide the best methodology for high-throughput sequencing processing, and explain key components below.
+
+| GTF mods
+
+| Dedup
+
+
+| Metagene
+
+
+| Periodicity
+
+| Read distribution
