@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Ribosome Profiling Pipeline &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
+  <title>Ribosome Profiling Pipeline &mdash; XPRESSpipe 0.1.3-beta documentation</title>
   
 
   
@@ -26,6 +26,8 @@
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,8 +39,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Read Pre-Processing" href="trim.html" />
-    <link rel="prev" title="PE RNAseq Pipeline" href="peRNAseq.html" /> 
+    <link rel="next" title="FAQs" href="faqs.html" />
+    <link rel="prev" title="Paired-End RNA-seq Pipeline" href="peRNAseq.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -90,19 +92,24 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference-building.html">Curating References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">SE RNAseq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">PE RNAseq Pipeline</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="count.html">Count</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quality.html">Quality Control/Meta-analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ribosome Profiling Pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
             
@@ -169,6 +176,75 @@
             
   <div class="section" id="ribosome-profiling-pipeline">
 <h1>Ribosome Profiling Pipeline<a class="headerlink" href="#ribosome-profiling-pipeline" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the appropriate chapter.</div>
+</div>
+<div class="line-block">
+<div class="line">Steps:</div>
+</div>
+<table class="colwidths-given docutils align-center">
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">run_trim()</span></code></p></td>
+<td><p>Trims reads of adaptors, low-quality base calls, and reads that are too short</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">run_seRNAseq()</span></code></p></td>
+<td><p>Aligns each samples reads using a two-pass splice-aware alignment; formats output files for downstream use</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">create_bed()</span></code> – optional</p></td>
+<td><p>Outputs bed-formatted file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">create_bigwig()</span></code> – optional</p></td>
+<td><p>Outputs bigwig-formatted file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">count_reads()</span></code></p></td>
+<td><p>Quantitates aligned reads per each sample</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">collect_counts()</span></code></p></td>
+<td><p>Creates a table of counts for each sample</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">run_normalization()</span></code></p></td>
+<td><p>Normalizes count table based on user-defined input</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">make_readDistributions()</span></code></p></td>
+<td><p>Runs fastqc on each sample and generates a summary for read distributions of each sample</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">get_summary()</span></code></p></td>
+<td><p>Runs multiqc to generate summary reports for steps in the pipeline</p></td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line">Run the following for more details:</div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe riboprof --help
+</pre></div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line"><strong>Example 1 – Run pipeline on ribosome profiling sample files</strong></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe riboprof \
+              -i riboprof_test \
+              -o ribopipe_out \
+              -r se_reference \
+              --gtf se_reference/transcript_longestTranscript_codingOnly_truncated.gtf \
+              -e riboprof_test \
+              -a CTGTAGGCACCATCAAT \
+              --method RPKM \
+              --sjdbOverhang 49
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -179,10 +255,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="trim.html" class="btn btn-neutral float-right" title="Read Pre-Processing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="faqs.html" class="btn btn-neutral float-right" title="FAQs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="peRNAseq.html" class="btn btn-neutral float-left" title="PE RNAseq Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="peRNAseq.html" class="btn btn-neutral float-left" title="Paired-End RNA-seq Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

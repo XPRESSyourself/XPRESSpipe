@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Overview &mdash; XPRESSpipe 0.0.1-alpha documentation</title>
+  <title>Overview &mdash; XPRESSpipe 0.1.3-beta documentation</title>
   
 
   
@@ -26,6 +26,8 @@
         <script type="text/javascript" src="../_static/jquery.js"></script>
         <script type="text/javascript" src="../_static/underscore.js"></script>
         <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -37,7 +39,7 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="next" title="Beginners" href="beginner.html" />
     <link rel="prev" title="XPRESSpipe" href="../index.html" /> 
 </head>
 
@@ -92,22 +94,25 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#se-and-pe-rnaseq">SE and PE RNAseq</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ribosome-profiling">Ribosome Profiling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#batch-effect-normalization">Batch Effect Normalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#software">Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#methodology">Methodology</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference-building.html">Curating References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">SE RNAseq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">PE RNAseq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="count.html">Count</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quality.html">Quality Control/Meta-analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
             
@@ -196,11 +201,65 @@
 </div>
 <a class="reference internal image-reference" href="../_images/riboseq_overview.png"><img alt="../_images/riboseq_overview.png" class="align-center" src="../_images/riboseq_overview.png" style="width: 600px;" /></a>
 </div>
-<div class="section" id="batch-effect-normalization">
-<h2>Batch Effect Normalization<a class="headerlink" href="#batch-effect-normalization" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="software">
+<h2>Software<a class="headerlink" href="#software" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line"><strong>Batch Effect</strong>: When using larger RNAseq libraries where multiple people prepared sequence libraries or where libraries were prepared on different days, batch effect normalization must be performed to remove these effects on sequence counts and make libraries that are comparable to one another. This step can be performed using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">batchNormalize</span></code> sub-module.</div>
-<div class="line"><strong>Sample Variability</strong>: Other sample inherent biases, such as variable total read counts per sample on the same sequencing chip, should be normalized using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">normalizeMatrix</span></code> sub-module.</div>
+<div class="line">XPRESSpipe aims to use the most up-to-date iterations of a software type required for high-throughput genomics processing and analysis. In order to design XPRESSpipe, we referred to a variety of benchmarking studies comparing the software we chose with others to verify that performance and speed would be optimal. Below is a rationale for each package chosen. As software continues to improve and benchmarking studies are published, XPRESSpipe will also be updated to reflect these improvements.</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/OpenGene/fastp">fastp</a> – Read pre-processing</div>
+<div class="line">While external benchmarking has not been performed to our knowledge in recent years on read pre-processing tools, we chose to use fastp as it is fast, and (at least from self-reports) has reliable output. We also favored fastp as it is able to handle more recent trends in RNA-seq, such as trimming of <a class="reference external" href="https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-018-4933-1">unique molecular identifiers (UMIs)</a>.</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/alexdobin/STAR">STAR</a> – Masking and Alignment</div>
+<div class="line">A recent <a class="reference external" href="https://www.nature.com/articles/nmeth.4106">benchmarking paper</a> showed that STAR outperformed other comparable tools in speed and performance, increasing the number of correctly aligned reads, while reducing the number of falsely called reads as is the case with several other packages. Additionally, in the XPRESS pipeline, we have included an option to perform a preliminary masking step, where one can remove sequences that often confound mRNA expression levels (i.e. rRNAs, tRNAs).</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/samtools/samtools">samtools</a>/<a class="reference external" href="https://github.com/arq5x/bedtools2">bedtools</a>/<a class="reference external" href="https://github.com/deeptools/deepTools">deepTools</a> – Alignment file handling</div>
+<div class="line">These tools handle the alignment file processing before quantification to idenify PCR duplicates, remove non-uniquely aligned reads, and so on.</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/cole-trapnell-lab/cufflinks">Cufflinks</a> – Read quantification (Recommended)</div>
+<div class="line">A recent <a class="reference external" href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0734-x">benchmarking paper</a> showed evidence that Cufflinks using default parameters performed the best compared to other read quantification tools.</div>
+<div class="line">Using v2.1.1 as v2.2.1 suffers from a persistent Seg Fault 11 error on MacOS. No significant changes occurred between these versions influencing performance of Cufflinks quantification.</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/simon-anders/htseq">HTSeq</a> – Read quantification</div>
+<div class="line">While not performing optimally compared to other tools, HTSeq has been included for archival purposes as the current <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> pipeline uses HTSeq</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://bioconductor.org/packages/release/bioc/html/dupRadar.html">dupRadar</a> – Library complexity</div>
+<div class="line">dupRadar is a stable, easy to use tool for estimating library size complexity and doesn’t suffer from systematic software issues like other tools that contain a similar module</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="https://github.com/ewels/MultiQC">MultiQC</a> – Summary reports</div>
+<div class="line">MultiQC gathers log output from fastp, STAR, and Cufflinks to provide the user with a easy to view summary of their processed data at each step</div>
+</div>
+</div>
+<div class="section" id="methodology">
+<h2>Methodology<a class="headerlink" href="#methodology" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Additionally, we seek to provide the best methodology for high-throughput sequencing processing, and explain key components below.</div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Transcriptomic Reference Files</strong></div>
+<div class="line">Read quantification often requires a transcriptome reference file in order to know what alignment coordinates map to what genes. We introduce a suite of GTF modification tools included in XPRESSpipe that we will briefly discuss:</div>
+<div class="line">Isoforms: GTF files contain records for every isoform of a gene. However, since these isoforms all contain overlapping regions, many quantification tools count a read mapping to one of these regions as a multi-mapper and either penalizes it or discards it completely. A common way to handle this is by taking only the longest transcript for each gene during quantification. This can be performed with <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-l</span></code>.</div>
+<div class="line">Protein Coding: When calculating mRNA expression levels, sample normalization to reduce technical bias from RNA-seq platforms is important. However, highly-abundant rRNAs can confound these metrics. Therefore, we provide an option to create a GTF file with only protein-coding annotated genes as input for quantification using <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-p</span></code>.</div>
+<div class="line">Ribosome Profiling Bias: During translation, there are three steps: 1) Initiation, 2) Elongation, and 3) Termination. There is usually a pause during Initiation and Termination, which will present itself as systematic spikes on the 5’ and 3’ ends of each transcript for ribosome profiling reads. A way to correct for the kinetics of initiation and termination and measure translational capacity itself is to <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/28579404">avoid mapping reads to the first 15 codons and last 5 codons of a transcript</a>. <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-t</span></code> handles this by searching the exon space of each transcript and pruning the given amounts off of each so that these regions are considered non-coding space.</div>
+</div>
+<div class="line-block">
+<div class="line"><strong>PCR De-Duplication</strong></div>
+<div class="line">During sequence library creation, a PCR amplification step is common in order to produce enough sequence material, but often, different reads are amplified differentially.  When UMIs are not used, these duplication events can artificially model higher expression of a transcript that had favorable amplification conditions. We therefore include a PCR de-duplication step for experiments not using UMIs and the resulting reads then continue through the pipeline.</div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Metagene Analysis</strong></div>
+</div>
+<div class="line-block">
+<div class="line">Periodicity</div>
+</div>
+<div class="line-block">
+<div class="line">Read distribution</div>
 </div>
 </div>
 </div>
@@ -213,7 +272,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="beginner.html" class="btn btn-neutral float-right" title="Beginners" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../index.html" class="btn btn-neutral float-left" title="XPRESSpipe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

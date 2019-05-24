@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Beginners &mdash; XPRESSpipe 0.1.3-beta documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/xpressyourself.png"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> XPRESSpipe
+          
+
+          
+            
+            <img src="../_static/xpressyourself.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">XPRESSpipe</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Beginners</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#first-step">First Step</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-xpresspipe">Install XPRESSpipe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-reference-files">Generate Reference Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#process-raw-sequencing-files">Process Raw Sequencing Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#explore-the-data">Explore the Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sequencing-metrics">Sequencing Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#library-complexity">Library Complexity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metagene-analysis">Metagene Analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#periodicity-ribosome-profiling">Periodicity (Ribosome Profiling)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#count-data-and-downstream-analysis">Count Data and Downstream Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#supercomputing">Supercomputing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-xpresspipe">Load XPRESSpipe</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-data">Load Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#curate-reference">Curate Reference</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#process-data">Process Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retrieve-data">Retrieve Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-building.html">Curating References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">XPRESSpipe</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Beginners</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/content/beginner.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="beginners">
+<h1>Beginners<a class="headerlink" href="#beginners" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="first-step">
+<h2>First Step<a class="headerlink" href="#first-step" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">If this is your first time doing any programming, congratulations! You are embarking upon a very rewarding path. As with learning any new natural language, there is a learning curve associated with learning a computer language. While XPRESSpipe is aimed at reducing majority of the overhead associated with processing this data, using this software will still require some effort, just as would learning any new language or laboratory technique.</div>
+</div>
+<div class="line-block">
+<div class="line">XPRESSpipe is used through something called the <a class="reference external" href="https://en.wikipedia.org/wiki/Command-line_interface">command line interface</a> (or CLI), or what some people refer to as <a class="reference external" href="https://www.youtube.com/watch?v=kqUR3KtWbTk">“The Matrix”</a>. This may seem daunting, but luckily, several free online courses are available to quickly catch you up to speed on some of the basics that will be required to use this software. We recommend Codecademy’s CLI course, which you can find <a class="reference external" href="https://www.codecademy.com/learn/learn-the-command-line">here</a> and should take only a couple of hours (Codecademy estimates ~10 hours, but you probably don’t need to finish the course to use XPRESSpipe. The purpose of this is to help you become more comfortable with the command line).</div>
+</div>
+<div class="line-block">
+<div class="line">Once, you’re ready to jump into the command line, we can get rolling! For the steps below, we’re going to assume we are on an Mac operating system and provide examples under this pretext, but this software is compatible with any Linux-like operating system (sorry Windows users).</div>
+</div>
+</div>
+<div class="section" id="install-xpresspipe">
+<h2>Install XPRESSpipe<a class="headerlink" href="#install-xpresspipe" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">- To keep this as simple as possible, we are going to use a program called <a class="reference external" href="https://www.docker.com/">Docker</a>. Docker’s purpose is to, as it’s referred to in the computer world, “containerize” a program and all other requirements of the software so that it is fully self-contained. This is great because, say in 5 years you wanted to use the same version of XPRESSpipe and the dependencies used at the time of use for a publication, you could access and run the same Docker “image” version and reproduce the output! Let’s download Docker now. This will likely require you to create a Docker account.</div>
+<div class="line">1. Click <a class="reference external" href="https://download.docker.com/mac/stable/Docker.dmg">here</a> to download Docker (the link is for a Mac, but a Linux version is also available)</div>
+<div class="line">2. Open and install the file that was downloaded from the link following the relevant instructions.</div>
+</div>
+<div class="line-block">
+<div class="line">- Now its time to enter the command line.</div>
+<div class="line">1. Click on the Finder icon the top right side of the screen on your Mac (or wherever else it might be located)</div>
+<div class="line">2. Type “Terminal” into the search bar and click on the app icon</div>
+</div>
+<div class="line-block">
+<div class="line">- Great! Now we are in the command line interface. As a review, anything followed by a “$” in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, space and characters must be typed exactly and commands are case-sensitive. Let’s get the latest version of XPRESSpipe by executing the lines of code in the code block below.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ docker image pull jordanberg/xpresspipe:latest
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">- Let’s test that this worked by executing the following:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ docker run jordanberg/xpresspipe --help
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">- If a help menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!</div>
+</div>
+</div>
+<div class="section" id="generate-reference-files">
+<h2>Generate Reference Files<a class="headerlink" href="#generate-reference-files" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">- Before we can actually use XPRESSpipe to process our raw RNA-seq data, we need to create a reference directory. Directory is just programmer lingo for a folder. In this example, we will be working with human-derived RNA-seq data, so let’s perform the following in the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~/Desktop
+$ mkdir reference_folder
+$ mkdir reference_folder/fasta_files
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">1. The first command helped us navigate to the Desktop. The “~” icon is a shortcut for the User directory, and every directory needs to be separated by a “/”</div>
+<div class="line">2. The second command created a new folder in the Desktop directory called <code class="xref py py-data docutils literal notranslate"><span class="pre">reference_folder</span></code></div>
+<div class="line">3. The third command created a new folder in the reference directory for intermediate reference files</div>
+</div>
+<div class="line-block">
+<div class="line">- Now let’s get the reference files. We’re going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are a bit long, I used the “” character to indicate I am continuing the command in the next line. You do not need this in executing the command, they just help make the code a little more readable.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> reference_folder/
+$ curl ftp://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz -o transcripts.gtf.gz
+$ gzip -d *.gz
+$ <span class="nb">cd</span> fasta_files/
+$ <span class="k">for</span> i in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">6</span> <span class="m">7</span> <span class="m">8</span> <span class="m">9</span> <span class="m">10</span> <span class="m">11</span> <span class="m">12</span> <span class="m">13</span> <span class="m">14</span> <span class="m">15</span> <span class="m">16</span> <span class="m">17</span> <span class="m">18</span> <span class="m">19</span> <span class="m">20</span> <span class="m">21</span> <span class="m">22</span> X Y MT<span class="p">;</span> <span class="se">\</span>
+    <span class="k">do</span> curl -O ftp://ftp.ensembl.org/pub/release-95/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.<span class="si">${</span><span class="nv">i</span><span class="si">}</span>.fa.gz<span class="p">;</span> <span class="se">\</span>
+    <span class="k">done</span>
+$ gzip -d *.gz
+$ <span class="nb">cd</span> ../
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">1. We navigated into the reference folder, downloaded a GTF reference file and unzipped it, then navigated to the <code class="xref py py-data docutils literal notranslate"><span class="pre">fasta_file</span></code> directory to download the raw reference data and unzipped it. Finally, we returned to the main reference directory.</div>
+<div class="line">2. If this didn’t work, we can navigate to <a class="reference external" href="https://www.ensembl.org/">Ensembl</a> to get the relevant data. We need to get the <a class="reference external" href="ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.gtf.gz">GTF file</a> and <a class="reference external" href="ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/">each chromosome sequence file</a>. You can follow the links to download these files and then move them into your reference folder. The link to the chromosome sequence files actually contains more files than we need. We just need the files that start with <code class="xref py py-data docutils literal notranslate"><span class="pre">Homo_sapiens.GRCh38.dna.chromosome</span></code>. If these files were zipped with a <code class="xref py py-data docutils literal notranslate"><span class="pre">zip</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">gz</span></code> extension, double click each file to unzip them.</div>
+</div>
+<div class="line-block">
+<div class="line">- Now we need to curate these references files into something the sequencing alignment software can use. Since we are using ribosome profiling data, we want a reference that will allow us to <a class="reference external" href="https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1">avoid mapping to the 5’ and 3’ ends of genes</a>. We also don’t want to align to anything but protein coding genes. Finally, we want to quantify to the longest transcript. This last bit just helps the software avoid confusion when a gene has multiple splice variants to choose from. Since this is short read sequencing, we also want to factor this into the curation of the reference (see the <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> argument below).</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ docker run jordanberg/xpresspipe curateReference --output ./ <span class="se">\</span>
+                                                    --fasta fasta_files/ <span class="se">\</span>
+                                                    --gtf ./transcripts.gtf <span class="se">\</span>
+                                                    --longest_transcript <span class="se">\</span>
+                                                    --protein_coding <span class="se">\</span>
+                                                    --truncate <span class="se">\</span>
+                                                    --sjdbOverhang <span class="m">49</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">- If running regular single-end sequencing, you will want to leave out the <code class="xref py py-data docutils literal notranslate"><span class="pre">--truncate</span></code> argument and may want to leave out the <code class="xref py py-data docutils literal notranslate"><span class="pre">--protein_coding</span></code> argument if you want to quantify miRNA, etc.</div>
+<div class="line">- If running regular paired-end sequencing, you will want to change the <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> argument to be the length of one of the paired-end reads - 1, so if we ran 2x100bp sequencing, we would specify <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">99</span></code></div>
+<div class="line">- This may take awhile, and as we will discuss later, you may want to run these steps on a supercomputer, but this will serve as a preliminary guide for now.</div>
+</div>
+</div>
+<div class="section" id="process-raw-sequencing-files">
+<h2>Process Raw Sequencing Files<a class="headerlink" href="#process-raw-sequencing-files" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">- Now let’s get our raw data. Let’s follow the following instructions:</div>
+<div class="line">1. Make a new folder, something called <code class="xref py py-data docutils literal notranslate"><span class="pre">raw_data</span></code> or whatever you like and place your data there.</div>
+<div class="line">2. Make sure the files follow proper naming conventions (see naming conventions <span class="xref std std-ref">here</span>)</div>
+<div class="line">3. Now let’s process the data</div>
+<div class="line">4. Let’s also create a folder called something like <code class="xref py py-data docutils literal notranslate"><span class="pre">output</span></code></div>
+<div class="line">5. Also, make sure you have the 3’ adaptor sequence handy used when generating your sequencing library</div>
+<div class="line">6. We’ll feed the program the new GTF file that contains only longest transcript, protein coding, truncated references generating in the reference curation step</div>
+<div class="line">7. We’ll give the experiment a name and also specify what <a class="reference external" href="https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/">method of sample normalization</a> we want performed on the count data</div>
+<div class="line">8. We also need to specify the <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> amount we fed into the reference curation step, so in this case we will use <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">49</span></code></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ docker run jordanberg/xpresspipe riboprof --input raw_data/ <span class="se">\</span>
+                                            --output output/ <span class="se">\</span>
+                                            --reference reference_folder/ <span class="se">\</span>
+                                            --gtf reference_folder/transcripts_longestTranscript_proteinCoding_truncated.gtf
+                                            --experiment riboprof_test
+                                            --adaptor CTGTAGGCACCATCAAT
+                                            --method RPKM
+                                            --sjdbOverhang <span class="m">49</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">- If you are running a lot of files, especially for human samples, this may take a lot of time. We recommend running this on some kind of server. A situation like yeast with few samples may be feasible to run on a personal computer, but will likely also take some time</div>
+</div>
+</div>
+<div class="section" id="explore-the-data">
+<h2>Explore the Data<a class="headerlink" href="#explore-the-data" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">- Once the data is finished processing, we can start exploring the output.</div>
+</div>
+<div class="section" id="sequencing-metrics">
+<h3>Sequencing Metrics<a class="headerlink" href="#sequencing-metrics" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="library-complexity">
+<h3>Library Complexity<a class="headerlink" href="#library-complexity" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="metagene-analysis">
+<h3>Metagene Analysis<a class="headerlink" href="#metagene-analysis" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="periodicity-ribosome-profiling">
+<h3>Periodicity (Ribosome Profiling)<a class="headerlink" href="#periodicity-ribosome-profiling" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="count-data-and-downstream-analysis">
+<h3>Count Data and Downstream Analysis<a class="headerlink" href="#count-data-and-downstream-analysis" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="supercomputing">
+<h2>Supercomputing<a class="headerlink" href="#supercomputing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getting-started">
+<h3>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="load-xpresspipe">
+<h3>Load XPRESSpipe<a class="headerlink" href="#load-xpresspipe" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="load-data">
+<h3>Load Data<a class="headerlink" href="#load-data" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="curate-reference">
+<h3>Curate Reference<a class="headerlink" href="#curate-reference" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="process-data">
+<h3>Process Data<a class="headerlink" href="#process-data" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="retrieve-data">
+<h3>Retrieve Data<a class="headerlink" href="#retrieve-data" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="overview.html" class="btn btn-neutral float-left" title="Overview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jordan A. Berg
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

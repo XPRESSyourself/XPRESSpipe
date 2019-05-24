@@ -27,9 +27,9 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-i \<str\>, --input \<str\>`
+   * - :data:`-i \<path\>, --input \<path\>`
      - Path to input directory -- if paired-end, file names should be exactly the same except for :data:`r1/r2.fastq` or similar suffix
-   * - :data:`-o \<str\>, --output \<str\>`
+   * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
 
 .. list-table::
@@ -38,13 +38,13 @@ Arguments
 
    * - Optional Arguments
      - Description
-   * - :data:`-a \<list\> [\<list\> ...]`, :data:`--adaptor \<list\> [\<list\> ...]`
+   * - :data:`-a \<adaptor1 ...\> [\<adaptor1 ...\> ...]`, :data:`--adaptor \<adaptor1 ...\> [\<adaptor1 ...\> ...]`
      - Specify adaptor(s) in list of strings -- if more than one is provided, it will be assumed reads are paired-end -- if :data:`None` are provided, software will attempt to auto-detect adaptors -- if "POLYX" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide :data:`None` twice
-   * - :data:`-q \<int\>, --quality \<int\>`
+   * - :data:`-q \<PHRED_value\>, --quality \<PHRED_value\>`
      - PHRED read quality threshold (default: :data:`28`)
-   * - :data:`--min_length \<int\>`
+   * - :data:`--min_length \<length_value\>`
      - Minimum read length threshold to keep for reads (default: :data:`18`)
-   * - :data:`-m <int>, --max_processors <int>`
+   * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: Max)
 
 --------------
