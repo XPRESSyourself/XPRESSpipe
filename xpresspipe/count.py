@@ -30,9 +30,7 @@ from xpressplot import count_table
 from .utils import get_files, get_directories, add_directory
 from .parallel import parallelize
 
-__path__ = str(os.path.dirname(os.path.realpath(__file__)))[:-10]
-print(__path__)
-os.environ["PATH"] += os.pathsep + str(__path__) + 'cufflinks'
+__path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
 
 """Parse cufflinks table for FPKM info"""
 def parse_table(
@@ -96,7 +94,7 @@ def count_file_cufflinks(
 
     # Count
     os.system(
-        'cufflinks'
+        str(__path__) + 'cufflinks'
         + ' ' + str(args_dict['input']) + str(file)
         + ' --output-dir ' + str(args_dict['counts']) + str(file[:-4]) + '_cufflinks_counts'
         + ' --GTF ' + str(args_dict['gtf'])

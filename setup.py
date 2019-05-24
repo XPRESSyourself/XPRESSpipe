@@ -28,20 +28,10 @@ import os
 import sys
 import subprocess
 
+__path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
+
 """Test system for cufflinks compatibility"""
-
-def get_path():
-
-    arguments = sys.argv
-
-    if arguments.count('--prefix') > 1 or arguments.count('--install_dir') > 1:
-        raise Exception('Argument inputs are incorrect. You provided too many instances of either --prefix or --install_dir')
-
-    for x in range(len(arguments)):
-        if arguments[x] == '--prefix' or arguments[x] == '--install_dir':
-            return arguments[x + 1]
-
-def test_system(__path__):
+def test_system():
 
     if sys.platform == 'darwin':
         subprocess.call(
@@ -50,6 +40,7 @@ def test_system(__path__):
             + 'tar -zxvf ' + str(__path__) + 'cufflinks.tar.gz; '
             + 'rm ' + str(__path__) + 'cufflinks.tar.gz; '
             + 'mv ' + str(__path__) + 'cufflinks-2.1.1.OSX_x86_64 ' + str(__path__) + 'cufflinks; '
+            + 'mv ' + str(__path__) + 'cufflinks/cufflinks ' + str(__path__) + 'xpresspipe; '
             + 'echo "Cufflinks installed"; '),
             shell = True)
 
@@ -60,6 +51,7 @@ def test_system(__path__):
             + 'tar -zxvf ' + str(__path__) + 'cufflinks.tar.gz; '
             + 'rm ' + str(__path__) + 'cufflinks.tar.gz; '
             + 'mv ' + str(__path__) + 'cufflinks-2.1.1.Linux_x86_64 ' + str(__path__) + 'cufflinks; '
+            + 'mv ' + str(__path__) + 'cufflinks/cufflinks ' + str(__path__) + 'xpresspipe; '
             + 'echo "Cufflinks installed"; '),
             shell = True)
 
@@ -70,17 +62,14 @@ def test_system(__path__):
 class PostDevelopCommand(develop):
     # Post-installation for python setup.py develop
     def run(self):
-        __path__ = get_path()
+        test_system()
         develop.run(self)
-        __path__ = get_path()
-        test_system(__path__)
 
 class PostInstallCommand(install):
     # Post-installation for python setup.py install
     def run(self):
+        test_system()
         install.run(self)
-        __path__ = get_path()
-        test_system(__path__)
 
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
