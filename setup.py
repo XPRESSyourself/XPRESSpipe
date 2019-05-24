@@ -64,6 +64,10 @@ def test_system():
     # Install Dependencies
     subprocess.call(
         ('echo "Installing conda dependencies..."; '
+        + 'conda config --add channels defaults; '
+        + 'conda config --add channels r; '
+        + 'conda config --add channels bioconda; '
+        + 'conda config --add channels conda-forge; '
         + 'conda install -y fastp STAR samtools bedtools deeptools fastqc htseq pandas numpy biopython scipy r conda-forge::ncurses libiconv bioconductor-rsubread bioconductor-dupradar matplotlib=2.2.3; '
         + 'echo "Conda dependencies installed"; '),
         shell = True)
