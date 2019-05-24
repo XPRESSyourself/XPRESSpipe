@@ -62,19 +62,20 @@ def test_system():
 class PostDevelopCommand(develop):
     # Post-installation for python setup.py develop
     def run(self):
-        test_system()
+
         develop.run(self)
 
 class PostInstallCommand(install):
     # Post-installation for python setup.py install
     def run(self):
-        test_system()
         install.run(self)
 
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         fd.read(), re.MULTILINE).group(1)
+
+test_system()
 
 """Setup arguments"""
 setup(
