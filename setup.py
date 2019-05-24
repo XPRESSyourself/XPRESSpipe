@@ -26,12 +26,22 @@ from setuptools.command.install import install
 import re
 import os
 import sys
-import subprocess 
+import subprocess
 
 """Test system for cufflinks compatibility"""
-__path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
 
-def test_system():
+def get_path():
+
+    arguments = sys.argv
+
+    if arguments.count('--prefix') > 1 or arguments.count('--install_dir') > 1:
+        raise Exception('Argument inputs are incorrect. You provided too many instances of either --prefix or --install_dir')
+
+    for x in range(len(arguments)):
+        if arguments[x] == '--prefix' or arguments[x] == '--install_dir':
+            return arguments[x + 1]
+
+def test_system(__path__):
 
     if sys.platform == 'darwin':
         subprocess.call(
@@ -60,14 +70,17 @@ def test_system():
 class PostDevelopCommand(develop):
     # Post-installation for python setup.py develop
     def run(self):
+        __path__ = get_path()
         develop.run(self)
-        test_system()
+        __path__ = get_path()
+        test_system(__path__)
 
 class PostInstallCommand(install):
     # Post-installation for python setup.py install
     def run(self):
         install.run(self)
-        test_system()
+        __path__ = get_path()
+        test_system(__path__)
 
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
