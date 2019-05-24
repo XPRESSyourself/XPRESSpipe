@@ -33,36 +33,60 @@ __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
 """Test system for cufflinks compatibility"""
 def test_system():
 
+    # Get python version
+    python =  sys.version_info[0]
+
     if sys.platform == 'darwin':
-        subprocess.call(
-            ('echo "Installing cufflinks binary for macOS..."; '
-            + 'curl http://cole-trapnell-lab.github.io/cufflinks/assets/downloads/cufflinks-2.1.1.OSX_x86_64.tar.gz -o ' + str(__path__) + 'cufflinks.tar.gz; '
-            + 'tar -zxvf ' + str(__path__) + 'cufflinks.tar.gz; '
-            + 'rm ' + str(__path__) + 'cufflinks.tar.gz; '
-            + 'mv ' + str(__path__) + 'cufflinks-2.1.1.OSX_x86_64 ' + str(__path__) + 'cufflinks; '
-            + 'mv ' + str(__path__) + 'cufflinks/cufflinks ' + str(__path__) + 'xpresspipe; '
-            + 'echo "Cufflinks installed"; '),
-            shell = True)
+        system = 'MacOSX'
+        cufflinks = 'cufflinks-2.1.1.OSX_x86_64'
 
     elif sys.platform == 'linux':
-        subprocess.call(
-            ('echo "Installing cufflinks binary for Linux..."; '
-            + 'curl http://cole-trapnell-lab.github.io/cufflinks/assets/downloads/cufflinks-2.1.1.Linux_x86_64.tar.gz -o ' + str(__path__) + 'cufflinks.tar.gz; '
-            + 'tar -zxvf ' + str(__path__) + 'cufflinks.tar.gz; '
-            + 'rm ' + str(__path__) + 'cufflinks.tar.gz; '
-            + 'mv ' + str(__path__) + 'cufflinks-2.1.1.Linux_x86_64 ' + str(__path__) + 'cufflinks; '
-            + 'mv ' + str(__path__) + 'cufflinks/cufflinks ' + str(__path__) + 'xpresspipe; '
-            + 'echo "Cufflinks installed"; '),
-            shell = True)
+        system = 'Linux'
+        cufflinks = 'cufflinks-2.1.1.Linux_x86_64'
 
     else:
         raise Exception('Cannot recognize operating system')
+
+    # Install Conda
+    if 'conda' not in sys.version:
+        subprocess.call(
+            ('echo "Installing conda for ' + str(system) + '..."; '
+            + 'curl https://repo.anaconda.com/miniconda/Miniconda' + str(python) + '-latest-' + str(system) + '-x86_64.sh -o ~/miniconda.sh; '
+            + 'bash ~/miniconda.sh -b -p ~/miniconda; '
+            + 'conda config --set always_yes yes --set changeps1 no --set show_channel_urls true; '
+            + 'conda config --add channels defaults; '
+            + 'conda config --add channels r; '
+            + 'conda config --add channels bioconda; '
+            + 'conda config --add channels conda-forge; '
+            + 'echo "Conda installed"; '),
+            shell = True)
+
+    # Install Dependencies
+    subprocess.call(
+        ('echo "Installing conda dependencies..."; '
+        + 'conda config --add channels defaults; '
+        + 'conda config --add channels r; '
+        + 'conda config --add channels bioconda; '
+        + 'conda config --add channels conda-forge; '
+        + 'conda install -y fastp STAR samtools bedtools deeptools fastqc htseq pandas numpy biopython scipy r conda-forge::ncurses libiconv bioconductor-rsubread bioconductor-dupradar matplotlib=2.2.3; '
+        + 'echo "Conda dependencies installed"; '),
+        shell = True)
+
+    # Install Cufflinks
+    subprocess.call(
+        ('echo "Installing cufflinks binary for ' + str(system) + '..."; '
+        + 'curl http://cole-trapnell-lab.github.io/cufflinks/assets/downloads/' + str(cufflinks) + '.tar.gz -o ' + str(__path__) + 'cufflinks.tar.gz; '
+        + 'tar -zxvf ' + str(__path__) + 'cufflinks.tar.gz; '
+        + 'rm ' + str(__path__) + 'cufflinks.tar.gz; '
+        + 'mv ' + str(__path__) + str(cufflinks) + ' ' + str(__path__) + 'cufflinks; '
+        + 'mv ' + str(__path__) + 'cufflinks/cufflinks ' + str(__path__) + 'xpresspipe; '
+        + 'echo "Cufflinks installed"; '),
+        shell = True)
 
 """Define post-install classes"""
 class PostDevelopCommand(develop):
     # Post-installation for python setup.py develop
     def run(self):
-
         develop.run(self)
 
 class PostInstallCommand(install):
