@@ -260,7 +260,7 @@ def main(
             mod_workers = True)
         create_mask_reference(
             args_dict['output'],
-            args_dict['mask_fasta'],
+            args_dict['masked_index'],
             args_dict['log'],
             threads = args_dict['threads'])
 

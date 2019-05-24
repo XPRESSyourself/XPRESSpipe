@@ -1122,19 +1122,12 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
-    curate_reqs.add_argument(
-        '--mask_fasta',
+    curate_opts.add_argument(
+        '--masked_index',
         help = 'Path to directory containing masking fasta files (NOTE: Cannot be the same directory where genomic fasta files are located)',
         metavar = '<path>',
         type = str,
         required = True)
-    curate_reqs.add_argument(
-        '--masked_index',
-        help = 'Path to directory containing masking fasta files (NOTE: Cannot be the same directory where genomic fasta files are located) (default: None)',
-        metavar = '<path>',
-        type = str,
-        default = None,
-        required = False)
     curate_opts.add_argument(
         '-l', '--longest_transcript',
         help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
@@ -1297,7 +1290,7 @@ def get_arguments(
         type = str,
         required = True)
     mask_reqs.add_argument(
-        '--mask_fasta',
+        '--masked_index',
         help = 'Path to directory containing masking fasta files (NOTE: Cannot be the same directory where genomic fasta files are located)',
         metavar = '<path>',
         type = str,
