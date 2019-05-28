@@ -107,7 +107,7 @@ def main(
 
     elif args.cmd == 'count':
         print('Counting alignments...')
-
+        
         # Count reads for each alignment file
         args_dict = count_reads(args_dict)
 
@@ -480,7 +480,7 @@ def main(
         get_multiqc_summary(args_dict)
         msg_finish()
 
-    elif args.cmd == 'riboprof':
+    elif args.cmd == 'riboseq':
         args_dict['type'] = 'SE'
 
         # Trim

@@ -97,7 +97,7 @@ def count_file_cufflinks(
         str(__path__) + 'cufflinks'
         + ' ' + str(args_dict['input']) + str(file)
         + ' --output-dir ' + str(args_dict['counts']) + str(file[:-4]) + '_cufflinks_counts'
-        + ' --GTF ' + str(args_dict['gtf'])
+        + ' --GTF ' + str(args_dict['reference']) + 'transcripts.gtf'
         + ' --num-threads 1'
         + str(args_dict['log']))
 

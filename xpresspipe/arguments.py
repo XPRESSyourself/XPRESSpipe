@@ -55,7 +55,7 @@ description_table  =  """\
         |-----------------------|---------------------------------------------------------------------------------------|
         |    peRNAseq           |   Trim, align, count, and perform quality control on paired-end RNAseq raw data       |
         |-----------------------|---------------------------------------------------------------------------------------|
-        |    riboprof           |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
+        |    riboseq           |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
         |                       |   raw data                                                                            |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    trim               |   Trim RNAseq reads of adaptors and for quality                                       |
@@ -252,7 +252,7 @@ def get_arguments(
         required = True)
     se_reqs.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to GTF used for alignment quantification',
+        help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
         metavar = '</path/transcript.gtf>',
         type = str,
         required = True)
@@ -318,9 +318,9 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'cufflinks',
+        default = 'htseq',
         type = str,
         required = False)
     se_opts.add_argument(
@@ -394,7 +394,7 @@ def get_arguments(
         required = True)
     pe_reqs.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to GTF used for alignment quantification',
+        help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
         metavar = '</path/transcript.gtf>',
         type = str,
         required = True)
@@ -460,9 +460,9 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'cufflinks',
+        default = 'htseq',
         type = str,
         required = False)
     pe_opts.add_argument(
@@ -511,7 +511,7 @@ def get_arguments(
 
     """RIBOPROF SUBPARSER"""
     rp_parser = subparser.add_parser(
-        'riboprof',
+        'riboseq',
         description = 'Trim, align, count, and perform quality control on single-end Ribosome Profiling raw data',
         add_help = False)
     # Required arguments
@@ -536,7 +536,7 @@ def get_arguments(
         required = True)
     rp_reqs.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to GTF used for alignment quantification',
+        help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
         metavar = '</path/transcript.gtf>',
         type = str,
         required = True)
@@ -602,9 +602,9 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'cufflinks',
+        default = 'htseq',
         type = str,
         required = False)
     rp_opts.add_argument(
@@ -823,7 +823,7 @@ def get_arguments(
         required = True)
     count_reqs.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to GTF used for alignment quantification',
+        help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
         metavar = '</path/transcript.gtf>',
         type = str,
         required = True)
@@ -841,9 +841,9 @@ def get_arguments(
         required = False)
     count_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'cufflinks',
+        default = 'htseq',
         type = str,
         required = False)
     count_opts.add_argument(
