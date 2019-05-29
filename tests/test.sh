@@ -247,7 +247,7 @@ xpresspipe riboprof --help
 rm -r riboprof_out/
 mkdir riboprof_out
 
-xpresspipe riboprof -i riboprof_test -o riboprof_out -r se_reference -g se_reference/transcripts_LCT.gtf -e riboprof_test -a CTGTAGGCACCATCAAT --sjdbOverhang 49
+xpresspipe riboseq -i riboprof_test -o riboprof_out -r se_reference -g se_reference/transcripts_LCT.gtf -e riboprof_test -a CTGTAGGCACCATCAAT --sjdbOverhang 49
 
 ###########################
 #FINAL CLEANUP OF TEST DATA
