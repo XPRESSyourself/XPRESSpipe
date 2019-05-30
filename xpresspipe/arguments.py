@@ -302,8 +302,8 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     se_opts.add_argument(
-        '--count_duplicates',
-        help = 'Include flag to quantify reads without de-duplication',
+        '--deduplicate',
+        help = 'Include flag to quantify reads with de-duplication',
         action = 'store_true',
         required = False)
     se_opts.add_argument(
@@ -444,8 +444,8 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     pe_opts.add_argument(
-        '--count_duplicates',
-        help = 'Include flag to quantify reads without de-duplication',
+        '--deduplicate',
+        help = 'Include flag to quantify reads with de-duplication',
         action = 'store_true',
         required = False)
     pe_opts.add_argument(
@@ -586,8 +586,8 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     rp_opts.add_argument(
-        '--count_duplicates',
-        help = 'Include flag to quantify reads without de-duplication',
+        '--deduplicate',
+        help = 'Include flag to quantify reads with de-duplication',
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
@@ -847,9 +847,16 @@ def get_arguments(
         type = str,
         required = False)
     count_opts.add_argument(
-        '--count_duplicates',
-        help = 'Include flag to quantify reads without de-duplication',
+        '--deduplicate',
+        help = 'Include flag to quantify reads with de-duplication',
         action = 'store_true',
+        required = False)
+    count_opts.add_argument(
+        '--bam_suffix',
+        help = 'Change from default suffix of _Aligned.sort.bam',
+        metavar = '<suffix>',
+        default = '_Aligned.sort.bam',
+        type = str,
         required = False)
     count_opts.add_argument(
         '-m', '--max_processors',
@@ -940,7 +947,7 @@ def get_arguments(
     metagene_reqs = metagene_parser.add_argument_group('required arguments')
     metagene_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _dedupRemoved.bam)',
+        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _Aligned.sort.bam)',
         metavar = '<path>',
         type = str,
         required = True)
@@ -968,6 +975,14 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    metagene_opts.add_argument(
+        '--bam_suffix',
+        help = 'Change from default suffix of _Aligned.sort.bam',
+        metavar = '<suffix>',
+        default = '_Aligned.sort.bam',
+        type = str,
+        required = False)
+
 
     """READ DISTRIBUTION SUBPARSER"""
     distribution_parser = subparser.add_parser(
@@ -1010,7 +1025,7 @@ def get_arguments(
     period_reqs = period_parser.add_argument_group('required arguments')
     period_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _dedupRemoved.bam)',
+        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _Aligned.sort.bam)',
         metavar = '<path>',
         type = str,
         required = True)
@@ -1038,6 +1053,13 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    period_opts.add_argument(
+        '--bam_suffix',
+        help = 'Change from default suffix of _Aligned.sort.bam',
+        metavar = '<suffix>',
+        default = '_Aligned.sort.bam',
+        type = str,
+        required = False)
 
     """COMPLEXITY SUBPARSER"""
     complex_parser = subparser.add_parser(
@@ -1049,7 +1071,7 @@ def get_arguments(
     complex_reqs = complex_parser.add_argument_group('required arguments')
     complex_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _dedupRemoved.bam)',
+        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _dedupMarked.bam)',
         metavar = '<path>',
         type = str,
         required = True)
