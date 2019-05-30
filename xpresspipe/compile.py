@@ -29,7 +29,6 @@ from scipy.stats import gaussian_kde
 import matplotlib
 #matplotlib.use('agg') #remove need for -X server connect
 import matplotlib.pyplot as plt
-import seaborn as sns
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
 
 """IMPORT INTERNAL DEPENDENCIES"""
