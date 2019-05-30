@@ -104,7 +104,7 @@ def count_file_cufflinks(
 """Run count reads manager"""
 def count_reads(
     args_dict,
-    suffix='_dedupRemoved.bam'):
+    suffix='_Aligned.sort.bam'):
 
     # Add output directories
     args_dict = add_directory(
@@ -112,8 +112,11 @@ def count_reads(
         'output',
         'counts')
 
-    if 'count_duplicates' in args_dict and args_dict['count_duplicates'] == True:
-        suffix = '_Aligned.sort.bam'
+    if 'deduplicate' in args_dict and args_dict['deduplicate'] == True:
+        suffix = '_dedupRemoved.bam'
+
+    if 'bam_suffix' in args_dict:
+        suffix = args_dict['bam_suffix']
 
     # Get list of files to count based on acceptable file types
     files = get_files(

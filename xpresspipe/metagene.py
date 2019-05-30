@@ -145,7 +145,7 @@ def make_metagene(
     # Get list of bam files from user input
     files = get_files(
         args_dict['input'],
-        ['_dedupRemoved.bam'])
+        [str(args_dict['bam_suffix'])])
 
     # Get indices
     chromosome_index, coordinate_index = get_indices(args_dict)
