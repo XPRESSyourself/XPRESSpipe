@@ -368,8 +368,8 @@ def align(
         args_dict)
 
     # Clean up the output
-    #remove_intermediates(
-    #    args_dict)
+    remove_intermediates(
+        args_dict)
 
 """Single-end RNA-seq pipeline"""
 def se_align(
