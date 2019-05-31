@@ -40,7 +40,7 @@ def parse_table(
 
     # file will be at str(directory) + str(file)
     # output will be to str(output) as directory_name.tsv from second to last /
-    output_file = str(output) + str(directory)[:-1].split('/')[-1] + '_fpkm_counts.tsv'
+    output_file = str(output) + str(directory)[:-18].split('/')[-1] + '_fpkm_counts.tsv'
 
     # Read in cufflinks quantification table
     cufflinks_table = pd.read_csv(
@@ -87,16 +87,17 @@ def count_file_cufflinks(
     file, args_dict = args[0], args[1] # Parse args
 
     # Add output directories
+    dir_name = file.replace(str(args_dict['bam_suffix']), '_cufflinks_counts')
     args_dict = add_directory(
         args_dict,
         'counts',
-        str(file[:-4]) + '_cufflinks_counts')
+        str(dir_name))
 
     # Count
     os.system(
         str(__path__) + 'cufflinks'
         + ' ' + str(args_dict['input']) + str(file)
-        + ' --output-dir ' + str(args_dict['counts']) + str(file[:-4]) + '_cufflinks_counts'
+        + ' --output-dir ' + str(args_dict['counts']) + str(dir_name)
         + ' --GTF ' + str(args_dict['reference']) + 'transcripts.gtf'
         + ' --num-threads 1'
         + str(args_dict['log']))
@@ -114,9 +115,12 @@ def count_reads(
 
     if 'deduplicate' in args_dict and args_dict['deduplicate'] == True:
         suffix = '_dedupRemoved.bam'
-
-    if 'bam_suffix' in args_dict:
+    elif 'bam_suffix' in args_dict:
         suffix = args_dict['bam_suffix']
+    else:
+        pass
+
+    args_dict['bam_suffix'] = str(suffix)
 
     # Get list of files to count based on acceptable file types
     files = get_files(
@@ -182,7 +186,7 @@ def collect_counts(
 
     # Output data
     if args_dict['quantification_method'] == 'cufflinks':
-        count_suffix = '_cufflinksFPKM_table.tsv'
+        count_suffix = '_cufflinks_FPKM_table.tsv'
     else:
         count_suffix = '_count_table.tsv'
 
