@@ -276,10 +276,16 @@ def alignment_process(
         + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
         + str(args_dict['log']))
 
+    # Prep files for markdup
+    os.system(
+        'samtools fixmate'
+        + ' -m ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.fixmate.bam')
+
     # Use sorted BAM file to find any duplicate reads
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.fixmate.bam' # Input BAM
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupMarked.bam' # Output BAM
         + ' -s' # Print some basic stats
         + str(args_dict['log']))
@@ -291,7 +297,7 @@ def alignment_process(
     # Create sorted BAM file with duplicates removed
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.fixmate.bam' # Input BAM
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam' # Output BAM
         + ' -s' # Print some basic stats to STDOUT
         + ' -r' # Remove duplicate reads
