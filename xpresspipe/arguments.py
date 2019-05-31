@@ -325,9 +325,9 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'htseq',
+        default = 'cufflinks',
         type = str,
         required = False)
     se_opts.add_argument(
@@ -474,14 +474,14 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'htseq',
+        default = 'cufflinks',
         type = str,
         required = False)
     pe_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
+        help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
         metavar = '<RPM, TPM, RPKM, FPKM>',
         type = str,
         required = False)
@@ -623,14 +623,14 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'htseq',
+        default = 'cufflinks',
         type = str,
         required = False)
     rp_opts.add_argument(
         '--method',
-        help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
+        help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
         metavar = '<RPM, TPM, RPKM, FPKM>',
         type = str,
         required = False)
@@ -876,9 +876,9 @@ def get_arguments(
         required = False)
     count_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'htseq',
+        default = 'cufflinks',
         type = str,
         required = False)
     count_opts.add_argument(
