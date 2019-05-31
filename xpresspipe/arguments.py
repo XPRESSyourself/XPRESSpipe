@@ -961,7 +961,7 @@ def get_arguments(
         required = True)
     diffx_reqs.add_argument(
         '--design',
-        help = 'Design formula for differential expression analysis (spaces in command line are conserved in input string. DO NOT INCLUDE ~ \
+        help = 'Design formula for differential expression analysis (spaces in command line are conserved in input string. DO NOT INCLUDE ~ OR SPACES \
         IN FORMULA IN COMMAND LINE, will be automatically added)',
         metavar = '<formula>',
         type = str,
