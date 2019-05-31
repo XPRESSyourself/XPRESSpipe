@@ -7,12 +7,13 @@ import unittest
 truth_dict = {
     'input': '/path/to/files/',
     'output': '/path/to/files2/',
-    'reference': '/path/to/reference/'}
-
+    'reference': '/path/to/reference/',
+    'cmd': 'riboseq'}
 test_dict = {
     'input': '/path/to/files',
     'output': '/path/to/files2/',
-    'reference': '/path/to/reference'}
+    'reference': '/path/to/reference',
+    'cmd': 'riboseq'}
 
 t = check_inputs(test_dict)
 
@@ -109,13 +110,15 @@ else:
 test0_dict = {
     'input': '/path/to/files',
     'output': '/path/to/files2/',
-    'reference': '/path/to/reference'}
+    'reference': '/path/to/reference',
+    'cmd': 'riboseq'}
 
 test1_dict = {
     'input': '/path/to/files',
     'output': '/path/to/files2/',
     'reference': '/path/to/reference',
-    'experiment': 'test'}
+    'experiment': 'test',
+    'cmd': 'riboseq'}
 
 t0 = check_inputs(test0_dict)
 t1 = check_inputs(test1_dict)
