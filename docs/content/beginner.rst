@@ -3,36 +3,43 @@ Beginners
 ############
 
 =================================
-First Step
+First Steps
 =================================
 | If this is your first time doing any programming, congratulations! You are embarking upon a very rewarding path. As with learning any new natural language, there is a learning curve associated with learning a computer language. While XPRESSpipe is aimed at reducing majority of the overhead associated with processing this data, using this software will still require some effort, just as would learning any new language or laboratory technique.
 
 | XPRESSpipe is used through something called the `command line interface <https://en.wikipedia.org/wiki/Command-line_interface>`_ (or CLI), or what some people refer to as `"The Matrix" <https://www.youtube.com/watch?v=kqUR3KtWbTk>`_. This may seem daunting, but luckily, several free online courses are available to quickly catch you up to speed on some of the basics that will be required to use this software. We recommend Codecademy's CLI course, which you can find `here <https://www.codecademy.com/learn/learn-the-command-line>`_ and should take only a couple of hours (Codecademy estimates ~10 hours, but you probably don't need to finish the course to use XPRESSpipe. The purpose of this is to help you become more comfortable with the command line).
 
-| Once, you're ready to jump into the command line, we can get rolling! For the steps below, we're going to assume we are on an Mac operating system and provide examples under this pretext, but this software is compatible with any Linux-like operating system (sorry Windows users).
+| Once, you're ready to jump into the command line, we can get rolling! For the steps below, we're going to assume we are on an Mac operating system and provide examples under this pretext, but this software is compatible with any Linux-like operating system and the syntax is largely the same (sorry Windows users!).
 
 =================================
 Install XPRESSpipe
 =================================
-| - To keep this as simple as possible, we are going to use a program called `Docker <https://www.docker.com/>`_. Docker's purpose is to, as it's referred to in the computer world, "containerize" a program and all other requirements of the software so that it is fully self-contained. This is great because, say in 5 years you wanted to use the same version of XPRESSpipe and the dependencies used at the time of use for a publication, you could access and run the same Docker "image" version and reproduce the output! Let's download Docker now. This will likely require you to create a Docker account.
-| 1. Click `here <https://download.docker.com/mac/stable/Docker.dmg>`_ to download Docker (the link is for a Mac, but a Linux version is also available)
-| 2. Open and install the file that was downloaded from the link following the relevant instructions.
-
-| - Now its time to enter the command line.
+| - Let's enter the command line.
 | 1. Click on the Finder icon the top right side of the screen on your Mac (or wherever else it might be located)
 | 2. Type "Terminal" into the search bar and click on the app icon
 
-| - Great! Now we are in the command line interface. As a review, anything followed by a "$" in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, space and characters must be typed exactly and commands are case-sensitive. Let's get the latest version of XPRESSpipe by executing the lines of code in the code block below.
+| - Great! Now we are in the command line interface. As a review, anything followed by a "$" in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, **space and characters must be typed exactly and commands are case-sensitive**.
+| - First, let's make sure the required dependency is installed. If the :data:`pip` command does not work, then read `this <https://pip.pypa.io/en/stable/installing/>`_ for more information.
 
 .. code-block:: shell
 
-  $ docker image pull jordanberg/xpresspipe:latest
+  $ pip install setuptools
+
+| - Let's get the latest version of XPRESSpipe by executing the lines of code in the code block below. Replace the URL for the version of XPRESSpipe for whatever version you want (these can be found under the :data:`releases` tab on the XPRESSpipe GitHub repository).
+
+.. code-block:: shell
+
+  $ cd ~
+  $ curl -O https://github.com/XPRESSyourself/XPRESSpipe/archive/XPRESSpipe-v0.1.3b2.tar.gz
+  $ tar xvzf XPRESSpipe-v0.1.3b2.tar.gz
+  $ cd XPRESSpipe-v0.1.3b2
+  $ python setup.py install
 
 | - Let's test that this worked by executing the following:
 
 .. code-block:: shell
 
-  $ docker run jordanberg/xpresspipe --help
+  $ xpresspipe -h
 
 | - If a help menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!
 
@@ -81,8 +88,9 @@ Generate Reference Files
                                                       --truncate \
                                                       --sjdbOverhang 49
 
-| - If running regular single-end sequencing, you will want to leave out the :data:`--truncate` argument and may want to leave out the :data:`--protein_coding` argument if you want to quantify miRNA, etc.
-| - If running regular paired-end sequencing, you will want to change the :data:`--sjdbOverhang` argument to be the length of one of the paired-end reads - 1, so if we ran 2x100bp sequencing, we would specify :data:`--sjdbOverhang 99`
+| - The truncation option is only necessary when using XPRESSpipe to process ribosome profiling samples and their associated RNA-seq samples.
+| - If interested in quantifying miRNA, etc, leave out the :data:`--protein_coding` argument.
+| - If running sequencing where the read (single-end) or mates not equal to 100 bp, you will want to change the :data:`--sjdbOverhang` argument to be the length of one of the paired-end reads - 1, so if we ran 2x100bp sequencing, we would specify :data:`--sjdbOverhang 99`
 | - This may take awhile, and as we will discuss later, you may want to run these steps on a supercomputer, but this will serve as a preliminary guide for now.
 
 =================================

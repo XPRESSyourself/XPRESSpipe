@@ -68,6 +68,6 @@ Methodology
 | **Metagene Analysis**
 
 
-| Periodicity
+| **Periodicity**
 
-| Read distribution
+| **Read distribution**

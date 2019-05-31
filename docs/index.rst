@@ -6,14 +6,15 @@ XPRESSpipe
 =================
 About
 =================
-| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is a part of the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite of sequencing tools. `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is an automated, efficient, and flexible pipeline for processing RNA-seq raw data, performing quality control analysis on the data, and preparing data for further downstream analysis.  `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is currently capable of handling single-end (SE), paired-end (PE), and ribosome profiling data. Features include the ability to trim, align, and count sequence reads. Other useful features include:
+| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is a part of the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite of sequencing tools. `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is an automated, efficient, and flexible pipeline for processing RNA-seq raw data, performing quality control analysis on the data, and preparing data for further downstream analysis.  `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is currently capable of handling single-end (SE), paired-end (PE), and ribosome profiling data. Features include the ability to trim, align, and count sequence reads.
+| Other useful features include:
 | - Curate reference files for alignment
 | - Prepare transcriptome reference file to contain only protein coding transcripts, longest isoform only, and/or truncate transcripts
-| - Identify over-abundant sequences in the read data to determine possible rRNA depletion probes
+| - Identify over-abundant sequences in the read data to design possible rRNA depletion probes
 | - Perform transcript meta-analysis, ribosome profiling periodicity analysis, and library complexity analysis
 | - Output aligned reads in a variety of formats for downstream applications
 |
-| Other analyses can be performed by `XPRESStools <https://github.com/XPRESSyourself/XPRESStools>`_. Please read the relevant documentation for more information.
+| Other analyses can be performed by `XPRESSplot <https://github.com/XPRESSyourself/XPRESSplot>`_. Please read the relevant documentation for more information.
 |
 | `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ and the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite is developed and maintained by Jordan Berg in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators.
 |
@@ -50,7 +51,7 @@ Table of contents
 =======
 License
 =======
-| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is freely available under a GNU General Public License (v3.0).
+| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is perpetually open access under a GNU General Public License (v3.0).
 
 ==========
 Questions?

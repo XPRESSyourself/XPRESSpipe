@@ -299,6 +299,7 @@
 </div>
 <div class="line-block">
 <div class="line"><strong>Example 3 – Analyze ribosome profiling data:</strong></div>
+<div class="line">For ribosome profiling, you need to divide the footprint samples by their corresponding mRNA sample to account for translation efficiency</div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;/path/to/expression_counts.tsv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="o">&gt;</span> <span class="n">data</span>

@@ -97,6 +97,7 @@ Examples
   $ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition+Batch
 
 | **Example 3 -- Analyze ribosome profiling data:**
+| For ribosome profiling, you need to divide the footprint samples by their corresponding mRNA sample to account for translation efficiency
 
 .. ident with TABs
 .. code-block:: python
@@ -124,6 +125,7 @@ Examples
 .. code-block:: shell
 
   $ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Type+Condition+Type:Condition
+
 
 =================================
 Read Distribution Analysis
