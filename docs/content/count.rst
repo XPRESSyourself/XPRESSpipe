@@ -30,7 +30,7 @@ Arguments
    * - :data:`-r \<path\>, --reference \<path\>`
      - Path to parent organism reference directory
    * - :data:`-g \</path/transcript.gtf\>, --gtf \</path/transcript.gtf\>`
-     - Path and file name to GTF used for alignment quantification (if a modified GTF was created, this should be provided here)
+     - Path and file name to GTF used for alignment quantification (if a modified GTF was created, this should be provided here; if using Cufflinks and you want isoform abundance estimates, important that you do not provide a longest transcript only GTF)
 
 .. list-table::
    :widths: 35 50
