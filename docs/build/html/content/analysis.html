@@ -92,7 +92,7 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -129,7 +129,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -196,15 +196,17 @@
            <div itemprop="articleBody">
             
   <div class="section" id="quality-control-and-analysis">
-<h1>Quality Control and Analysis<a class="headerlink" href="#quality-control-and-analysis" title="Permalink to this headline">¶</a></h1>
+<span id="analysis-link"></span><h1>Quality Control and Analysis<a class="headerlink" href="#quality-control-and-analysis" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="differential-expression-analysis">
 <h2>Differential Expression Analysis<a class="headerlink" href="#differential-expression-analysis" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">Differential Expression analysis allows one to determine significantly enriched or depleted genes between two conditions.</div>
+<div class="line">Differential Expression analysis allows one to determine significantly enriched or depleted genes between two conditions. XPESSpipe acts as a wrapper for <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/">DESeq2</a>. Please refer to its <a class="reference external" href="https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html">documentation</a> for more information.</div>
+</div>
+<div class="line-block">
 <div class="line"><br /></div>
 <div class="line">Assumptions:</div>
 <div class="line-block">
-<div class="line">- R is installed on your machine and is in your $PATH</div>
+<div class="line">- R is installed on your machine and is in your $PATH (this should be handled in the installation)</div>
 <div class="line">- All input files are tab-delimited (with .txt or .tsv suffix)</div>
 <div class="line">- Design formula does not include the tilde (~) and there are no spaces</div>
 <div class="line">- Your base parameter in a given column in the sample_info file must be first alphabetically. If this is not the base, you can append letters to the beginning to force alphabetical order</div>
@@ -229,14 +231,14 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-d</span> <span class="pre">&lt;path/filename.tsv&gt;,</span> <span class="pre">--data</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path/filename.tsv&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
 <td><p>Path and file name of expression counts matrix</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-s</span> <span class="pre">&lt;path/filename.tsv&gt;,</span> <span class="pre">--sample</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
 <td><p>Path and file name of sample information matrix</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--design</span> <span class="pre">&lt;formula&gt;</span></code></p></td>
-<td><p>Path to parent organism reference directory</p></td>
+<td><p>Design formula for differential expression analysis (spaces in command line are conserved in input string. DO NOT INCLUDE ~ OR SPACES IN FORMULA IN COMMAND LINE, will be automatically added)</p></td>
 </tr>
 </tbody>
 </table>
@@ -244,7 +246,7 @@
 <div class="section" id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
-<div class="line"><strong>Example 1 – Analyze RNAseq data</strong></div>
+<div class="line"><strong>Example 1 – Analyze RNA-seq data</strong></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;/path/to/expression_counts.tsv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="o">&gt;</span> <span class="n">data</span>
@@ -267,11 +269,11 @@
 <span class="mi">7</span> <span class="n">s8</span>      <span class="n">rep2</span>      <span class="n">b_EXP</span>
 </pre></div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe diffxpress -i test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Example 2 – Analyze RNAseq data that was prepared in different batches:</strong></div>
+<div class="line"><strong>Example 2 – Analyze RNA-seq data that was prepared in different batches:</strong></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;/path/to/expression_counts.tsv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="o">&gt;</span> <span class="n">data</span>
@@ -294,7 +296,7 @@
 <span class="mi">7</span> <span class="n">s8</span>      <span class="n">rep2</span>      <span class="n">b_EXP</span>     <span class="n">batch2</span>
 </pre></div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition+Batch
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe diffxpress -i test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition+Batch
 </pre></div>
 </div>
 <div class="line-block">
@@ -322,7 +324,7 @@
 <span class="mi">7</span> <span class="n">s4_rna</span>  <span class="n">rep2</span>      <span class="n">b_EXP</span>     <span class="n">RNA</span>
 </pre></div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Type+Condition+Type:Condition
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe diffxpress -i test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Type+Condition+Type:Condition
 </pre></div>
 </div>
 </div>
@@ -330,7 +332,7 @@
 <div class="section" id="read-distribution-analysis">
 <h2>Read Distribution Analysis<a class="headerlink" href="#read-distribution-analysis" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">When performing RNAseq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all fastq samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library.</div>
+<div class="line">When performing RNA-seq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library. When this is run within the pipeline, it will analyze just the post-trimming <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> files</div>
 </div>
 <div class="section" id="id1">
 <h3>Arguments<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
@@ -417,6 +419,7 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/se_test_metagene_summary.png"><img alt="../_images/se_test_metagene_summary.png" src="../_images/se_test_metagene_summary.png" style="width: 450px;" /></a>
+<p>NOTE: As you can appreciate, there are systematic 5’ biases in these library preparations. A good RNA-seq library should have even coverage across all transcripts.</p>
 </div>
 </div>
 <div class="section" id="codon-periodicitiy-analysis">
@@ -460,7 +463,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/se_test_periodicity_summary.png"><img alt="../_images/se_test_periodicity_summary.png" src="../_images/se_test_periodicity_summary.png" style="width: 450px;" /></a>
+<a class="reference internal image-reference" href="../_images/se_test_periodicity_summary.png"><img alt="../_images/se_test_periodicity_summary.png" src="../_images/se_test_periodicity_summary.png" style="width: 250px;" /></a>
 </div>
 </div>
 <div class="section" id="rrna-probe">

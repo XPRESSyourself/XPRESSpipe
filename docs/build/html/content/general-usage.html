@@ -92,7 +92,7 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">General Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#file-naming">File Naming</a></li>
@@ -109,7 +109,7 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -176,62 +176,28 @@
            <div itemprop="articleBody">
             
   <div class="section" id="general-usage">
-<h1>General Usage<a class="headerlink" href="#general-usage" title="Permalink to this headline">¶</a></h1>
+<span id="general-link"></span><h1>General Usage<a class="headerlink" href="#general-usage" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line">The purpose of XPRESSpipe is to automate the alignment, quality control, and initial analysis of single-end (SE), paired-end (PE), ribosome profiling data. It is intended that input data is a directory of .fastq formatted files. However, when using the intermediate submodules, such as <code class="xref py py-data docutils literal notranslate"><span class="pre">align</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">readDistribution</span></code>, input will vary and is explicated</div>
+<div class="line">XPRESSpipe can be run essentially from beginning to end as a pipeline, or as individual sub-modules. We will describe each option in more detail in each section of the documentation. The purpose of XPRESSpipe is to automate the alignment, quality control, and initial analysis of single-end (SE), paired-end (PE), and ribosome profiling data. It is intended that input data is in its own directory and that each file is a properly formatted <a href="#id1"><span class="problematic" id="id2">:dat:`.fastq`</span></a> file. However, the suffix for these files can be <code class="xref py py-data docutils literal notranslate"><span class="pre">fq</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">txt</span></code> as well. They can be zipped (<code class="xref py py-data docutils literal notranslate"><span class="pre">zip</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">gz</span></code>) or unzipped. When using intermediate sub-modules, such as <code class="xref py py-data docutils literal notranslate"><span class="pre">align</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">readDistribution</span></code>, input will vary and is explicated</div>
 </div>
-<p>in the <code class="xref py py-data docutils literal notranslate"><span class="pre">--help</span></code> menu for each submodule.</p>
+<p>in the <code class="xref py py-data docutils literal notranslate"><span class="pre">--help</span></code> menu for each sub-module.</p>
 <div class="line-block">
-<div class="line">XPRESSpipe can be run essentially from beginning to end as a pipeline, or as individual sub-modules. We will describe each option in more detail in each section of the documentation.</div>
-</div>
-<div class="line-block">
-<div class="line">Further analysis on the resulting datasets can be performed using <a class="reference external" href="https://github.com/XPRESSyourself/XPRESStools">XPRESStools</a>.</div>
+<div class="line">Further analysis on the resulting datasets can be performed using <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSplot">XPRESSplot</a>.</div>
 </div>
 <div class="section" id="file-naming">
 <h2>File Naming<a class="headerlink" href="#file-naming" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">In order for many of the XPRESSpipe functions to perform properly and for the output to be reliable after alignment (except for generation of a raw counts table), file naming conventions must be followed.</div>
 <div class="line">1. Download your raw sequence data and place in a folder – this folder should contain all the sequence data and nothing else.</div>
-<div class="line">2. Make sure files follow a pattern naming scheme. For example, if you had 3 genetic backgrounds of ribosome profiling data, the naming scheme would go as follows:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ExperimentName_BackgroundA_FP.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_BackgroundA_RNA.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_BackgroundB_FP.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_BackgroundB_RNA.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_BackgroundC_FP.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_BackgroundC_RNA.fastq<span class="o">(</span>.qz<span class="o">)</span>
-</pre></div>
 </div>
 <div class="line-block">
-<div class="line">3. If the sample names are replicates, their sample number needs to be indicated.</div>
-<div class="line">4. If you want the final count table to be in a particular order and the samples ordered that way are not alphabetically, append a letter in front of the sample name to force this ordering.</div>
+<div class="line">2. If you are working with paired-end data:</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ExperimentName_a_WT.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_a_WT.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_b_exType.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_b_exType.fastq<span class="o">(</span>.qz<span class="o">)</span>
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">5. If you have replicates:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ExperimentName_a_WT_1.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_a_WT_1.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_a_WT_2.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_a_WT_2.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_b_exType_1.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_b_exType_1.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_b_exType_2.fastq<span class="o">(</span>.qz<span class="o">)</span>
-ExperimentName_b_exType_2.fastq<span class="o">(</span>.qz<span class="o">)</span>
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">6. If you are working with paired-end data:</div>
-</div>
+<p>or</p>
 </div>
 <div class="section" id="data-output">
 <h2>Data Output<a class="headerlink" href="#data-output" title="Permalink to this headline">¶</a></h2>
-<p>Running <code class="xref py py-data docutils literal notranslate"><span class="pre">seRNAseq</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">peRNAseq</span></code>, or <code class="xref py py-data docutils literal notranslate"><span class="pre">riboprof</span></code> will output all intermediate and final data files in a tree structure as seen below:</p>
+<p>Running <code class="xref py py-data docutils literal notranslate"><span class="pre">seRNAseq</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">peRNAseq</span></code>, or <code class="xref py py-data docutils literal notranslate"><span class="pre">riboseq</span></code> will output all intermediate and final data files in a tree structure as seen below:</p>
 <a class="reference internal image-reference" href="../_images/xpresspipe_overview.png"><img alt="../_images/xpresspipe_overview.png" class="align-center" src="../_images/xpresspipe_overview.png" style="width: 600px;" /></a>
 </div>
 </div>

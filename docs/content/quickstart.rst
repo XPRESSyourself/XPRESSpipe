@@ -2,6 +2,8 @@
 Quickstart
 #################
 
+| Jupyter Notebook walkthrough coming soon...
 
-Jupyter Notebook walkthrough
-Link to video
+| XPRESSpipe command designer coming soon...
+
+| Walkthrough video coming soon...

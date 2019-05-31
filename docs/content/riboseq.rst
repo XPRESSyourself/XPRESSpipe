@@ -1,7 +1,7 @@
 ############################
-Single-End RNA-seq Pipeline
+Ribosome Profiling Pipeline
 ############################
-| The following pipeline will pre-process, align, and quality check single-end RNA-seq samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the appropriate chapter.
+| The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the appropriate chapter.
 
 .. list-table::
    :widths: 35 50
@@ -57,28 +57,27 @@ Single-End RNA-seq Pipeline
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
-
 | Run the following for more details:
 
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe seRNAseq --help
+  $ xpresspipe riboseq --help
 
 -----------
 Examples
 -----------
-| **Example 1 -- Run pipeline on single-end RNA-seq sample files**
+| **Example 1 -- Run pipeline on ribosome profiling sample files**
 
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe seRNAseq \
-                -i se_test \
-                -o se_out \
+  $ xpresspipe riboseq \
+                -i riboprof_test \
+                -o ribopipe_out \
                 -r se_reference \
-                --gtf transcripts_longestTranscript.gtf \
-                -e se_test \
+                --gtf se_reference/transcript_LCT.gtf \
+                -e riboprof_test \
                 -a CTGTAGGCACCATCAAT \
                 --method RPKM \
                 --sjdbOverhang 49

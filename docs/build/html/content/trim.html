@@ -92,7 +92,7 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -112,7 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -184,8 +184,8 @@
 <h2>Read Trimming<a class="headerlink" href="#read-trimming" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">Trimming is a necessary part of RNAseq data processing due to the technological limitations described below:</div>
-<div class="line">- Inherent in RNAseq library creation, RNA is fragmented and adaptor sequences are ligated to the sequence. These adaptors include information such as sample batch and act as a primer for the sequencer to recognize the fragment as something to analyze. However, these adaptors, once sequenced, prevent alignment to a reference as large chunks of the fragment are synthetic sequence not found in each transcript.</div>
-<div class="line">- A sequencer’s job is to read a fragment base by base and determine the nucleotide species each step of the way. While the technology has greatly improved over the years, a probability of error remains. Miscalled bases can prevent proper alignment of the sequenced fragment to the reference. Therefore, it is important for low confidence base calls to be trimmed from each read.</div>
+<div class="line">- Inherent in RNA-seq library creation, RNA is fragmented and adaptor sequences are ligated to the sequence. These adaptors include information such as sample batch and act as a primer for the sequencer to recognize the fragment as something to analyze. However, these adaptors, once sequenced, prevent alignment to a reference as large chunks of the fragment are synthetic sequence not found in the actual organism’s genome/transcriptome.</div>
+<div class="line">- A sequencer’s job is to read a fragment base by base and determine the nucleotide species each step of the way. While the technology has greatly improved over the years, a probability of error remains. Mis-called bases can prevent proper alignment of the sequenced fragment to the reference. Therefore, it is important for low confidence base calls to be trimmed from each read.</div>
 <div class="line"><br /></div>
 <div class="line">Trimming is performed by <a class="reference external" href="https://github.com/OpenGene/fastp">fastp</a></div>
 </div>

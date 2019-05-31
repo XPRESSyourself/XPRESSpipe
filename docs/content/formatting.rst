@@ -22,7 +22,7 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-d \<path/filename\>, --data \<path/filename\>`
+   * - :data:`-i \<path/filename\>, --input \<path/filename\>`
      - Path and file name to sequence dataframe
    * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
      - Path and file name to reference GTF
@@ -52,4 +52,4 @@ Examples
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe convertNames -d riboprof_out/counts/se_test_counts_table.csv -g se_reference/transcripts.gtf
+  $ xpresspipe convertNames -i riboprof_out/counts/se_test_counts_table.csv -g se_reference/transcripts.gtf

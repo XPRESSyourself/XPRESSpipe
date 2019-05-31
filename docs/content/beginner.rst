@@ -1,6 +1,8 @@
-############
-Beginners
-############
+.. _beginners_link:
+
+################
+Beginner's Guide
+################
 
 =================================
 First Steps
@@ -90,7 +92,7 @@ Generate Reference Files
 
 | - The truncation option is only necessary when using XPRESSpipe to process ribosome profiling samples and their associated RNA-seq samples.
 | - If interested in quantifying miRNA, etc, leave out the :data:`--protein_coding` argument.
-| - If running sequencing where the read (single-end) or mates not equal to 100 bp, you will want to change the :data:`--sjdbOverhang` argument to be the length of one of the paired-end reads - 1, so if we ran 2x100bp sequencing, we would specify :data:`--sjdbOverhang 99`
+| - If running sequencing where the read (single-end) or mates not equal to 100 bp, you will want to change the :data:`--sjdbOverhang` argument to be the length of one of the paired-end reads - 1, so if we ran 2x100bp sequencing, we would specify :data:`--sjdbOverhang 99` (although in this case, the default of :data:`--sjdbOverhang 100` is fine).
 | - This may take awhile, and as we will discuss later, you may want to run these steps on a supercomputer, but this will serve as a preliminary guide for now.
 
 =================================
@@ -98,7 +100,7 @@ Process Raw Sequencing Files
 =================================
 | - Now let's get our raw data. Let's follow the following instructions:
 | 1. Make a new folder, something called :data:`raw_data` or whatever you like and place your data there.
-| 2. Make sure the files follow proper naming conventions (see naming conventions :ref:`here <general-usage>`)
+| 2. Make sure the files follow proper naming conventions (see naming conventions at :ref:`general_link`)
 | 3. Now let's process the data
 | 4. Let's also create a folder called something like :data:`output`
 | 5. Also, make sure you have the 3' adaptor sequence handy used when generating your sequencing library
@@ -108,60 +110,62 @@ Process Raw Sequencing Files
 
 .. code-block:: shell
 
-  $ docker run jordanberg/xpresspipe riboprof --input raw_data/ \
-                                              --output output/ \
-                                              --reference reference_folder/ \
-                                              --gtf reference_folder/transcripts_longestTranscript_proteinCoding_truncated.gtf
-                                              --experiment riboprof_test
-                                              --adaptor CTGTAGGCACCATCAAT
-                                              --method RPKM
-                                              --sjdbOverhang 49
+  $ xpresspipe riboseq --input raw_data/ \
+                      --output output/ \
+                      --reference reference_folder/ \
+                      --gtf reference_folder/transcripts_LCT.gtf
+                      --experiment riboseq_test
+                      --adaptor CTGTAGGCACCATCAAT
+                      --method RPKM
+                      --sjdbOverhang 49
 
-| - If you are running a lot of files, especially for human samples, this may take a lot of time. We recommend running this on some kind of server. A situation like yeast with few samples may be feasible to run on a personal computer, but will likely also take some time
+| - If you are running a lot of files, especially for human samples, this may take a lot of time. We recommend running this on some kind of server. A situation like yeast with few samples may be feasible to run on a personal computer, but will likely also take some time.
 
 ======================
 Explore the Data
 ======================
-| - Once the data is finished processing, we can start exploring the output.
+| Once the data is finished processing, we can start exploring the output. Explanations each quality control analysis can be found in the :ref:`analysis_link` section of the documentation.
+| In order to get the data from a HPC to your personal computer, you can use a command like the following:
+
+.. code-block:: shell
+
+  $ scp USERNAME@kingspeak.chpc.utah.edu:/full/path/to/files/file_name.sfx ./
 
 ------------------
 Sequencing Metrics
 ------------------
+| In your output folder, you will see a file named :data:`riboseq_test_multiqc_report.html`. This file will compile the statistics from each processing step of the pipeline for each sample file you provided as input. Things like read quality, mapping, and quantification statistics can be found here. Just double-click the file or execute the following command to open in your default browser window.
 
+.. code-block:: shell
+
+  $ open riboseq_test_multiqc_report.html
 
 ------------------
 Library Complexity
 ------------------
-
+| Within the :data:`complexity` directory in your output folder, you will find summary PDFs for all samples processed analyzing library complexity of each sample.
 
 -------------------
 Metagene Analysis
 -------------------
-
+| Within the :data:`metagene` directory in your output folder, you will find summary PDFs for all samples processed analyzing the metagene profile of each sample.
 
 --------------------------------
 Periodicity (Ribosome Profiling)
 --------------------------------
-
+| Within the :data:`periodicity` directory in your output folder, you will find summary PDFs for all samples processed analyzing ribosome periodicity of each of each sample containing reads 28-30nt.
 
 ----------------------------------
 Count Data and Downstream Analysis
 ----------------------------------
-
-
-
-
-
-
-
-
-
-
+| Within the :data:`counts` directory in your output folder, you will find individual counts tables for each sample, as well as compiled tables for each sample that was processed.
 
 
 =======================
 Supercomputing
 =======================
+| Section coming soon...
+
 
 ---------------
 Getting Started

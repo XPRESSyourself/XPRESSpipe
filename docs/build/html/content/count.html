@@ -92,7 +92,7 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -103,7 +103,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#quantifying-and-collating-reads">Quantifying and Collating Reads</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#future-implementations">Future Implementations</a></li>
 </ul>
 </li>
 </ul>
@@ -113,7 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -185,6 +184,7 @@
 <h2>Quantifying and Collating Reads<a class="headerlink" href="#quantifying-and-collating-reads" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">In order to quantify aligned reads, they must be counts to a reference transcriptome. This will tell you in relative terms how much of each transcript is expressed in a system. The following sub-module will perform this quantification, as well as compile all sample quantifications into a single data matrix for downstream use.</div>
+<div class="line">XPRESSpipe uses <a class="reference external" href="http://cole-trapnell-lab.github.io/cufflinks/">Cufflinks</a> as the default, but <a class="reference external" href="https://htseq.readthedocs.io/en/release_0.11.1/">HTSeq</a> can also be specified. Cufflinks is one of the most accurate read quantifiers currently available, but HTSeq is still widely used and is part of the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> pipeline.</div>
 </div>
 <div class="section" id="arguments">
 <h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h3>
@@ -215,7 +215,7 @@
 <td><p>Path to parent organism reference directory</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcript.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcript.gtf&gt;</span></code></p></td>
-<td><p>Path and file name to GTF used for alignment quantification</p></td>
+<td><p>Path and file name to GTF used for alignment quantification (if a modified GTF was created, this should be provided here)</p></td>
 </tr>
 </tbody>
 </table>
@@ -233,7 +233,16 @@
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--experiment</span></code></p></td>
 <td><p>Experiment name</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-c</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--quantification_method</span></code></p></td>
+<td><p>Specify quantification method (default: cufflinks; other option: htseq. If using Cufflinks, no downstream sample normalization is required)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--deduplicate</span></code></p></td>
+<td><p>Include flag to quantify reads with de-duplication (will search for files with suffix <code class="xref py py-data docutils literal notranslate"><span class="pre">_dedupRemoved.bam</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--bam_suffix</span></code></p></td>
+<td><p>Change from default suffix of _Aligned.sort.bam</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>
 </tr>
 </tbody>
@@ -247,7 +256,7 @@
 <div class="line">- An experiment name is provided to name the final data matrix</div>
 <div class="line">- Reads are quantified only to coding genes and are not counted if mapping to the first x nucleotides of each transcript exon 1 (x being the value provided for truncation when initially creating the reference files)</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe count -i riboprof_out/alignments/ -o riboprof_out/ -r se_reference/ -g se_reference/transcripts_codingOnly_truncated.gtf -e se_test
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe count -i riboseq_out/alignments/ -o riboseq_out/ -r se_reference/ -g se_reference/transcripts_codingOnly_truncated.gtf -e se_test
 </pre></div>
 </div>
 <div class="line-block">
@@ -258,13 +267,6 @@
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe count -i pe_out/alignments/ -o pe_out/ -r pe_reference/
 </pre></div>
-</div>
-</div>
-<div class="section" id="future-implementations">
-<h3>Future Implementations<a class="headerlink" href="#future-implementations" title="Permalink to this headline">¶</a></h3>
-<div class="line-block">
-<div class="line">Add arguments for -s strandedness so other kits are usable with pipeline (default: False for TCGA)</div>
-<div class="line">Add arguments for -m intersection (d)efault: intersection-nonempty for TCGA)</div>
 </div>
 </div>
 </div>

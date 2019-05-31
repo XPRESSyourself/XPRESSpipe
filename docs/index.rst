@@ -18,7 +18,7 @@ About
 |
 | `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ and the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite is developed and maintained by Jordan Berg in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators.
 |
-| If you have limited or no computational experience, please see our "Beginners" guide (link below)
+| If you have limited or no computational experience, please see our :ref:`beginners_link`
 
 =================
 Table of contents
@@ -45,7 +45,7 @@ Table of contents
    content/analysis
    content/seRNAseq
    content/peRNAseq
-   content/riboprof
+   content/riboseq
    content/faqs
 
 =======
@@ -56,7 +56,7 @@ License
 ==========
 Questions?
 ==========
-| If you have questions, requests, or bugs to report, please use the `Github issues forum <https://github.com/XPRESSyourself/XPRESSpipe/issues>`_.
+| If you have questions, requests, or bugs to report, please use the `XPRESSpipe issues forum <https://github.com/XPRESSyourself/XPRESSpipe/issues>`_.
 
 
 

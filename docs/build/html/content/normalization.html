@@ -92,7 +92,7 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -107,17 +107,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#batch-normalize">Batch Normalize</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Arguments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -191,25 +186,26 @@
 <div class="section" id="sample-normalize">
 <h2>Sample Normalize<a class="headerlink" href="#sample-normalize" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">Due to inherent biases in RNAseq samples (most commonly, different amounts of total RNA per sample in a given lane), samples must be normalized to obtain an accurate representation of transcription per sample. Additional normalization can be performed to normalize for transcript length (“per kilobase million”) as longer transcripts will naturally create more fragments mapping to a given gene, thus potentially making 1 transcript appear as many when quantified.</div>
+<div class="line">Due to inherent biases in RNA-seq samples (most commonly, different amounts of total RNA per sample in a given lane), samples must be normalized to obtain an accurate representation of transcription per sample. Additional normalization can be performed to normalize for transcript length (“per kilobase million”) as longer transcripts will naturally create more fragments mapping to a given gene, thus potentially making 1 transcript appear as many when quantified.</div>
 <div class="line"><br /></div>
-<div class="line">The following equations summarize different way to normalize samples for RNAseq:</div>
-<div class="line">Perform reads per million sample normalization on RNAseq data</div>
+<div class="line">The following equations summarize different way to normalize samples for RNA-seq:</div>
+<div class="line">- Perform <strong>reads per million</strong> sample normalization on RNA-seq data</div>
 <div class="line"><span class="math notranslate nohighlight">\(RPM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e6}{\#\ mapped\ reads\ per\ sample}\)</span></div>
-<div class="line">Perform reads per kilobase million sample normalization on RNAseq data</div>
+<div class="line">- Perform <strong>reads per kilobase million</strong> sample normalization on RNA-seq data</div>
 <div class="line"><span class="math notranslate nohighlight">\(RPKM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e6\ x\ 1e3}{\#\ mapped\ reads\ per\ sample\ x\ gene\ length\ (bp)}\)</span></div>
-<div class="line">Perform fragments per kilobase million sample normalization on RNAseq data</div>
+<div class="line">- Perform <strong>fragments per kilobase million</strong> sample normalization on RNA-seq data</div>
 <div class="line"><span class="math notranslate nohighlight">\(FPKM = \frac{\#\ number\ fragments\ per\ gene\ x\ 1e6\ x\ 1e3}{\#\ mapped\ fragments\ per\ sample\ x\ gene\ length\ (bp)}\)</span></div>
-<div class="line">Perform transcripts per million sample normalization on RNAseq data (same as RPKM, but order of operations is different)</div>
-<div class="line"><span class="math notranslate nohighlight">\(TPM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e3\ x\ 1e6}{\gene\ length\ (bp) x\ #\ mapped\ reads\ per\ sample}\)</span></div>
-<div class="line"><br /></div>
-<div class="line">Translation efficiency normalization can be performed within XPRESStools</div>
+<div class="line">- Perform <strong>transcripts per million</strong> sample normalization on RNA-seq data (same as RPKM, but order of operations is different)</div>
+<div class="line"><span class="math notranslate nohighlight">\(TPM = \frac{\#\ number\ reads/fragments\ per\ gene\ x\ 1e3\ x\ 1e6}{gene\ length\ (bp)\ x\ \#\ mapped\ reads\ per\ sample}\)</span></div>
 <div class="line"><br /></div>
 <div class="line">Assumptions:</div>
 <div class="line-block">
 <div class="line">- R is installed on your machine and is in your $PATH if using the <code class="xref py py-data docutils literal notranslate"><span class="pre">batch</span></code> argument</div>
 <div class="line">- All input files are tab-delimited (with .txt or .tsv suffix)</div>
+<div class="line"><br /></div>
 </div>
+<div class="line"><strong>Batch Correction</strong>:</div>
+<div class="line">When multiple people perform library preparation, or when libraries are prepared on different days, this can lead to inherent biases in count distributions between batches of samples. It is therefore necessary to normalize these effects when appropriate.</div>
 </div>
 <div class="section" id="arguments">
 <h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h3>
@@ -230,7 +226,7 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-d</span> <span class="pre">&lt;path/filename.tsv&gt;,</span> <span class="pre">--data</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path/filename.tsv&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
 <td><p>Path and file name of expression counts matrix</p></td>
 </tr>
 </tbody>
@@ -247,7 +243,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--method</span> <span class="pre">&lt;RPM,</span> <span class="pre">RPKM,</span> <span class="pre">FPKM,</span> <span class="pre">LOG&gt;</span></code></p></td>
-<td><p>Normalization method to perform (options: “RPM”, “TPM”, “RPKM”, “FPKM”, “LOG”) – if using either TPM, RPKM, or FPKM, a GTF reference file must be included</p></td>
+<td><p>Normalization method to perform (options: “RPM”, “TPM”, “RPKM”, “FPKM”) – if using either TPM, RPKM, or FPKM, a GTF reference file must be included</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
 <td><p>Path and file name to reference GTF (RECOMMENDED: Do not use modified GTF file)</p></td>
@@ -261,75 +257,13 @@
 <div class="section" id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
-<div class="line"><strong>Example 1 – Perform RPKM normalization on single-end RNAseq data:</strong></div>
+<div class="line"><strong>Example 1 – Perform RPKM normalization on single-end RNA-seq data:</strong></div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe normalizeMatrix -d riboprof_out/counts/se_test_counts_table.tsv --method RPKM -g se_reference/transcripts_coding_truncated.gtf
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe normalizeMatrix -i riboprof_out/counts/se_test_counts_table.tsv --method RPKM -g se_reference/transcripts_coding_truncated.gtf
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="batch-normalize">
-<h2>Batch Normalize<a class="headerlink" href="#batch-normalize" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">When multiple people perform library preparation, or when libraries are prepared on different days, this can lead to inherent biases in count distributions between batches of samples. It is therefore necessary to normalize these effects when appropriate.</div>
-<div class="line"><br /></div>
-<div class="line">Assumptions:</div>
-<div class="line-block">
-<div class="line">- R is installed on your machine and is in your $PATH</div>
-<div class="line">- All input files are tab-delimited (with .txt or .tsv suffix)</div>
-</div>
-</div>
-<div class="section" id="id1">
-<h3>Arguments<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="line-block">
-<div class="line">The help menu can be accessed by calling the following from the command line:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe normalizeMatrix --help
-</pre></div>
-</div>
-<table class="colwidths-given docutils align-center">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Required Arguments</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-d</span> <span class="pre">&lt;path/filename.tsv&gt;,</span> <span class="pre">--data</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
-<td><p>Path and file name of expression counts matrix</p></td>
-</tr>
-</tbody>
-</table>
-<table class="colwidths-given docutils align-center">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Optional Arguments</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--method</span> <span class="pre">&lt;RPM,</span> <span class="pre">TPM,</span> <span class="pre">RPKM,</span> <span class="pre">FPKM,</span> <span class="pre">LOG&gt;</span></code></p></td>
-<td><p>Normalization method to perform (options: “RPM”, “TPM”, “RPKM”, “FPKM”, “LOG”) – if using either RPKM or FPKM, a GTF reference file must be included</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
-<td><p>Path and file name to reference GTF</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--batch</span> <span class="pre">&lt;/path/filename.tsv&gt;</span></code></p></td>
-<td><p>Include path and filename of dataframe with batch normalization parameters</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="id2">
-<h3>Examples<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<div class="line-block">
-<div class="line"><strong>Example 1 – Perform batch normalization on RNAseq data:</strong></div>
+<div class="line"><strong>Example 2 – Perform batch normalization on RNA-seq data:</strong></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">batch</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./riboprof_out/counts/batch_info.tsv&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="o">&gt;</span> <span class="n">batch</span>
@@ -340,7 +274,7 @@
 <span class="mi">3</span> <span class="n">s4</span>      <span class="n">batch2</span>
 </pre></div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe normalizeMatrix -d riboprof_out/counts/se_test_counts_table.tsv --batch riboprof_out/counts/batch_info.tsv
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe normalizeMatrix -i riboprof_out/counts/se_test_counts_table.tsv --batch riboprof_out/counts/batch_info.tsv
 </pre></div>
 </div>
 </div>

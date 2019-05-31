@@ -1,3 +1,5 @@
+.. _analysis_link:
+
 ##############################
 Quality Control and Analysis
 ##############################
@@ -5,10 +7,11 @@ Quality Control and Analysis
 =================================
 Differential Expression Analysis
 =================================
-| Differential Expression analysis allows one to determine significantly enriched or depleted genes between two conditions.
+| Differential Expression analysis allows one to determine significantly enriched or depleted genes between two conditions. XPESSpipe acts as a wrapper for `DESeq2 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/>`_. Please refer to its `documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html>`_ for more information.
+
 |
 | Assumptions:
-|   - R is installed on your machine and is in your $PATH
+|   - R is installed on your machine and is in your $PATH (this should be handled in the installation)
 |   - All input files are tab-delimited (with .txt or .tsv suffix)
 |   - Design formula does not include the tilde (~) and there are no spaces
 |   - Your base parameter in a given column in the sample_info file must be first alphabetically. If this is not the base, you can append letters to the beginning to force alphabetical order
@@ -28,17 +31,17 @@ Arguments
 
    * - Required Arguments
      - Description
-   * - :data:`-d \<path/filename.tsv\>, --data \<path/filename.tsv\>`
+   * - :data:`-i \<path/filename.tsv\>, --input \<path/filename.tsv\>`
      - Path and file name of expression counts matrix
    * - :data:`-s \<path/filename.tsv\>, --sample \<path/filename.tsv\>`
      - Path and file name of sample information matrix
    * - :data:`--design \<formula\>`
-     - Path to parent organism reference directory
+     - Design formula for differential expression analysis (spaces in command line are conserved in input string. DO NOT INCLUDE ~ OR SPACES IN FORMULA IN COMMAND LINE, will be automatically added)
 
 -----------
 Examples
 -----------
-| **Example 1 -- Analyze RNAseq data**
+| **Example 1 -- Analyze RNA-seq data**
 
 .. ident with TABs
 .. code-block:: python
@@ -65,9 +68,9 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition
+  $ xpresspipe diffxpress -i test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition
 
-| **Example 2 -- Analyze RNAseq data that was prepared in different batches:**
+| **Example 2 -- Analyze RNA-seq data that was prepared in different batches:**
 
 .. ident with TABs
 .. code-block:: python
@@ -94,7 +97,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition+Batch
+  $ xpresspipe diffxpress -i test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition+Batch
 
 | **Example 3 -- Analyze ribosome profiling data:**
 | For ribosome profiling, you need to divide the footprint samples by their corresponding mRNA sample to account for translation efficiency
@@ -124,13 +127,13 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe diffxpress -d test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Type+Condition+Type:Condition
+  $ xpresspipe diffxpress -i test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Type+Condition+Type:Condition
 
 
 =================================
 Read Distribution Analysis
 =================================
-| When performing RNAseq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all fastq samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library.
+| When performing RNA-seq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all :data:`.fastq` samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library. When this is run within the pipeline, it will analyze just the post-trimming :data:`.fastq` files
 
 -----------
 Arguments
@@ -205,6 +208,8 @@ Examples
 .. image:: se_test_metagene_summary.png
   :width: 450px
 
+NOTE: As you can appreciate, there are systematic 5' biases in these library preparations. A good RNA-seq library should have even coverage across all transcripts.
+
 =================================
 Codon Periodicitiy Analysis
 =================================
@@ -241,7 +246,7 @@ Examples
   $ xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
 
 .. image:: se_test_periodicity_summary.png
-  :width: 450px
+  :width: 250px
 
 ======================
 rRNA Probe

@@ -39,7 +39,7 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Beginners" href="beginner.html" />
+    <link rel="next" title="Beginner’s Guide" href="beginner.html" />
     <link rel="prev" title="XPRESSpipe" href="../index.html" /> 
 </head>
 
@@ -92,13 +92,13 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#se-and-pe-rnaseq">SE and PE RNAseq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#se-and-pe-rna-seq">SE and PE RNA-seq</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#ribosome-profiling">Ribosome Profiling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#software">Software</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#methodology">Methodology</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -111,7 +111,7 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -179,22 +179,22 @@
             
   <div class="section" id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="se-and-pe-rnaseq">
-<h2>SE and PE RNAseq<a class="headerlink" href="#se-and-pe-rnaseq" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="se-and-pe-rna-seq">
+<h2>SE and PE RNA-seq<a class="headerlink" href="#se-and-pe-rna-seq" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">The XPRESSpipe pipeline is flexibly designed to be able to process and perform preliminary analyses on single-end (SE) or paired-end RNAseq sequence read. Raw data is most often generated in the form of a <a class="reference external" href="http://support.illumina.com/content/dam/illumina-support/help/BaseSpaceHelp_v2/Content/Vault/Informatics/Sequencing_Analysis/BS/swSEQ_mBS_FASTQFiles.htm">.fastq</a> or .txt file. This data is useful in determining the transcriptional landscape of a population of cells or of single cells. Other qualities, such as microRNA abundance, splice events, and sequence variants can also be detected and analyzed.</div>
+<div class="line">The XPRESSpipe pipeline is flexibly designed to be able to process and perform preliminary analyses on single-end (SE) or paired-end RNA-seq sequence read. Raw data is most often generated in the form of a <a class="reference external" href="http://support.illumina.com/content/dam/illumina-support/help/BaseSpaceHelp_v2/Content/Vault/Informatics/Sequencing_Analysis/BS/swSEQ_mBS_FASTQFiles.htm">.fastq</a> or .txt file. This data is useful in determining the transcriptional landscape of a population of cells or of single cells. Other qualities, such as microRNA abundance, splice events, and sequence variants can also be detected and analyzed.</div>
 </div>
 </div>
 <div class="section" id="ribosome-profiling">
 <h2>Ribosome Profiling<a class="headerlink" href="#ribosome-profiling" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line"><a class="reference external" href="https://en.wikipedia.org/wiki/Ribosome_profiling">Ribosome profiling</a> utilizes Next Generation Sequencing (NGS) to provide a detailed picture of the protein translation landscape within cells. Cells are lysed, translating ribosomes are isolated, and the ribosome protected mRNA fragments (ribosome footprints are integrated into a SE RNAseq library. The library is then sequenced and processed similarly to a single-end RNAseq run, with some exceptions:</div>
+<div class="line"><a class="reference external" href="https://en.wikipedia.org/wiki/Ribosome_profiling">Ribosome profiling</a> utilizes Next Generation Sequencing (NGS) to provide a detailed picture of the protein translation landscape within cells. Cells are lysed, translating ribosomes are isolated, and the ribosome protected mRNA fragments (ribosome footprints are integrated into a SE RNA-seq library. The library is then sequenced and processed similarly to a single-end RNA-seq run, with some exceptions:</div>
 </div>
 <div class="line-block">
-<div class="line">- <strong>5’ ribosome footprint bias</strong>: 5’ footprint bias has been well-documented in any sequence library preparation method. Therefore, it is advised that when counting reads to a reference transcriptome, one avoids mapping to the first 45-50 nucleotides of exon 1 of each transcript. By using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">truncate</span></code> sub-module, one can create truncated transcriptome reference files (GTF) for counting their aligned reads.</div>
+<div class="line">- <strong>5’ and 3’ ribosome footprint bias</strong>: 5’ and 3’ footprint bias has been well-documented in any ribosome profiling library preparation method, arising from the longer ribosome initiation and termination steps. Therefore, it is advised that when quantifying reads to a reference transcriptome, one avoids mapping to the first 45-50 nucleotides of exon 1 of each transcript. By using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">truncate</span></code> sub-module, one can create a truncated transcriptome reference file (GTF) for use when quantifying their aligned reads.</div>
 </div>
 <div class="line-block">
-<div class="line">- <strong>rRNA contamination</strong>: As pervasive ribosomal RNA (rRNA) can contaminate footprint libraries due to most commercial kits’ inability to deplete these various fragmented rRNAs inherent in the ribosome profiling methodology, it is advised to create depletion probes that are dominant in ribosome profiling libraries for a given organism. By using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">rrnaProbe</span></code> sub-module, one can collate these dominant rRNA species and create depletion probes for these fragment species.</div>
+<div class="line">- <strong>rRNA contamination</strong>: As pervasive ribosomal RNA (rRNA) can contaminate footprint libraries due to most commercial kits’ inability to deplete these various fragmented rRNAs inherent in the ribosome profiling methodology, it is advised to create depletion probes for dominant rRNA fragment species in ribosome profiling libraries for a given organism. By using the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">rrnaProbe</span></code> sub-module, one can collate these dominant rRNA species and create depletion probes to prevent their incorporation into future sequence libraries.</div>
 </div>
 <div class="line-block">
 <div class="line">See this <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/28579404">paper</a> for a recent discussion and detailed protocol of the technique.</div>
@@ -216,20 +216,28 @@
 </div>
 <div class="line-block">
 <div class="line"><a class="reference external" href="https://github.com/samtools/samtools">samtools</a>/<a class="reference external" href="https://github.com/arq5x/bedtools2">bedtools</a>/<a class="reference external" href="https://github.com/deeptools/deepTools">deepTools</a> – Alignment file handling</div>
-<div class="line">These tools handle the alignment file processing before quantification to idenify PCR duplicates, remove non-uniquely aligned reads, and so on.</div>
+<div class="line">These tools handle the alignment file processing before quantification to identify PCR duplicates (optional), remove non-uniquely aligned reads, and so on.</div>
 </div>
 <div class="line-block">
 <div class="line"><a class="reference external" href="https://github.com/cole-trapnell-lab/cufflinks">Cufflinks</a> – Read quantification (Recommended)</div>
 <div class="line">A recent <a class="reference external" href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0734-x">benchmarking paper</a> showed evidence that Cufflinks using default parameters performed the best compared to other read quantification tools.</div>
-<div class="line">Using v2.1.1 as v2.2.1 suffers from a persistent Seg Fault 11 error on MacOS. No significant changes occurred between these versions influencing performance of Cufflinks quantification.</div>
+<div class="line">XPRESSpipe uses Cufflinks v2.1.1 as Cufflinks v2.2.1 suffers from a persistent Seg Fault 11 error on MacOS. No significant changes effecting quantification have occurred between these versions.</div>
 </div>
 <div class="line-block">
 <div class="line"><a class="reference external" href="https://github.com/simon-anders/htseq">HTSeq</a> – Read quantification</div>
-<div class="line">While not performing optimally compared to other tools, HTSeq has been included for archival purposes as the current <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> pipeline uses HTSeq</div>
+<div class="line">While not performing optimally compared to other tools, HTSeq has been included for archival purposes as the current <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> pipeline uses HTSeq. This is also a included in cases where the user requires raw counts as quantification output.</div>
 </div>
 <div class="line-block">
-<div class="line"><a class="reference external" href="https://bioconductor.org/packages/release/bioc/html/dupRadar.html">dupRadar</a> – Library complexity</div>
+<div class="line"><a class="reference external" href="https://bioconductor.org/packages/release/bioc/html/dupRadar.html">dupRadar</a> – Library Complexity</div>
 <div class="line">dupRadar is a stable, easy to use tool for estimating library size complexity and doesn’t suffer from systematic software issues like other tools that contain a similar module</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="http://bioconductor.org/packages/release/bioc/html/sva.html">SVA</a> – Known Library Batch Correction</div>
+<div class="line">Used for correcting for known batch effects between samples (i.e. samples prepared on different days, by different people, etc.)</div>
+</div>
+<div class="line-block">
+<div class="line"><a class="reference external" href="http://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a> – Differential Expression Analysis</div>
+<div class="line">Perform differential expression analysis on the data.</div>
 </div>
 <div class="line-block">
 <div class="line"><a class="reference external" href="https://github.com/ewels/MultiQC">MultiQC</a> – Summary reports</div>
@@ -244,22 +252,23 @@
 <div class="line-block">
 <div class="line"><strong>Transcriptomic Reference Files</strong></div>
 <div class="line">Read quantification often requires a transcriptome reference file in order to know what alignment coordinates map to what genes. We introduce a suite of GTF modification tools included in XPRESSpipe that we will briefly discuss:</div>
-<div class="line">Isoforms: GTF files contain records for every isoform of a gene. However, since these isoforms all contain overlapping regions, many quantification tools count a read mapping to one of these regions as a multi-mapper and either penalizes it or discards it completely. A common way to handle this is by taking only the longest transcript for each gene during quantification. This can be performed with <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-l</span></code>.</div>
-<div class="line">Protein Coding: When calculating mRNA expression levels, sample normalization to reduce technical bias from RNA-seq platforms is important. However, highly-abundant rRNAs can confound these metrics. Therefore, we provide an option to create a GTF file with only protein-coding annotated genes as input for quantification using <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-p</span></code>.</div>
-<div class="line">Ribosome Profiling Bias: During translation, there are three steps: 1) Initiation, 2) Elongation, and 3) Termination. There is usually a pause during Initiation and Termination, which will present itself as systematic spikes on the 5’ and 3’ ends of each transcript for ribosome profiling reads. A way to correct for the kinetics of initiation and termination and measure translational capacity itself is to <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/28579404">avoid mapping reads to the first 15 codons and last 5 codons of a transcript</a>. <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-t</span></code> handles this by searching the exon space of each transcript and pruning the given amounts off of each so that these regions are considered non-coding space.</div>
+<div class="line">- Isoforms: GTF files contain records for every isoform of a gene. However, since these isoforms all contain overlapping regions, many quantification tools count a read mapping to one of these regions as a multi-mapper and either penalizes it or discards it completely. A common way to handle this is by taking only the longest transcript for each gene during quantification. This can be performed with <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-l</span></code>.</div>
+<div class="line">- Protein Coding: When calculating mRNA expression levels, sample normalization to reduce technical bias from RNA-seq platforms is important. However, highly-abundant rRNAs can confound these metrics. Therefore, we provide an option to create a GTF file with only protein-coding annotated genes as input for quantification using <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-p</span></code>.</div>
+<div class="line">- Ribosome Profiling Bias: During translation, there are three steps: 1) Initiation, 2) Elongation, and 3) Termination. There is usually a pause during Initiation and Termination, which will present itself as systematic spikes on the 5’ and 3’ ends of each transcript for ribosome profiling reads. A way to correct for the kinetics of initiation and termination and measure translational capacity itself is to <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/28579404">avoid mapping reads to the first 15 codons and last 5 codons of a transcript</a>. <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">modifyGTF</span> <span class="pre">-t</span></code> handles this by searching the exon space of each transcript and pruning the given amounts off of each so that these regions are considered non-coding space. This process is performed recursively, so that if you were trimming 45 nt from the 5’ end and exon 1 was only 30 nt, exon 1 would be removed and exon 2 would be trimmed by 15 nt.</div>
 </div>
 <div class="line-block">
 <div class="line"><strong>PCR De-Duplication</strong></div>
-<div class="line">During sequence library creation, a PCR amplification step is common in order to produce enough sequence material, but often, different reads are amplified differentially.  When UMIs are not used, these duplication events can artificially model higher expression of a transcript that had favorable amplification conditions. We therefore include a PCR de-duplication step for experiments not using UMIs and the resulting reads then continue through the pipeline.</div>
+<div class="line">During sequence library creation, a PCR amplification step is common in order to produce enough sequence material, but often, different reads are amplified differentially.  When UMIs are not used, these duplication events can artificially model higher expression of a transcript that had favorable amplification conditions. We therefore include an optional PCR de-duplication step for experiments not using UMIs. Be warned, this can introduce <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pubmed/30001700">additional biases</a> and should be used with caution. Performing library complexity analysis on the samples should indicate whether or not computational de-duplication should be performed.</div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Metagene Analysis</strong></div>
+<div class="line"><strong>Meta-Analysis</strong></div>
+<div class="line">- Periodicity: A helpful metric of ribosome profiling libraries is looking at the characteristic 3 nt/1 codon stepping of the translating ribosome.</div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Periodicity</strong></div>
+<div class="line">- Metagene: Metagene analysis takes the read coverage across all transcripts in a sample and compiles their distribution along a representative transcript. This is useful in identifying any systematic 5’ or 3’ biases in the library preparation step.</div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Read distribution</strong></div>
+<div class="line">- Read distribution: Once reads are trimmed of low quality bases or adaptor sequences, looking at the distribution of read lengths can be helpful in identifying that the expected RNA was incorporated into the library. This is especially useful in ribosome profiling datasets, where ideally all reads isolated and incorporated into the library should fall within the 21-30 nt range.</div>
 </div>
 </div>
 </div>
@@ -272,7 +281,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="beginner.html" class="btn btn-neutral float-right" title="Beginners" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="beginner.html" class="btn btn-neutral float-right" title="Beginner’s Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../index.html" class="btn btn-neutral float-left" title="XPRESSpipe" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

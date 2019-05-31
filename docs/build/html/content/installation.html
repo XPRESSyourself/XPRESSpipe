@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="General Usage" href="general-usage.html" />
-    <link rel="prev" title="Beginners" href="beginner.html" /> 
+    <link rel="prev" title="Beginner’s Guide" href="beginner.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,11 +92,10 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#conda-installation">Conda Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-from-source-recommended">Install from Source (Recommended)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#docker-container">Docker Container</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#manual-installation">Manual installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>
 </li>
@@ -111,7 +110,7 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -179,20 +178,53 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="conda-installation">
-<h2>Conda Installation<a class="headerlink" href="#conda-installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-from-source-recommended">
+<h2>Install from Source (Recommended)<a class="headerlink" href="#install-from-source-recommended" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">This feature is not yet available…</div>
-<div class="line"><br /></div>
-<div class="line">1. Install XPRESSpipe and associated dependencies via conda:</div>
+<div class="line">The majority of installation is automated within the setup script.</div>
+<div class="line">1. Assuming you have a more recent version of Python, you should have <code class="xref py py-data docutils literal notranslate"><span class="pre">pip</span></code> installed. If not, please follow these <a class="reference external" href="https://pip.pypa.io/en/stable/installing/">instructions</a>.</div>
+<div class="line">2. Install the required <code class="xref py py-data docutils literal notranslate"><span class="pre">setuptools</span></code> package that will automate setup.</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda install -y -c bioconda xpresspipe
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install setuptools
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">3. Download XPRESSpipe and execute the XPRESSpipe installation script.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~
+$ curl -O https://github.com/XPRESSyourself/XPRESSpipe/archive/XPRESSpipe-v0.1.3b2.tar.gz
+$ tar xvzf XPRESSpipe-v0.1.3b2.tar.gz
+$ <span class="nb">cd</span> XPRESSpipe-v0.1.3b2
+$ python setup.py install
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">This will install XPRESSpipe as well as all required dependencies. If <a class="reference external" href="https://www.anaconda.com/distribution/">Anaconda</a> has not been installed by the user, this will take care of installation. Anaconda is a package manager and will install the other software packages XPRESSpipe relies on.</div>
+</div>
+<div class="line-block">
+<div class="line">4. Test installation by executing the following in the command line:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe -h
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">5. If your system can’t find the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span></code> command, try the following. At the end of the installation instructions, an installation location will be given. Add this to your $PATH:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>...
+Installing xpresspipe script to /Users/<span class="nv">$USERNAME</span>/anaconda3/bin
+
+Installed /Users/<span class="nv">$USERNAME</span>/anaconda3/lib/python3.6/site-packages/xpresspipe-0.0.1b0-py3.6.egg
+Processing dependencies <span class="k">for</span> <span class="nv">XPRESSpipe</span><span class="o">==</span><span class="m">0</span>.0.1b0
+Finished processing dependencies <span class="k">for</span> <span class="nv">XPRESSpipe</span><span class="o">==</span><span class="m">0</span>.0.1b0
+
+$ <span class="nb">echo</span> <span class="s2">&quot;export PATH=&#39;/Users/</span><span class="nv">$USERNAME</span><span class="s2">/anaconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&#39; &gt;&gt; ~/.bash_profile</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="docker-container">
 <h2>Docker Container<a class="headerlink" href="#docker-container" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
+<div class="line">NOTE: The Docker containerization is still under development.</div>
 <div class="line">XPRESSpipe is available as a fully independent <a class="reference external" href="https://www.docker.com/">Docker</a> container. By downloading the Docker software and using the below command, a image of XPRESSpipe and all associated dependencies localized to a single file for ease of use.</div>
 </div>
 <div class="line-block">
@@ -211,54 +243,28 @@
 <div class="line">If the help menu prints, XPRESSpipe if functioning properly and you can replace the <code class="xref py py-data docutils literal notranslate"><span class="pre">--help</span></code> option with the appropriate sub-module and arguments.</div>
 </div>
 </div>
-<div class="section" id="manual-installation">
-<h2>Manual installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h2>
-<div class="line-block">
-<div class="line">1. Or download XPRESSpipe manually:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/XPRESSyourself/xpresspipe.git
-$ <span class="nb">cd</span> XPRESSpipe
-$ <span class="nb">cd</span> python setup.py install
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">2. Or, to download specific version:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nv">tag</span><span class="o">=</span><span class="s1">&#39;v0.0.1-beta&#39;</span>
-$ wget https://github.com/XPRESSyourself/XPRESSpipe/archive/<span class="nv">$tag</span>.zip
-$ unzip xpresspipe-<span class="si">${</span><span class="nv">tag</span><span class="p">:</span><span class="nv">1</span><span class="si">}</span>.zip
-$ mv xpresspipe-<span class="si">${</span><span class="nv">tag</span><span class="p">:</span><span class="nv">1</span><span class="si">}</span> xpresspipe
-$ <span class="nb">cd</span> xpresspipe
-$ <span class="nb">cd</span> python setup.py install
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line">3. At the end of the installation instructions, an installation location will be given. Add this to your $PATH:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>...
-Installing xpresspipe script to /Users/<span class="nv">$USERNAME</span>/anaconda3/bin
-
-Installed /Users/<span class="nv">$USERNAME</span>/anaconda3/lib/python3.6/site-packages/xpresspipe-0.0.1b0-py3.6.egg
-Processing dependencies <span class="k">for</span> <span class="nv">XPRESSpipe</span><span class="o">==</span><span class="m">0</span>.0.1b0
-Finished processing dependencies <span class="k">for</span> <span class="nv">XPRESSpipe</span><span class="o">==</span><span class="m">0</span>.0.1b0
-
-$ <span class="nb">echo</span> <span class="s2">&quot;export PATH=&#39;/Users/</span><span class="nv">$USERNAME</span><span class="s2">/anaconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&#39; &gt;&gt; ~/.bash_profile</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<div class="line-block">
-<div class="line">- FastP</div>
-<div class="line">- STAR</div>
-<div class="line">- samtools</div>
-<div class="line">- bedtools</div>
-<div class="line">- deeptools</div>
-<div class="line">- xpresspipe</div>
-<div class="line">- fastqc</div>
-<div class="line">- htseq</div>
-<div class="line">- R</div>
-</div>
+<p>In both installation options specified above, the installation of these packages should be handled automatically. If not, please make sure you have <a class="reference external" href="https://www.anaconda.com/distribution/">Anaconda</a> installed and try the installation again if using the Installation from Source option. If there is an issue with the Docker distribution, please submit an <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe/issues">issue</a>.
+| - fastp
+| - STAR
+| - samtools
+| - bedtools
+| - deepTools
+| - FastQC
+| - Cufflinks
+| - HTSeq
+| - pandas
+| - numpy
+| - biopython
+| - scipy
+| - plotly
+| - R
+| - dupRadar
+| - DESeq2
+| - matplotlib
+| - XPRESSplot
+| - MultiQC</p>
 </div>
 </div>
 
@@ -273,7 +279,7 @@ $ <span class="nb">echo</span> <span class="s2">&quot;export PATH=&#39;/Users/</
         <a href="general-usage.html" class="btn btn-neutral float-right" title="General Usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="beginner.html" class="btn btn-neutral float-left" title="Beginners" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="beginner.html" class="btn btn-neutral float-left" title="Beginner’s Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -6,6 +6,7 @@ Read Quantification
 Quantifying and Collating Reads
 ===============================
 | In order to quantify aligned reads, they must be counts to a reference transcriptome. This will tell you in relative terms how much of each transcript is expressed in a system. The following sub-module will perform this quantification, as well as compile all sample quantifications into a single data matrix for downstream use.
+| XPRESSpipe uses `Cufflinks <http://cole-trapnell-lab.github.io/cufflinks/>`_ as the default, but `HTSeq <https://htseq.readthedocs.io/en/release_0.11.1/>`_ can also be specified. Cufflinks is one of the most accurate read quantifiers currently available, but HTSeq is still widely used and is part of the `TCGA <https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/>`_ pipeline.
 
 -----------
 Arguments
@@ -29,7 +30,7 @@ Arguments
    * - :data:`-r \<path\>, --reference \<path\>`
      - Path to parent organism reference directory
    * - :data:`-g \</path/transcript.gtf\>, --gtf \</path/transcript.gtf\>`
-     - Path and file name to GTF used for alignment quantification
+     - Path and file name to GTF used for alignment quantification (if a modified GTF was created, this should be provided here)
 
 .. list-table::
    :widths: 35 50
@@ -39,6 +40,12 @@ Arguments
      - Description
    * - :data:`-e <experiment_name>`, :data:`--experiment <experiment_name>`
      - Experiment name
+   * - :data:`-c <method>`, :data:`--quantification_method <method>`
+     - Specify quantification method (default: cufflinks; other option: htseq. If using Cufflinks, no downstream sample normalization is required)
+   * - :data:`--deduplicate`
+     - Include flag to quantify reads with de-duplication (will search for files with suffix :data:`_dedupRemoved.bam`)
+   * - :data:`--bam_suffix <suffix>`
+     - Change from default suffix of _Aligned.sort.bam
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
@@ -52,7 +59,7 @@ Examples
 
 .. code-block:: shell
 
-  $ xpresspipe count -i riboprof_out/alignments/ -o riboprof_out/ -r se_reference/ -g se_reference/transcripts_codingOnly_truncated.gtf -e se_test
+  $ xpresspipe count -i riboseq_out/alignments/ -o riboseq_out/ -r se_reference/ -g se_reference/transcripts_codingOnly_truncated.gtf -e se_test
 
 | **Example 2 -- Count paired-end alignments:**
 | - Input points to directory with SAM alignment files that are sorted by name
@@ -62,9 +69,3 @@ Examples
 .. code-block:: shell
 
   $ xpresspipe count -i pe_out/alignments/ -o pe_out/ -r pe_reference/
-
-----------------------
-Future Implementations
-----------------------
-| Add arguments for -s strandedness so other kits are usable with pipeline (default: False for TCGA)
-| Add arguments for -m intersection (d)efault: intersection-nonempty for TCGA)

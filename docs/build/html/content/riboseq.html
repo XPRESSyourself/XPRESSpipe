@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Single-End RNA-seq Pipeline &mdash; XPRESSpipe 0.1.3-beta documentation</title>
+  <title>Ribosome Profiling Pipeline &mdash; XPRESSpipe 0.1.3-beta documentation</title>
   
 
   
@@ -39,8 +39,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Paired-End RNA-seq Pipeline" href="peRNAseq.html" />
-    <link rel="prev" title="Quality Control and Analysis" href="analysis.html" /> 
+    <link rel="next" title="FAQs" href="faqs.html" />
+    <link rel="prev" title="Paired-End RNA-seq Pipeline" href="peRNAseq.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -103,12 +103,12 @@
 <li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Single-End RNA-seq Pipeline</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Ribosome Profiling Pipeline</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -155,13 +155,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Single-End RNA-seq Pipeline</li>
+      <li>Ribosome Profiling Pipeline</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/content/seRNAseq.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/content/riboseq.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -174,10 +174,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="single-end-rna-seq-pipeline">
-<h1>Single-End RNA-seq Pipeline<a class="headerlink" href="#single-end-rna-seq-pipeline" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="ribosome-profiling-pipeline">
+<h1>Ribosome Profiling Pipeline<a class="headerlink" href="#ribosome-profiling-pipeline" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line">The following pipeline will pre-process, align, and quality check single-end RNA-seq samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the appropriate chapter.</div>
+<div class="line">The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the appropriate chapter.</div>
 </div>
 <table class="colwidths-given docutils align-center">
 <colgroup>
@@ -268,20 +268,20 @@
 <div class="line-block">
 <div class="line">Run the following for more details:</div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe seRNAseq --help
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe riboseq --help
 </pre></div>
 </div>
 <div class="section" id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line"><strong>Example 1 – Run pipeline on single-end RNA-seq sample files</strong></div>
+<div class="line"><strong>Example 1 – Run pipeline on ribosome profiling sample files</strong></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe seRNAseq \
-              -i se_test \
-              -o se_out \
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe riboseq \
+              -i riboprof_test \
+              -o ribopipe_out \
               -r se_reference \
-              --gtf transcripts_longestTranscript.gtf \
-              -e se_test \
+              --gtf se_reference/transcript_LCT.gtf \
+              -e riboprof_test \
               -a CTGTAGGCACCATCAAT \
               --method RPKM \
               --sjdbOverhang 49
@@ -298,10 +298,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="peRNAseq.html" class="btn btn-neutral float-right" title="Paired-End RNA-seq Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="faqs.html" class="btn btn-neutral float-right" title="FAQs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="analysis.html" class="btn btn-neutral float-left" title="Quality Control and Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="peRNAseq.html" class="btn btn-neutral float-left" title="Paired-End RNA-seq Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

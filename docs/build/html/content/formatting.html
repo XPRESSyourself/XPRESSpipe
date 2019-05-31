@@ -92,7 +92,7 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -112,7 +112,7 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -204,7 +204,7 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-d</span> <span class="pre">&lt;path/filename&gt;,</span> <span class="pre">--data</span> <span class="pre">&lt;path/filename&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path/filename&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path/filename&gt;</span></code></p></td>
 <td><p>Path and file name to sequence dataframe</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
@@ -246,7 +246,7 @@
 <div class="line-block">
 <div class="line"><strong>Example 1 – Convert gene names in count dataframe</strong></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe convertNames -d riboprof_out/counts/se_test_counts_table.csv -g se_reference/transcripts.gtf
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe convertNames -i riboprof_out/counts/se_test_counts_table.csv -g se_reference/transcripts.gtf
 </pre></div>
 </div>
 </div>

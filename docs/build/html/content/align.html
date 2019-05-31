@@ -92,7 +92,7 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -117,7 +117,7 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -189,7 +189,7 @@
 <div class="line">In order to quantify transcription on a transcript to transcript basis, individual reads called during sequencing must be mapped to the genome. While there are multiple alignment software packages available, XPRESSpipe uses a current version of <a class="reference external" href="https://github.com/alexdobin/STAR">STAR</a> to perform this step in transcription quantification for several reasons:</div>
 <div class="line">- Performance: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/">performance and accuracy is superior to the majority of other splice aware aligners currently available</a></div>
 <div class="line">- Splice Junction Aware: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.</div>
-<div class="line">- Standard: The foundation of the pipeline used in XPRESSpipe is based in the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> standards for RNAseq alignment. This method utilizes a 2-pass alignment program, where alignment is performed to identify splice junctions, these junctions are considered in the reference genome, and reads are re-aligned with this new reference. While more time-intensive, the practice provides the user with a more thorough quantification of their RNA sequencing.</div>
+<div class="line">- Standard: The foundation of the pipeline used in XPRESSpipe is based in the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> standards for RNAseq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated.</div>
 </div>
 <div class="section" id="single-end-rnaseq-alignment">
 <h2>Single-End RNAseq Alignment<a class="headerlink" href="#single-end-rnaseq-alignment" title="Permalink to this headline">¶</a></h2>
@@ -197,7 +197,7 @@
 <div class="line">The following runs single-end reads alignment using the specified XPRESSpipe-formatted reference directory.</div>
 <div class="line">Notes:</div>
 <div class="line">- For the <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> argument, the same value should be entered that was used when creating the STAR reference files.</div>
-<div class="line">- Ribosome profiling data can be run as a single-end RNAseq</div>
+<div class="line">- Ribosome profiling data can be run as a single-end RNA-seq</div>
 </div>
 <div class="section" id="arguments">
 <h3>Arguments<a class="headerlink" href="#arguments" title="Permalink to this headline">¶</a></h3>
@@ -243,20 +243,26 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--two-pass</span></code></p></td>
+<td><p>Use a two-pass STAR alignment for novel splice junction discovery</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
 <td><p>Include flag to output BED files for each aligned file</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bigwig</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bigwig</span></code></p></td>
 <td><p>Include flag to output bigwig files for each aligned file</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;sjdbOverhang_amount&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;sjdbOverhang_amount&gt;</span></code></p></td>
 <td><p>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--mismatchRatio</span> <span class="pre">&lt;mismatchRatio&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--mismatchRatio</span> <span class="pre">&lt;mismatchRatio&gt;</span></code></p></td>
 <td><p>Alignment ratio of mismatches to mapped length is less than this value. See STAR documentation for more information on setting this parameter</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--seedSearchStartLmax</span> <span class="pre">&lt;seedSearchStartLmax&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--seedSearchStartLmax</span> <span class="pre">&lt;seedSearchStartLmax&gt;</span></code></p></td>
 <td><p>Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">genome_size</span></code></p></td>
+<td><p>Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>
@@ -269,13 +275,13 @@
 <div class="line-block">
 <div class="line"><strong>Example 1 – Single-end RNAseq alignment:</strong></div>
 <div class="line">- Raw reads are <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code>-like and found in the <code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">/path/to/input/files/</span></code> directory. Can be uncompressed or compressed via <code class="xref py py-data docutils literal notranslate"><span class="pre">gz</span></code> or <code class="xref py py-data docutils literal notranslate"><span class="pre">zip</span></code></div>
-<div class="line">- A general output directory has been created, <code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">riboprof_out/</span></code></div>
+<div class="line">- A general output directory has been created, <code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">riboseq_out/</span></code></div>
 <div class="line">- <code class="xref py py-data docutils literal notranslate"><span class="pre">--type</span></code> is specified as ‘SE’ and path to parent reference directory is provided</div>
 <div class="line">- The value for <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> used in reference creation is provided. Failure to do so will trigger an error</div>
 <div class="line">- BED and BIGWIG files will be output in their own directories in <code class="xref py py-data docutils literal notranslate"><span class="pre">output</span></code></div>
 <div class="line">- All other arguments use the default value</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align -i /path/to/input/files/ -o riboprof_out/ -t SE -r /path/to/reference/ --sjdbOverhang <span class="m">49</span> --output_bed --output_bigwig
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align -i /path/to/input/files/ -o riboseq_out/ -t SE -r /path/to/reference/ --sjdbOverhang <span class="m">49</span> --output_bed --output_bigwig
 </pre></div>
 </div>
 </div>
@@ -357,7 +363,7 @@
 <div class="line">- BED and BIGWIG files are not output</div>
 <div class="line">- All other arguments use the default value</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align -i /path/to/input/files/ -o riboprof_out -t PE -r /path/to/reference/
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align -i /path/to/input/files/ -o riboseq_out -t PE -r /path/to/reference/
 </pre></div>
 </div>
 </div>

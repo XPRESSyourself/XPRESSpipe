@@ -7,8 +7,8 @@ Read Trimming
 ===================
 
 | Trimming is a necessary part of RNAseq data processing due to the technological limitations described below:
-| - Inherent in RNAseq library creation, RNA is fragmented and adaptor sequences are ligated to the sequence. These adaptors include information such as sample batch and act as a primer for the sequencer to recognize the fragment as something to analyze. However, these adaptors, once sequenced, prevent alignment to a reference as large chunks of the fragment are synthetic sequence not found in each transcript.
-| - A sequencer's job is to read a fragment base by base and determine the nucleotide species each step of the way. While the technology has greatly improved over the years, a probability of error remains. Miscalled bases can prevent proper alignment of the sequenced fragment to the reference. Therefore, it is important for low confidence base calls to be trimmed from each read.
+| - Inherent in RNA-seq library creation, RNA is fragmented and adaptor sequences are ligated to the sequence. These adaptors include information such as sample batch and act as a primer for the sequencer to recognize the fragment as something to analyze. However, these adaptors, once sequenced, prevent alignment to a reference as large chunks of the fragment are synthetic sequence not found in the actual organism's genome/transcriptome.
+| - A sequencer's job is to read a fragment base by base and determine the nucleotide species each step of the way. While the technology has greatly improved over the years, a probability of error remains. Mis-called bases can prevent proper alignment of the sequenced fragment to the reference. Therefore, it is important for low confidence base calls to be trimmed from each read.
 |
 | Trimming is performed by `fastp <https://github.com/OpenGene/fastp>`_
 

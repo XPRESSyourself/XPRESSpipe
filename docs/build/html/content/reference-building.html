@@ -92,7 +92,7 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginners</a></li>
+<li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -124,7 +124,7 @@
 <li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboprof.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -196,13 +196,14 @@
 <div class="line">In order to quantify transcription on a transcript to transcript basis, individual reads called during sequencing must be mapped to the genome. While there are multiple alignment software packages available, XPRESSpipe uses a current version of <a class="reference external" href="https://github.com/alexdobin/STAR">STAR</a> to perform this step in transcription quantification for several reasons:</div>
 <div class="line">- Performance: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/">performance and accuracy is superior to the majority of other splice aware aligners currently available</a></div>
 <div class="line">- Splice Junction Aware: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.</div>
-<div class="line">- Standard: The foundation of the pipeline used in XPRESSpipe is based in the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> standards for RNAseq alignment. This method utilizes a 2-pass alignment program, where alignment is performed to identify splice junctions, these junctions are considered in the reference genome, and reads are re-aligned with this new reference. While more time-intensive, the practice provides the user with a more thorough quantification of their RNA sequencing.</div>
+<div class="line">- Standard: The foundation of the pipeline used in XPRESSpipe is based in the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> standards for RNAseq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated.</div>
+<div class="line"><strong>To perform a full reference indexing, including GTF modification, please skip down to the</strong> <a class="reference internal" href="#curate-link"><span class="std std-ref">Perform Full Reference Curation</span></a>.</div>
 </div>
 <div class="section" id="xpresspipe-reference-requirements">
 <h2>XPRESSpipe Reference Requirements<a class="headerlink" href="#xpresspipe-reference-requirements" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">An XPRESSpipe compatible reference directory must meet some requirements:</div>
-<div class="line">- All chromosomal genome fasta files are in the parent reference directory</div>
+<div class="line">- All chromosomal genome fasta files are in their own directory within the parent reference directory</div>
 <div class="line">- A sub-directory, named <code class="xref py py-data docutils literal notranslate"><span class="pre">genome</span></code>, contains the STAR reference files. If <code class="xref py py-data docutils literal notranslate"><span class="pre">createReference</span></code> is used to curate the reference, and the parent reference directory was provided as output location, this formatted will be handled by XPRESSpipe</div>
 <div class="line">- A transcript reference (GTF), is located in the reference parent directory and is named <code class="xref py py-data docutils literal notranslate"><span class="pre">transcripts.gtf</span></code>. If coding-only or truncated reference GTFs are used, they should also be in this directory (<code class="xref py py-data docutils literal notranslate"><span class="pre">truncate</span></code> will handle file naming and formatting so long as the output location is specified as this parent directory)</div>
 <div class="line"><a href="#id1"><span class="problematic" id="id2">**</span></a>A completed reference directory can be created that follows these requirements by creating a directory, placing the transcripts.gtf and chromosome genomic fasta files in the parent directory and running <code class="xref py py-data docutils literal notranslate"><span class="pre">curateReference</span></code> as described below</div>
@@ -214,10 +215,13 @@
 <div class="line">The following is an example of how to get the reference files needed for generating a human reference:</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ mkdir human_reference
+$ mkdir human_reference/genome
+$ mkdir human_reference/genome_fasta
 $ <span class="nb">cd</span> human_reference/
 $ curl ftp://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz -o transcripts.gtf.gz
 $ <span class="k">for</span> i in <span class="m">1</span> <span class="m">2</span> <span class="m">3</span> <span class="m">4</span> <span class="m">5</span> <span class="m">6</span> <span class="m">7</span> <span class="m">8</span> <span class="m">9</span> <span class="m">10</span> <span class="m">11</span> <span class="m">12</span> <span class="m">13</span> <span class="m">14</span> <span class="m">15</span> <span class="m">16</span> <span class="m">17</span> <span class="m">18</span> <span class="m">19</span> <span class="m">20</span> <span class="m">21</span> <span class="m">22</span> X Y MT<span class="p">;</span> <span class="k">do</span> curl -O ftp://ftp.ensembl.org/pub/release-95/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.<span class="si">${</span><span class="nv">i</span><span class="si">}</span>.fa.gz<span class="p">;</span> <span class="k">done</span>
 $ gzip -d *.gz
+$ mv *fasta genome_fasta
 </pre></div>
 </div>
 </div>
@@ -252,7 +256,7 @@ $ gzip -d *.gz
 <td><p>Path to genome fasta files (file names should end in .fa, .fasta, or .txt and no other files should exist in the directory with similar extensions)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
-<td><p>Path and file name to transcript reference file names ‘transcripts.gtf’</p></td>
+<td><p>Path and file name to transcript reference file names ‘transcripts.gtf (DO NOT USE MODIFIED GTF HERE)’</p></td>
 </tr>
 </tbody>
 </table>
@@ -270,7 +274,10 @@ $ gzip -d *.gz
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;int&gt;</span></code></p></td>
 <td><p>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--genome_size</span> <span class="pre">&lt;int&gt;</span></code></p></td>
+<td><p>Taken from the STAR manual: For small genomes, the parameter –genomeSAindexNbases needs to be scaled down, with a typical value of min(14, log2(GenomeLength)/2 - 1). For example, for 1 megaBase genome, this is equal to 9, for 100 kiloBase genome, this is equal to 7.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>
 </tr>
 </tbody>
@@ -283,7 +290,7 @@ $ gzip -d *.gz
 <div class="line">- Paths to output and location of genome fasta files for each chromosome are provided, as well as path and file name to transcripts.gtf file</div>
 <div class="line">- Default number of threads are used for preparing reference</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -sjdbOverhang <span class="m">49</span>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf --sjdbOverhang <span class="m">49</span>
 </pre></div>
 </div>
 <div class="line-block">
@@ -292,6 +299,15 @@ $ gzip -d *.gz
 <div class="line">- The as 2x100bp paired-end sequencing was used, the default value for <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> is appropriate in this case</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -t <span class="m">12</span>
+
+<span class="p">|</span> **Example <span class="m">3</span> -- Create a single-end sequencing reference <span class="k">for</span> Saccharomyces cerevisiae:**
+<span class="p">|</span> - Paths to output and location of genome fasta files <span class="k">for</span> each chromosome are provided, as well as path and file name to transcripts.gtf file
+<span class="p">|</span> - Default number of threads are used <span class="k">for</span> preparing reference<span class="se">\</span>
+<span class="p">|</span> - Genome size is specified
+
+.. code-block:: shell
+
+  $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf --sjdbOverhang <span class="m">49</span> --genome_size <span class="m">11</span>
 </pre></div>
 </div>
 </div>
@@ -304,7 +320,6 @@ $ gzip -d *.gz
 <div class="line">2. During ribosome profiling library preparation, a 5’ and 3’ transcript bias is common, regardless of library preparation method. It has therefore been suggested to <a class="reference external" href="https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1">exclude the first 45-50 nucleotides from the 5’ end and 15 nucleotides from the 3’ end of each transcript during quantification</a></div>
 <div class="line">3. Several genes encode multiple isoforms or transcripts. During quantification, many software packages for counting reads to genes consider a read mapping to multiple transcripts of the same gene as a multi-mapper. Unless interested in alternate isoform usage, it is recommended that transcriptome reference files only contain the longest transcript for each gene.</div>
 <div class="line">The <code class="xref py py-data docutils literal notranslate"><span class="pre">modifyGTF</span></code> sub-module provides the ability to make the above-mentioned modifications to a GTF transcriptome reference file. The modified GTF file is output at the end and the filename is labeled with the modifications made. Truncations to each transcript reference are stranded-aware.</div>
-<div class="line">NOTE: This only looks at transcript start and end position. It does not factor in longest exon space or stop sites within the transcript space, so does not necessarily conform to Ensembl’s definition of <a class="reference external" href="https://uswest.ensembl.org/Multi/Help/Glossary?db=core">canonical transcript</a></div>
 </div>
 <div class="section" id="id3">
 <h3>Arguments<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
@@ -378,7 +393,7 @@ $ gzip -d *.gz
 </div>
 </div>
 <div class="section" id="perform-full-reference-curation">
-<h2>Perform Full Reference Curation<a class="headerlink" href="#perform-full-reference-curation" title="Permalink to this headline">¶</a></h2>
+<span id="curate-link"></span><h2>Perform Full Reference Curation<a class="headerlink" href="#perform-full-reference-curation" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">The following will create a XPRESSpipe-formatted reference directory containing all STAR reference files and transcript references needs for quantification and meta-analysis.</div>
 <div class="line">A parent reference directory containing the transcripts.gtf file and all chromosomal genome fasta files must be present</div>
@@ -442,7 +457,10 @@ $ gzip -d *.gz
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;value&gt;</span></code></p></td>
 <td><p>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--genome_size</span> <span class="pre">&lt;int&gt;</span></code></p></td>
+<td><p>Taken from the STAR manual: For small genomes, the parameter –genomeSAindexNbases needs to be scaled down, with a typical value of min(14, log2(GenomeLength)/2 - 1). For example, for 1 megaBase genome, this is equal to 9, for 100 kiloBase genome, this is equal to 7.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>
 </tr>
 </tbody>
