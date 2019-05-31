@@ -367,6 +367,13 @@ def get_arguments(
         default = 50,
         required = False)
     se_opts.add_argument(
+        '--genome_size',
+        help = 'Only needs to be changed if provided argument during reference building and using a two-pass alignment',
+        default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    se_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -509,6 +516,13 @@ def get_arguments(
         default = 50,
         required = False)
     pe_opts.add_argument(
+        '--genome_size',
+        help = 'Only needs to be changed if provided argument during reference building and using a two-pass alignment',
+        default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    pe_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -649,6 +663,13 @@ def get_arguments(
         metavar = '<seedSearchStartLmax>',
         type = int,
         default = 50,
+        required = False)
+    rp_opts.add_argument(
+        '--genome_size',
+        help = 'Only needs to be changed if provided argument during reference building and using a two-pass alignment',
+        default = 14,
+        metavar = '<value>',
+        type = int,
         required = False)
     rp_opts.add_argument(
         '-m', '--max_processors',
@@ -794,6 +815,13 @@ def get_arguments(
         metavar = '<seedSearchStartLmax>',
         type = int,
         default = 50,
+        required = False)
+    align_opts.add_argument(
+        '--genome_size',
+        help = 'Only needs to be changed if provided argument during reference building and using a two-pass alignment',
+        default = 14,
+        metavar = '<value>',
+        type = int,
         required = False)
     align_opts.add_argument(
         '-m', '--max_processors',
@@ -1195,6 +1223,13 @@ def get_arguments(
         type = int,
         required = False)
     curate_opts.add_argument(
+        '--genome_size',
+        help = 'Taken from the STAR manual: For small genomes, the parameter --genomeSAindexNbases needs to be scaled down, with a typical value of min(14, log2(GenomeLength)/2 - 1). For example, for 1 megaBase genome, this is equal to 9, for 100 kiloBase genome, this is equal to 7.',
+        default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    curate_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -1294,6 +1329,13 @@ def get_arguments(
         help = 'Specify length of genomic sequences for constructing splice-aware reference. Ideal length is read length -1, \
         so for 2x100bp paired-end reads, you would use 100-1 = 99. However, the default value of 100 should work in most cases',
         default = 100,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    reference_opts.add_argument(
+        '--genome_size',
+        help = 'Taken from the STAR manual: For small genomes, the parameter --genomeSAindexNbases needs to be scaled down, with a typical value of min(14, log2(GenomeLength)/2 - 1). For example, for 1 megaBase genome, this is equal to 9, for 100 kiloBase genome, this is equal to 7.',
+        default = 14,
         metavar = '<value>',
         type = int,
         required = False)

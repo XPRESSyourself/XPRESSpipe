@@ -215,7 +215,8 @@ def main(
             args_dict['gtf'],
             args_dict['log'],
             threads = args_dict['threads'],
-            sjdbOverhang = args_dict['sjdbOverhang'])
+            sjdbOverhang = args_dict['sjdbOverhang'],
+            genome_size = args_dict['genome_size'])
 
         # Truncate transcript reference
         edit_gtf(
@@ -260,7 +261,8 @@ def main(
             args_dict['gtf'],
             args_dict['log'],
             threads = args_dict['threads'],
-            sjdbOverhang = args_dict['sjdbOverhang'])
+            sjdbOverhang = args_dict['sjdbOverhang'],
+            genome_size = args_dict['genome_size'])
 
         # Check log file for errors and exceptions
         check_process(

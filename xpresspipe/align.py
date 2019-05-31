@@ -34,7 +34,8 @@ def create_star_reference(
         gtf,
         log,
         threads=1,
-        sjdbOverhang=100):
+        sjdbOverhang=100,
+        genome_size=14):
 
     # Create output directory
     output_directory = check_directories(output_directory)
@@ -53,6 +54,7 @@ def create_star_reference(
         + ' --genomeDir ' + str(output_directory) + 'genome'
         + ' --genomeFastaFiles ' + str(fasta_list)
         + ' --sjdbOverhang ' + str(sjdbOverhang)
+        + ' --genomeSAindexNbases ' + str(genome_size)
         + ' --sjdbGTFfile ' + str(gtf)
         + ' --runThreadN ' + str(threads)
         + str(log))
@@ -100,6 +102,7 @@ def build_star_splice_junction_intermediate(
         + ' --runThreadN ' + str(args_dict['threads'])
         + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab' # Splice junction annotation file output in first pass alignment
         + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) # Input chromosomal fasta files for reference building
+        + ' --genomeSAindexNbases ' + str(args_dict['genome_size'])
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) # Location for output revised reference
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
         + str(args_dict['log'])) # Record log output (must go last in command)
