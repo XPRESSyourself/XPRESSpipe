@@ -8,6 +8,7 @@ Quality Control and Analysis
 Differential Expression Analysis
 =================================
 | Differential Expression analysis allows one to determine significantly enriched or depleted genes between two conditions. XPESSpipe acts as a wrapper for `DESeq2 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/>`_. Please refer to its `documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html>`_ for more information.
+| NOTE: If intending to use the :data:`diffxpress` sub-module, you must use :data:`--quantification_method htseq` for the time being
 
 |
 | Assumptions:
