@@ -307,7 +307,7 @@ def compile_complexity_metrics(
             color = 'black')
         axes[ax_y, ax_x].axvline(
             0,
-            ymin = 0.063,
+            ymin = 0.060,
             ls = '-',
             color = 'black')
         axes[ax_y, ax_x].scatter(
@@ -317,6 +317,8 @@ def compile_complexity_metrics(
             s = 3,
             alpha = 0.7)
 
+        axes[ax_y, ax_x].set_xlabel('log$_1$$_0$expression (reads/kb)')
+        axes[ax_y, ax_x].set_ylabel('% duplicate reads')
         axes[ax_y, ax_x].set_title(str(file[:-4]))
         axes[ax_y, ax_x].grid(False)
 
