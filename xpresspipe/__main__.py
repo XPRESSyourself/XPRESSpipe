@@ -25,7 +25,7 @@ import os
 import sys
 import pandas as pd
 
-from xpressplot import rpm, r_fpkm, batch_normalize, convert_names, diff_xpress #tpm, add back when pip install updated
+from xpressplot import rpm, r_fpkm, batch_normalize, convert_names #tpm, add back when pip install updated
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__
@@ -107,7 +107,7 @@ def main(
 
     elif args.cmd == 'count':
         print('Counting alignments...')
-        
+
         # Count reads for each alignment file
         args_dict = count_reads(args_dict)
 
@@ -126,10 +126,27 @@ def main(
         print('Performing differential expression analysis...')
 
         # Run differential expression analysis via DESeq2
-        diff_xpress(
-            str(args_dict['input']),
-            str(args_dict['sample']),
-            equation = str(args_dict['design']))
+        if str(args_dict['input']).endswith('.txt') or str(args_dict['input']).endswith('.tsv'):
+            output_file = str(args_dict['input'])[:-4] + '_diffx.tsv'
+        else:
+            raise Exception('Unrecognized input_file delimiter type. Files must be tab-delimited')
+
+        if str(args_dict['sample']).endswith('.txt') or str(args_dict['sample']).endswith('.tsv'):
+            pass
+        else:
+            raise Exception('Unrecognized sample_file delimiter type. Files must be tab-delimited')
+
+        if str(args_dict['design']).startswith('~'):
+            raise Exception('Tilde should not be included in design formula, script will automatically add this syntax.')
+
+        # Run deseq2 in R
+        os.system('rscript' \
+            + ' ' + str(args_dict['path']) + 'diffxpress.r' \
+            + ' ' + str(args_dict['input']) \
+            + ' ' + str(args_dict['sample']) \
+            + ' ' + str(output_file) \
+            + ' ' + str(args_dict['design'])
+            + str(args_dict['log']))
 
         # Check log file for errors and exceptions
         check_process(

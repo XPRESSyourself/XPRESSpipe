@@ -98,7 +98,12 @@ def check_inputs(
         args_dict):
 
     # Check user-provided directory formatting
-    if 'input' in args_dict:
+    ignore_list = [
+        'normalizeMatrix',
+        'diffxpress',
+        'convertNames']
+
+    if 'input' in args_dict and args_dict['cmd'] not in ignore_list:
         args_dict['input'] = check_directories(
             args_dict['input'],
             'input')
@@ -183,7 +188,8 @@ def check_inputs(
         args_dict['log'] = (
             ' >> '
             + str(args_dict['log_loc'])
-            + str(cdt.year)
+            + str(args_dict['cmd'])
+            + '_' + str(cdt.year)
             + '_' + str(cdt.month)
             + '_' + str(cdt.day)
             + '_' + str(cdt.hour)
@@ -192,7 +198,8 @@ def check_inputs(
             + 's.log 2>&1')
         args_dict['log_file'] = (
             str(args_dict['log_loc'])
-            + str(cdt.year)
+            + str(args_dict['cmd'])
+            + '_' + str(cdt.year)
             + '_' + str(cdt.month)
             + '_' + str(cdt.day)
             + '_' + str(cdt.hour)
