@@ -279,7 +279,8 @@ def minus_5prime(
 def truncate_gtf(
     gtf,
     _5prime=45,
-    _3prime=15):
+    _3prime=15,
+    trim_type='CDS'):
 
     """STEP 1"""
     # Initialize variables for step 1
@@ -287,7 +288,6 @@ def truncate_gtf(
     bad_transcript = []
     bad_exons = []
     limit = _5prime + _3prime
-    trim_type = 'exon'
     parse_type = 'transcript_id \"'
 
     # Step 1: Remove transcripts with exon space smaller than truncation sum

@@ -72,7 +72,7 @@ def count_file_htseq(
         + ' -q'
         + ' -f bam'
         + ' -m intersection-nonempty'
-        + ' -t exon'
+        + ' -t ' + args_dict['feature_type']
         + ' -i gene_id'
         + ' -r pos'
         + ' -s no'

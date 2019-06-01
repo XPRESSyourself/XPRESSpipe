@@ -331,6 +331,13 @@ def get_arguments(
         type = str,
         required = False)
     se_opts.add_argument(
+        '--feature_type',
+        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq',
+        metavar = '<feature>',
+        default = 'exon',
+        type = str,
+        required = False)
+    se_opts.add_argument(
         '--method',
         help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
         metavar = '<RPM, TPM, RPKM, FPKM>',
@@ -480,6 +487,13 @@ def get_arguments(
         type = str,
         required = False)
     pe_opts.add_argument(
+        '--feature_type',
+        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq',
+        metavar = '<feature>',
+        default = 'exon',
+        type = str,
+        required = False)
+    pe_opts.add_argument(
         '--method',
         help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
         metavar = '<RPM, TPM, RPKM, FPKM>',
@@ -626,6 +640,13 @@ def get_arguments(
         help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
         default = 'cufflinks',
+        type = str,
+        required = False)
+    rp_opts.add_argument(
+        '--feature_type',
+        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq',
+        metavar = '<feature>',
+        default = 'CDS',
         type = str,
         required = False)
     rp_opts.add_argument(
@@ -879,6 +900,13 @@ def get_arguments(
         help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
         default = 'cufflinks',
+        type = str,
+        required = False)
+    count_opts.add_argument(
+        '--feature_type',
+        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq',
+        metavar = '<feature>',
+        default = 'exon',
         type = str,
         required = False)
     count_opts.add_argument(

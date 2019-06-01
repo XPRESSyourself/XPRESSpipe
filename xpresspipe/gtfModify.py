@@ -122,11 +122,11 @@ def longest_transcripts(
                     if check_stops(ccds, stops) == 1:
                         ccds = pd.DataFrame()
 
-                    trans_ens_hav = transcript_record.loc[(transcript_record[2] == 'exon') & transcript_record[8].str.contains('gene_biotype \"protein_coding\"') & (transcript_record[1] == 'ensembl_havana')]
+                    trans_ens_hav = transcript_record.loc[(transcript_record[2] == 'CDS') & (transcript_record[1] == 'ensembl_havana')]
                     if check_stops(trans_ens_hav, stops) == 1:
                         trans_ens_hav = pd.DataFrame()
 
-                    trans = transcript_record.loc[(transcript_record[2] == 'exon') & (transcript_record[8].str.contains('gene_biotype \"protein_coding\"'))]
+                    trans = transcript_record.loc[transcript_record[2] == 'CDS']
                     if check_stops(trans, stops) == 1:
                         trans = pd.DataFrame()
 
