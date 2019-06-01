@@ -49,7 +49,7 @@ def check_stops(
     for index, row in data.iterrows():
 
         for s in stops:
-            if s > row[3] or s < row[4]:
+            if s > row[3] and s < row[4]:
                 return 1
             else:
                 pass
@@ -66,6 +66,7 @@ def longest_transcripts(
 
         # Find next gene record
         if row[2] == 'gene':
+            print('++++++++++GENE')
             # Forward scan to next gene record
             n = 0
             gene_id_original = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
@@ -116,56 +117,61 @@ def longest_transcripts(
                             stops.append(row[3] + 1)
                             stops.append(row[4])
 
-                    # Get values of interest for each transcript record and check if stop in range
-                    cds = transcript_record.loc[transcript_record[2] == 'CDS']
-                    if check_stops(cds, stops) == 1:
-                        cds = pd.DataFrame()
+                    # Get CCDS
+                    ccds = transcript_record.loc[(transcript_record[2] == 'CDS') & (transcript_record[8].str.contains('tag \"CCDS\"'))]
+                    if check_stops(ccds, stops) == 1:
+                        ccds = pd.DataFrame()
 
-                    exon_ens_hav = transcript_record.loc[(transcript_record[2] == 'exon') & (transcript_record[1].isin(['ensembl', 'havana', 'ensembl_havana']))]
-                    if check_stops(exon_ens_hav, stops) == 1:
-                        exon_ens_hav = pd.DataFrame()
+                    trans_ens_hav = transcript_record.loc[(transcript_record[2] == 'exon') & transcript_record[8].str.contains('gene_biotype \"protein_coding\"') & (transcript_record[1] == 'ensembl_havana')]
+                    if check_stops(trans_ens_hav, stops) == 1:
+                        trans_ens_hav = pd.DataFrame()
+
+                    trans = transcript_record.loc[(transcript_record[2] == 'exon') & (transcript_record[8].str.contains('gene_biotype \"protein_coding\"'))]
+                    if check_stops(trans, stops) == 1:
+                        trans = pd.DataFrame()
 
                     exon = transcript_record.loc[transcript_record[2] == 'exon']
-                    if check_stops(exon, stops) == 1:
-                        priority = 4
-                    else:
-                        priority = 3
 
                     # Set priority and length for each type
                     length = 0
-                    if cds.empty == False:
+                    if ccds.empty == False:
                         priority = 1
-                        for index, row in cds.iterrows():
+                        for index, row in ccds.iterrows():
                             length = length + (row[4] - row[3])
-                    elif exon_ens_hav.empty == False:
+                    elif trans_ens_hav.empty == False:
                         priority = 2
-                        for index, row in exon_ens_hav.iterrows():
+                        for index, row in trans_ens_hav.iterrows():
+                            length = length + (row[4] - row[3])
+                    elif trans.empty == False:
+                        priority = 3
+                        for index, row in trans.iterrows():
                             length = length + (row[4] - row[3])
                     elif exon.empty == False:
-                        for index, row in exon_ens_hav.iterrows():
+                        priority = 4
+                        for index, row in exon.iterrows():
                             length = length + (row[4] - row[3])
                     else:
-                        raise Exception('Something went wrong')
+                        priority = 5
+                        length = 0
 
                     transcript_info.append([priority, length, transcript_id])
 
+                    print([priority, length, transcript_id])
                 # Compare the different transcripts for highest priority and longest transcript
                 priorities = []
                 for x in transcript_info:
                     priorities.append(x[0])
-                priority_max = max(priorities)
+                priority_max = min(priorities)
 
                 lengths = []
                 for x in transcript_info:
                     if x[0] == priority_max:
-                        lengths.append(x)
+                        lengths.append(x[1])
+                """WHAT ABOUT TIE BREAKERS"""
                 lengths_max = max(lengths)
-                print(lengths_max)
                 for x in transcript_info:
                     if x[1] == lengths_max:
-                        print(x)
-                        long_transcripts.append(gtf.loc[gtf[8].str.contains(x[1])])
-    print(long_transcripts)
+                        long_transcripts.append(gtf.loc[gtf[8].str.contains(x[2])])
 
     #gtf = None # Garbage management
     gc.collect()
