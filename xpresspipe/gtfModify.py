@@ -41,6 +41,22 @@ from .utils import get_files
 Parse  GTF dataframe for longest transcript per gene record and keep only those transcript records
 Input: GTF formatted as pandas dataframe
 """
+
+def check_stops(
+    data,
+    stops):
+
+    for index, row in data.iterrows():
+
+        for s in stops:
+            if s > row[3] or s < row[4]:
+                return 1
+            else:
+                pass
+
+    return 0
+
+
 def longest_transcripts(
         gtf):
 
@@ -71,19 +87,85 @@ def longest_transcripts(
                 gene_stop_index = index + n
 
             if gene_start_index < gene_stop_index:
+                # Get gene record
                 gtf_record = gtf.loc[gene_start_index:gene_stop_index]
 
-                # Find longest transcript for the current gene record
-                transcript_lengths = gtf_record.loc[gtf_record[2] == 'transcript'][4] \
-                                    - gtf_record.loc[gtf_record[2] == 'transcript'][3]
+                # Get coordinates for each transcript record
+                transcript_list = []
+                for index, row in gtf_record.iterrows():
+                    if row[2] == 'transcript':
+                        transcript_list.append(index)
+                transcript_list.append(gene_stop_index)
 
-                transcript_max_index = transcript_lengths.idxmax()
+                # Get Priority, Length, Transcript ID for each transcript record
+                transcript_info = []
+                for x in range(0, len(transcript_list)-1):
+                    if transcript_list[x + 1] == gene_stop_index:
+                        transcript_record = gtf.loc[transcript_list[x]:transcript_list[x + 1]]
+                    else:
+                        transcript_record = gtf.loc[transcript_list[x]:transcript_list[x + 1] - 1]
 
-                # Get index for longest transcript
-                longest_transcript_id = gtf_record.at[transcript_max_index, 8][(gtf_record.at[transcript_max_index, 8].find('transcript_id \"') + 15):].split('\";')[0]
+                    # Get transcript ID
+                    transcript_id = transcript_record.iloc[0,8][(transcript_record.iloc[0, 8].find('transcript_id \"') + 15):].split('\";')[0]
 
-                # Append longest transcript records to list of records to keep
-                long_transcripts.append(gtf_record.loc[gtf_record[8].str.contains(longest_transcript_id)])
+                    # For each transcript record, get stop codon coordinates, CDS and
+                    stops = []
+                    for index, row in transcript_record.iterrows():
+                        if row[2] == 'stop_codon':
+                            stops.append(row[3])
+                            stops.append(row[3] + 1)
+                            stops.append(row[4])
+
+                    # Get values of interest for each transcript record and check if stop in range
+                    cds = transcript_record.loc[transcript_record[2] == 'CDS']
+                    if check_stops(cds, stops) == 1:
+                        cds = pd.DataFrame()
+
+                    exon_ens_hav = transcript_record.loc[(transcript_record[2] == 'exon') & (transcript_record[1].isin(['ensembl', 'havana', 'ensembl_havana']))]
+                    if check_stops(exon_ens_hav, stops) == 1:
+                        exon_ens_hav = pd.DataFrame()
+
+                    exon = transcript_record.loc[transcript_record[2] == 'exon']
+                    if check_stops(exon, stops) == 1:
+                        priority = 4
+                    else:
+                        priority = 3
+
+                    # Set priority and length for each type
+                    length = 0
+                    if cds.empty == False:
+                        priority = 1
+                        for index, row in cds.iterrows():
+                            length = length + (row[4] - row[3])
+                    elif exon_ens_hav.empty == False:
+                        priority = 2
+                        for index, row in exon_ens_hav.iterrows():
+                            length = length + (row[4] - row[3])
+                    elif exon.empty == False:
+                        for index, row in exon_ens_hav.iterrows():
+                            length = length + (row[4] - row[3])
+                    else:
+                        raise Exception('Something went wrong')
+
+                    transcript_info.append([priority, length, transcript_id])
+
+                # Compare the different transcripts for highest priority and longest transcript
+                priorities = []
+                for x in transcript_info:
+                    priorities.append(x[0])
+                priority_max = max(priorities)
+
+                lengths = []
+                for x in transcript_info:
+                    if x[0] == priority_max:
+                        lengths.append(x)
+                lengths_max = max(lengths)
+                print(lengths_max)
+                for x in transcript_info:
+                    if x[1] == lengths_max:
+                        print(x)
+                        long_transcripts.append(gtf.loc[gtf[8].str.contains(x[1])])
+    print(long_transcripts)
 
     #gtf = None # Garbage management
     gc.collect()
