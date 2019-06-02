@@ -41,7 +41,7 @@ from .utils import get_files
 Parse  GTF dataframe for longest transcript per gene record and keep only those transcript records
 Input: GTF formatted as pandas dataframe
 """
-
+# Check if stop codon coordinates are within any CDS or exon space
 def check_stops(
     data,
     stops):
@@ -56,7 +56,8 @@ def check_stops(
 
     return 0
 
-
+# Find longest trascript for each
+# In case of tie breakers, first listed is taken
 def longest_transcripts(
         gtf):
 
@@ -66,7 +67,6 @@ def longest_transcripts(
 
         # Find next gene record
         if row[2] == 'gene':
-            print('++++++++++GENE')
             # Forward scan to next gene record
             n = 0
             gene_id_original = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
@@ -130,6 +130,8 @@ def longest_transcripts(
                     if check_stops(trans, stops) == 1:
                         trans = pd.DataFrame()
 
+                    exon_processed = transcript_record.loc[(transcript_record[2] == 'exon') & (transcript_record[8].str.contains('transcript_biotype \"processed_transcript\"'))]
+
                     exon = transcript_record.loc[transcript_record[2] == 'exon']
 
                     # Set priority and length for each type
@@ -146,17 +148,20 @@ def longest_transcripts(
                         priority = 3
                         for index, row in trans.iterrows():
                             length = length + (row[4] - row[3])
-                    elif exon.empty == False:
+                    elif exon_processed.empty == False:
                         priority = 4
+                        for index, row in exon_processed.iterrows():
+                            length = length + (row[4] - row[3])
+                    elif exon.empty == False:
+                        priority = 5
                         for index, row in exon.iterrows():
                             length = length + (row[4] - row[3])
                     else:
-                        priority = 5
+                        priority = 6
                         length = 0
 
                     transcript_info.append([priority, length, transcript_id])
 
-                    print([priority, length, transcript_id])
                 # Compare the different transcripts for highest priority and longest transcript
                 priorities = []
                 for x in transcript_info:
@@ -167,11 +172,12 @@ def longest_transcripts(
                 for x in transcript_info:
                     if x[0] == priority_max:
                         lengths.append(x[1])
-                """WHAT ABOUT TIE BREAKERS"""
+
                 lengths_max = max(lengths)
                 for x in transcript_info:
                     if x[1] == lengths_max:
                         long_transcripts.append(gtf.loc[gtf[8].str.contains(x[2])])
+                        break
 
     #gtf = None # Garbage management
     gc.collect()
@@ -206,8 +212,8 @@ Parse GTF down to chunks per cores for multiprocessing
 Requires unmodified GTF with gene records intact
 """
 def get_chunks(
-        gtf,
-        threads=None):
+    gtf,
+    threads=None):
 
     # Determine number of chunks to create based on indicated or available cpus
     cores = cpu_count() # Number of CPU cores on your system
@@ -251,9 +257,18 @@ def get_chunks(
                 gene_id_original = gtf_remainder.at[end + n, 8][(gtf_remainder.at[end + n, 8].find('gene_id \"') + 9):].split('\";')[0]
                 gene_id_next = gene_id_original
 
+                amount = -1 # Set scan direction as reverse
                 while gene_id_next == gene_id_original:
-                    n -= 1 # Take another step back until a new gene_id is found
+                    if end + n - 1 < start:
+                        amount = 1 # Set scan direction as forward if returned to start gene
+                        n = -1 # Reset indexer
+                        gtf_remainder = gtf # Point back to original GTF to move past original end set for sub-GTF
+
+                    n += amount # Take another step back until a new gene_id is found (or forward if hit the start)
                     gene_id_next = gtf_remainder.at[end + n, 8][(gtf_remainder.at[end + n, 8].find('gene_id \"') + 9):].split('\";')[0]
+
+            if amount == 1: # Correct for scan direction pivot
+                n -= 1
 
             # Parse out current chunk
             new_chunk = gtf.loc[start:end + n]
