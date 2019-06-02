@@ -290,7 +290,8 @@ def truncate_gtf(
     limit = _5prime + _3prime
     parse_type = 'transcript_id \"'
 
-    # Step 1: Remove transcripts with exon space smaller than truncation sum
+    """Step 1"""
+    # Remove transcripts with exon space smaller than truncation sum
     for index, row in gtf.iterrows():
 
         # Start at a transcript
@@ -357,7 +358,7 @@ def truncate_gtf(
     # Remove bad transcripts and reindex GTF
     remove_indices = list(set(bad_exons + bad_transcript + remaining_bad))
 
-    print(str(len(remove_indices)) + ' exons records removed from reference chunk for being too short.')
+    print(str(len(remove_indices)) + ' records removed from reference chunk for being too short.')
     gtf_c = gtf_c.drop(gtf_c.index[remove_indices])
     gtf_c = gtf_c.reset_index(drop=True)
 

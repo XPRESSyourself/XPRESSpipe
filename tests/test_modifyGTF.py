@@ -3,9 +3,9 @@ import os
 import sys
 import pandas as pd
 import numpy as np
-__path__  =  os.path.dirname(os.path.realpath(__file__))
-#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests'
-__path__ = __path__ + '/'
+__path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
+#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
+
 
 """gtfModify functions"""
 
@@ -59,14 +59,29 @@ gtf_edit = edit_gtf(
     threads=None)
 assert gtf_edit.shape == (14, 9), 'Something went wrong during the functional test running through all GTF modifications'
 
-print(gtf_edit)
-print('----------')
 ### Unit tests
 # Get longest transcript records only for each gene
-gtf_long = longest_transcripts(gtf)
+# Check CCDS proteins were prioritized over others
+gtf_longest_truth1 = [
+[1,	'ensembl', 'transcript',	69055,	70108],
+[1,	'ensembl_havana',	'transcript',	450703,	451697]]
+gtf_longest_truth1 = pd.DataFrame(gtf_longest_truth1, index=[34,101])
+assert gtf_long.iloc[0:200,].loc[(gtf_long[2] == 'transcript') & (gtf_long[8].str.contains('CCDS'))].iloc[:,0:5].equals(gtf_longest_truth1), 'failed to catch CCDS domains'
+
+# Do general spot check
+gtf_longest_truth2 = [
+[1,	'havana',	'transcript',	11869,	14409],
+[1,	'havana',	'transcript',	14404,	29570],
+[1,	'mirbase',	'transcript',	17369,	17436],
+[1,	'havana',	'transcript',	29554,	31097],
+[1,	'mirbase',	'transcript',	30366,	30503],
+[1,	'havana',	'transcript',	34554,	36081]]
+gtf_longest_truth2 = pd.DataFrame(gtf_longest_truth2, index=[0,4,16,18,22,24])
+assert gtf_long.iloc[0:25,].loc[gtf_long[2] == 'transcript'].iloc[:,0:5].equals(gtf_longest_truth2), 'failed to pass general check of transcript choosing'
 
 # Get protein coding only records
-gtf_protein = protein_gtf(gtf_long)
+gtf_protein = protein_gtf(gtf)
+assert gtf_protein.shape == (27, 9), 'protein_gtf() failed'
 
 # Run whole gambit together
 gtf_edit = edit_gtf(
@@ -78,6 +93,7 @@ gtf_edit = edit_gtf(
     _3prime=15,
     output=False,
     threads=None)
+assert gtf_edit.shape == (14, 9), 'edit_gtf() failed'
 
 gtf_edit = edit_gtf(
     gtf,
@@ -88,6 +104,7 @@ gtf_edit = edit_gtf(
     _3prime=15,
     output=False,
     threads=None)
+assert gtf_edit.shape == (27,9), 'edit_gtf() failed during protein_coding only output'
 
 gtf_edit = edit_gtf(
     gtf,
@@ -98,13 +115,32 @@ gtf_edit = edit_gtf(
     _3prime=15,
     output=False,
     threads=None)
+assert gtf_edit.iloc[0:200,].loc[(gtf_edit[2] == 'transcript') & (gtf_edit[8].str.contains('CCDS'))].iloc[:,0:5].equals(gtf_longest_truth1), 'failed to catch CCDS domains'
+assert gtf_edit.iloc[0:25,].loc[gtf_edit[2] == 'transcript'].iloc[:,0:5].equals(gtf_longest_truth2), 'failed to pass general check of transcript choosing'
 
 gtf_edit_truncated = edit_gtf(
     gtf,
     longest_transcript=True,
-    protein_coding=False,
+    protein_coding=True,
     truncate_reference=True,
     _5prime=45,
     _3prime=15,
     output=False,
     threads=None)
+truncate_truth = [
+[1,	'ensembl',	'transcript',	69055,	70108],
+[1,	'ensembl',	'exon',	69055,	70108],
+[1,	'ensembl',	'CDS',	69136,	69990],
+[1,	'ensembl',	'start_codon',	69091,	69093],
+[1,	'ensembl',	'stop_codon',	70006,	70008],
+[1,	'ensembl',	'five_prime_utr',	69055,	69090],
+[1,	'ensembl',	'three_prime_utr',	70009,	70108],
+[1,	'ensembl_havana',	'transcript',	450703,	451697],
+[1,	'ensembl_havana',	'exon',	450703,	451697],
+[1,	'ensembl_havana',	'CDS',	450758,	451633],
+[1,	'ensembl_havana',	'start_codon',	451676,	451678],
+[1,	'ensembl_havana',	'stop_codon',	450740,	450742],
+[1,	'ensembl_havana',	'five_prime_utr',	451679,	451697],
+[1,	'ensembl_havana',	'three_prime_utr',	450703,	450739]]
+truncate_truth = pd.DataFrame(truncate_truth)
+assert gtf_edit_truncated.iloc[:,:5].equals(truncate_truth), 'edit_gtf() failed during truncation'
