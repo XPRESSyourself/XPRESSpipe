@@ -312,6 +312,11 @@ def truncate_gtf(
 
             gtf_parse = gtf.loc[index:index + n - 1]
 
+            # If target type not in transcript record, skip
+            # Without, will remove all exons and transcript IDs 
+            if trim_type not in gtf_parse[2].tolist():
+                continue
+
             # Create exon length array for each exon labeled record for the transcript
             exon_lengths = gtf_parse.loc[gtf_parse[2] == trim_type][4] \
                                 - gtf_parse.loc[gtf_parse[2] == trim_type][3]

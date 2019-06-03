@@ -6,7 +6,6 @@ import numpy as np
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 #__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
 
-
 """gtfModify functions"""
 
 # Input file will test chunking to make sure GTF structure is conserved
