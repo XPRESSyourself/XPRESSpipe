@@ -13,6 +13,10 @@
 /tests/riboprof_out/**
 **reference/genome**
 **reference/transcripts_**
+/tests/rp_reference
 /tests/se_reference
 /tests/pe_reference
+/tests/riboseq_out
+/tests/se_out
+/tests/pe_out
 cufflinks/
