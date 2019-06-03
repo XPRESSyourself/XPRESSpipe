@@ -40,6 +40,10 @@ def scan_forward(
     # Start at start_index and parse forward to first exon and trim
     # until stop index (inclusive)
     n = start_index + penalty
+
+    if n > stop_index:
+        return
+
     while n != stop_index + 1:
 
         if gtf.at[n, 2] != trim_type:
@@ -168,10 +172,13 @@ def scan_backward(
     n = stop_index - penalty
 
     while n != start_index - 1:
+        if n > gtf.shape[0]: # Built in control to prevent indexing out of bounds, not relevant for small tests, but required when working with larger GTFs
+            return gtf, bad_exons # Says we are out of bounds and return the work that its done up until now
 
         if gtf.at[n, 2] != trim_type:
             n -= 1
             penalty -= 1
+
         else:
             if sign == '+':
                 gtf, bad_exons = plus_3prime(
@@ -313,7 +320,7 @@ def truncate_gtf(
             gtf_parse = gtf.loc[index:index + n - 1]
 
             # If target type not in transcript record, skip
-            # Without, will remove all exons and transcript IDs 
+            # Without, will remove all exons and transcript IDs
             if trim_type not in gtf_parse[2].tolist():
                 continue
 
