@@ -170,7 +170,7 @@ def make_periodicity(
         [str(args_dict['bam_suffix'])])
 
     # Get indices
-    chromosome_index, coordinate_index = get_indices(args_dict)
+    chromosome_index, coordinate_index = get_indices(args_dict, record_type='CDS')
 
     # Perform periodicity analysis
     func = partial(

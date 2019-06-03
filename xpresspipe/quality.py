@@ -29,7 +29,8 @@ from .gtfFlatten import flatten_reference, create_chromosome_index, create_coord
 
 """Get meta and periodicity indices from GTF"""
 def get_indices(
-        args_dict):
+        args_dict,
+        record_type='exon'):
 
     # Read in GTF
     gtf = pd.read_csv(str(args_dict['gtf']),
@@ -41,6 +42,7 @@ def get_indices(
     # Flatten GTF
     gtf_flat = flatten_reference(
         gtf,
+        record_type,
         threads = None)
 
     # Get GTF indices

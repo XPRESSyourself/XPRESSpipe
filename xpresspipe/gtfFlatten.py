@@ -71,7 +71,8 @@ def get_coding_length(
 
 """Make a flat reference from parsed GTF file"""
 def make_flatten(
-        gtf):
+        gtf,
+        record_type='exon'):
 
     records = []
 
@@ -95,7 +96,7 @@ def make_flatten(
                 else:
                     item = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
 
-                    if gtf.at[index + n, 2] == 'exon': # Append coordinate paires for each exon of the transcript
+                    if gtf.at[index + n, 2] == record_type: # Append coordinate paires for each exon of the transcript
                         coordinates.append([gtf.at[index + n, 3], gtf.at[index + n, 4]])
 
             # Get start and end positions for transcript/gene
@@ -125,6 +126,7 @@ Requires an unmodified GTF file
 """
 def flatten_reference(
         gtf,
+        record_type='exon',
         threads=None):
 
     # Import GTF reference file
@@ -161,7 +163,7 @@ def flatten_reference(
     if len(chunks) > 0:
         gtf = pd.concat(chunks)
         gtf = gtf.reset_index(drop=True)
-        gtf = make_flatten(gtf)
+        gtf = make_flatten(gtf, record_type)
 
         del chunks
         gc.collect()
