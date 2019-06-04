@@ -280,12 +280,13 @@ def alignment_process(
 
     # Fixmates for paired-end
     if paired == True:
+
         # Fixmate requires name sorted files
         os.system(
         'samtools sort'
         + ' -n'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
-        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.namesort.bam')
+        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.namesort.bam'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam')
 
         # Run fixmate
         os.system(
@@ -297,8 +298,8 @@ def alignment_process(
         # Convert back to coordinate sorted because markdup doesn't accept name sorted files
         os.system(
         'samtools sort'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_fixed.namesort.bam'
-        + ' -o ' + str(args_dict['alignments']) + str(output) + '_fixed.sort.bam')
+        + ' -o ' + str(args_dict['alignments']) + str(output) + '_fixed.sort.bam'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_fixed.namesort.bam')
 
         file_suffix = '_fixed.sort.bam'
     else:
@@ -391,8 +392,7 @@ def align(
         # Remove intermediate reference for the file
         remove_intermediate_reference(
             output,
-            args_dict,
-            paired=paired)
+            args_dict)
     else:
         # One-pass STAR with GTF guiding splice mapping
         guided_star(
@@ -403,7 +403,8 @@ def align(
     # Create BAM file with only unique hits, mark duplicates, index
     alignment_process(
         output,
-        args_dict)
+        args_dict,
+        paired=paired)
 
     # Clean up the output
     remove_intermediates(
