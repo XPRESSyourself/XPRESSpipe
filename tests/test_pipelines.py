@@ -45,7 +45,7 @@ print('Creating riboseq reference for testing...')
 rp_reference = str(__path__) + 'rp_reference/'
 if os.path.exists(rp_reference):
     os.system(
-        'rm -r ' + str(rp_reference))
+        'rm -rf ' + str(rp_reference))
 
 os.makedirs(rp_reference)
 get_source(rp_reference)
@@ -60,39 +60,47 @@ os.system(
 
 print('Creating single-end reference for testing...')
 se_reference = str(__path__) + 'se_reference/'
-if not os.path.exists(se_reference):
-    os.makedirs(se_reference)
-    get_source(se_reference)
+if os.path.exists(se_reference):
     os.system(
-        'xpresspipe curateReference'
-        + ' -o ' + str(se_reference)
-        + ' -f ' + str(se_reference)
-        + ' -g ' + str(se_reference) + 'transcripts.gtf'
-        + ' --sjdbOverhang 49'
-        + ' --genome_size 11'
-        + ' -l -p')
+        'rm -rf ' + str(se_reference))
+
+os.makedirs(se_reference)
+get_source(se_reference)
+os.system(
+    'xpresspipe curateReference'
+    + ' -o ' + str(se_reference)
+    + ' -f ' + str(se_reference)
+    + ' -g ' + str(se_reference) + 'transcripts.gtf'
+    + ' --sjdbOverhang 49'
+    + ' --genome_size 11'
+    + ' -l -p')
 
 print('Creating paired-end reference for testing...')
 pe_reference = str(__path__) + 'pe_reference/'
-if not os.path.exists(pe_reference):
-    os.makedirs(pe_reference)
-    get_source(pe_reference)
+if os.path.exists(pe_reference):
     os.system(
-        'xpresspipe curateReference'
-        + ' -o ' + str(pe_reference)
-        + ' -f ' + str(pe_reference)
-        + ' -g ' + str(pe_reference) + 'transcripts.gtf'
-        + ' --genome_size 11'
-        + ' -l -p')
+        'rm -rf ' + str(pe_reference))
+
+os.makedirs(pe_reference)
+get_source(pe_reference)
+os.system(
+    'xpresspipe curateReference'
+    + ' -o ' + str(pe_reference)
+    + ' -f ' + str(pe_reference)
+    + ' -g ' + str(pe_reference) + 'transcripts.gtf'
+    + ' --genome_size 11'
+    + ' -l -p')
 
 
 # Test riboseq pipeline on test data
 print('Running riboseq test pipeline...')
 rp_input = str(__path__) + 'riboseq_test/'
 rp_output = str(__path__) + 'riboseq_out/'
-if not os.path.exists(rp_output):
-    os.makedirs(rp_output)
+if os.path.exists(rp_output):
+    os.system(
+        'rm -rf ' + str(rp_output))
 
+os.makedirs(rp_output)
 rp_gtf = str(__path__) + 'rp_reference/transcripts_LCT.gtf'
 os.system(
     'xpresspipe riboseq' \
@@ -119,9 +127,11 @@ assert all(r >= 0.99 for r in r_vals), 'An error occured while testing the ribos
 print('Running single-end test pipeline...')
 se_input = str(__path__) + 'se_test'
 se_output = str(__path__) + 'se_out'
-if not os.path.exists(se_output):
-    os.makedirs(se_output)
+if os.path.exists(se_output):
+    os.system(
+        'rm -rf ' + str(se_output))
 
+os.makedirs(se_output)
 se_gtf = str(__path__) + 'se_reference/transcripts_LC.gtf'
 os.system(
     'xpresspipe seRNAseq' \
@@ -138,9 +148,11 @@ os.system(
 print('Running paired-end test pipeline...')
 pe_input = str(__path__) + 'pe_test'
 pe_output = str(__path__) + 'pe_out'
-if not os.path.exists(pe_output):
-    os.makedirs(pe_output)
+if os.path.exists(pe_output):
+    os.system(
+        'rm -rf ' + str(pe_output))
 
+os.makedirs(pe_output)
 pe_gtf = str(__path__) + 'pe_reference/transcripts_LC.gtf'
 os.system(
     'xpresspipe peRNAseq' \

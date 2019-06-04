@@ -251,7 +251,8 @@ def remove_intermediate_reference(
 """Sort reads per file by chromosome position and keep only unique mappers"""
 def alignment_process(
         output,
-        args_dict):
+        args_dict,
+        paired=False):
 
     # Only take unique mappers (q = 255)
     os.system(
@@ -277,10 +278,22 @@ def alignment_process(
         + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
         + str(args_dict['log']))
 
+    # Fixmates for paired-end
+    if paired == True:
+        os.system(
+        'samtools fixmate'
+        + ' -m'
+        + ' -o' + str(args_dict['alignments']) + str(output) + '_fixed.sort.bam'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+        )
+        file_suffix = '_fixed.sort.bam'
+    else:
+        file_suffix = '_Aligned.sort.bam'
+
     # Use sorted BAM file to find any duplicate reads
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix) # Input BAM
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupMarked.bam' # Output BAM
         + ' -s' # Print some basic stats
         + str(args_dict['log']))
@@ -292,7 +305,7 @@ def alignment_process(
     # Create sorted BAM file with duplicates removed
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam' # Input BAM
+        + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix) # Input BAM
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam' # Output BAM
         + ' -s' # Print some basic stats to STDOUT
         + ' -r' # Remove duplicate reads
@@ -334,7 +347,8 @@ def clean_reference_directory(
 def align(
     args_dict,
     output,
-    file):
+    file,
+    paired=False):
 
     if 'mask' in args_dict and args_dict['mask'] == True:
         file = masking_star(
@@ -363,7 +377,8 @@ def align(
         # Remove intermediate reference for the file
         remove_intermediate_reference(
             output,
-            args_dict)
+            args_dict,
+            paired=paired)
     else:
         # One-pass STAR with GTF guiding splice mapping
         guided_star(
@@ -401,7 +416,7 @@ def pe_align(
     output = str(file1[8:-7]) # Get output file name before adding path to file name(s)
     file = str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2)
 
-    align(args_dict, output, file)
+    align(args_dict, output, file, paired=True)
 
 """Manage single-end RNA-seq pipeline"""
 def run_seRNAseq(
