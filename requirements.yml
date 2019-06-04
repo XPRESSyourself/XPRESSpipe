@@ -30,9 +30,7 @@ dependencies:
 - matplotlib=2.2.3
 - pip
 - pip:
-  - git-lfs
   - xpressplot
   - multiqc
   - numpydoc
-  - PySimpleGUI
 prefix: .miniconda3/envs/test
