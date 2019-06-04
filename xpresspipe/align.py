@@ -280,12 +280,26 @@ def alignment_process(
 
     # Fixmates for paired-end
     if paired == True:
+        # Fixmate requires name sorted files
+        os.system(
+        'samtools sort'
+        + ' -n'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.namesort.bam')
+
+        # Run fixmate
         os.system(
         'samtools fixmate'
         + ' -m'
-        + ' -o' + str(args_dict['alignments']) + str(output) + '_fixed.sort.bam'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
-        )
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.namesort.bam'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_fixed.namesort.bam')
+
+        # Convert back to coordinate sorted because markdup doesn't accept name sorted files
+        os.system(
+        'samtools sort'
+        + ' ' + str(args_dict['alignments']) + str(output) + '_fixed.namesort.bam'
+        + ' -o ' + str(args_dict['alignments']) + str(output) + '_fixed.sort.bam')
+
         file_suffix = '_fixed.sort.bam'
     else:
         file_suffix = '_Aligned.sort.bam'
