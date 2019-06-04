@@ -59,7 +59,7 @@ before_install:
 
 # Install dependencies
 install:
-  - conda env create -n test --file requirements.yml
+  - travis_wait conda env create -n test --file requirements.yml
   - source activate test
   - conda info --envs
   - conda list
