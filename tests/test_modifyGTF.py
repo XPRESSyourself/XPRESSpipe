@@ -15,7 +15,7 @@ gtf = pd.read_csv(
     header = None,
     comment = '#',
     low_memory = False)
-
+print('GTF Shape:',gtf.shape)
 
 # Test chunking
 from xpresspipe.gtfModify import get_chunks
