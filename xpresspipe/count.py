@@ -87,7 +87,11 @@ def count_file_cufflinks(
     file, args_dict = args[0], args[1] # Parse args
 
     # Add output directories
-    dir_name = file.replace(str(args_dict['bam_suffix']), '_cufflinks_counts')
+    dir_name = file.replace(str(args_dict['bam_suffix']), '')
+    if '.' in dir_name:
+        dir_name = dir_name.split('.')[0]
+    dir_name = str(dir_name) + '_cufflinks_counts'
+
     args_dict = add_directory(
         args_dict,
         'counts',
