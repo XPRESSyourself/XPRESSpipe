@@ -34,4 +34,5 @@ dependencies:
   - xpressplot
   - multiqc
   - numpydoc
+  - PySimpleGUI
 prefix: .miniconda3/envs/test
