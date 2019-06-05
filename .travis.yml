@@ -78,6 +78,7 @@ script:
   - coverage run tests/test_truncateGTF.py
   - coverage run tests/test_analysis.py
   - coverage run tests/test_pipelines.py
+  - coverage run tests/test_help.py
   - bash <(curl -s https://codecov.io/bash) -cF python
 
 after_success:
