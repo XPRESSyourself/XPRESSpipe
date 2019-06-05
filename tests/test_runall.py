@@ -1,7 +1,7 @@
 import os
 import sys
 
-__path__  =  os.path.dirname(os.path.realpath(__file__)) '/'
+__path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
 os.system(
 'python ' + str(__path__) + 'test_analysis.py'

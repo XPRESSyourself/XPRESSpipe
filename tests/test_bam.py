@@ -2,7 +2,7 @@
 import os
 import sys
 import pandas as pd
-__path__  =  os.path.dirname(os.path.realpath(__file__)) '/'
+__path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 #__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
 
 # Read in BAM file to pandas dataframe
