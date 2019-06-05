@@ -14,7 +14,6 @@ dependencies:
 - samtools
 - bedtools
 - deeptools
-- fastqc
 - htseq
 - pandas
 - numpy
