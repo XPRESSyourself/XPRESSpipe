@@ -14,17 +14,7 @@
 
 ##### Installation
 - While [Docker Images](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general) exist for XPRESSpipe, it may be best to download the [latest version](https://github.com/XPRESSyourself/XPRESSpipe/releases) directly
-- Assuming you have conda and git installed on your system, you can install using the ```install.sh``` script included in the [repo](https://github.com/XPRESSyourself/XPRESSpipe/)
-  - Use the current one, not the one versioned
-- You will also need to install the R dependencies required:
-```
-$ R
-
-> if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-> BiocManager::install("Rsubread", version = "3.8")
-> BiocManager::install("dupRadar", version = "3.8")
-> BiocManager::install("DESeq2", version = "3.8")
+- Running `python setup.py install` will handle dependency installation 
 ```
 
 ##### Getting Started
