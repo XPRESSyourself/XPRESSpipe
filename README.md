@@ -9,11 +9,11 @@
 [![Docker](https://img.shields.io/static/v1.svg?label=docker&message=dowload&color=informational)](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general)
 
 -----
-Please refer to the [documentation](https://xpresspipe.readthedocs.io/en/latest/?badge=latest) for more in depth details. 
+Please refer to the [documentation](https://xpresspipe.readthedocs.io/en/latest/?badge=latest) for more in depth details.
 
 ### Development Notes:
 - <b><i>XPRESSpipe is still in beta production</i></b>  
-- The current release [XPRESSpipe-v0.1.3b2](https://github.com/XPRESSyourself/XPRESSpipe/releases/tag/XPRESSpipe-v0.1.3b2) is running relatively stable on MacOS and Linux (including HPCs)
+- The current release [XPRESSpipe-v0.1.4b2](https://github.com/XPRESSyourself/XPRESSpipe/releases/tag/XPRESSpipe-v0.1.4b2) is running relatively stable on MacOS and Linux (including HPCs)
   - The meta-analysis plotting seems to work on a local MacOS, but not when running on a Linux HPC, will hopefully have kinks worked out in the next couple of weeks
   - Yet to incorporate UMI handling, representative gene housekeeping, along with some other features in the near future
 
