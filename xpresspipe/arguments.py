@@ -332,7 +332,7 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--feature_type',
-        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq',
+        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: exon)',
         metavar = '<feature>',
         default = 'exon',
         type = str,
@@ -488,7 +488,7 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--feature_type',
-        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq',
+        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: exon)',
         metavar = '<feature>',
         default = 'exon',
         type = str,
@@ -644,7 +644,7 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '--feature_type',
-        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq',
+        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: CDS)',
         metavar = '<feature>',
         default = 'CDS',
         type = str,
@@ -904,7 +904,7 @@ def get_arguments(
         required = False)
     count_opts.add_argument(
         '--feature_type',
-        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq',
+        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: exon)',
         metavar = '<feature>',
         default = 'exon',
         type = str,
