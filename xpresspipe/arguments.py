@@ -1078,6 +1078,12 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    distribution_opts.add_argument(
+        '-t', '--type',
+        help = 'Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
+        metavar = '<SE or PE>',
+        type = str,
+        required = True)
 
     """PERIODICITY SUBPARSER"""
     period_parser = subparser.add_parser(

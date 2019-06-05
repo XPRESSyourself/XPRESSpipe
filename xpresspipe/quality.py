@@ -98,15 +98,3 @@ def get_multiqc_summary(
         + ' -i ' + str(args_dict['experiment'])
         + ' -o ' + args_dict['output']
         + str(args_dict['log']))
-
-"""Generate read distribution profiles"""
-def run_fastqc(
-        args):
-
-    file, args_dict = args[0], args[1]
-
-    os.system(
-        'fastqc'
-        + ' -q ' + str(args_dict['input']) + str(file)
-        + ' -o ' + str(args_dict['fastqc_output'])
-        + str(args_dict['log']))
