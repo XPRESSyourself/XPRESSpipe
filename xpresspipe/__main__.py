@@ -37,7 +37,7 @@ from .count import count_reads, collect_counts
 from .normalizeMatrix import run_normalization
 from .convert import create_bed, create_bigwig
 from .rrnaProbe import rrnaProbe
-from .quality import get_multiqc_summary
+from .quality import get_multiqc_summary, get_fastqc
 from .metagene import make_metagene
 from .readDistribution import make_readDistributions
 from .periodicity import make_periodicity
@@ -382,6 +382,7 @@ def main(
         # Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
+        get_fastqc(args_dict) # Run FastQC on trimmed reads
         args_dict = run_seRNAseq(args_dict)
 
         # Get other formatted files
@@ -448,6 +449,7 @@ def main(
         # Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
+        get_fastqc(args_dict) # Run FastQC on trimmed reads
         args_dict = run_peRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']
@@ -513,6 +515,7 @@ def main(
         # Align
         msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
+        get_fastqc(args_dict) # Run FastQC on trimmed reads
         args_dict = run_seRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']

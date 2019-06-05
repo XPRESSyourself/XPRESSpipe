@@ -88,6 +88,37 @@ def get_position(
             else: # '-'
                 next_coordinate =  min(y)
 
+"""Generate read distribution profiles"""
+def run_fastqc(
+        args):
+
+    file, args_dict = args[0], args[1]
+
+    os.system(
+        'fastqc'
+        + ' -q ' + str(args_dict['input']) + str(file)
+        + ' -o ' + str(args_dict['fastqc'])
+        + str(args_dict['log']))
+
+"""Parellel run of FastQC"""
+def get_fastqc(args_dict):
+
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'fastqc')
+
+    files = get_files(
+        args_dict['input'],
+        ['.fastq', '.fq', '.txt'])
+
+    # Perform fastqc on each file and unzip output
+    parallelize(
+        run_fastqc,
+        files,
+        args_dict,
+        mod_workers = True)
+
 """Create MultiQC processing summary from all files in args_dict output"""
 def get_multiqc_summary(
         args_dict):
