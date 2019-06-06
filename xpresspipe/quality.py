@@ -26,7 +26,8 @@ import pandas as pd
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index
-
+from .utils import add_directory, get_files
+from .parallel import parallelize
 """Get meta and periodicity indices from GTF"""
 def get_indices(
         args_dict,
