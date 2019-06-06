@@ -60,6 +60,7 @@ def create_star_reference(
         + ' --runThreadN ' + str(threads)
         + str(log))
 
+"""DEPRECATED"""
 """Create STAR mask reference"""
 def create_mask_reference(
         output_directory,
