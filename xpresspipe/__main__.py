@@ -32,7 +32,7 @@ from .__init__ import __version__
 from .messages import *
 from .arguments import get_arguments
 from .trim import run_trim
-from .align import run_seRNAseq, run_peRNAseq, create_star_reference, create_mask_reference
+from .align import run_seRNAseq, run_peRNAseq, create_star_reference
 from .count import count_reads, collect_counts
 from .normalizeMatrix import run_normalization
 from .convert import create_bed, create_bigwig
@@ -219,27 +219,15 @@ def main(
             genome_size = args_dict['genome_size'])
 
         # Truncate transcript reference
-        edit_gtf(
-            args_dict['gtf'],
-            longest_transcript = args_dict['longest_transcript'],
-            protein_coding = args_dict['protein_coding'],
-            truncate_reference = args_dict['truncate'],
-            _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
-            _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
-            output = True,
-            threads = args_dict['threads'])
-
-        # Create masked index for STAR
-        if 'masked_index' in args_dict and args_dict['masked_index'] != None:
-
-            # Generate reference
-            args_dict['threads'], args_dict['workers'] = get_cores(
-                args_dict,
-                mod_workers = True)
-            create_mask_reference(
-                args_dict['output'],
-                args_dict['masked_index'],
-                args_dict['log'],
+        if (args_dict['longest_transcript'] == True) or (args_dict['protein_coding'] == True) or (args_dict['truncate'] == True):
+            edit_gtf(
+                args_dict['gtf'],
+                longest_transcript = args_dict['longest_transcript'],
+                protein_coding = args_dict['protein_coding'],
+                truncate_reference = args_dict['truncate'],
+                _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
+                _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
+                output = True,
                 threads = args_dict['threads'])
 
         # Check log file for errors and exceptions
