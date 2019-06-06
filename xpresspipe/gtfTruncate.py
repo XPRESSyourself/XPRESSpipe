@@ -172,12 +172,12 @@ def scan_backward(
     n = stop_index - penalty
 
     while n != start_index - 1:
-        if n > gtf.shape[0]: # Built in control to prevent indexing out of bounds, not relevant for small tests, but required when working with larger GTFs
+        if n > gtf.index[-1] or n < start_index: # Built in control to prevent indexing out of bounds, not relevant for small tests, but required when working with larger GTFs
             return gtf, bad_exons # Says we are out of bounds and return the work that its done up until now
 
         if gtf.at[n, 2] != trim_type:
             n -= 1
-            penalty -= 1
+            penalty += 1
 
         else:
             if sign == '+':
@@ -212,6 +212,8 @@ def scan_backward(
             # Exon 1 does not have a strandedness annotation
             else:
                 raise Exception('Unstranded transcript record present')
+    else:
+        return gtf, bad_exons # Provide exit mechanism if start hit outside while loop
 
 """Truncate 3' amount from the first listed positive stranded exon"""
 def plus_3prime(
@@ -312,10 +314,13 @@ def truncate_gtf(
             parse_id = transcript_id
             while transcript_id == parse_id:
                 n += 1
+
                 if index + n > gtf.index[-1]: # Check if we reached the end of the GTF
                     break
-                else:
+                elif parse_type in gtf.at[index + n, 8]: # Handles a GTF where gene record present -- without this it will try to parse transcript_id incorrectly from row and screw things up
                     parse_id = gtf.at[index + n, 8][(gtf.at[index + n, 8].find(parse_type) + 15):].split('\";')[0]
+                else:
+                    break
 
             gtf_parse = gtf.loc[index:index + n - 1]
 
@@ -363,7 +368,7 @@ def truncate_gtf(
     # If the case, append to list and drop
     remaining_bad = []
     for index, row in gtf_c.iterrows():
-        if row[3] >= row[4]:
+        if row[3] >= row[4] and row[2] == trim_type:
             remaining_bad.append(index)
 
     """STEP 4"""
@@ -371,7 +376,7 @@ def truncate_gtf(
     remove_indices = list(set(bad_exons + bad_transcript + remaining_bad))
 
     print(str(len(remove_indices)) + ' records removed from reference chunk for being too short.')
-    gtf_c = gtf_c.drop(gtf_c.index[remove_indices])
+    gtf_c = gtf_c.drop(remove_indices)
     gtf_c = gtf_c.reset_index(drop=True)
 
     # Garbage management
