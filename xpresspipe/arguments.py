@@ -81,8 +81,6 @@ description_table  =  """\
         |-----------------------|---------------------------------------------------------------------------------------|
         |    makeReference      |   Create a STAR reference directory (memory intensive)                                |
         |-----------------------|---------------------------------------------------------------------------------------|
-        |    maskReference      |   Create a masking STAR reference directory (memory intensive)                        |
-        |-----------------------|---------------------------------------------------------------------------------------|
         |    modifyGTF          |   Create a longest isoform-only, protein-coding only, and/or truncated GTF file       |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
@@ -280,11 +278,6 @@ def get_arguments(
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
         action = 'store_true',
         required = False)
-    #se_opts.add_argument(
-    #    '--mask',
-    #    help = 'Set to False if you wish to align out ncRNA before alignment (requires a ncRNA STAR index be created in reference curation)',
-    #    action = 'store_true',
-    #    required = False)
     se_opts.add_argument(
         '-a', '--adaptors',
         help = 'Specify adaptor as string (only one allowed) -- if \"None\" is provided, software will attempt to auto-detect adaptors -- \
@@ -436,11 +429,6 @@ def get_arguments(
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
         action = 'store_true',
         required = False)
-    #pe_opts.add_argument(
-    #    '--mask',
-    #    help = 'Set to False if you wish to align out ncRNA before alignment (requires a ncRNA STAR index be created in reference curation)',
-    #    action = 'store_true',
-    #    required = False)
     pe_opts.add_argument(
         '-a', '--adaptors',
         help = 'Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if"None None\" is \
@@ -592,11 +580,6 @@ def get_arguments(
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
         action = 'store_true',
         required = False)
-    #rp_opts.add_argument(
-    #    '--mask',
-    #    help = 'Set to False if you wish to align out ncRNA before alignment (requires a ncRNA STAR index be created in reference curation)',
-    #    action = 'store_true',
-    #    required = False)
     rp_opts.add_argument(
         '-a', '--adaptors',
         help = 'Specify adaptor as string (only one allowed) -- if"None\" is provided, software will attempt to auto-detect adaptors -- \
@@ -798,11 +781,6 @@ def get_arguments(
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
         action = 'store_true',
         required = False)
-    #align_opts.add_argument(
-    #    '--mask',
-    #    help = 'Set to False if you wish to align out ncRNA before alignment (requires a ncRNA STAR index be created in reference curation)',
-    #    action = 'store_true',
-    #    required = False)
     align_opts.add_argument(
         '--output_bigwig',
         help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
@@ -1185,7 +1163,7 @@ def get_arguments(
     """CURATE SUBPARSER"""
     curate_parser = subparser.add_parser(
         'curateReference',
-        description = 'Run makeReference, maskReference, and modifyGTF',
+        description = 'Run makeReference and modifyGTF',
         add_help = False)
     # Required arguments
     curate_reqs = curate_parser.add_argument_group('required arguments')
@@ -1213,12 +1191,6 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
-    #curate_opts.add_argument(
-    #    '--masked_index',
-    #    help = 'Path to directory containing masking fasta files (NOTE: Cannot be the same directory where genomic fasta files are located)',
-    #    metavar = '<path>',
-    #    type = str,
-    #    required = True)
     curate_opts.add_argument(
         '-l', '--longest_transcript',
         help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
@@ -1380,39 +1352,6 @@ def get_arguments(
         type = int,
         default = DEFAULT_MAX_PROCESSORS,
         required = False)
-
-    """MASK SUBPARSER"""
-    #mask_parser = subparser.add_parser(
-    #    'maskReference',
-    #    description = 'Create a masked STAR reference directory',
-    #    add_help = False)
-    # Required arguments
-    #mask_reqs = mask_parser.add_argument_group('required arguments')
-    #mask_reqs.add_argument(
-    #    '-o', '--output',
-    #    help = 'Path to output directory',
-    #    metavar = '<path>',
-    #    type = str,
-    #    required = True)
-    #mask_reqs.add_argument(
-    #    '--masked_index',
-    #    help = 'Path to directory containing masking fasta files (NOTE: Cannot be the same directory where genomic fasta files are located)',
-    #    metavar = '<path>',
-    #    type = str,
-    #    required = True)
-    # Optional arguments
-    #mask_opts = mask_parser.add_argument_group('optional arguments')
-    #mask_opts.add_argument(
-    #    '-h', '--help',
-    #    action = 'help',
-    #    help = 'Show help message and exit')
-    #mask_opts.add_argument(
-    #    '-m', '--max_processors',
-    #    help = 'Number of max processors to use for tasks (default: No limit)',
-    #    metavar = '<processors>',
-    #    type = int,
-    #    default = DEFAULT_MAX_PROCESSORS,
-    #    required = False)
 
     """RRNAPROBE SUBPARSER"""
     probe_parser = subparser.add_parser(
