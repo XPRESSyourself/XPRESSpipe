@@ -30,12 +30,9 @@ def check_directories(
     type=None):
 
     # Check that a file wasn't passed in
-    if '.' in input:
-        if input.startswith('.'):
-            pass
-        else:
-            raise Exception('It appears you passed a file instead of a directory as input')
-
+    if os.path.isdir(input) != True:
+        raise Exception(str(input) + ' is not a directory')
+        
     # Check input directory name is formatted correctly and fix if necessary
     if input.endswith('/'):
         pass

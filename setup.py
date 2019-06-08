@@ -36,11 +36,11 @@ def test_system():
     # Get python version
     python =  sys.version_info[0]
 
-    if sys.platform == 'darwin':
+    if 'darwin' in sys.platform:
         system = 'MacOSX'
         cufflinks = 'cufflinks-2.1.1.OSX_x86_64'
 
-    elif sys.platform == 'linux':
+    elif 'linux' in sys.platform:
         system = 'Linux'
         cufflinks = 'cufflinks-2.1.1.Linux_x86_64'
 

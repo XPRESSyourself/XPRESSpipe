@@ -24,7 +24,6 @@ Get Sequence Files
 .. code-block:: shell
 
   $ mkdir human_reference
-  $ mkdir human_reference/genome
   $ mkdir human_reference/genome_fasta
   $ cd human_reference/
   $ curl ftp://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz -o transcripts.gtf.gz
@@ -91,14 +90,14 @@ Examples
 
   $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -t 12
 
-  | **Example 3 -- Create a single-end sequencing reference for Saccharomyces cerevisiae:**
-  | - Paths to output and location of genome fasta files for each chromosome are provided, as well as path and file name to transcripts.gtf file
-  | - Default number of threads are used for preparing reference\
-  | - Genome size is specified
+| **Example 3 -- Create a single-end sequencing reference for Saccharomyces cerevisiae:**
+| - Paths to output and location of genome fasta files for each chromosome are provided, as well as path and file name to transcripts.gtf file
+| - Default number of threads are used for preparing reference\
+| - Genome size is specified
 
-  .. code-block:: shell
+.. code-block:: shell
 
-    $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf --sjdbOverhang 49 --genome_size 11
+  $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf --sjdbOverhang 49 --genome_size 11
 
 ============================================
 Transcript Reference Modification
