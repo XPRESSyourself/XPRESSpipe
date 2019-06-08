@@ -43,6 +43,7 @@ Install from Source (Recommended)
   Finished processing dependencies for XPRESSpipe==0.0.1b0
 
   $ echo "export PATH='/Users/$USERNAME/anaconda3/bin:$PATH' >> ~/.bash_profile
+  $ echo "export PYTHONPATH='/Users/$USERNAME/anaconda3/lib/python3.6/site-packages'"
 
 ======================
 Docker Container
