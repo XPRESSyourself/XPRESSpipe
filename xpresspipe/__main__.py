@@ -44,7 +44,7 @@ from .periodicity import make_periodicity
 from .complexity import make_complexity
 from .parallel import get_cores
 from .gtfModify import edit_gtf
-from .utils import get_probe_files, unzip_files
+from .utils import get_files, unzip_files
 
 """Main function to call necessary functions for sub-modules
 

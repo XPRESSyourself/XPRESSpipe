@@ -32,7 +32,7 @@ def check_directories(
     # Check that a file wasn't passed in
     if os.path.isdir(input) != True:
         raise Exception(str(input) + ' is not a directory')
-        
+
     # Check input directory name is formatted correctly and fix if necessary
     if input.endswith('/'):
         pass
@@ -127,7 +127,7 @@ def get_directories(
     return tuple(directory_list)
 
 """Get files to perform rRNA prober upon"""
-def get_probe_files(
+"""def get_probe_files(
     args_dict,
     suffix):
 
@@ -151,7 +151,7 @@ def get_probe_files(
 
     print(probe_list)
 
-    return tuple(probe_list)
+    return tuple(probe_list)"""
 
 """Unzip all files from directory"""
 def unzip_files(
