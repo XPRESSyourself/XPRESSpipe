@@ -26,38 +26,31 @@ import re
 import sys
 
 """Get overrepresented sequences from a given FastQC zip file"""
-def get_overrep_seqs(file):
-    print('************')
-    print(file)
-    with file as folder:
-        datafilename = ''
-        for resource in folder.namelist():
-            curr_filename = os.path.basename(resource).strip()
+def get_overrep_seqs(directory):
 
-            if "fastqc_data.txt" == curr_filename:
-                datafilename = resource
+    file = str(directory) + '/fastqc_data.txt'
+    if os.path.isfile(file) == False:
+        raise Exception('No fastqc data file found in fastqc folder: ' + str(directory))
+
+
+    # If execution makes it to here, should have a valid data filename
+    with folder.open(file) as datafile:
+        overrep_seqs = []
+        store_flag = False
+        for bytes_string in datafile:
+            line = str(bytes_string, 'utf-8').strip()
+            if line == ">>Overrepresented sequences	fail":
+                # This means time to start storing lines
+                store_flag = True
+            elif store_flag and line == ">>END_MODULE":
                 break
-        if datafilename == "":
-            print ("No fastqc data file found in fastqc folder: " + file)
-            sys.exit(1)
-        # If execution makes it to here, should have a valid data filename
-        with folder.open(datafilename) as datafile:
-            overrep_seqs = []
-            store_flag = False
-            for bytes_string in datafile:
-                line = str(bytes_string, 'utf-8').strip()
-                if line == ">>Overrepresented sequences	fail":
-                    # This means time to start storing lines
-                    store_flag = True
-                elif store_flag and line == ">>END_MODULE":
-                    break
-                elif store_flag:
-                    entry = line.split()[:2]
-                    try:
-                        entry[1] = int(entry[1])
-                        overrep_seqs.append(entry)
-                    except Exception as e:
-                        pass
+            elif store_flag:
+                entry = line.split()[:2]
+                try:
+                    entry[1] = int(entry[1])
+                    overrep_seqs.append(entry)
+                except Exception as e:
+                    pass
 
     if len(overrep_seqs) <= 0:
         print ("No fastqc data file found in fastqc folder: " + file)
@@ -153,13 +146,13 @@ def countFreqs(combined_entries):
 
 """Determine consensus overrepresented sequences between files from list"""
 def rrnaProbe(
-    files_list,
+    directory_list,
     min_overlap):
 
     footprint_seqs = []
 
-    for filename in files_list:
-        footprint_seqs += get_overrep_seqs(filename)
+    for directory in directory_list:
+        footprint_seqs += get_overrep_seqs(directory)
 
     combined_fp = []
 

@@ -44,7 +44,7 @@ from .periodicity import make_periodicity
 from .complexity import make_complexity
 from .parallel import get_cores
 from .gtfModify import edit_gtf
-from .utils import get_files, unzip_files
+from .utils import get_files, get_directories, unzip_files
 
 """Main function to call necessary functions for sub-modules
 
@@ -295,10 +295,10 @@ def main(
 
     elif args.cmd == 'rrnaProbe':
         # Get files to probe
-        probe_list = get_files(
+        probe_list = get_directories(
             args_dict['input'],
             ['.zip'],
-            omit=['.html'])
+            omit=['.html','.zip'])
 
         # Run rrna_prober, output to outputDir
         print('Probing for most over-represented read sequences...')

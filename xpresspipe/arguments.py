@@ -1370,8 +1370,8 @@ def get_arguments(
         required = True)
     probe_reqs.add_argument(
         '-o', '--output',
-        help = 'Path and file name to write output to',
-        metavar = '</path/filename>',
+        help = 'Path to write output to',
+        metavar = '<path>',
         type = str,
         required = True)
     # Optional arguments
