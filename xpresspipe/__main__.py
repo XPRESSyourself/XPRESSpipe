@@ -296,7 +296,7 @@ def main(
         probe_list = get_files(
             args_dict['input'],
             ['.zip'],
-            ['.html'])
+            omit=['.html'])
 
         # Run rrna_prober, output to outputDir
         print('Probing for most over-represented read sequences...')
