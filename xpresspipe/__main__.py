@@ -66,7 +66,9 @@ def main(
     # Should have already seen check_directory() so should have a trailing '/'
     if 'input' in args_dict \
     and str(args_dict['input']).endswith('/'):
-        unzip_files(args_dict['input'])
+        unzip_files(
+            args_dict['input'],
+            args_dict['log'])
 
     # Execute corresponding functions determined by arguments provided by user
     if args.cmd == 'trim':

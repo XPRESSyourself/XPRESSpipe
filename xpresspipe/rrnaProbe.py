@@ -24,13 +24,12 @@ from __future__ import print_function
 import os
 import re
 import sys
-from zipfile import ZipFile as zf
 
 """Get overrepresented sequences from a given FastQC zip file"""
-def get_overrep_seqs(zipfile):
+def get_overrep_seqs(file):
     print('************')
-    print(zipfile)
-    with zf(zipfile) as folder:
+    print(file)
+    with file as folder:
         datafilename = ''
         for resource in folder.namelist():
             curr_filename = os.path.basename(resource).strip()
@@ -39,7 +38,7 @@ def get_overrep_seqs(zipfile):
                 datafilename = resource
                 break
         if datafilename == "":
-            print ("No fastqc data file found in fastqc folder: " + zipfile)
+            print ("No fastqc data file found in fastqc folder: " + file)
             sys.exit(1)
         # If execution makes it to here, should have a valid data filename
         with folder.open(datafilename) as datafile:
@@ -61,7 +60,7 @@ def get_overrep_seqs(zipfile):
                         pass
 
     if len(overrep_seqs) <= 0:
-        print ("No fastqc data file found in fastqc folder: " + zipfile)
+        print ("No fastqc data file found in fastqc folder: " + file)
         sys.exit(1)
     return overrep_seqs
 

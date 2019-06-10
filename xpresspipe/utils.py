@@ -74,6 +74,7 @@ def get_files(
 
     # Walk through raw data files within given directory
     for file in next(os.walk(directory))[2]:
+        print(file)
         if file.endswith(tuple(suffix)):
             file_list.append(file) # Do not append directory, files in list will be modified and output to different locations
 
@@ -155,13 +156,14 @@ def get_directories(
 
 """Unzip all files from directory"""
 def unzip_files(
-    directory):
+    directory,
+    log):
 
     suffix = ['.gz', '.zip']
-
+    print(directory)
     # Walk through raw data files within given directory
     for file in os.listdir(directory):
-
+        print(file)
         for s in suffix:
             if file.endswith(str(s)):
                 if s == '.gz':
@@ -169,12 +171,17 @@ def unzip_files(
                         'gzip' +
                         ' -d'
                         + ' ' + str(directory) + str(file)
-                        + str(args_dict['log']))
+                        + str(log))
+
+
                 if s == '.zip':
+                    print(directory)
+                    print(file)
                     os.system(
                         'unzip'
+                        + ' -d ' + str(directory)
                         + ' ' + str(directory) + str(file)
-                        + str(args_dict['log']))
+                        + str(log))
 
 """Get fasta files within directory"""
 def get_fasta(
