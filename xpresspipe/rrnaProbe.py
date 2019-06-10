@@ -153,12 +153,17 @@ def countFreqs(combined_entries):
     return count
 
 """Determine consensus overrepresented sequences between files from list"""
-def rrnaProbe(files_list, min_overlap):
+def rrnaProbe(
+    files_list,
+    min_overlap):
+
     footprint_seqs = []
+
     for filename in files_list:
         footprint_seqs += get_overrep_seqs(filename)
 
     combined_fp = []
+
     # Put into uppercase format together, prep for combining (ribosome footprint sequences)
     count = 0
     for seq,count in footprint_seqs:

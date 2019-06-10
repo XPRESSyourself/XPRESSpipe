@@ -55,7 +55,7 @@ description_table  =  """\
         |-----------------------|---------------------------------------------------------------------------------------|
         |    peRNAseq           |   Trim, align, count, and perform quality control on paired-end RNAseq raw data       |
         |-----------------------|---------------------------------------------------------------------------------------|
-        |    riboseq           |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
+        |    riboseq            |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
         |                       |   raw data                                                                            |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    trim               |   Trim RNAseq reads of adaptors and for quality                                       |
@@ -99,13 +99,14 @@ def check_inputs(
     ignore_list = [
         'normalizeMatrix',
         'diffxpress',
-        'convertNames']
+        'convertNames',
+        'rrnaProbe']
 
     if 'input' in args_dict and args_dict['cmd'] not in ignore_list:
         args_dict['input'] = check_directories(
             args_dict['input'],
             'input')
-    if 'output' in args_dict:
+    if 'output' in args_dict and args_dict['cmd'] not in ignore_list:
         args_dict['output'] = check_directories(
             args_dict['output'],
             'output')

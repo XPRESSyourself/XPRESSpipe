@@ -293,9 +293,10 @@ def main(
 
     elif args.cmd == 'rrnaProbe':
         # Get files to probe
-        probe_list = get_probe_files(
-            args_dict,
-            '.zip')
+        probe_list = get_files(
+            args_dict['input'],
+            ['.zip'],
+            ['.html'])
 
         # Run rrna_prober, output to outputDir
         print('Probing for most over-represented read sequences...')
