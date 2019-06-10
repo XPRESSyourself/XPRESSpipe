@@ -1383,7 +1383,7 @@ def get_arguments(
     probe_opts.add_argument(
         '-m', '--min_overlap',
         help = 'Minimum number of bases that must match on a side to combine sequences (default: %s)' % 5,
-        default = 5,
+        default = 15,
         metavar = '<value>',
         type = int,
         required = False)
