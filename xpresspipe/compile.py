@@ -224,3 +224,7 @@ def compile_complexity_metrics(
         str(plot_output) + plot_title + '_summary.pdf',
         dpi = dpi,
         bbox_inches = 'tight')
+
+def compile_coverage():
+
+    print('coming soon')

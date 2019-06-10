@@ -70,6 +70,9 @@ description_table  =  """\
         |-----------------------|---------------------------------------------------------------------------------------|
         |    metagene           |   Compile summarized metagene profiles for each sample in a directory                 |
         |-----------------------|---------------------------------------------------------------------------------------|
+        |    geneCoverage       |   Compile coverage profiles for a given gene for each sample in a directory across    |
+        |                       |   exons or CDS (no introns)                                                           |
+        |-----------------------|---------------------------------------------------------------------------------------|
         |    readDistribution   |   Compile summarized distributions for each sample in a directory                     |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    periodicity        |   Calculate periodicity of transcripts using the most abundant transcript length      |
@@ -980,6 +983,7 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
 
+
     """METAGENE SUBPARSER"""
     metagene_parser = subparser.add_parser(
         'metagene',
@@ -1024,7 +1028,79 @@ def get_arguments(
         default = '_Aligned.sort.bam',
         type = str,
         required = False)
+    metagene_opts.add_argument(
+        '--type',
+        help = 'Record type to map across (i.e. "exon", "CDS") (case-sensitive)',
+        metavar = '<type>',
+        default = 'exon',
+        type = str,
+        required = False)
 
+
+    """METAGENE SUBPARSER"""
+    coverage_parser = subparser.add_parser(
+        'geneCoverage',
+        description = 'Compile coverage profiles for a given gene for each sample in a directory across exons or CDS (no introns)',
+        add_help = False)
+    # Required arguments
+    coverage_reqs = coverage_parser.add_argument_group('required arguments')
+    coverage_reqs.add_argument(
+        '-i', '--input',
+        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _Aligned.sort.bam)',
+        metavar = '<path>',
+        type = str,
+        required = True)
+    coverage_reqs.add_argument(
+        '-o', '--output',
+        help = 'Path to output directory',
+        metavar = '<path>',
+        type = str,
+        required = True)
+    coverage_reqs.add_argument(
+        '-g', '--gtf',
+        help = 'Path and file name to reference GTF',
+        metavar = '</path/transcripts.gtf>',
+        type = str,
+        required = True)
+    coverage_reqs.add_argument(
+        '-n', '--gene_name',
+        help = 'Gene name to plot coverage (case-sensitive)',
+        metavar = '</path/transcripts.gtf>',
+        type = str,
+        required = True)
+    coverage_reqs.add_argument(
+        '-e', '--experiment',
+        help = 'Experiment name',
+        metavar = '<experiment_name>',
+        type = str,
+        required = True)
+    # Optional arguments
+    coverage_opts  = coverage_parser.add_argument_group('optional arguments')
+    coverage_opts.add_argument(
+        '-h', '--help',
+        action = 'help',
+        help = 'Show help message and exit')
+    coverage_opts.add_argument(
+        '--bam_suffix',
+        help = 'Change from default suffix of _Aligned.sort.bam',
+        metavar = '<suffix>',
+        default = '_Aligned.sort.bam',
+        type = str,
+        required = False)
+    coverage_opts.add_argument(
+        '--type',
+        help = 'Record type to map across (i.e. "exon", "CDS") (case-sensitive)',
+        metavar = '<type>',
+        default = 'exon',
+        type = str,
+        required = False)
+    coverage_opts.add_argument(
+        '--type',
+        help = 'Record type to map across (i.e. "exon", "CDS") (case-sensitive)',
+        metavar = '<type>',
+        default = 'exon',
+        type = str,
+        required = False)
 
     """READ DISTRIBUTION SUBPARSER"""
     distribution_parser = subparser.add_parser(
@@ -1046,11 +1122,14 @@ def get_arguments(
         type = str,
         required = True)
     distribution_reqs.add_argument(
-        '-e', '--experiment',
-        help = 'Experiment name',
-        metavar = '<experiment_name>',
+        '--samples',
+        help = 'Provide a space-separated list of sample names to include in analysis (will only include those listed, and will plot in the order listed)',
+        metavar = '<sample_list>',
         type = str,
-        required = True)
+        nargs = '+',
+        default = None,
+        required = False)
+
     # Optional arguments
     distribution_opts = distribution_parser.add_argument_group('optional arguments')
     distribution_opts.add_argument(

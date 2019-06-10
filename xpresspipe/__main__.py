@@ -38,7 +38,7 @@ from .normalizeMatrix import run_normalization
 from .convert import create_bed, create_bigwig
 from .rrnaProbe import rrnaProbe
 from .quality import get_multiqc_summary, get_fastqc
-from .metagene import make_metagene
+from .metagene import make_metagene, make_coverage
 from .readDistribution import make_readDistributions
 from .periodicity import make_periodicity
 from .complexity import make_complexity
@@ -167,6 +167,18 @@ def main(
             args_dict['log_file'],
             msg_complete(),
             'METAGENE')
+
+    elif args.cmd == 'geneCoverage':
+        print('Performing gene coverage analysis on SAM files...')
+
+        # Perform metagene analysis
+        make_coverage(args_dict)
+
+        # Check log file for errors and exceptions
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'GENE COVERAGE')
 
     elif args.cmd == 'readDistribution':
         print('Performing read distribution analysis on fastq files...')

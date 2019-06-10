@@ -31,7 +31,7 @@ from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .parallel import parallelize
-from .compile import compile_matrix_metrics
+from .compile import compile_matrix_metrics, compile_coverage
 from .utils import add_directory, get_files
 from .processBAM import read_bam, bam_sample
 from .quality import get_indices, get_position
@@ -148,7 +148,7 @@ def make_metagene(
         [str(args_dict['bam_suffix'])])
 
     # Get indices
-    chromosome_index, coordinate_index = get_indices(args_dict)
+    chromosome_index, coordinate_index = get_indices(args_dict, record_type=args_dict['type'])
 
     # Perform metagene analysis
     func = partial(
@@ -193,4 +193,61 @@ def make_metagene(
 
     chromosome_index = None
     coordinate_index = None
+    gc.collect()
+
+
+"""Get coverage profile for a specific gene"""
+def make_coverage(
+    args_dict):
+
+    # Add output directories
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'coverage')
+
+    args_dict = add_directory(
+        args_dict,
+        'coverage',
+        'metrics')
+    args_dict = add_directory(
+        args_dict,
+        'coverage',
+        'individual_plots')
+
+    # Get list of bam files from user input
+    files = get_files(
+        args_dict['input'],
+        [str(args_dict['bam_suffix'])])
+
+    # Get samples user specified
+    if args_dict['samples'] != None:
+        sample_list = []
+        for x in files:
+            for y in args_dict['samples']:
+                if y in x:
+                    sample_list.append(x)
+                    break
+        files = sample_list
+
+    # Get indices
+    chromosome_index, coordinate_index = get_indices(args_dict, record_type=args_dict['type'], gene_name=args_dict['gene'])
+
+    # Perform metagene analysis
+    func = partial(
+        get_coverage,
+        chromosome_index = chromosome_index,
+        coordinate_index = coordinate_index)
+    parallelize(
+        func,
+        files,
+        args_dict,
+        mod_workers = True)
+
+    # Compile metrics to plot
+    files = get_files(
+        str(args_dict['coverage']) + 'metrics/',
+        ['_metrics.txt'])
+
+    compile_coverage()
     gc.collect()
