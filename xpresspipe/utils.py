@@ -160,10 +160,10 @@ def unzip_files(
     log):
 
     suffix = ['.gz', '.zip']
-    print(directory)
+
     # Walk through raw data files within given directory
     for file in os.listdir(directory):
-        print(file)
+
         for s in suffix:
             if file.endswith(str(s)):
                 if s == '.gz':
@@ -173,12 +173,10 @@ def unzip_files(
                         + ' ' + str(directory) + str(file)
                         + str(log))
 
-
                 if s == '.zip':
-                    print(directory)
-                    print(file)
                     os.system(
                         'unzip'
+                        + ' -q'
                         + ' -d ' + str(directory)
                         + ' ' + str(directory) + str(file)
                         + str(log))

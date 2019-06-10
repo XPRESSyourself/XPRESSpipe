@@ -297,7 +297,7 @@ def main(
         # Get files to probe
         probe_list = get_directories(
             args_dict['input'],
-            ['.zip'],
+            [''],
             omit=['.html','.zip'])
 
         # Run rrna_prober, output to outputDir

@@ -28,18 +28,17 @@ import sys
 """Get overrepresented sequences from a given FastQC zip file"""
 def get_overrep_seqs(directory):
 
-    file = str(directory) + '/fastqc_data.txt'
+    print(directory)
+    file = str(directory) + 'fastqc_data.txt'
     if os.path.isfile(file) == False:
         raise Exception('No fastqc data file found in fastqc folder: ' + str(directory))
-
-
+    print(file)
     # If execution makes it to here, should have a valid data filename
-    with folder.open(file) as datafile:
+    with open(str(file), 'r') as datafile:
         overrep_seqs = []
         store_flag = False
-        for bytes_string in datafile:
-            line = str(bytes_string, 'utf-8').strip()
-            if line == ">>Overrepresented sequences	fail":
+        for line in datafile:
+            if ">>Overrepresented sequences" in line:
                 # This means time to start storing lines
                 store_flag = True
             elif store_flag and line == ">>END_MODULE":
