@@ -21,9 +21,33 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import print_function
 
 """IMPORT DEPENDENCIES"""
+import os
 import math
 import concurrent.futures
 from multiprocessing import cpu_count
+import psutil
+
+"""Threshold number of workers if available RAM is insufficient with number of workers and file sizes"""
+def threshold_ram(
+    args_dict,
+    file_list):
+
+    total = psutil.virtual_memory()[1] # Get available memory
+
+    file_sizes = [] # Get max file size
+    for file in file_list:
+        file_sizes.append(os.path.getsize(str(args_dict['input']) + str(file)))
+    _max = max(file_sizes)
+
+    if file[-4:] == '.bam': # Assume binary files will expand by factor of 4 for decompression and additional data storage used in process
+        factor = 4
+    else:
+        factor = 2
+
+    threshold = math.floor(total / (_max * factor)) # Set threshold based on max file size in set
+    if threshold < args_dict['workers']: # Modify if set # of workers is greater than memory threshold
+        print('Resetting max number of workers to ' + str(threshold))
+        return threshold
 
 """Determine number of processors to use"""
 def get_cores(
@@ -61,9 +85,15 @@ def parallelize(
 
     args_iter = ([file, args_dict] for file in file_list)
 
+    # Get number of cores
     args_dict['threads'], args_dict['workers'] = get_cores(
         args_dict,
         mod_workers)
+
+    # Check and apply RAM threshold if necessary
+    args_dict['workers'] = threshold_ram(
+        args_dict,
+        file_list)
 
     run_pools(
         func,

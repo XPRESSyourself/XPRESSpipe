@@ -119,7 +119,8 @@ setup(
     install_requires = [
         'xpressplot',
         'multiqc',
-        'numpydoc'
+        'numpydoc',
+        'psutil'
 
     ],
 
