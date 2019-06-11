@@ -174,7 +174,6 @@ def make_metagene(
         file_lists.append(files[y:y+6])
         y += 6
 
-    y = 1
     for file_list in file_lists:
 
         # Plot metrics for each file
@@ -189,8 +188,6 @@ def make_metagene(
             args_dict['metagene'],
             str(args_dict['metagene']) + 'individual_plots/')
 
-        y += 1
-
     chromosome_index = None
     coordinate_index = None
     gc.collect()
@@ -201,6 +198,7 @@ def make_coverage(
     args_dict):
 
     # Add output directories
+    print('\nGenerating gene coverage profiles...')
     args_dict = add_directory(
         args_dict,
         'output',
@@ -223,19 +221,21 @@ def make_coverage(
     # Get samples user specified
     if args_dict['samples'] != None:
         sample_list = []
-        for x in files:
-            for y in args_dict['samples']:
+        for x in args_dict['samples']:
+            for y in files:
                 if y in x:
-                    sample_list.append(x)
+                    sample_list.append(y)
                     break
         files = sample_list
 
     # Get indices
-    chromosome_index, coordinate_index = get_indices(args_dict, record_type=args_dict['type'], gene_name=args_dict['gene'])
+    print('Generating index for gene...')
+    chromosome_index, coordinate_index = get_indices(args_dict, record_type=args_dict['type'], gene_name=args_dict['gene_name'])
 
     # Perform metagene analysis
+    print('Generating coverage profiles for each sample across ' + str(args_dict['gene_name']) + '...')
     func = partial(
-        get_coverage,
+        get_metagene,
         chromosome_index = chromosome_index,
         coordinate_index = coordinate_index)
     parallelize(
@@ -245,9 +245,33 @@ def make_coverage(
         mod_workers = True)
 
     # Compile metrics to plot
+    print('Plotting...')
     files = get_files(
         str(args_dict['coverage']) + 'metrics/',
         ['_metrics.txt'])
 
-    compile_coverage()
+    file_number = ceil(len(files) / 6)
+    file_lists = []
+
+    y = 0
+    for x in range(file_number):
+        file_lists.append(files[y:y+16])
+        y += 16
+
+    for file_list in file_lists:
+
+        # Plot metrics for each file
+        compile_coverage(
+            args_dict,
+            str(args_dict['coverage']) + 'metrics/',
+            file_list,
+            chromosome_index,
+            coordinate_index,
+            'representative transcript',
+            'metacount',
+            'coverage',
+            args_dict['experiment'],
+            args_dict['coverage'],
+            str(args_dict['coverage']) + 'individual_plots/')
+
     gc.collect()

@@ -1035,6 +1035,13 @@ def get_arguments(
         default = 'exon',
         type = str,
         required = False)
+    metagene_opts.add_argument(
+        '-m', '--max_processors',
+        help = 'Number of max processors to use for tasks (default: No limit)',
+        metavar = '<processors>',
+        type = int,
+        default = DEFAULT_MAX_PROCESSORS,
+        required = False)
 
 
     """METAGENE SUBPARSER"""
@@ -1058,7 +1065,7 @@ def get_arguments(
         required = True)
     coverage_reqs.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to reference GTF',
+        help = 'Path and file name to reference GTF (should be unmodified)',
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
@@ -1095,11 +1102,19 @@ def get_arguments(
         type = str,
         required = False)
     coverage_opts.add_argument(
-        '--type',
-        help = 'Record type to map across (i.e. "exon", "CDS") (case-sensitive)',
-        metavar = '<type>',
-        default = 'exon',
+        '--samples',
+        help = 'Provide a space-separated list of sample names to include in analysis (will only include those listed, and will plot in the order listed)',
+        metavar = '<sample_list>',
         type = str,
+        nargs = '+',
+        default = None,
+        required = False)
+    coverage_opts.add_argument(
+        '-m', '--max_processors',
+        help = 'Number of max processors to use for tasks (default: No limit)',
+        metavar = '<processors>',
+        type = int,
+        default = DEFAULT_MAX_PROCESSORS,
         required = False)
 
     """READ DISTRIBUTION SUBPARSER"""
@@ -1121,14 +1136,6 @@ def get_arguments(
         metavar = '<path>',
         type = str,
         required = True)
-    distribution_reqs.add_argument(
-        '--samples',
-        help = 'Provide a space-separated list of sample names to include in analysis (will only include those listed, and will plot in the order listed)',
-        metavar = '<sample_list>',
-        type = str,
-        nargs = '+',
-        default = None,
-        required = False)
 
     # Optional arguments
     distribution_opts = distribution_parser.add_argument_group('optional arguments')

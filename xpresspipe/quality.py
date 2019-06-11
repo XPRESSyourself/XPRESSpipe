@@ -30,19 +30,19 @@ from .utils import add_directory, get_files
 from .parallel import parallelize
 """Get meta and periodicity indices from GTF"""
 def get_indices(
-        args_dict,
-        record_type='exon',
-        gene_name=None):
+    args_dict,
+    record_type='exon',
+    gene_name=None):
 
     # Read in GTF
     gtf = pd.read_csv(str(args_dict['gtf']),
-       sep='\t',
-       header=None,
-       comment='#',
-       low_memory=False)
+        sep='\t',
+        header=None,
+        comment='#',
+        low_memory=False)
 
-     if gene_name != None:
-         gtf = gtf.loc[gtf[8].str.contains('gene_name \"' + str(gene_name) + '\";')]
+    if gene_name != None:
+        gtf = gtf.loc[gtf[8].str.contains('gene_name \"' + str(gene_name) + '\";')]
 
     # Flatten GTF
     gtf_flat = flatten_reference(

@@ -56,6 +56,7 @@ def add_directory(
 
     os.system(
         'mkdir'
+        + ' -p'
         + ' ' + str(args_dict[str(parent)]) + str(name)
         + str(args_dict['log']))
 
@@ -74,7 +75,7 @@ def get_files(
 
     # Walk through raw data files within given directory
     for file in next(os.walk(directory))[2]:
-        print(file)
+
         if file.endswith(tuple(suffix)):
             file_list.append(file) # Do not append directory, files in list will be modified and output to different locations
 

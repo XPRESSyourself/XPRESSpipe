@@ -30,6 +30,7 @@ import matplotlib
 #matplotlib.use('agg') #remove need for -X server connect
 import matplotlib.pyplot as plt
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
+import seaborn as sns
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .utils import add_directory
@@ -225,6 +226,80 @@ def compile_complexity_metrics(
         dpi = dpi,
         bbox_inches = 'tight')
 
-def compile_coverage():
+def compile_coverage(
+    args_dict,
+    path,
+    file_list,
+    chromosome_index,
+    coordinate_index,
+    lab_x,
+    lab_y,
+    plot_type,
+    experiment,
+    plot_output,
+    individual_output,
+    dpi=600):
 
-    print('coming soon')
+    # Keep axes happy to avoid 'IndexError: too many indices for array' error
+    # Auto formats figure summary size based on number of plots
+
+    # Set up figure space
+    fig, axes = plt.subplots(
+        nrows = len(file_list) + 1,
+        ncols = 1,
+        figsize = (3, 30),
+        subplot_kw = {'facecolor':'none'})
+    plt.subplots_adjust(
+        bottom = 0.3)
+
+    # Initialize file and axis counters for formatting summary figure
+    file_number = 0
+    ax_x = 0
+    ax_y = 0
+
+    for file in file_list:
+        x = 0
+        df = pd.read_csv(
+            str(path + file),
+            sep = '\t') # Initialize dataframe for relevant data
+        df = df.dropna(
+            axis = 0,
+            subset = [str(lab_x), str(lab_y)]) # Remove rows where pertinent information is missing
+
+        # Plot figure
+        sns.distplot(
+            df[lab_y],
+            hist = False,
+            kde = True,
+            kde_kws = {'shade': True, 'linewidth': 3},
+            label = file[:-4],
+            ax = axes[ax_y, ax_x])
+
+        """
+        axes[ax_y, ax_x].axhline(
+            0,
+            xmin = 0.048,
+            ls = '-',
+            color = 'black')
+        axes[ax_y, ax_x].axvline(
+            0,
+            ymin = 0.048,
+            ls = '-',
+            color = 'black')
+        """
+
+        fig.savefig(
+            str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
+            dpi = dpi,
+            bbox_inches = 'tight')
+
+        file_number += 1
+        del df
+        ax_y += 1
+
+    # Save catenated figure
+    plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
+    fig.savefig(
+        str(plot_output) + plot_title + '_summary.pdf',
+        dpi = dpi,
+        bbox_inches = 'tight')
