@@ -28,7 +28,7 @@ from .gtfModify import get_chunks, run_chunks, longest_transcripts, protein_gtf
 
 """Get index number for each chromosome name"""
 def create_chromosome_index(
-        gtf_flat):
+    gtf_flat):
 
     chromosome_index = {}
     y = 0
@@ -40,7 +40,7 @@ def create_chromosome_index(
 
 """Create a chromosome indexed array with positions and key"""
 def create_coordinate_index(
-        gtf_flat):
+    gtf_flat):
 
     coordinate_index = []
     for x in list(gtf_flat['chromosome'].unique()):
@@ -50,7 +50,7 @@ def create_coordinate_index(
 
 """Flatten nested list"""
 def flat_list(
-        nested_list):
+    nested_list):
 
     flat_list = []
     for x in nested_list:
@@ -61,7 +61,7 @@ def flat_list(
 
 """Get coding space length for each transcript"""
 def get_coding_length(
-        coordinates):
+    coordinates):
 
     transcript_length = 0
     for y in coordinates:
@@ -71,11 +71,12 @@ def get_coding_length(
 
 """Make a flat reference from parsed GTF file"""
 def make_flatten(
-        gtf,
-        record_type='exon'):
+    gtf,
+    record_type='exon'):
+
+    print('Flattening reference file...')
 
     records = []
-
     for index, row in gtf.iterrows():
 
         if row[2] == 'transcript':
@@ -101,11 +102,14 @@ def make_flatten(
 
             # Get start and end positions for transcript/gene
             # Assumes start and stop will be start and end of a protein coding transcript
-            start = min(flat_list(coordinates))
-            end = max(flat_list(coordinates))
+            try:
+                start = min(flat_list(coordinates))
+                end = max(flat_list(coordinates))
 
-            # Push information to record
-            records.append([gene, strand, chromosome, start, end, coordinates])
+                # Push information to record
+                records.append([gene, strand, chromosome, start, end, coordinates])
+            except:
+                print('No ' + str(record_type) +  ' records found for gene record ' + str(gene))
 
     # Push flattened reference into pandas dataframe
     gtf = None
@@ -125,9 +129,9 @@ Read in coordinate reference from GTF
 Requires an unmodified GTF file
 """
 def flatten_reference(
-        gtf,
-        record_type='exon',
-        threads=None):
+    gtf,
+    record_type='exon',
+    threads=None):
 
     # Import GTF reference file
     if isinstance(gtf, pd.DataFrame) and len(gtf.columns) == 9:
