@@ -77,6 +77,8 @@ def test_system():
                 + 'conda config --add channels conda-forge; '
                 + 'echo "Conda installed"; '),
                 shell = True)
+        else:
+            pass
 
     # Install Conda Dependencies
     install_input = input(
@@ -92,6 +94,8 @@ def test_system():
             + 'conda install -y fastp STAR samtools bedtools deeptools fastqc htseq pandas numpy biopython scipy r conda-forge::ncurses libiconv bioconductor-rsubread bioconductor-dupradar bioconductor-deseq2 matplotlib=2.2.3; '
             + 'echo "Conda dependencies installed"; '),
             shell = True)
+    else:
+        pass
 
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
