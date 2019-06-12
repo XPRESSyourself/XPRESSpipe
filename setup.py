@@ -80,7 +80,7 @@ def test_system():
 
     # Install Conda Dependencies
     install_input = input(
-        'Install conda and pypi dependencies via XPRESSpipe setup? [y/n]: ')
+        'Install conda dependencies via XPRESSpipe setup? [y/n]: ')
 
     if install_input.lower() == 'y' or install_input.lower() == 'yes':
         subprocess.call(
@@ -93,32 +93,13 @@ def test_system():
             + 'echo "Conda dependencies installed"; '),
             shell = True)
 
-        # Install Pip Dependencies
-        subprocess.call(
-            ('echo "Installing conda dependencies..."; '
-            + 'pip install -y xpressplot multiqc numpydoc psutil'
-            + 'echo "PyPi dependencies installed"; '),
-            shell = True)
-
-"""Define post-install classes"""
-class PostDevelopCommand(develop):
-    # Post-installation for python setup.py develop
-    def run(self):
-        develop.run(self)
-
-class PostInstallCommand(install):
-    # Post-installation for python setup.py install
-    def run(self):
-        install.run(self)
-
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
                         fd.read(), re.MULTILINE).group(1)
 
-test_system()
-
 """Setup arguments"""
+test_system()
 setup(
     name = 'XPRESSpipe',
     version = version,
@@ -134,10 +115,12 @@ setup(
     license = 'GPL-3.0',
     zip_safe = False,
 
-    cmdclass = {
-        'develop': PostDevelopCommand,
-        'install': PostInstallCommand
-    },
+    install_requires = [
+        'xpressplot',
+        'multiqc',
+        'numpydoc',
+        'psutil'
+    ],
 
     entry_points = {
         'console_scripts': [
