@@ -41,7 +41,7 @@ def psite_ranges(
         bam):
 
     # Keep only optimal footprint size
-    bam = bam[(bam[9].str.len() == 28) | (bam[9].str.len() == 29) | (bam[9].str.len() == 30)]
+    bam = bam[(bam[9].str.len() == 28)]
 
     # Get rightmost coordinates for each read
     bam[16] = bam[3] + bam[9].str.len()
@@ -133,8 +133,11 @@ def get_peaks(
 
     bam_coordinates = psite_ranges(bam)
     if bam_coordinates == None:
-        print('Warning: No reads passed filtering (28-30 nt) for file ' + str(file))
+        print('Warning: No reads passed filtering (28 nt) for file ' + str(file))
         return
+
+    bam = None # Some clean-up
+    del bam
 
     # Get profile
     profile_data = get_periodicity_profile(
