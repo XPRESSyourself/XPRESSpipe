@@ -118,8 +118,11 @@ def longest_transcripts(
                             stops.append(row[4])
 
                     # Get CCDS
+                    #print(transcript_record)
                     ccds = transcript_record.loc[(transcript_record[2] == 'CDS') & (transcript_record[8].str.contains('tag \"CCDS\"'))]
+
                     if check_stops(ccds, stops) == 1:
+                        print('HELLO')
                         ccds = pd.DataFrame()
 
                     trans_ens_hav = transcript_record.loc[(transcript_record[2] == 'CDS') & (transcript_record[1] == 'ensembl_havana')]
@@ -139,45 +142,44 @@ def longest_transcripts(
                     if ccds.empty == False:
                         priority = 1
                         for index, row in ccds.iterrows():
-                            length = length + (row[4] - row[3])
+                            length = length + (row[4] - row[3]) + 1
                     elif trans_ens_hav.empty == False:
                         priority = 2
                         for index, row in trans_ens_hav.iterrows():
-                            length = length + (row[4] - row[3])
+                            length = length + (row[4] - row[3]) + 1
                     elif trans.empty == False:
                         priority = 3
                         for index, row in trans.iterrows():
-                            length = length + (row[4] - row[3])
+                            length = length + (row[4] - row[3]) + 1
                     elif exon_processed.empty == False:
                         priority = 4
                         for index, row in exon_processed.iterrows():
-                            length = length + (row[4] - row[3])
+                            length = length + (row[4] - row[3]) + 1
                     elif exon.empty == False:
                         priority = 5
                         for index, row in exon.iterrows():
-                            length = length + (row[4] - row[3])
+                            length = length + (row[4] - row[3]) + 1
                     else:
                         priority = 6
                         length = 0
 
-                    transcript_info.append([priority, length, transcript_id])
+                    # Get overall transcribed length for CCDS tie-breakers
+                    transcript_length = 0
+                    for index, row in exon.iterrows():
+                        transcript_length = transcript_length + (row[4] - row[3]) + 1
 
-                # Compare the different transcripts for highest priority and longest transcript
-                priorities = []
-                for x in transcript_info:
-                    priorities.append(x[0])
-                priority_max = min(priorities)
+                    # Make decision dataframe
+                    transcript_info.append([priority, length, transcript_length, transcript_id])
+                    transcript_data = pd.DataFrame.from_records(transcript_info)
 
-                lengths = []
-                for x in transcript_info:
-                    if x[0] == priority_max:
-                        lengths.append(x[1])
+                # Compare the different transcripts for highest priority and longest transcript (each successive step takes cohort meeting previous step)
+                priority_max = min(transcript_data[0].tolist())
+                coding_max = max(transcript_data.loc[transcript_data[0] == priority_max][1].tolist()) # From all records having the best priority
+                transcript_max = max(transcript_data.loc[(transcript_data[0] == priority_max) & (transcript_data[1] == coding_max)][2].tolist()) # From all records with best priority and coding length
 
-                lengths_max = max(lengths)
-                for x in transcript_info:
-                    if x[1] == lengths_max:
-                        long_transcripts.append(gtf.loc[gtf[8].str.contains(x[2])])
-                        break
+                # Keep first record that meets all above maxes in case of remaining tie-breaker
+                transcript_keep = transcript_data.loc[(transcript_data[0] == priority_max) & (transcript_data[1] == coding_max) & (transcript_data[2] == transcript_max)][3].tolist()[0]
+                long_transcripts.append(gtf.loc[gtf[8].str.contains(transcript_keep)])
 
     #gtf = None # Garbage management
     gc.collect()
