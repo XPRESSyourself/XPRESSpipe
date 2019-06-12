@@ -3,7 +3,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
-__path__, xpresspipe_arguments  =  os.path.split(__file__) + '/'
+__path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 #__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
 
 """gtfModify functions"""
