@@ -59,8 +59,8 @@ before_install:
 
 # Install dependencies
 install:
-  - conda create -v -n test --file requirements.yml
-  - source activate test
+  - conda env create -v -n xpresspipe --file requirements.yml
+  - source activate xpresspipe
   - conda info --envs
   - conda list
   - pip install codecov

@@ -1,37 +1,34 @@
-name: test
-channels: !!python/tuple
-- !!python/unicode
-  'defaults'
-- !!python/unicode
-  'r'
-- !!python/unicode
-  'bioconda'
-- !!python/unicode
-  'conda-forge'
+name: xpresspipe
+
+channels:
+  - defaults
+  - r
+  - bioconda
+  - conda-forge
+
 dependencies:
-- FastP
-- STAR
-- samtools
-- bedtools
-- deeptools
-- htseq
-- pandas
-- numpy
-- biopython
-- scipy
-- plotly
-- r
-- conda-forge::ncurses
-- libiconv
-- bioconductor-rsubread
-- bioconductor-dupradar
-- bioconductor-deseq2
-- matplotlib=2.2.3
-- pip
-- pip:
-  - git-lfs
-  - xpressplot
-  - multiqc
-  - numpydoc
-  - PySimpleGUI
-prefix: .miniconda3/envs/test
+  - FastP
+  - STAR
+  - samtools
+  - bedtools
+  - deeptools
+  - htseq
+  - pandas
+  - numpy
+  - biopython
+  - scipy
+  - plotly
+  - r
+  - conda-forge::ncurses
+  - libiconv
+  - bioconductor-rsubread
+  - bioconductor-dupradar
+  - bioconductor-deseq2
+  - matplotlib=2.2.3
+  - pip
+  - pip:
+    - git-lfs
+    - xpressplot
+    - multiqc
+    - numpydoc
+    - PySimpleGUI
