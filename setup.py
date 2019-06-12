@@ -47,31 +47,6 @@ def test_system():
     else:
         raise Exception('Cannot recognize operating system')
 
-    # Install Conda
-    if 'conda' not in sys.version:
-        subprocess.call(
-            ('echo "Installing conda for ' + str(system) + '..."; '
-            + 'curl https://repo.anaconda.com/miniconda/Miniconda' + str(python) + '-latest-' + str(system) + '-x86_64.sh -o ~/miniconda.sh; '
-            + 'bash ~/miniconda.sh -b -p ~/miniconda; '
-            + 'conda config --set always_yes yes --set changeps1 no --set show_channel_urls true; '
-            + 'conda config --add channels defaults; '
-            + 'conda config --add channels r; '
-            + 'conda config --add channels bioconda; '
-            + 'conda config --add channels conda-forge; '
-            + 'echo "Conda installed"; '),
-            shell = True)
-
-    # Install Dependencies
-    subprocess.call(
-        ('echo "Installing conda dependencies..."; '
-        + 'conda config --add channels defaults; '
-        + 'conda config --add channels r; '
-        + 'conda config --add channels bioconda; '
-        + 'conda config --add channels conda-forge; '
-        + 'conda install -y fastp STAR samtools bedtools deeptools fastqc htseq pandas numpy biopython scipy r conda-forge::ncurses libiconv bioconductor-rsubread bioconductor-dupradar bioconductor-deseq2 matplotlib=2.2.3; '
-        + 'echo "Conda dependencies installed"; '),
-        shell = True)
-
     # Install Cufflinks
     subprocess.call(
         ('echo "Installing cufflinks binary for ' + str(system) + '..."; '
@@ -82,6 +57,48 @@ def test_system():
         + 'mv ' + str(__path__) + 'cufflinks/cufflinks ' + str(__path__) + 'xpresspipe; '
         + 'echo "Cufflinks installed"; '),
         shell = True)
+
+    # Install Conda
+    if 'conda' not in sys.version:
+        conda_input = input(
+            'It does not appear the package manager, Conda, is installed on your system.'
+            + ' XPRESSpipe uses this package manager to install required dependencies of this software.'
+            + ' If you would like to install this manually, please visit https://conda.io/projects/conda/en/latest/user-guide/install/index.html.'
+            + '\nWould you like XPRESSpipe to download this software for you? [y/n]: ')
+        if conda_input.lower() == 'y' or conda_input.lower() == 'yes':
+            subprocess.call(
+                ('echo "Installing conda for ' + str(system) + '..."; '
+                + 'curl https://repo.anaconda.com/miniconda/Miniconda' + str(python) + '-latest-' + str(system) + '-x86_64.sh -o ~/miniconda.sh; '
+                + 'bash ~/miniconda.sh -b -p ~/miniconda; '
+                + 'conda config --set always_yes yes --set changeps1 no --set show_channel_urls true; '
+                + 'conda config --add channels defaults; '
+                + 'conda config --add channels r; '
+                + 'conda config --add channels bioconda; '
+                + 'conda config --add channels conda-forge; '
+                + 'echo "Conda installed"; '),
+                shell = True)
+
+    # Install Conda Dependencies
+    install_input = input(
+        'Install conda and pypi dependencies via XPRESSpipe setup? [y/n]: ')
+
+    if install_input.lower() == 'y' or install_input.lower() == 'yes':
+        subprocess.call(
+            ('echo "Installing conda dependencies..."; '
+            + 'conda config --add channels defaults; '
+            + 'conda config --add channels r; '
+            + 'conda config --add channels bioconda; '
+            + 'conda config --add channels conda-forge; '
+            + 'conda install -y fastp STAR samtools bedtools deeptools fastqc htseq pandas numpy biopython scipy r conda-forge::ncurses libiconv bioconductor-rsubread bioconductor-dupradar bioconductor-deseq2 matplotlib=2.2.3; '
+            + 'echo "Conda dependencies installed"; '),
+            shell = True)
+
+        # Install Pip Dependencies
+        subprocess.call(
+            ('echo "Installing conda dependencies..."; '
+            + 'pip install -y xpressplot multiqc numpydoc psutil'
+            + 'echo "PyPi dependencies installed"; '),
+            shell = True)
 
 """Define post-install classes"""
 class PostDevelopCommand(develop):
@@ -116,13 +133,6 @@ setup(
     include_package_data = True,
     license = 'GPL-3.0',
     zip_safe = False,
-    install_requires = [
-        'xpressplot',
-        'multiqc',
-        'numpydoc',
-        'psutil'
-
-    ],
 
     cmdclass = {
         'develop': PostDevelopCommand,
