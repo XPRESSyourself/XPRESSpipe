@@ -27,7 +27,7 @@ import re
 import os
 import sys
 import subprocess
-
+import six
 __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
 
 """Test system for cufflinks compatibility"""
@@ -60,7 +60,7 @@ def test_system():
 
     # Install Conda
     if 'conda' not in sys.version:
-        conda_input = input(
+        conda_input = six.moves.input(
             'It does not appear the package manager, Conda, is installed on your system.'
             + ' XPRESSpipe uses this package manager to install required dependencies of this software.'
             + ' If you would like to install this manually, please visit https://conda.io/projects/conda/en/latest/user-guide/install/index.html.'
@@ -81,7 +81,7 @@ def test_system():
             pass
 
     # Install Conda Dependencies
-    install_input = input(
+    install_input = six.moves.input(
         'Install conda dependencies via XPRESSpipe setup? [y/n]: ')
 
     if install_input.lower() == 'y' or install_input.lower() == 'yes':
@@ -118,6 +118,11 @@ setup(
     include_package_data = True,
     license = 'GPL-3.0',
     zip_safe = False,
+
+    setup_requires = [
+        'six'
+
+    ],
 
     install_requires = [
         'xpressplot',
