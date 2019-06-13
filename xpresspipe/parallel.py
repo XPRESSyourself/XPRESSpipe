@@ -47,6 +47,9 @@ def threshold_ram(
 
     threshold = math.floor(total / (_max * factor)) # Set threshold based on max file size in set
 
+    if threshold > cpu_count():
+        threshold = cpu_count()
+
     if threshold < args_dict['workers']: # Modify if set # of workers is greater than memory threshold
         print('Resetting max number of workers to ' + str(threshold))
         return threshold
@@ -93,9 +96,10 @@ def parallelize(
         mod_workers)
 
     # Check and apply RAM threshold if necessary
-    args_dict['workers'] = threshold_ram(
-        args_dict,
-        file_list)
+    if mod_workers == True:
+        args_dict['workers'] = threshold_ram(
+            args_dict,
+            file_list)
 
     run_pools(
         func,
