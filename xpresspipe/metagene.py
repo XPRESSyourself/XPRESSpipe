@@ -113,6 +113,9 @@ def get_metagene(
         str(args_dict['input']) + str(file))
     bam_coordinates = meta_coordinates(bam)
 
+    bam = None # Some clean-up
+    del bam
+
     # Get profile
     profile_data = get_meta_profile(
         bam_coordinates,
