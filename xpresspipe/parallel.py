@@ -46,6 +46,7 @@ def threshold_ram(
         factor = 2
 
     threshold = math.floor(total / (_max * factor)) # Set threshold based on max file size in set
+
     if threshold < args_dict['workers']: # Modify if set # of workers is greater than memory threshold
         print('Resetting max number of workers to ' + str(threshold))
         return threshold
