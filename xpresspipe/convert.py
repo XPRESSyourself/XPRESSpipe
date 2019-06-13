@@ -61,39 +61,3 @@ def create_bed(
         args_dict)
 
     return args_dict
-
-"""Convert sorted sam files in directory to bigwig files"""
-def bigwig_convert(
-        args):
-
-    file, args_dict = args[0], args[1] # Parse args
-
-    # Convert BAM to bigwig
-    os.system(
-        'bamCoverage'
-        + ' -b ' + str(args_dict['input']) + str(file[:-4]) + '.bam'
-        + ' -o ' + str(args_dict['bigwig_files']) + str(file[:-4]) + '.bw'
-        + str(args_dict['log']))
-
-"""Run Bigwig creation manager"""
-def create_bigwig(
-        args_dict):
-
-    # Add output directories
-    args_dict = add_directory(
-        args_dict,
-        'output',
-        'bigwig_files')
-
-    # Get list of files to convert based on acceptable file types
-    files = get_files(
-        args_dict['input'],
-        ['.bam'])
-
-    # Convert aligned RNAseq reads to bigwig files
-    parallelize(
-        bigwig_convert,
-        files,
-        args_dict)
-
-    return args_dict

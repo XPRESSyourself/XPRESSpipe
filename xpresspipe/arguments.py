@@ -311,11 +311,6 @@ def get_arguments(
         action = 'store_true',
         required = False)
     se_opts.add_argument(
-        '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
-        action = 'store_true',
-        required = False)
-    se_opts.add_argument(
         '--output_bed',
         help = 'Include option to output BED files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
@@ -462,11 +457,6 @@ def get_arguments(
         action = 'store_true',
         required = False)
     pe_opts.add_argument(
-        '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
-        action = 'store_true',
-        required = False)
-    pe_opts.add_argument(
         '--output_bed',
         help = 'Include option to output BED files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
@@ -610,11 +600,6 @@ def get_arguments(
     rp_opts.add_argument(
         '--deduplicate',
         help = 'Include flag to quantify reads with de-duplication',
-        action = 'store_true',
-        required = False)
-    rp_opts.add_argument(
-        '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
@@ -783,11 +768,6 @@ def get_arguments(
     align_opts.add_argument(
         '--two-pass',
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
-        action = 'store_true',
-        required = False)
-    align_opts.add_argument(
-        '--output_bigwig',
-        help = 'Include flag to output bigwig files for each aligned file (NOTE: Will add considerable time to pipeline processing)',
         action = 'store_true',
         required = False)
     align_opts.add_argument(

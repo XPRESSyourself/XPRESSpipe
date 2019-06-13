@@ -35,7 +35,7 @@ from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq, create_star_reference
 from .count import count_reads, collect_counts
 from .normalizeMatrix import run_normalization
-from .convert import create_bed, create_bigwig
+from .convert import create_bed
 from .rrnaProbe import rrnaProbe
 from .quality import get_multiqc_summary, get_fastqc
 from .metagene import make_metagene, make_coverage
@@ -98,8 +98,6 @@ def main(
         args_dict['input'] = args_dict['alignments']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
-        if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict)
 
         # Check log file for errors and exceptions
         check_process(
@@ -390,8 +388,6 @@ def main(
 
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']
-        if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict)
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(
@@ -456,8 +452,6 @@ def main(
         args_dict = run_peRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']
-        if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict)
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(
@@ -522,8 +516,6 @@ def main(
         args_dict = run_seRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']
-        if args_dict['output_bigwig'] == True:
-            create_bigwig(args_dict)
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(

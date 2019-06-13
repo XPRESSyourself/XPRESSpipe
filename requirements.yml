@@ -7,28 +7,23 @@ channels:
   - conda-forge
 
 dependencies:
-  - FastP
-  - STAR
-  - samtools
-  - bedtools
-  - deeptools
-  - htseq
+  - python=3
   - pandas
-  - numpy
-  - biopython
-  - scipy
-  - plotly
+  - matplotlib>=2.1.1
+  - numpy>=1.9.0
+  - plotly>=1.9.0
+  - scipy>=0.17.0
   - r
-  - conda-forge::ncurses
   - libiconv
-  - bioconductor-rsubread
-  - bioconductor-dupradar
-  - bioconductor-deseq2
-  - matplotlib=2.2.3
+  - ncurses
+  - fastp
+  - STAR>=2.7
+  - samtools
+  - bedtools>=2.28
+  - fastqc
+  - biopython
+  - multiqc
   - pip
   - pip:
-    - git-lfs
     - xpressplot
-    - multiqc
     - numpydoc
-    - PySimpleGUI
