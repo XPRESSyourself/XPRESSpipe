@@ -1,7 +1,11 @@
 # Initialize functions
-from xpresspipe.arguments import check_inputs
+import os
+import sys
 import multiprocessing
 import unittest
+from xpresspipe.arguments import check_inputs
+__path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
+#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
 
 # Check max_processors argument
 test0_dict = {
@@ -31,14 +35,14 @@ assert type(t3['max_processors']) is int, 'check_inputs() failed checking max_pr
 
 # Test some input/output directory formatting checks
 truth_dict = {
-    'input': '/path/to/files/',
-    'output': '/path/to/files2/',
-    'reference': '/path/to/reference/',
+    'input': __path__,
+    'output': __path__,
+    'reference': __path__,
     'cmd': 'riboseq'}
 test_dict = {
-    'input': '/path/to/files',
-    'output': '/path/to/files2/',
-    'reference': '/path/to/reference',
+    'input': __path__,
+    'output': __path__,
+    'reference': __path__,
     'cmd': 'riboseq'}
 
 t = check_inputs(test_dict)
@@ -132,15 +136,15 @@ else:
 
 # Check log file formatting and location
 test0_dict = {
-    'input': '/path/to/files',
-    'output': '/path/to/files2/',
-    'reference': '/path/to/reference',
+    'input': __path__,
+    'output': __path__,
+    'reference': __path__,
     'cmd': 'riboseq'}
 
 test1_dict = {
-    'input': '/path/to/files',
-    'output': '/path/to/files2/',
-    'reference': '/path/to/reference',
+    'input': __path__,
+    'output': __path__,
+    'reference': __path__,
     'experiment': 'test',
     'cmd': 'riboseq'}
 
