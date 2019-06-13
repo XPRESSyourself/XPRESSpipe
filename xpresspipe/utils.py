@@ -93,6 +93,10 @@ def get_files(
     for x in omit_drop:
         file_list.remove(x)
 
+    if len(file_list) == 0:
+        print('The provided directory does not contain any files with the suffix ' + str(''.join(suffix)) + '.\nPlease check the suffixes of your files and if they are different than ' + str(''.join(suffix)) + ' use the --bam_suffix argument.')
+        sys.exit(1)
+        
     return tuple(file_list)
 
 """Make a list of the directories in a given directory, based on list of acceptable suffixes"""
