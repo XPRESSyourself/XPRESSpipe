@@ -366,6 +366,10 @@ def align(
     file,
     paired=False):
 
+    if args_dict['threads'] > 30:
+        thread_count = args_dict['threads']
+        args_dict['threads'] = 30
+
     if 'mask' in args_dict and args_dict['mask'] == True:
         file = masking_star(
             file,
@@ -410,6 +414,8 @@ def align(
     # Clean up the output
     remove_intermediates(
         args_dict)
+
+    args_dict['threads'] = thread_count
 
 """Single-end RNA-seq pipeline"""
 def se_align(
