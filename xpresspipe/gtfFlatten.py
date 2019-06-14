@@ -166,11 +166,11 @@ def flatten_reference(
     # Rejoin chunks into single GTF and flatten
     if len(chunks) > 0:
         gtf = pd.concat(chunks)
+        chunks = None
+        del chunks
         gtf = gtf.reset_index(drop=True)
         gtf = make_flatten(gtf, record_type)
 
-        del chunks
-        gc.collect()
         return gtf
 
     else:
