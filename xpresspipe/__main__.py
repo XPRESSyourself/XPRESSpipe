@@ -270,19 +270,6 @@ def main(
             msg_complete(),
             'MAKE REFERENCE')
 
-    elif args.cmd == 'maskReference':
-        print('Creating masked reference files...')
-
-        # Generate reference
-        args_dict['threads'], args_dict['workers'] = get_cores(
-            args_dict,
-            mod_workers = True)
-        create_mask_reference(
-            args_dict['output'],
-            args_dict['masked_index'],
-            args_dict['log'],
-            threads = args_dict['threads'])
-
     elif args.cmd == 'modifyGTF':
         print('Formatting reference file...')
 
