@@ -27,75 +27,7 @@ import re
 import os
 import sys
 import subprocess
-import six
 __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
-
-"""Test system for cufflinks compatibility"""
-def test_system():
-
-    # Get python version
-    python =  sys.version_info[0]
-
-    if 'darwin' in sys.platform:
-        system = 'MacOSX'
-        cufflinks = 'cufflinks-2.1.1.OSX_x86_64'
-
-    elif 'linux' in sys.platform:
-        system = 'Linux'
-        cufflinks = 'cufflinks-2.1.1.Linux_x86_64'
-
-    else:
-        raise Exception('Cannot recognize operating system')
-
-    # Install Cufflinks
-    subprocess.call(
-        ('echo "Installing cufflinks binary for ' + str(system) + '..."; '
-        + 'curl http://cole-trapnell-lab.github.io/cufflinks/assets/downloads/' + str(cufflinks) + '.tar.gz -o ' + str(__path__) + 'cufflinks.tar.gz; '
-        + 'tar -zxvf ' + str(__path__) + 'cufflinks.tar.gz; '
-        + 'rm ' + str(__path__) + 'cufflinks.tar.gz; '
-        + 'mv ' + str(__path__) + str(cufflinks) + ' ' + str(__path__) + 'cufflinks; '
-        + 'mv ' + str(__path__) + 'cufflinks/cufflinks ' + str(__path__) + 'xpresspipe; '
-        + 'echo "Cufflinks installed"; '),
-        shell = True)
-
-    # Install Conda
-    if 'conda' not in sys.version:
-        conda_input = six.moves.input(
-            'It does not appear the package manager, Conda, is installed on your system.'
-            + ' XPRESSpipe uses this package manager to install required dependencies of this software.'
-            + ' If you would like to install this manually, please visit https://conda.io/projects/conda/en/latest/user-guide/install/index.html.'
-            + '\nWould you like XPRESSpipe to download this software for you? [y/n]: ')
-        if conda_input.lower() == 'y' or conda_input.lower() == 'yes':
-            subprocess.call(
-                ('echo "Installing conda for ' + str(system) + '..."; '
-                + 'curl https://repo.anaconda.com/miniconda/Miniconda' + str(python) + '-latest-' + str(system) + '-x86_64.sh -o ~/miniconda.sh; '
-                + 'bash ~/miniconda.sh -b -p ~/miniconda; '
-                + 'conda config --set always_yes yes --set changeps1 no --set show_channel_urls true; '
-                + 'conda config --add channels defaults; '
-                + 'conda config --add channels r; '
-                + 'conda config --add channels bioconda; '
-                + 'conda config --add channels conda-forge; '
-                + 'echo "Conda installed"; '),
-                shell = True)
-        else:
-            pass
-
-    # Install Conda Dependencies
-    install_input = six.moves.input(
-        'Install conda dependencies via XPRESSpipe setup? [y/n]: ')
-
-    if install_input.lower() == 'y' or install_input.lower() == 'yes':
-        subprocess.call(
-            ('echo "Installing conda dependencies..."; '
-            + 'conda config --add channels defaults; '
-            + 'conda config --add channels r; '
-            + 'conda config --add channels bioconda; '
-            + 'conda config --add channels conda-forge; '
-            + 'conda install -y fastp STAR samtools bedtools deeptools fastqc htseq pandas numpy biopython scipy r conda-forge::ncurses libiconv bioconductor-rsubread bioconductor-dupradar bioconductor-deseq2 matplotlib=2.2.3; '
-            + 'echo "Conda dependencies installed"; '),
-            shell = True)
-    else:
-        pass
 
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
@@ -103,7 +35,6 @@ with open('xpresspipe/__init__.py', 'r') as fd:
                         fd.read(), re.MULTILINE).group(1)
 
 """Setup arguments"""
-test_system()
 setup(
     name = 'XPRESSpipe',
     version = version,
@@ -118,18 +49,6 @@ setup(
     include_package_data = True,
     license = 'GPL-3.0',
     zip_safe = False,
-
-    setup_requires = [
-        'six'
-
-    ],
-
-    install_requires = [
-        'xpressplot',
-        'multiqc',
-        'numpydoc',
-        'psutil'
-    ],
 
     entry_points = {
         'console_scripts': [
