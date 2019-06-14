@@ -138,6 +138,7 @@ def get_peaks(
 
     bam = None # Some clean-up
     del bam
+    gc.collect()
 
     # Get profile
     profile_data = get_periodicity_profile(

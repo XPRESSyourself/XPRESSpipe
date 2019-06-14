@@ -28,7 +28,7 @@ from multiprocessing import cpu_count
 import psutil
 
 """Threshold number of workers if available RAM is insufficient with number of workers and file sizes"""
-def threshold_ram(
+"""def threshold_ram(
     args_dict,
     file_list):
 
@@ -41,9 +41,9 @@ def threshold_ram(
     _max = max(file_sizes)
 
     if file[-4:] == '.bam': # Assume binary files will expand by factor of 4 for decompression and additional data storage used in process
-        factor = 4
+        factor = 3
     else:
-        factor = 2
+        factor = 1
 
     threshold = math.floor(total / (_max * factor)) # Set threshold based on max file size in set
 
@@ -52,7 +52,7 @@ def threshold_ram(
 
     if threshold < args_dict['workers']: # Modify if set # of workers is greater than memory threshold
         print('Resetting max number of workers to ' + str(threshold))
-        return threshold
+        return threshold"""
 
 """Determine number of processors to use"""
 def get_cores(
@@ -96,10 +96,10 @@ def parallelize(
         mod_workers)
 
     # Check and apply RAM threshold if necessary
-    if mod_workers == True:
+    """if mod_workers == True:
         args_dict['workers'] = threshold_ram(
             args_dict,
-            file_list)
+            file_list)"""
 
     run_pools(
         func,

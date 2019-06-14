@@ -25,7 +25,7 @@ import sys
 import pandas as pd
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index
+from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index, make_flatten
 from .utils import add_directory, get_files
 from .parallel import parallelize
 """Get meta and periodicity indices from GTF"""
@@ -45,10 +45,15 @@ def get_indices(
         gtf = gtf.loc[gtf[8].str.contains('gene_name \"' + str(gene_name) + '\";')]
 
     # Flatten GTF
-    gtf_flat = flatten_reference(
-        gtf,
-        record_type,
-        threads = None)
+    if args_dict['gtf'].endswith('_LC.gtf') == True:
+        gtf_flat = make_flatten(
+            gtf,
+            record_type)
+    else:
+        gtf_flat = flatten_reference(
+            gtf,
+            record_type,
+            threads = None)
 
     # Get GTF indices
     chromosome_index = create_chromosome_index(gtf_flat)
