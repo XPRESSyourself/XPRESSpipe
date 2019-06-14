@@ -60,33 +60,6 @@ def create_star_reference(
         + ' --runThreadN ' + str(threads)
         + str(log))
 
-"""DEPRECATED"""
-"""Create STAR mask reference"""
-def create_mask_reference(
-        output_directory,
-        fasta_directory,
-        log,
-        threads=1):
-
-    # Create output directory
-    output_directory = check_directories(output_directory)
-    fasta_directory = check_directories(fasta_directory)
-
-    os.system('mkdir'
-        + ' ' + str(output_directory) + 'mask'
-        + str(log))
-
-    fasta_list = get_fasta(fasta_directory)
-
-    # Create reference
-    os.system(
-        'STAR'
-        + ' --runMode genomeGenerate'
-        + ' --genomeDir ' + str(output_directory) + 'mask'
-        + ' --genomeFastaFiles ' + str(fasta_list)
-        + ' --runThreadN ' + str(threads)
-        + str(log))
-
 """Build intermediate STAR alignment reference using splice junction annotations from first pass"""
 def build_star_splice_junction_intermediate(
         output,
@@ -98,6 +71,8 @@ def build_star_splice_junction_intermediate(
         + str(args_dict['intermediate_references']) + str(output) # Make directory for currently processed file
         + str(args_dict['log'])) # Record log output (must go last in command)
 
+    fasta_list = get_fasta(args_dict['reference'])
+
     os.system(
         'STAR'
         + ' --runMode genomeGenerate'
@@ -108,35 +83,6 @@ def build_star_splice_junction_intermediate(
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) # Location for output revised reference
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
         + str(args_dict['log'])) # Record log output (must go last in command)
-
-"""Run a masking alignment step with STAR"""
-def masking_star(
-    file,
-    output,
-    args_dict):
-
-    os.system(
-        'STAR'
-        + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
-        + ' --genomeDir ' + str(args_dict['reference']) + 'mask' # Argument for specifying STAR reference directory
-        + ' --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
-        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_' # Argument to dictate output directory
-        + ' --outReadsUnmapped Fastx'
-        + ' --outFilterMultimapScoreRange 1'
-        + ' --outFilterMultimapNmax 20'
-        + ' --outFilterMismatchNmax 10'
-        + ' --alignIntronMax 500000'
-        + ' --alignMatesGapMax 1000000'
-        + ' --genomeLoad NoSharedMemory'
-        + ' --readFilesCommand cat'
-        + ' --outFilterMatchNminOverLread 0.33'
-        + ' --outFilterScoreMinOverLread 0.33'
-        + str(args_dict['log']))
-
-    if ' ' in file:
-        return str(args_dict['alignments']) + str(output) + '_Unmapped.out.mate1 ' + str(args_dict['alignments']) + str(output) + '_Unmapped.out.mate2'
-    else:
-        return str(args_dict['alignments']) + str(output) + '_Unmapped.out.mate1'
 
 """Run first pass STAR alignment to map splice junctions"""
 def first_pass_star(
@@ -455,8 +401,6 @@ def run_seRNAseq(
             'alignments',
             'intermediate_references')
 
-        args_dict['fasta_list'] = get_fasta(args_dict['reference'])
-
         # Get list of files to align based on acceptable file types
         files = get_files(
             args_dict['input'],
@@ -489,8 +433,6 @@ def run_peRNAseq(
             args_dict,
             'alignments',
             'intermediate_references')
-
-        args_dict['fasta_list'] = get_fasta(args_dict['reference'])
 
         # Get list of files to align based on acceptable file types
         files = get_files(

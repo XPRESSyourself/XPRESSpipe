@@ -76,7 +76,7 @@ def get_files(
     # Walk through raw data files within given directory
     for file in next(os.walk(directory))[2]:
 
-        if file.endswith(tuple(suffix)):
+        if file.endswith(tuple(suffix)) and os.path.isfile(str(directory) + str(file)) == True:
             file_list.append(file) # Do not append directory, files in list will be modified and output to different locations
 
     # Sort files in alphabetical order (helps in formatting the count tables correctly)
@@ -94,9 +94,9 @@ def get_files(
         file_list.remove(x)
 
     if len(file_list) == 0:
-        print('The provided directory does not contain any files with the suffix ' + str(''.join(suffix)) + '.\nPlease check the suffixes of your files and if they are different than ' + str(''.join(suffix)) + ' use the --bam_suffix argument.')
+        print('The provided directory does not contain any files with the suffix ' + str(''.join(suffix)) + '.\nPlease check the suffixes of your files and see they are different than ' + str(''.join(suffix)) + '. If working with BAM files, try using the --bam_suffix argument to specify a different BAM suffix.')
         sys.exit(1)
-        
+
     return tuple(file_list)
 
 """Make a list of the directories in a given directory, based on list of acceptable suffixes"""
@@ -186,20 +186,83 @@ def unzip_files(
                         + ' ' + str(directory) + str(file)
                         + str(log))
 
-"""Get fasta files within directory"""
+"""Check path for directory named fasta with fasta files"""
+"""
+- A one-level recursive function for searching parent and child directories for fasta files
+- Get list of parent directory
+- If a list of files that exist cannot be found, recurse through child directories until list found
+    - If a list can be found, return list
+    - If list cannot be found in level-1 children directories, exit and print Error
+"""
 def get_fasta(
-    fasta_directory):
+    fasta_directory,
+    suffix=['.fasta', '.fa'],
+    omit=['refFlat', 'rois'],
+    recursed=0):
 
-    # Make space separated list of fasta files
-    fasta = get_files(
-        fasta_directory,
-        ['.txt', '.fasta', '.fa'],
-        omit = ['refFlat', 'rois'])
-    fasta = [fasta_directory + x for x in fasta]
+    fasta_list = []
+    fasta_directory = check_directories(fasta_directory)
 
-    if len(fasta) > 1:
-        fasta_list = ' '.join(fasta)
+    # Walk through raw data files within given directory
+    for file in next(os.walk(fasta_directory))[2]:
+        if file.endswith(tuple(suffix)) and os.path.isfile(str(fasta_directory) + str(file)) == True:
+            fasta_list.append(file) # Do not append directory, files in list will be modified and output to different locations
+
+    # Sort files in alphabetical order (helps in formatting the count tables correctly)
+    fasta_list = sorted(fasta_list)
+
+    # Get rid of bad grabs
+    omit_drop = []
+    if len(omit) > 0:
+        for x in fasta_list:
+            for o in omit:
+                if str(o) in x:
+                    omit_drop.append(x)
+
+    for x in omit_drop:
+        fasta_list.remove(x)
+
+    # If fasta list is empty, try to find a child directory with fasta files
+    if len(fasta_list) == 0:
+        print('FASTA files not found in parent reference directory ' + str(fasta_directory) + '.\nAttempting search through any child directories...')
+
+        # Go through first level child directories until a valid list of fasta files is found
+        while recursed == 0:
+            for folder in os.listdir(fasta_directory):
+                folder = str(fasta_directory) + str(folder)
+                if os.path.isdir(folder) == True:
+                    fasta_list = get_fasta(
+                        folder,
+                        recursed=recursed)
+
+                    # Break out of the loop if valid fasta list found
+                    if len(fasta_list) > 0:
+                        break
+                    else:
+                        continue
+
+            # Prep output -- return list if valid, or send output trigger for a sys.exit()
+            if len(fasta_list) > 0:
+                print('A list of valid FASTA files found in ' + str(folder))
+                recursed = 2
+            else:
+                recursed = 1 # Prevent excessive recursions
+
+        # What to do at the end -- either return the list or print exit message
+        else:
+            if recursed == 1:
+                # No child directories have fasta files if this is hit
+                print('A directory with fasta files cannot be found.\nExiting...')
+                sys.exit(1)
+            else:
+                return fasta_list
+
     else:
-        fasta_list = ''.join(fasta)
+        # If valid list of fastas available, create a single string out of the fullpath/filename of each fasta
+        fasta = [fasta_directory + x for x in fasta_list]
+        if len(fasta) > 1:
+            fasta_list = ' '.join(fasta)
+        else:
+            fasta_list = ''.join(fasta)
 
-    return fasta_list
+        return fasta_list
