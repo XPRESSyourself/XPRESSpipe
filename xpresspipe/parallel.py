@@ -51,7 +51,7 @@ def threshold_ram(
         threshold = cpu_count()
 
     if threshold < args_dict['workers']: # Modify if set # of workers is greater than memory threshold
-        print('Resetting max number of workers to ' + str(threshold))
+        print('Resetting max number of workers to ' + str(threshold) + ' to account for limitations in available memory based on input file sizes.')
         return threshold
     else:
         return args_dict['workers']
