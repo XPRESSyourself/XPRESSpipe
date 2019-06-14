@@ -27,3 +27,4 @@ dependencies:
   - pip
   - pip:
     - XPRESSplot
+    - scikit-learn
