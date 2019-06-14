@@ -77,6 +77,7 @@ def make_flatten(
     print('Flattening reference file...')
 
     records = []
+    warning = 0
     for index, row in gtf.iterrows():
 
         if row[2] == 'transcript':
@@ -99,7 +100,7 @@ def make_flatten(
 
                     if gtf.at[index + n, 2] == record_type: # Append coordinate paires for each exon of the transcript
                         coordinates.append([gtf.at[index + n, 3], gtf.at[index + n, 4]])
-
+            print("c:",coordinates)
             # Get start and end positions for transcript/gene
             # Assumes start and stop will be start and end of a protein coding transcript
             try:
@@ -109,7 +110,8 @@ def make_flatten(
                 # Push information to record
                 records.append([gene, strand, chromosome, start, end, coordinates])
             except:
-                print('No ' + str(record_type) +  ' records found for gene record ' + str(gene))
+                warning = 1
+                print('Warning: No ' + str(record_type) +  ' records found for gene record ' + str(gene))
 
     # Push flattened reference into pandas dataframe
     gtf = None
@@ -121,6 +123,10 @@ def make_flatten(
 
     # Get length of each transcripts exon space
     reference['length'] = reference['coordinates'].apply(get_coding_length)
+
+    # Print message about warning
+    if warning == 1:
+        print('If no gene records were found for a given gene, it is likely in the GTF file parsing where no suitable record was found ')
 
     return reference
 
