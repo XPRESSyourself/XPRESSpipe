@@ -22,6 +22,7 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """IMPORT DEPENDENCIES"""
 import os
 import sys
+from multiprocessing import cpu_count
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .utils import get_files, add_directory
@@ -29,7 +30,7 @@ from .parallel import parallelize, parallelize_pe
 
 """Determine sequencing type based on adaptor list"""
 def determine_type(
-        adaptor_list):
+    adaptor_list):
 
     try:
         if adaptor_list == None:
@@ -57,7 +58,7 @@ def determine_type(
 
 """Trim adaptors via auto-detect"""
 def auto_trim(
-        args):
+    args):
 
     file, args_dict = args[0], args[1] # Parse args
 
@@ -75,7 +76,7 @@ def auto_trim(
 
 """Trim polyX adaptors"""
 def polyx_trim(
-        args):
+    args):
 
     file, args_dict = args[0], args[1] # Parse args
 
@@ -94,7 +95,7 @@ def polyx_trim(
 
 """Trim SE adaptors"""
 def se_trim(
-        args):
+    args):
 
     file, args_dict = args[0], args[1] # Parse args
 
@@ -113,7 +114,7 @@ def se_trim(
 
 """Auto-detect and trim PE adaptors"""
 def auto_pe_trim(
-        args):
+    args):
 
     file1, file2, args_dict = args[0], args[1], args[2] # Parse args
 
@@ -133,7 +134,7 @@ def auto_pe_trim(
 
 """Trim PE adaptors"""
 def pe_trim(
-        args):
+    args):
 
     file1, file2, args_dict = args[0], args[1], args[2] # Parse args
 
@@ -154,69 +155,76 @@ def pe_trim(
 
 """Trim RNAseq reads of adaptors and for quality"""
 def run_trim(
-        args_dict):
+    args_dict):
 
-    try:
-        # Add output directories
-        args_dict = add_directory(
+    # Add output directories
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'trimmed_fastq')
+
+    # Get list of files to trim based on acceptable file types
+    files = get_files(
+        args_dict['input'],
+        ['.fastq','.fq','.txt'])
+
+    # Determine sequencing type based on args_dict['adaptors']
+    if 'type' not in args_dict:
+        type = determine_type(
+            args_dict['adaptors'])
+    else:
+        type = args_dict['type']
+
+    # Mod workers if threads > 16 as fastp maxes at 16 per task
+    if args_dict['max_processors'] > 16 or (args_dict['max_processors'] == None and cpu_count() > 16):
+        workers = True
+    else:
+        workers = False
+
+    # Auto-detect and trim adaptors
+    if type == 'AUTOSE':
+        parallelize(
+            auto_trim,
+            files,
             args_dict,
-            'output',
-            'trimmed_fastq')
+            mod_workers=workers)
 
-        # Get list of files to trim based on acceptable file types
-        files = get_files(
-            args_dict['input'],
-            ['.fastq','.fq','.txt'])
+    # Trim polyX adaptors, assumes single-end RNAseq reads
+    if type == 'POLYX':
+        parallelize(
+            polyx_trim,
+            files,
+            args_dict,
+            mod_workers=workers)
 
-        # Determine sequencing type based on args_dict['adaptors']
-        if 'type' not in args_dict:
-            type = determine_type(
-                args_dict['adaptors'])
+    # Trim single-end RNAseq reads
+    if type == 'SE':
+        parallelize(
+            se_trim,
+            files,
+            args_dict,
+            mod_workers=workers)
+
+    # Auto-detect adaptors for paired-end reads
+    if type == 'AUTOPE':
+        if len(files) % 2 != 0:
+            raise Exception('An uneven number of paired-end files were specified in the input directory')
         else:
-            type = args_dict['type']
-
-        # Auto-detect and trim adaptors
-        if type == 'AUTOSE':
-            parallelize(
-                auto_trim,
+            parallelize_pe(
+                auto_pe_trim,
                 files,
-                args_dict)
+                args_dict,
+                mod_workers=workers)
 
-        # Trim polyX adaptors, assumes single-end RNAseq reads
-        if type == 'POLYX':
-            parallelize(
-                polyx_trim,
+    # Trim paired-end RNAseq reads
+    if type == 'PE':
+        if len(files) % 2 != 0:
+            raise Exception('An uneven number of paired-end files were specified in the input directory')
+        else:
+            parallelize_pe(
+                pe_trim,
                 files,
-                args_dict)
+                args_dict,
+                mod_workers=workers)
 
-        # Trim single-end RNAseq reads
-        if type == 'SE':
-            parallelize(
-                se_trim,
-                files,
-                args_dict)
-
-        # Auto-detect adaptors for paired-end reads
-        if type == 'AUTOPE':
-            if len(files) % 2 != 0:
-                raise Exception('An uneven number of paired-end files were specified in the input directory')
-            else:
-                parallelize_pe(
-                    auto_pe_trim,
-                    files,
-                    args_dict)
-
-        # Trim paired-end RNAseq reads
-        if type == 'PE':
-            if len(files) % 2 != 0:
-                raise Exception('An uneven number of paired-end files were specified in the input directory')
-            else:
-                parallelize_pe(
-                    pe_trim,
-                    files,
-                    args_dict)
-
-        return args_dict
-
-    except:
-        raise Exception('Trimming failed')
+    return args_dict
