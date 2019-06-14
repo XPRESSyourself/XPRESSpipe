@@ -463,6 +463,7 @@ def run_seRNAseq(
             ['.fastq','.fq','.txt'])
 
         # Align single-end RNAseq reads
+        print('Am I running twice?')
         parallelize(
             se_align,
             files,
