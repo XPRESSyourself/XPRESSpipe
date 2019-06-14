@@ -83,6 +83,12 @@ def msg_trim():
 
     time.sleep(1)
 
+"""Trim submodule message"""
+def msg_fastqc():
+    print("""\nRunning some QC on trimmed reads...\n""")
+
+    time.sleep(1)
+
 """Align submodule message"""
 def msg_align():
     print("""Aligning...\n

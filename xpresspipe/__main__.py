@@ -368,9 +368,10 @@ def main(
             'TRIM') # Check log file for errors and exceptions
 
         # Align
-        msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
+        msg_fastqc()
         get_fastqc(args_dict) # Run FastQC on trimmed reads
+        msg_align()
         args_dict = run_seRNAseq(args_dict)
 
         # Get other formatted files
@@ -433,9 +434,10 @@ def main(
             'TRIM') # Check log file for errors and exceptions
 
         # Align
-        msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
+        msg_fastqc()
         get_fastqc(args_dict) # Run FastQC on trimmed reads
+        msg_align()
         args_dict = run_peRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']
@@ -497,9 +499,10 @@ def main(
             'TRIM') # Check log file for errors and exceptions
 
         # Align
-        msg_align()
         args_dict['input'] = args_dict['trimmed_fastq']
+        msg_fastqc()
         get_fastqc(args_dict) # Run FastQC on trimmed reads
+        msg_align()
         args_dict = run_seRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments']

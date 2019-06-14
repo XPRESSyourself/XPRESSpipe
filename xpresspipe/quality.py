@@ -123,7 +123,6 @@ def get_fastqc(args_dict):
         ['.fastq', '.fq', '.txt'])
 
     # Perform fastqc on each file and unzip output
-    print('QCing')
     parallelize(
         run_fastqc,
         files,
