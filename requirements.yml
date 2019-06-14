@@ -22,6 +22,8 @@ dependencies:
   - fastqc
   - biopython
   - multiqc
-  - xpressplot
   - numpydoc
   - psutil
+  - pip
+  - pip:
+    - xpressplot
