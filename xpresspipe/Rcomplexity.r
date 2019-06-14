@@ -3,10 +3,19 @@
 # Measure library complexity of RNA-seq sample
 
 # Install dependencies
-#if (!requireNamespace("BiocManager", quietly = TRUE))
-#    install.packages("BiocManager")
-#BiocManager::install("Rsubread", version = "3.8")
-#BiocManager::install("dupRadar", version = "3.8")
+if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
+
+if ("Rsubread" %in% rownames(installed.packages()) == FALSE) {
+  BiocManager::install("Rsubread", dependencies=TRUE)
+} else {
+  print("Rsubread package already installed")
+}
+if ("dupRadar" %in% rownames(installed.packages()) == FALSE) {
+  BiocManager::install("dupRadar", dependencies=TRUE)
+} else {
+  print("dupRadar package already installed")
+}
+
 library(dupRadar)
 
 # Get arguments

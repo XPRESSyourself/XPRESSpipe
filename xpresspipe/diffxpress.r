@@ -1,6 +1,14 @@
 #!/usr/bin/env Rscript
 
 # Control batch effects for prep, chips, etc
+if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
+
+if ("DESeq2" %in% rownames(installed.packages()) == FALSE) {
+  BiocManager::install("DESeq2", dependencies=TRUE)
+} else {
+  print("DESeq2 package already installed")
+}
+
 library(DESeq2)
 
 # Get arguments
