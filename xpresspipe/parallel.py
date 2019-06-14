@@ -50,11 +50,6 @@ def threshold_ram(
     if threshold > cpu_count():
         threshold = cpu_count()
 
-    print('?')
-    print(threshold)
-    print(args_dict['workers'])
-    print('?')
-
     if threshold < args_dict['workers']: # Modify if set # of workers is greater than memory threshold
         print('Resetting max number of workers to ' + str(threshold))
         return threshold
@@ -67,7 +62,7 @@ def threshold_ram(
 - If None specified (no user input), set cores equal to number available on system
 - Determine number of workers to use per job based on user input
     - If modified, workers equal number of cores
-    - If not modified, workers equal 1, so one worker is using all available cores 
+    - If not modified, workers equal 1, so one worker is using all available cores
 """
 def get_cores(
     args_dict,
@@ -108,17 +103,13 @@ def parallelize(
     args_dict['threads'], args_dict['workers'] = get_cores(
         args_dict,
         mod_workers)
-    print('Init:',args_dict['workers'])
+
     # Check and apply RAM threshold if necessary
-    print(file_list)
-    print('For this step are workers moded',mod_workers)
     if mod_workers == True:
         args_dict['workers'] = threshold_ram(
             args_dict,
             file_list)
-        print("W:",args_dict['workers'])
-    print('S:',args_dict['threads'], args_dict['workers'])
-    print('----------------------')
+
     run_pools(
         func,
         args_iter,

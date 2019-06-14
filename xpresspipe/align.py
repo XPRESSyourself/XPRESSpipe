@@ -301,10 +301,11 @@ def clean_reference_directory(
         + ' ' + str(args_dict['alignments']) + '*_STARgenome'
         + str(args_dict['log']))
 
-    os.system(
-        'rm -r'
-        + ' ' + str(args_dict['intermediate_references'])
-        + str(args_dict['log']))
+    if 'two-pass' in args_dict and args_dict['two-pass'] == True:
+        os.system(
+            'rm -r'
+            + ' ' + str(args_dict['intermediate_references'])
+            + str(args_dict['log']))
 
 def align(
     args_dict,
@@ -323,6 +324,7 @@ def align(
             args_dict)
 
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
+
         # STAR first pass
         first_pass_star(
             file,
@@ -344,6 +346,7 @@ def align(
         remove_intermediate_reference(
             output,
             args_dict)
+
     else:
         # One-pass STAR with GTF guiding splice mapping
         guided_star(
@@ -390,66 +393,62 @@ def pe_align(
 def run_seRNAseq(
         args_dict):
 
-    try:
-        # Add output directories
-        args_dict = add_directory(
-            args_dict,
-            'output',
-            'alignments')
+    # Add output directories
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'alignments')
+
+    if 'two-pass' in args_dict and args_dict['two-pass'] == True:
         args_dict = add_directory(
             args_dict,
             'alignments',
             'intermediate_references')
 
-        # Get list of files to align based on acceptable file types
-        files = get_files(
-            args_dict['input'],
-            ['.fastq','.fq','.txt'])
+    # Get list of files to align based on acceptable file types
+    files = get_files(
+        args_dict['input'],
+        ['.fastq','.fq','.txt'])
 
-        # Align single-end RNAseq reads
-        print('Am I running twice?')
-        parallelize(
-            se_align,
-            files,
-            args_dict)
-        clean_reference_directory(args_dict)
+    # Align single-end RNAseq reads
+    parallelize(
+        se_align,
+        files,
+        args_dict)
+    clean_reference_directory(args_dict)
 
-        return args_dict
+    return args_dict
 
-    except:
-        raise Exception('Single-end alignment failed')
 
 """Manage paired-end RNA-seq pipeline"""
 def run_peRNAseq(
         args_dict):
 
-    try:
-        # Add output directories
-        args_dict = add_directory(
-            args_dict,
-            'output',
-            'alignments')
+    # Add output directories
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'alignments')
+
+    if 'two-pass' in args_dict and args_dict['two-pass'] == True:
         args_dict = add_directory(
             args_dict,
             'alignments',
             'intermediate_references')
 
-        # Get list of files to align based on acceptable file types
-        files = get_files(
-            args_dict['input'],
-            ['.fastq','.fq','.txt'])
+    # Get list of files to align based on acceptable file types
+    files = get_files(
+        args_dict['input'],
+        ['.fastq','.fq','.txt'])
 
-        if len(files) % 2 != 0:
-            raise Exception('An uneven number of paired-end files were specified in the input directory')
-        else:
-            # Align paired-end RNAseq reads
-            parallelize_pe(
-                pe_align,
-                files,
-                args_dict)
-            clean_reference_directory(args_dict)
+    if len(files) % 2 != 0:
+        raise Exception('An uneven number of paired-end files were specified in the input directory')
+    else:
+        # Align paired-end RNAseq reads
+        parallelize_pe(
+            pe_align,
+            files,
+            args_dict)
+        clean_reference_directory(args_dict)
 
-        return args_dict
-
-    except:
-        raise Exception('Paired-end alignment failed')
+    return args_dict
