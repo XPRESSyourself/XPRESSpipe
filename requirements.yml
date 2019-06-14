@@ -26,4 +26,4 @@ dependencies:
   - psutil
   - pip
   - pip:
-    - xpressplot
+    - XPRESSplot
