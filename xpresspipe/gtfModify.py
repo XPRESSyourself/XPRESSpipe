@@ -228,9 +228,11 @@ def get_chunks(
         cores = int(threads)
 
     # Get number of times 'gene' is references in column 2 of GTF and if cores > #genes, limit
-    gene_instances = gtf[gtf[2] == 'gene'][2].shape[0]
+    gene_instances = gtf.loc[gtf[2] == 'gene'].shape[0]
     if gene_instances == 0:
-        raise Exception('No gene records found in GTF')
+        gene_instances = gtf.loc[gtf[2] == 'transcript'].shape[0]
+        if gene_instances == 0:
+            raise Exception('No gene or transcript records found in GTF')
 
     if cores > gene_instances:
         cores = gene_instances
