@@ -100,7 +100,7 @@ def make_flatten(
 
                     if gtf.at[index + n, 2] == record_type: # Append coordinate paires for each exon of the transcript
                         coordinates.append([gtf.at[index + n, 3], gtf.at[index + n, 4]])
-            print("c:",coordinates)
+
             # Get start and end positions for transcript/gene
             # Assumes start and stop will be start and end of a protein coding transcript
             try:
