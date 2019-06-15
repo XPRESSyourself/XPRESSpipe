@@ -9,14 +9,7 @@ __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 """Test gtfFlatten functions"""
 
 # Input file will test chunking to make sure GTF structure is conserved
-gtf = pd.read_csv(
-    str(__path__) + 'other/gtf_test.gtf',
-    sep = '\t',
-    header = None,
-    comment = '#',
-    low_memory = False)
-
-gtf_file = str(__path__) + 'other/gtf_test.gtf'
+gtf = str(__path__) + 'other/gtf_test.gtf'
 
 # Flatten GTF
 from xpresspipe.gtfFlatten import flatten_reference
@@ -24,12 +17,7 @@ col = ['gene', 'strand', 'chromosome', 'start', 'end', 'coordinates', 'length']
 gtf_truth = [['ENSG00000176695', '+', '19', 107104, 113156, [[107104, 107157], [107473, 107555], [110625, 113156]], 2666]]
 gtf_truth = pd.DataFrame(gtf_truth, columns = col)
 flat_gtf = flatten_reference(gtf)
-
-
 assert flat_gtf.equals(gtf_truth), 'flatten_reference() failed with gtf dataframe input'
-
-flat_gtf_file = flatten_reference(gtf_file)
-assert flat_gtf_file.equals(gtf_truth), 'flatten_reference() failed with gtf file input'
 
 
 # Indexing truth set

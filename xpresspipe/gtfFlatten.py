@@ -135,16 +135,14 @@ Read in coordinate reference from GTF
 Requires an unmodified GTF file
 """
 def flatten_reference(
-    gtf,
+    gtf_file,
     record_type='exon',
     threads=None):
 
     # Import GTF reference file
-    if isinstance(gtf, pd.DataFrame) and len(gtf.columns) == 9:
-        pass
-    elif str(gtf).endswith('.gtf'):
+    if str(gtf_file).endswith('.gtf'):
         gtf = pd.read_csv(
-            str(gtf),
+            str(gtf_file),
             sep = '\t',
             header = None,
             comment = '#',
