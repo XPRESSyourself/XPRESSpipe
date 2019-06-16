@@ -28,3 +28,4 @@ dependencies:
   - pip:
     - XPRESSplot
     - scikit-learn
+    - seaborn
