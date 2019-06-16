@@ -29,8 +29,8 @@ import pandas as pd
 
 """Read in indexed BAM file to Pandas dataframe"""
 def read_bam(
-        file,
-        threads = 1):
+    file,
+    threads = 1):
 
     # Read in BAM file
     os.system(
@@ -47,11 +47,11 @@ def read_bam(
         usecols = list(range(0, 16)),
         low_memory = False)
 
-    bam[2] = bam[2].astype(str) # Make chromosome info consisitent with reference file
-
     os.system(
         'rm'
         ' ' + str(file)[:-4] + '.tmp')
+
+    bam[2] = bam[2].astype(str) # Make chromosome info consisitent with reference file
 
     return bam
 
