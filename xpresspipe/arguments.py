@@ -117,7 +117,7 @@ def check_inputs(
         args_dict['reference'] = check_directories(
             args_dict['reference'],
             'reference')
-    if 'gtf' in args_dict:
+    if 'gtf' in args_dict and args_dict['cmd'] not in ignore_list:
         args_dict['gtf'] = os.path.abspath(args_dict['gtf'])
     if 'fasta' in args_dict:
         args_dict['fasta'] = check_directories(
