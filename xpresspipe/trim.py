@@ -176,7 +176,8 @@ def run_trim(
         type = args_dict['type']
 
     # Mod workers if threads > 16 as fastp maxes at 16 per task
-    if args_dict['max_processors'] > 16 or (args_dict['max_processors'] == None and cpu_count() > 16):
+    if (isinstance(args_dict['max_processors'], int) and args_dict['max_processors'] > 16) \
+    or (args_dict['max_processors'] == None and cpu_count() > 16):
         workers = True
     else:
         workers = False
