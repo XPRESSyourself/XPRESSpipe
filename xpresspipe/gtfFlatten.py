@@ -147,6 +147,8 @@ def flatten_reference(
             header = None,
             comment = '#',
             low_memory = False)
+    elif if isinstance(gtf_file, pd.DataFrame):
+        pass 
     else:
         raise Exception('Error: A GTF-formatted file or dataframe was not provided')
 
