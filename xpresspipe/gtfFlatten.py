@@ -148,10 +148,15 @@ def flatten_reference(
             comment = '#',
             low_memory = False)
     elif isinstance(gtf_file, pd.DataFrame):
-        pass
+        gtf = gtf_file
+
     else:
         raise Exception('Error: A GTF-formatted file or dataframe was not provided')
 
+    gtf_file = None
+    del gtf_file
+    gc.collect()
+    
     # Get chunks
     chunks = get_chunks(
         gtf,
