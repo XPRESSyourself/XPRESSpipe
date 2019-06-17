@@ -54,6 +54,8 @@ def threshold_ram(
         factor = 1
 
     threshold_workers = math.floor(total / (_max * factor)) # Set threshold based on max file size in set
+    if threshold_workers < 1:
+        threshold_workers = 1
 
     if threshold_workers > cpu_count():
         threshold_workers = cpu_count()
