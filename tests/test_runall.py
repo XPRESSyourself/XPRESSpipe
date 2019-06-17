@@ -37,5 +37,5 @@ os.system(
 'python ' + str(__path__) + 'test_utils.py'
 )
 os.system(
-'python ' + str(__path__) + 'test_rrneProbe.py'
+'python ' + str(__path__) + 'test_rrnaProbe.py'
 )
