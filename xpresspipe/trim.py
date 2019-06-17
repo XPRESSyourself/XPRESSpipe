@@ -169,11 +169,8 @@ def run_trim(
         ['.fastq','.fq','.txt'])
 
     # Determine sequencing type based on args_dict['adaptors']
-    if 'type' not in args_dict:
-        type = determine_type(
-            args_dict['adaptors'])
-    else:
-        type = args_dict['type']
+    type = determine_type(
+        args_dict['adaptors'])
 
     # Mod workers if threads > 16 as fastp maxes at 16 per task
     if (isinstance(args_dict['max_processors'], int) and args_dict['max_processors'] > 16) \
