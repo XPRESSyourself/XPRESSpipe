@@ -316,6 +316,8 @@ def align(
     if args_dict['threads'] > 30:
         thread_count = args_dict['threads']
         args_dict['threads'] = 30
+    else:
+        thread_count = args_dict['threads']
 
     if 'mask' in args_dict and args_dict['mask'] == True:
         file = masking_star(
