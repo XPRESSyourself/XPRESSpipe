@@ -147,11 +147,12 @@ def check_inputs(
             args_dict['max_processors'] = multiprocessing.cpu_count()
 
     # Check number of adaptors provided
-    if isinstance(args_dict['adaptors'], list):
+    if isinstance(args_dict['adaptors'], list) == True:
         args_dict['adaptors'] = [a.upper() for a in args_dict['adaptors']]
 
     if 'adaptors' in args_dict:
-        if args_dict['adaptors'].upper() == 'NONE' or args_dict['adaptors'] == ['NONE']:
+        if (isinstance(args_dict['adaptors'], list) == False and args_dict['adaptors'].upper() == 'NONE') \
+        or args_dict['adaptors'] == ['NONE']:
             pass
         elif type(args_dict['adaptors']) != list:
             raise Exception('Adaptors must be provided as a list of strings or None')
