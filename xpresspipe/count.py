@@ -69,7 +69,6 @@ def count_file_htseq(
     # Count
     os.system(
         'htseq-count'
-        + ' -q'
         + ' -f bam'
         + ' -m intersection-nonempty'
         + ' -t ' + args_dict['feature_type']
