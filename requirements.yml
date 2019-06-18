@@ -14,11 +14,12 @@ dependencies:
   - scipy
   - r
   - libiconv
-  - ncurses
+  - conda-forge::ncurses
   - fastp
   - STAR
   - samtools
   - bedtools
+  - htseq
   - fastqc
   - biopython
   - multiqc
