@@ -152,35 +152,25 @@ def check_inputs(
     # Check number of adaptors provided
     if 'adaptors' in args_dict and isinstance(args_dict['adaptors'], list) == True:
         args_dict['adaptors'] = [a.upper() for a in args_dict['adaptors']]
+        for x in args_dict['adaptors']:
+            if type(x) != str:
+                raise Exception('Adaptors must be provided as a list of strings')
 
-    if 'adaptors' in args_dict:
-        if (isinstance(args_dict['adaptors'], list) == False \
-            and args_dict['adaptors'].upper() == 'NONE' \
-            or args_dict['adaptors'] == None) \
-        or (isinstance(args_dict['adaptors'], list) \
-            and args_dict['adaptors'] == ['NONE'] \
-            or args_dict['adaptors'] == ['NONE', 'NONE']):
-            pass
-        elif type(args_dict['adaptors']) != list:
-            raise Exception('Adaptors must be provided as a list of strings or None')
-        else:
-            for x in args_dict['adaptors']:
-                if type(x) != str:
-                    raise Exception('Adaptors must be provided as a list of strings')
+            if any(char.isdigit() for char in x):
+                raise Exception('Adaptors must not contain numerics')
 
-                if any(char.isdigit() for char in x):
-                    raise Exception('Adaptors must not contain numerics')
+            if x == 'NONE' or x == None:
+                pass
+            elif any(char not in ['A','a','T','t','G','g','C','c','N','n'] for char in x):
+                raise Exception('Adaptors sequence contains an invalid character')
+            else:
+                pass
+    else:
+        raise Exception('Something went wrong with the adaptor input formatting. Expected a list, but got ' \
+        + str(type(args_dict['adaptors'])))
 
-                if x.upper() == 'NONE' or x == None:
-                    pass
-                elif any(char not in ['A','a','T','t','G','g','C','c','N','n','None','none','NONE',None] for char in x):
-                    raise Exception('Adaptors sequence contains an invalid character')
-                else:
-                    pass
-
-            if len(args_dict['adaptors']) > 2:
-                raise Exception('A maximum of 2 adaptors may be provided')
-
+    if len(args_dict['adaptors']) > 2:
+        raise Exception('A maximum of 2 adaptors may be provided')
 
     # Determine output directory for log file
     if 'output' in args_dict \
