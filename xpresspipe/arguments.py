@@ -153,7 +153,7 @@ def check_inputs(
     if 'adaptors' in args_dict:
         if (isinstance(args_dict['adaptors'], list) == False \
             and args_dict['adaptors'].upper() == 'NONE' \
-            or args_dict['adaptors'].upper() == None) \
+            or args_dict['adaptors'] == None) \
         or (isinstance(args_dict['adaptors'], list) \
             and args_dict['adaptors'] == ['NONE'] \
             or args_dict['adaptors'] == ['NONE', 'NONE']):
