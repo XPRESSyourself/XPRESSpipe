@@ -90,21 +90,29 @@ def compile_matrix_metrics(
                 ax_y += 1
 
         # Plot figure
-        df.plot.line(
-            x = lab_x,
-            y = lab_y,
-            title = file[:-4],
-            ax = axes[ax_y, ax_x],
-            grid = None)
+        if plot_type == 'periodicity':
+            df.plot.bar(
+                x = lab_x,
+                y = lab_y,
+                title = file[:-4],
+                ax = axes[ax_y, ax_x],
+                grid = None)
+        else:
+            df.plot.line(
+                x = lab_x,
+                y = lab_y,
+                title = file[:-4],
+                ax = axes[ax_y, ax_x],
+                grid = None)
 
         axes[ax_y, ax_x].axhline(
             0,
-            xmin = 0.048,
+            xmin = 0,
             ls = '-',
             color = 'black')
         axes[ax_y, ax_x].axvline(
             0,
-            ymin = 0.048,
+            ymin = 0,
             ls = '-',
             color = 'black')
 
