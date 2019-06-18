@@ -61,8 +61,6 @@ def main(
         args,
         __version__)
 
-    # print(args_dict) # For debugging purposes
-
     # Should have already seen check_directory() so should have a trailing '/'
     if 'input' in args_dict \
     and str(args_dict['input']).endswith('/'):
