@@ -96,7 +96,7 @@ description_table  =  """\
 
 """Check arguments provided by user"""
 def check_inputs(
-        args_dict):
+    args_dict):
 
     print(args_dict)
 
@@ -173,7 +173,7 @@ def check_inputs(
 
                 if x.upper() == 'NONE' or x == None:
                     pass
-                elif any(char not in ['A','a','T','t','G','g','C','c','N','n'] for char in x):
+                elif any(char not in ['A','a','T','t','G','g','C','c','N','n','None','none','NONE',None] for char in x):
                     raise Exception('Adaptors sequence contains an invalid character')
                 else:
                     pass
