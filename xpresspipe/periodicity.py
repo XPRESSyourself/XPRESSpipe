@@ -78,12 +78,14 @@ def get_coordinate_records_period(
 def get_periodicity_profile(
         aligned_reads_index,
         coordinate_index,
-        chromosome_index):
+        chromosome_index,
+        start_range=0,
+        end_range=101):
 
     # Initialize profile dataframe for storage
     metagene_profile = pd.DataFrame(
         0,
-        index = range(201),
+        index = range(start_range, end_range),
         columns = ['count'])
 
     # Search through each mapped read coordinate
@@ -110,7 +112,9 @@ def get_periodicity_profile(
                     coordinate,
                     transcript_record[3],
                     transcript_record[2])
-                if position != None and position < 201:
+
+                if position != None and position > start_range and position < end_range:
+                    # Position cannot be inclusive of start or end coorindate or will throw invalid index error
                     position_count.append(position)
 
             for x in position_count:
