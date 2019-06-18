@@ -1547,6 +1547,7 @@ def get_arguments(
     #Collect subargs and package, add XPRESSpipe script path to argument dictionary
     args_dict = vars(args)
     args_dict['path'] = str(__path__) + '/'
+    print('Hello')
     print(args) # For debugging purposes
 
     #Check inputs validity
