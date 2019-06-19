@@ -79,7 +79,7 @@ def get_periodicity_profile(
         aligned_reads_index,
         coordinate_index,
         chromosome_index,
-        start_range=0,
+        start_range=-1,
         end_range=101):
 
     # Initialize profile dataframe for storage

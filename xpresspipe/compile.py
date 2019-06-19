@@ -66,6 +66,13 @@ def compile_matrix_metrics(
     plt.subplots_adjust(
         bottom = 0.3)
 
+    if plot_type == 'periodicity':
+        tix = ['']
+        for t in range(0,101,3):
+            tix.append(str(t))
+            tix.append('')
+            tix.append('')
+
     # Initialize file and axis counters for formatting summary figure
     file_number = 0
     ax_y = 0
@@ -97,6 +104,8 @@ def compile_matrix_metrics(
                 title = file[:-4],
                 ax = axes[ax_y, ax_x],
                 grid = None)
+            axes[ax_y, ax_x].set_xticklabels(tix)
+            axes[ax_y, ax_x].tick_params(which='major', length=7, width=2, direction='out')
         else:
             df.plot.line(
                 x = lab_x,
