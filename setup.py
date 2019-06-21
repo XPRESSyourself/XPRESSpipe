@@ -20,14 +20,39 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 """IMPORT DEPENDENCIES"""
-from setuptools import setup
-from setuptools.command.develop import develop
-from setuptools.command.install import install
 import re
 import os
 import sys
 import subprocess
+from setuptools import setup
 __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
+
+def get_cufflinks():
+
+    # Get python version
+    python =  sys.version_info[0]
+
+    if 'darwin' in sys.platform:
+        system = 'MacOSX'
+        cufflinks = 'cufflinks-2.1.1.OSX_x86_64'
+
+    elif 'linux' in sys.platform:
+        system = 'Linux'
+        cufflinks = 'cufflinks-2.1.1.Linux_x86_64'
+
+    else:
+        raise Exception('Cannot recognize operating system. Expected \"darwin\" or \"linux\", got ' + str(sys.platform))
+
+    # Install Cufflinks
+    subprocess.call(
+        ('echo "Installing cufflinks binary for ' + str(system) + '..."; '
+        + 'curl http://cole-trapnell-lab.github.io/cufflinks/assets/downloads/' + str(cufflinks) + '.tar.gz -o ' + str(__path__) + 'cufflinks.tar.gz; '
+        + 'tar -zxvf ' + str(__path__) + 'cufflinks.tar.gz; '
+        + 'rm ' + str(__path__) + 'cufflinks.tar.gz; '
+        + 'mv ' + str(__path__) + str(cufflinks) + ' ' + str(__path__) + 'cufflinks; '
+        + 'mv ' + str(__path__) + 'cufflinks/cufflinks ' + str(__path__) + 'xpresspipe; '
+        + 'echo "Cufflinks installed"; '),
+        shell = True)
 
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
@@ -35,6 +60,7 @@ with open('xpresspipe/__init__.py', 'r') as fd:
                         fd.read(), re.MULTILINE).group(1)
 
 """Setup arguments"""
+get_cufflinks()
 setup(
     name = 'XPRESSpipe',
     version = version,
