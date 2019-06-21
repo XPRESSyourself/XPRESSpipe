@@ -69,12 +69,13 @@ def count_file_htseq(
     # Count
     os.system(
         'htseq-count'
+        + ' -q' # Add this to not print out what line it is processing of a file
         + ' -f bam'
         + ' -m intersection-nonempty'
         + ' -t ' + args_dict['feature_type']
         + ' -i gene_id'
         + ' -r pos'
-        + ' -s no'
+        + ' -s ' + str(args_dict['stranded']).lower()
         + ' ' + str(args_dict['input']) + str(file)
         + ' ' + str(args_dict['gtf'])
         + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
@@ -101,7 +102,8 @@ def count_file_cufflinks(
         str(__path__) + 'cufflinks'
         + ' ' + str(args_dict['input']) + str(file)
         + ' --output-dir ' + str(args_dict['counts']) + str(dir_name)
-        + ' --GTF ' + str(args_dict['reference']) + 'transcripts.gtf'
+        + ' --GTF ' + str(args_dict['gtf'])
+        + ' –-library-type ' + str(args_dict['stranded']).lower()
         + ' --num-threads 1'
         + str(args_dict['log']))
 
