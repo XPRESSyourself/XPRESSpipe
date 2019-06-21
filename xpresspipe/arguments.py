@@ -187,6 +187,24 @@ def check_inputs(
         else:
             args_dict['log_loc'] = './'
 
+    if 'quantification_method' in args_dict and 'stranded' in args_dict:
+        if str(args_dict['quantification_method']).lower() == 'htseq':
+            if str(args_dict['stranded']).lower() == 'no' \
+            or str(args_dict['stranded']).lower() == 'yes':
+                pass
+            else:
+                raise Exception('Invalid strandedness option for HTSeq-count')
+        elif str(args_dict['quantification_method']).lower() == 'cufflinks':
+            if str(args_dict['stranded']).lower() == 'fr-unstranded ' \
+            or str(args_dict['stranded']).lower() == 'fr-firststrand' \
+            or str(args_dict['stranded']).lower() == 'fr-secondstrand':
+                pass
+            else:
+                raise Exception('Invalid strandedness option for Cufflinks')
+
+        else:
+            raise Exception('Invalid quantification method provided')
+
     if 'experiment' in args_dict \
     and args_dict['experiment'] != None:
         args_dict['log'] = ' >> ' + str(args_dict['log_loc']) + str(args_dict['experiment']) + '.log 2>&1'
@@ -336,6 +354,13 @@ def get_arguments(
         type = str,
         required = False)
     se_opts.add_argument(
+        '--stranded',
+        help = 'Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)',
+        metavar = '<fr-unstranded/fr-firststrand/fr-secondstrand||no/yes>',
+        default = 'no',
+        type = str,
+        required = False)
+    se_opts.add_argument(
         '--method',
         help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
         metavar = '<RPM, TPM, RPKM, FPKM>',
@@ -482,6 +507,13 @@ def get_arguments(
         type = str,
         required = False)
     pe_opts.add_argument(
+        '--stranded',
+        help = 'Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)',
+        metavar = '<fr-unstranded/fr-firststrand/fr-secondstrand||no/yes>',
+        default = 'no',
+        type = str,
+        required = False)
+    pe_opts.add_argument(
         '--method',
         help = 'Normalization method to perform (options: \"RPM\", \"TPM\", \"RPKM\", \"FPKM\")',
         metavar = '<RPM, TPM, RPKM, FPKM>',
@@ -625,6 +657,13 @@ def get_arguments(
         help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: CDS)',
         metavar = '<feature>',
         default = 'CDS',
+        type = str,
+        required = False)
+    rp_opts.add_argument(
+        '--stranded',
+        help = 'Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)',
+        metavar = '<fr-unstranded/fr-firststrand/fr-secondstrand||no/yes>',
+        default = 'no',
         type = str,
         required = False)
     rp_opts.add_argument(
@@ -840,12 +879,6 @@ def get_arguments(
         type = str,
         required = True)
     count_reqs.add_argument(
-        '-r', '--reference',
-        help = 'Path to parent organism reference directory',
-        metavar = '<path>',
-        type = str,
-        required = True)
-    count_reqs.add_argument(
         '-g', '--gtf',
         help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
         metavar = '</path/transcript.gtf>',
@@ -875,6 +908,13 @@ def get_arguments(
         help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: exon)',
         metavar = '<feature>',
         default = 'exon',
+        type = str,
+        required = False)
+    count_opts.add_argument(
+        '--stranded',
+        help = 'Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)',
+        metavar = '<fr-unstranded/fr-firststrand/fr-secondstrand||no/yes>',
+        default = 'no',
         type = str,
         required = False)
     count_opts.add_argument(
@@ -1058,7 +1098,7 @@ def get_arguments(
     coverage_reqs.add_argument(
         '-n', '--gene_name',
         help = 'Gene name to plot coverage (case-sensitive)',
-        metavar = '</path/transcripts.gtf>',
+        metavar = '<gene name>',
         type = str,
         required = True)
     coverage_reqs.add_argument(
