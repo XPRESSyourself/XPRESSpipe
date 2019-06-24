@@ -173,20 +173,6 @@ def check_inputs(
         if len(args_dict['adaptors']) > 2:
             raise Exception('A maximum of 2 adaptors may be provided')
 
-    # Determine output directory for log file
-    if 'output' in args_dict \
-    and args_dict['output'] != None:
-        args_dict['log_loc'] = args_dict['output']
-    else:
-        if 'input' in args_dict \
-        and args_dict['input'] != None:
-            args_dict['log_loc'] = str(args_dict['input'][:args_dict['input'].rfind('/') + 1])
-        elif 'gtf' in args_dict \
-        and args_dict['gtf'] != None:
-            args_dict['log_loc'] = str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1])
-        else:
-            args_dict['log_loc'] = './'
-
     if 'quantification_method' in args_dict and 'stranded' in args_dict:
         if str(args_dict['quantification_method']).lower() == 'htseq':
             if str(args_dict['stranded']).lower() == 'no' \
@@ -205,6 +191,21 @@ def check_inputs(
         else:
             raise Exception('Invalid quantification method provided')
 
+    # Determine output directory for log file
+    if 'output' in args_dict \
+    and args_dict['output'] != None:
+        args_dict['log_loc'] = args_dict['output']
+    else:
+        if 'input' in args_dict \
+        and args_dict['input'] != None:
+            args_dict['log_loc'] = str(args_dict['input'][:args_dict['input'].rfind('/') + 1])
+        elif 'gtf' in args_dict \
+        and args_dict['gtf'] != None:
+            args_dict['log_loc'] = str(args_dict['gtf'][:args_dict['gtf'].rfind('/') + 1])
+        else:
+            args_dict['log_loc'] = './'
+
+    # Create log file name and write command snippet
     if 'experiment' in args_dict \
     and args_dict['experiment'] != None:
         args_dict['log'] = ' >> ' + str(args_dict['log_loc']) + str(args_dict['experiment']) + '.log 2>&1'
@@ -232,6 +233,18 @@ def check_inputs(
             + 'h_' + str(cdt.minute)
             + 'm_' + str(cdt.second)
             + 's.log')
+
+    # Print out user commands to log file
+    os.system(
+        'echo \"======================\nUser commands summary:\n======================\"'
+        + str(args_dict['log']))
+    for key, value in args_dict.items():
+        os.system(
+        'echo \"' + str(key) + ': ' + str(value) + '\"'
+        + str(args_dict['log']))
+    os.system(
+        'echo \"=====================\nEnd commands summary:\n=====================\"'
+        + str(args_dict['log']))
 
     return args_dict
 
@@ -647,9 +660,9 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks). HTSeq is recommended for ribosome profiling data as it allows quantification across the CDS',
         metavar = '<method>',
-        default = 'cufflinks',
+        default = 'htseq',
         type = str,
         required = False)
     rp_opts.add_argument(
@@ -898,7 +911,7 @@ def get_arguments(
         required = False)
     count_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed. HTSeq is recommended for ribosome profiling data as it allows quantification across the CDS.',
         metavar = '<method>',
         default = 'cufflinks',
         type = str,
