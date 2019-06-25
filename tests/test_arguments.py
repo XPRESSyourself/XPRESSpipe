@@ -12,7 +12,7 @@ test0_dict = {
     'max_processors': 1000000,
     'cmd': 'riboseq'} # Where input is more than available cores
 test1_dict = {
-    'max_processors': None,
+    'max_processors': 'None',
     'cmd': 'riboseq'} # Where no limit is specified
 test2_dict = {
     'max_processors': multiprocessing.cpu_count(),
@@ -55,7 +55,7 @@ assert truth_dict['reference'] == t['reference'], 'check_inputs() failed at dire
 adap1 = 'CTGTAGGCACCATCAAT'
 adap2 = 'CTGTAGGCACCATCAAT CTGTAGGCACCATCAAG'
 adap3 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG']
-adap4 = [None]
+adap4 = ['None']
 adap5 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG', 'ACCATCAAG']
 adap6 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCA262343CCATCAaAG']
 adap7 = ['GCTCGCGCHATC']
