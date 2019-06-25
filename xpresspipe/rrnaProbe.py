@@ -28,12 +28,12 @@ import sys
 """Get overrepresented sequences from a given FastQC zip file"""
 def get_overrep_seqs(directory):
 
-    file = str(directory) + 'fastqc_data.txt'
-    if os.path.isfile(file) == False:
+    filename = str(directory) + 'fastqc_data.txt'
+    if os.path.isfile(filename) == False:
         raise Exception('No fastqc data file found in fastqc folder: ' + str(directory))
 
     # If execution makes it to here, should have a valid data filename
-    with open(str(file), 'r') as datafile:
+    with open(str(filename), 'r') as datafile:
         overrep_seqs = []
         store_flag = False
         for line in datafile:
@@ -133,7 +133,8 @@ def addEntry(new_entry, combined_entries, min_ovlp):
 def combineSeqs(entries, min_overlap):
     combined_entries = []
     for entry in entries:
-        combined_entries = addEntry(entry, combined_entries, min_overlap)
+        if len(entry[0]) >= min_overlap:
+            combined_entries = addEntry(entry, combined_entries, min_overlap)
     return combined_entries
 
 def countFreqs(combined_entries):
@@ -147,26 +148,25 @@ def rrnaProbe(
     directory_list,
     min_overlap):
 
-    footprint_seqs = []
+    seqs = []
 
     for directory in directory_list:
-        footprint_seqs += get_overrep_seqs(directory)
+        seqs += get_overrep_seqs(directory)
 
-    combined_fp = []
-
-    # Put into uppercase format together, prep for combining (ribosome footprint sequences)
+    # Put into uppercase format together, prep for combining
     count = 0
-    for seq,count in footprint_seqs:
+    combined_seqs = []
+    for seq,count in seqs:
         seq = seq.strip().upper()
-        combined_fp.append([seq,count])
-    combined_fp = combineSeqs(combined_fp, min_overlap)
+        combined_seqs.append([seq,count])
+    combined_seqs = combineSeqs(combined_seqs, min_overlap)
 
-    combined_fp.sort(key=lambda x: x[1], reverse=True)
+    combined_seqs.sort(key=lambda x: x[1], reverse=True)
     results_list = []
-    for entry in combined_fp:
+    for entry in combined_seqs:
         results_list.append("\t".join([str(x) for x in entry]))
 
-    header = "##This file contains the most highly represented sequences in a given ribosome footprint RNA-seq experiment\n" +\
+    header = "##This file contains the most highly represented sequences in a given RNA-seq experiment\n" +\
             "##The sequences included are combined from FASTQC output so that if multiple sequences reported there are exact-match substring of one another, they will be combined and their counts summed\n"+\
             "##These sequences should be checked using a tool such as BLAST to ensure that the most represented sequences are not Illumina artifacts.\n" +\
             "#SEQ\tCOUNT\n"
