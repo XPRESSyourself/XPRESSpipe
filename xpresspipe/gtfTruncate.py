@@ -24,6 +24,15 @@ from __future__ import print_function
 import pandas as pd
 import gc
 
+"""GLOBALS"""
+gtf_chr_column = 1
+gtf_type_column = 2
+gtf_leftCoordinate_column = 3
+gtf_rightCoordinate_column = 4
+gtf_sign_column = 6
+gtf_annotation_column = 8
+parse_type = 'transcript_id \"'
+
 """Scan first exons recursively by chromosome position and truncate"""
 def scan_forward(
     gtf,
@@ -35,7 +44,7 @@ def scan_forward(
     _3prime,
     penalty=0):
 
-    sign = gtf.at[start_index, 6]
+    sign = gtf.at[start_index, gtf_sign_column]
 
     # Start at start_index and parse forward to first exon and trim
     # until stop index (inclusive)
@@ -46,9 +55,9 @@ def scan_forward(
 
     while n != stop_index + 1:
 
-        if gtf.at[n, 2] != trim_type:
+        if gtf.at[n, gtf_type_column] != trim_type:
             n += 1
-            penalty += 1
+            penalty += 1 # Make sure penalty keeps up with current position steps
         else:
             if sign == '+':
                 gtf, bad_exons = plus_5prime(
@@ -96,9 +105,12 @@ def plus_5prime(
     penalty):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, 3] + _5prime < gtf.at[current_position, 4]:
-        gtf.at[current_position, 3] = gtf.at[current_position, 3] \
-                                    + _5prime
+    if gtf.at[current_position, gtf_leftCoordinate_column] + _5prime \
+    < gtf.at[current_position, gtf_rightCoordinate_column]:
+
+        gtf.at[current_position, gtf_leftCoordinate_column] \
+            = gtf.at[current_position, gtf_leftCoordinate_column] \
+            + _5prime
 
         return gtf, bad_exons
 
@@ -106,7 +118,8 @@ def plus_5prime(
     else:
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _5prime \
-                    - abs(gtf.at[current_position, 4] - gtf.at[current_position, 3])
+            - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
+            - gtf.at[current_position, gtf_leftCoordinate_column])
 
         # Recursive scan to next exon until no remainder
         return scan_forward(
@@ -117,7 +130,7 @@ def plus_5prime(
             trim_type,
             remainder,
             _3prime,
-            penalty + 1)
+            penalty + 1) # Penalty takes current position plus one for next round
 
 """Truncate 3' amount from the first listed minus stranded exon"""
 def minus_3prime(
@@ -132,16 +145,21 @@ def minus_3prime(
     penalty):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, 3] + _3prime < gtf.at[current_position, 4]:
-        gtf.at[current_position, 3] = gtf.at[current_position, 3] \
-                                        + _3prime
+    if gtf.at[current_position, gtf_leftCoordinate_column] + _3prime \
+    < gtf.at[current_position, gtf_rightCoordinate_column]:
+
+        gtf.at[current_position, gtf_leftCoordinate_column] \
+            = gtf.at[current_position, gtf_leftCoordinate_column] \
+            + _3prime
+
         return gtf, bad_exons
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _3prime \
-                    - abs(gtf.at[current_position, 4] - gtf.at[current_position, 3])
+            - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
+            - gtf.at[current_position, gtf_leftCoordinate_column])
 
         # Recursive scan to next exon until no remainder
         return scan_forward(
@@ -152,7 +170,7 @@ def minus_3prime(
             trim_type,
             _5prime,
             remainder,
-            penalty + 1)
+            penalty + 1) # Penalty takes current position plus one for next round
 
 """Scan first exons recursively by chromosome position and truncate"""
 def scan_backward(
@@ -165,19 +183,20 @@ def scan_backward(
     _3prime,
     penalty=0):
 
-    sign = gtf.at[start_index, 6]
+    sign = gtf.at[start_index, gtf_sign_column]
 
     # Start at start_index and parse forward to first exon and trim
     # until stop index (inclusive)
     n = stop_index - penalty
 
     while n != start_index - 1:
-        if n > gtf.index[-1] or n < start_index: # Built in control to prevent indexing out of bounds, not relevant for small tests, but required when working with larger GTFs
+        # Built in control to prevent indexing out of bounds, not relevant for small tests, but required when working with larger GTFs
+        if n > gtf.index[-1] or n < start_index:
             return gtf, bad_exons # Says we are out of bounds and return the work that its done up until now
 
-        if gtf.at[n, 2] != trim_type:
+        if gtf.at[n, gtf_type_column] != trim_type:
             n -= 1
-            penalty += 1
+            penalty += 1 # Make sure penalty keeps up with current position steps
 
         else:
             if sign == '+':
@@ -228,16 +247,21 @@ def plus_3prime(
     penalty):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, 4] - _3prime > gtf.at[current_position, 3]:
-        gtf.at[current_position, 4] = gtf.at[current_position, 4] \
-                                                    - _3prime
+    if gtf.at[current_position, gtf_rightCoordinate_column] - _3prime \
+    > gtf.at[current_position, gtf_leftCoordinate_column]:
+
+        gtf.at[current_position, gtf_rightCoordinate_column] \
+            = gtf.at[current_position, gtf_rightCoordinate_column] \
+            - _3prime
+
         return gtf, bad_exons
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
         bad_exons.append(current_position)
         remainder = _3prime \
-                    - abs(gtf.at[current_position, 4] - gtf.at[current_position, 3])
+            - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
+            - gtf.at[current_position, gtf_leftCoordinate_column])
 
         return scan_backward( # Recursive scan to next exon until no remainder
             gtf,
@@ -247,7 +271,7 @@ def plus_3prime(
             trim_type,
             _5prime,
             remainder,
-            penalty + 1)
+            penalty + 1) # Penalty takes current position plus one for next round
 
 """Truncate 5' amount from the first listed minus stranded exon"""
 def minus_5prime(
@@ -262,16 +286,21 @@ def minus_5prime(
     penalty):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, 4] - _5prime > gtf.at[current_position, 3]:
-        gtf.at[current_position, 4] = gtf.at[current_position, 4] \
-                                                    - _5prime
+    if gtf.at[current_position, gtf_rightCoordinate_column] - _5prime \
+    > gtf.at[current_position, gtf_leftCoordinate_column]:
+
+        gtf.at[current_position, gtf_rightCoordinate_column] \
+            = gtf.at[current_position, gtf_rightCoordinate_column] \
+            - _5prime
+
         return gtf, bad_exons
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _5prime \
-                    - abs(gtf.at[current_position, 4] - gtf.at[current_position, 3])
+            - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
+            - gtf.at[current_position, gtf_leftCoordinate_column])
 
         # Recursive scan to next exon until no remainder
         return scan_backward(
@@ -297,17 +326,16 @@ def truncate_gtf(
     bad_transcript = []
     bad_exons = []
     limit = _5prime + _3prime
-    parse_type = 'transcript_id \"'
 
     """Step 1"""
     # Remove transcripts with exon space smaller than truncation sum
     for index, row in gtf.iterrows():
 
         # Start at a transcript
-        if row[2] == 'transcript':
+        if row[gtf_type_column] == 'transcript':
 
             # Get transcript ID
-            transcript_id = gtf.at[index, 8][(gtf.at[index, 8].find(parse_type) + 15):].split('\";')[0]
+            transcript_id = gtf.at[index, gtf_annotation_column][(gtf.at[index, gtf_annotation_column].find(parse_type) + 15):].split('\";')[0]
 
             # Find range for this transcript and parse out
             n = 0
@@ -317,8 +345,8 @@ def truncate_gtf(
 
                 if index + n > gtf.index[-1]: # Check if we reached the end of the GTF
                     break
-                elif parse_type in gtf.at[index + n, 8]: # Handles a GTF where gene record present -- without this it will try to parse transcript_id incorrectly from row and screw things up
-                    parse_id = gtf.at[index + n, 8][(gtf.at[index + n, 8].find(parse_type) + 15):].split('\";')[0]
+                elif parse_type in gtf.at[index + n, gtf_annotation_column]: # Handles a GTF where gene record present -- without this it will try to parse transcript_id incorrectly from row and screw things up
+                    parse_id = gtf.at[index + n, gtf_annotation_column][(gtf.at[index + n, gtf_annotation_column].find(parse_type) + 15):].split('\";')[0]
                 else:
                     break
 
@@ -326,12 +354,12 @@ def truncate_gtf(
 
             # If target type not in transcript record, skip
             # Without, will remove all exons and transcript IDs
-            if trim_type not in gtf_parse[2].tolist():
+            if trim_type not in gtf_parse[gtf_type_column].tolist():
                 continue
 
             # Create exon length array for each exon labeled record for the transcript
-            exon_lengths = gtf_parse.loc[gtf_parse[2] == trim_type][4] \
-                                - gtf_parse.loc[gtf_parse[2] == trim_type][3]
+            exon_lengths = gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_rightCoordinate_column] \
+                - gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_leftCoordinate_column]
 
             # Check exons for this record and check
             if exon_lengths.sum() <= limit:
@@ -368,7 +396,8 @@ def truncate_gtf(
     # If the case, append to list and drop
     remaining_bad = []
     for index, row in gtf_c.iterrows():
-        if row[3] >= row[4] and row[2] == trim_type:
+        if row[gtf_leftCoordinate_column] >= row[gtf_rightCoordinate_column] \
+        and row[gtf_type_column] == trim_type:
             remaining_bad.append(index)
 
     """STEP 4"""
@@ -378,9 +407,5 @@ def truncate_gtf(
     print(str(len(remove_indices)) + ' records removed from reference chunk for being too short.')
     gtf_c = gtf_c.drop(remove_indices)
     gtf_c = gtf_c.reset_index(drop=True)
-
-    # Garbage management
-    #gtf = None
-    #gc.collect()
 
     return gtf_c

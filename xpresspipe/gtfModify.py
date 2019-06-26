@@ -37,6 +37,15 @@ from Bio import SeqIO
 from .gtfTruncate import truncate_gtf
 from .utils import get_files
 
+"""GLOBALS"""
+gtf_chr_column = 1
+gtf_type_column = 2
+gtf_leftCoordinate_column = 3
+gtf_rightCoordinate_column = 4
+gtf_sign_column = 6
+gtf_annotation_column = 8
+parse_type = 'transcript_id \"'
+
 """
 Parse  GTF dataframe for longest transcript per gene record and keep only those transcript records
 Input: GTF formatted as pandas dataframe
@@ -49,7 +58,7 @@ def check_stops(
     for index, row in data.iterrows():
 
         for s in stops:
-            if s > row[3] and s < row[4]:
+            if s > row[gtf_leftCoordinate_column] and s < row[gtf_rightCoordinate_column]:
                 return 1
             else:
                 pass
@@ -66,10 +75,10 @@ def longest_transcripts(
     for index, row in gtf.iterrows():
 
         # Find next gene record
-        if row[2] == 'gene':
+        if row[gtf_type_column].lower() == 'gene':
             # Forward scan to next gene record
             n = 0
-            gene_id_original = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
+            gene_id_original = gtf.at[index + n, gtf_annotation_column][(gtf.at[index + n, gtf_annotation_column].find('gene_id \"') + 9):].split('\";')[0]
             gene_id_next = gene_id_original
 
             while gene_id_next == gene_id_original:
@@ -78,11 +87,11 @@ def longest_transcripts(
                     break
                 else:
                     n += 1
-                    gene_id_next = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
+                    gene_id_next = gtf.at[index + n, gtf_annotation_column][(gtf.at[index + n, gtf_annotation_column].find('gene_id \"') + 9):].split('\";')[0]
 
             # Parse out current gene record
             gene_start_index = index
-            if gtf.at[index + n, 2] == 'gene':
+            if gtf.at[index + n, gtf_type_column].lower() == 'gene':
                 gene_stop_index = index + n - 1
             else:
                 gene_stop_index = index + n
@@ -94,7 +103,7 @@ def longest_transcripts(
                 # Get coordinates for each transcript record
                 transcript_list = []
                 for index, row in gtf_record.iterrows():
-                    if row[2] == 'transcript':
+                    if row[gtf_type_column].lower() == 'transcript':
                         transcript_list.append(index)
                 transcript_list.append(gene_stop_index)
 
@@ -107,58 +116,57 @@ def longest_transcripts(
                         transcript_record = gtf.loc[transcript_list[x]:transcript_list[x + 1] - 1]
 
                     # Get transcript ID
-                    transcript_id = transcript_record.iloc[0,8][(transcript_record.iloc[0, 8].find('transcript_id \"') + 15):].split('\";')[0]
+                    transcript_id = transcript_record.iloc[0,gtf_annotation_column][(transcript_record.iloc[0, gtf_annotation_column].find('transcript_id \"') + 15):].split('\";')[0]
 
                     # For each transcript record, get stop codon coordinates, CDS and
                     stops = []
                     for index, row in transcript_record.iterrows():
-                        if row[2] == 'stop_codon':
-                            stops.append(row[3])
-                            stops.append(row[3] + 1)
-                            stops.append(row[4])
+                        if row[gtf_type_column].lower() == 'stop_codon':
+                            stops.append(row[gtf_leftCoordinate_column])
+                            stops.append(row[gtf_leftCoordinate_column] + 1)
+                            stops.append(row[gtf_rightCoordinate_column])
 
                     # Get CCDS
                     #print(transcript_record)
-                    ccds = transcript_record.loc[(transcript_record[2] == 'CDS') & (transcript_record[8].str.contains('tag \"CCDS\"'))]
+                    ccds = transcript_record.loc[(transcript_record[gtf_type_column].str.upper() == 'CDS') & (transcript_record[gtf_annotation_column].str.contains('tag \"CCDS\"', case=False))]
 
                     if check_stops(ccds, stops) == 1:
-                        print('HELLO')
                         ccds = pd.DataFrame()
 
-                    trans_ens_hav = transcript_record.loc[(transcript_record[2] == 'CDS') & (transcript_record[1] == 'ensembl_havana')]
+                    trans_ens_hav = transcript_record.loc[(transcript_record[gtf_type_column].str.upper() == 'CDS') & (transcript_record[1].str.lower() == 'ensembl_havana')]
                     if check_stops(trans_ens_hav, stops) == 1:
                         trans_ens_hav = pd.DataFrame()
 
-                    trans = transcript_record.loc[transcript_record[2] == 'CDS']
+                    trans = transcript_record.loc[transcript_record[gtf_type_column].str.upper() == 'CDS']
                     if check_stops(trans, stops) == 1:
                         trans = pd.DataFrame()
 
-                    exon_processed = transcript_record.loc[(transcript_record[2] == 'exon') & (transcript_record[8].str.contains('transcript_biotype \"processed_transcript\"'))]
+                    exon_processed = transcript_record.loc[(transcript_record[gtf_type_column].str.lower() == 'exon') & (transcript_record[gtf_annotation_column].str.contains('transcript_biotype \"processed_transcript\"', case=False))]
 
-                    exon = transcript_record.loc[transcript_record[2] == 'exon']
+                    exon = transcript_record.loc[transcript_record[gtf_type_column].str.lower() == 'exon']
 
                     # Set priority and length for each type
                     length = 0
                     if ccds.empty == False:
                         priority = 1
                         for index, row in ccds.iterrows():
-                            length = length + (row[4] - row[3]) + 1
+                            length = length + (row[gtf_rightCoordinate_column] - row[gtf_leftCoordinate_column]) + 1
                     elif trans_ens_hav.empty == False:
                         priority = 2
                         for index, row in trans_ens_hav.iterrows():
-                            length = length + (row[4] - row[3]) + 1
+                            length = length + (row[gtf_rightCoordinate_column] - row[gtf_leftCoordinate_column]) + 1
                     elif trans.empty == False:
                         priority = 3
                         for index, row in trans.iterrows():
-                            length = length + (row[4] - row[3]) + 1
+                            length = length + (row[gtf_rightCoordinate_column] - row[gtf_leftCoordinate_column]) + 1
                     elif exon_processed.empty == False:
                         priority = 4
                         for index, row in exon_processed.iterrows():
-                            length = length + (row[4] - row[3]) + 1
+                            length = length + (row[gtf_rightCoordinate_column] - row[gtf_leftCoordinate_column]) + 1
                     elif exon.empty == False:
                         priority = 5
                         for index, row in exon.iterrows():
-                            length = length + (row[4] - row[3]) + 1
+                            length = length + (row[gtf_rightCoordinate_column] - row[gtf_leftCoordinate_column]) + 1
                     else:
                         priority = 6
                         length = 0
@@ -166,7 +174,7 @@ def longest_transcripts(
                     # Get overall transcribed length for CCDS tie-breakers
                     transcript_length = 0
                     for index, row in exon.iterrows():
-                        transcript_length = transcript_length + (row[4] - row[3]) + 1
+                        transcript_length = transcript_length + (row[gtf_rightCoordinate_column] - row[gtf_leftCoordinate_column]) + 1
 
                     # Make decision dataframe
                     transcript_info.append([priority, length, transcript_length, transcript_id])
@@ -175,11 +183,11 @@ def longest_transcripts(
                 # Compare the different transcripts for highest priority and longest transcript (each successive step takes cohort meeting previous step)
                 priority_max = min(transcript_data[0].tolist())
                 coding_max = max(transcript_data.loc[transcript_data[0] == priority_max][1].tolist()) # From all records having the best priority
-                transcript_max = max(transcript_data.loc[(transcript_data[0] == priority_max) & (transcript_data[1] == coding_max)][2].tolist()) # From all records with best priority and coding length
+                transcript_max = max(transcript_data.loc[(transcript_data[0] == priority_max) & (transcript_data[1] == coding_max)][gtf_type_column].tolist()) # From all records with best priority and coding length
 
                 # Keep first record that meets all above maxes in case of remaining tie-breaker
-                transcript_keep = transcript_data.loc[(transcript_data[0] == priority_max) & (transcript_data[1] == coding_max) & (transcript_data[2] == transcript_max)][3].tolist()[0]
-                long_transcripts.append(gtf.loc[gtf[8].str.contains(transcript_keep)])
+                transcript_keep = transcript_data.loc[(transcript_data[0] == priority_max) & (transcript_data[1] == coding_max) & (transcript_data[gtf_type_column] == transcript_max)][gtf_leftCoordinate_column].tolist()[0]
+                long_transcripts.append(gtf.loc[gtf[gtf_annotation_column].str.contains(transcript_keep, case=False)])
 
     #gtf = None # Garbage management
     gc.collect()
@@ -201,7 +209,7 @@ def protein_gtf(
         gtf):
 
     # Take only records that are annotated as 'protein coding'
-    gtf_coding = gtf[gtf.iloc[:, 8].str.contains('protein_coding') == True]
+    gtf_coding = gtf[gtf.iloc[:, gtf_annotation_column].str.contains('protein_coding', case=False) == True]
     gtf_coding = gtf_coding.reset_index(drop=True)
 
     gtf = None # Garbage management
@@ -228,9 +236,9 @@ def get_chunks(
         cores = int(threads)
 
     # Get number of times 'gene' is references in column 2 of GTF and if cores > #genes, limit
-    gene_instances = gtf.loc[gtf[2] == 'gene'].shape[0]
+    gene_instances = gtf.loc[gtf[gtf_type_column] == 'gene'].shape[0]
     if gene_instances == 0:
-        gene_instances = gtf.loc[gtf[2] == 'transcript'].shape[0]
+        gene_instances = gtf.loc[gtf[gtf_type_column] == 'transcript'].shape[0]
         if gene_instances == 0:
             raise Exception('No gene or transcript records found in GTF')
 
@@ -258,7 +266,7 @@ def get_chunks(
                 gtf_remainder = gtf.iloc[start:end]
 
                 n = -1 # Start at current record
-                gene_id_original = gtf_remainder.at[end + n, 8][(gtf_remainder.at[end + n, 8].find('gene_id \"') + 9):].split('\";')[0]
+                gene_id_original = gtf_remainder.at[end + n, gtf_annotation_column][(gtf_remainder.at[end + n, gtf_annotation_column].find('gene_id \"') + 9):].split('\";')[0]
                 gene_id_next = gene_id_original
 
                 amount = -1 # Set scan direction as reverse
@@ -269,7 +277,7 @@ def get_chunks(
                         gtf_remainder = gtf # Point back to original GTF to move past original end set for sub-GTF
 
                     n += amount # Take another step back until a new gene_id is found (or forward if hit the start)
-                    gene_id_next = gtf_remainder.at[end + n, 8][(gtf_remainder.at[end + n, 8].find('gene_id \"') + 9):].split('\";')[0]
+                    gene_id_next = gtf_remainder.at[end + n, gtf_annotation_column][(gtf_remainder.at[end + n, gtf_annotation_column].find('gene_id \"') + 9):].split('\";')[0]
 
             if amount == 1: # Correct for scan direction pivot
                 n -= 1
@@ -324,7 +332,7 @@ def edit_gtf(
         output = False # Turn off intermediates output
         file_name = None
     elif str(gtf).endswith('.gtf'):
-        file_name = str(gtf[:-4]) + '_' # Get rid of GTF extension for now
+        file_name = str(gtf[:-gtf_rightCoordinate_column]) + '_' # Get rid of GTF extension for now
         gtf = pd.read_csv(
             str(gtf),
             sep = '\t',
