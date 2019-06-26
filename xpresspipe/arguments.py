@@ -551,16 +551,14 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--sjdbOverhang',
-        help = 'Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, \
-        so for 2x100bp paired-end reads, you would use 100-1 = 99. However, the default value of 100 should work in most cases',
+        help = 'Specify length of genomic sequences used for constructing splice-aware reference previously. Ideal length is read length -1, so for 2x100bp paired-end reads, you would use 100-1 = 99. However, the default value of 100 should work in most cases',
         metavar = '<sjdbOverhang_amount>',
         type = int,
         default = 100,
         required = False)
     pe_opts.add_argument(
         '--mismatchRatio',
-        help = 'Alignment ratio of mismatches to mapped length is less than this value. See STAR documentation for more information on \
-        setting this parameter',
+        help = 'Alignment ratio of mismatches to mapped length is less than this value. See STAR documentation for more information on setting this parameter',
         metavar = '<mismatchRatio>',
         type = float,
         default = 0.1,
