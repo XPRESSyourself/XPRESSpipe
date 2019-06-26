@@ -202,28 +202,18 @@ def alignment_process(
         paired=False):
 
     # Only take unique mappers (q = 255)
-    os.system(
-        'samtools view'
-        + ' -h' # Keep SAM header in output
-        + ' -q 255' # Keep unique mappers
-        + ' --threads ' + str(args_dict['threads'])
-        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam'
-        + str(args_dict['log']))
-
-    # Sort SAM file
-    os.system(
-        'samtools sort'
-        + ' --threads ' + str(args_dict['threads'])
-        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
-        + str(args_dict['log']))
-
-    # Index BAM file
-    os.system(
-        'samtools index'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
-        + str(args_dict['log']))
+    if args_dict['allow_multimappers'] == False:
+        os.system(
+            'samtools view'
+            + ' -h' # Keep SAM header in output
+            + ' -q 255' # Keep unique mappers
+            + ' --threads ' + str(args_dict['threads'])
+            + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
+            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam'
+            + str(args_dict['log']))
+        file_suffix = '_Aligned.unique.bam'
+    else:
+        file_suffix = '_Aligned.out.bam'
 
     # Fixmates for paired-end
     if paired == True:
@@ -250,7 +240,20 @@ def alignment_process(
 
         file_suffix = '_fixed.sort.bam'
     else:
+        # Sort SAM file
+        os.system(
+            'samtools sort'
+            + ' --threads ' + str(args_dict['threads'])
+            + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+            + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix)
+            + str(args_dict['log']))
         file_suffix = '_Aligned.sort.bam'
+
+    # Index BAM file
+    os.system(
+        'samtools index'
+        + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix)
+        + str(args_dict['log']))
 
     # Use sorted BAM file to find any duplicate reads
     os.system(

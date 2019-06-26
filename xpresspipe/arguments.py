@@ -133,12 +133,13 @@ def check_inputs(
         else:
             raise Exception('Invalid quantification method provided: must be \"cufflinks\" or \"htseq\"')
 
-    if 'gtf' in args_dict and args_dict['gtf'] != None and str(args_dict['gtf'].lower()[-4:]) != '.gtf':
+    if 'gtf' in args_dict and args_dict['gtf'] != None and str(args_dict['gtf']).lower()[-4:] != '.gtf':
         raise Exception('Invalid reference_type value provided')
 
     # Check max_processor input
     if 'max_processors' in args_dict \
-    and args_dict['max_processors'] !=  None:
+    and args_dict['max_processors'] !=  None \
+    and isinstance(args_dict['max_processors'], str) == False:
         args_dict['max_processors'] = int(args_dict['max_processors'])
 
         if multiprocessing.cpu_count() < args_dict['max_processors']:
@@ -152,7 +153,7 @@ def check_inputs(
     # Check number of adaptors provided
     if 'adaptors' in args_dict:
         if isinstance(args_dict['adaptors'], list) == True:
-            args_dict['adaptors'] = [a.upper() for a in args_dict['adaptors']]
+            args_dict['adaptors'] = [a.upper() if a != None else None for a in args_dict['adaptors'] ]
             for x in args_dict['adaptors']:
                 if type(x) != str:
                     raise Exception('Adaptors must be provided as a list of strings')
@@ -243,7 +244,7 @@ def check_inputs(
         'echo \"' + str(key) + ': ' + str(value) + '\"'
         + str(args_dict['log']))
     os.system(
-        'echo \"=====================\nEnd commands summary:\n=====================\"'
+        'echo \"=====================\nEnd commands summary\n=====================\n\"'
         + str(args_dict['log']))
 
     return args_dict
@@ -341,6 +342,11 @@ def get_arguments(
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_READ_MIN,
+        required = False)
+    se_opts.add_argument(
+        '--allow_multimappers',
+        help = 'Include flag to allow multimapping reads to be output and used in downstream analyses',
+        action = 'store_true',
         required = False)
     se_opts.add_argument(
         '--deduplicate',
@@ -496,6 +502,11 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     pe_opts.add_argument(
+        '--allow_multimappers',
+        help = 'Include flag to allow multimapping reads to be output and used in downstream analyses',
+        action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
         '--deduplicate',
         help = 'Include flag to quantify reads with de-duplication',
         action = 'store_true',
@@ -647,6 +658,11 @@ def get_arguments(
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_READ_MIN,
+        required = False)
+    rp_opts.add_argument(
+        '--allow_multimappers',
+        help = 'Include flag to allow multimapping reads to be output and used in downstream analyses',
+        action = 'store_true',
         required = False)
     rp_opts.add_argument(
         '--deduplicate',
@@ -826,6 +842,11 @@ def get_arguments(
     align_opts.add_argument(
         '--two-pass',
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
+        action = 'store_true',
+        required = False)
+    align_opts.add_argument(
+        '--allow_multimappers',
+        help = 'Include flag to allow multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
