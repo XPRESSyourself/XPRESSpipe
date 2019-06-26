@@ -92,7 +92,7 @@ test_dict = {
     'adaptors': adap4,
     'cmd': 'riboseq'} # Check the None input works
 t = check_inputs(test_dict)
-assert t['adaptors'] == adap4
+assert t['adaptors'] == ['NONE']
 
 test_dict = {
     'adaptors': adap5,
