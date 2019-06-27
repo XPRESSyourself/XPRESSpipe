@@ -243,16 +243,16 @@ def check_inputs(
     os.system(
         'echo \"======================\nUser commands summary:\n======================\"'
         + str(args_dict['log']))
-    print('echo \"======================\nUser commands summary:\n======================\"')
+    print('======================\nUser commands summary:\n======================')
     for key, value in args_dict.items():
         os.system(
         'echo \"' + str(key) + ': ' + str(value) + '\"'
         + str(args_dict['log']))
-        print('echo \"' + str(key) + ': ' + str(value) + '\"')
+        print(str(key) + ': ' + str(value))
     os.system(
         'echo \"=====================\nEnd commands summary\n=====================\n\"'
         + str(args_dict['log']))
-    print('echo \"=====================\nEnd commands summary\n=====================\n\"')
+    print('=====================\nEnd commands summary\n=====================\n')
 
     return args_dict
 
