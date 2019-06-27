@@ -201,20 +201,6 @@ def alignment_process(
         args_dict,
         paired=False):
 
-    # Only take unique mappers (q = 255)
-    if args_dict['allow_multimappers'] == False:
-        os.system(
-            'samtools view'
-            + ' -h' # Keep SAM header in output
-            + ' -q 255' # Keep unique mappers
-            + ' --threads ' + str(args_dict['threads'])
-            + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
-            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam'
-            + str(args_dict['log']))
-        file_suffix = '_Aligned.unique.bam'
-    else:
-        file_suffix = '_Aligned.out.bam'
-
     # Fixmates for paired-end
     if paired == True:
 
@@ -223,7 +209,7 @@ def alignment_process(
         'samtools sort'
         + ' -n'
         + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.namesort.bam'
-        + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix))
+        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam')
 
         # Run fixmate
         os.system(
@@ -238,17 +224,33 @@ def alignment_process(
         + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
         + ' ' + str(args_dict['alignments']) + str(output) + '_fixed.namesort.bam')
 
-        file_suffix = '_Aligned.sort.bam'
     else:
         # Sort SAM file
         os.system(
             'samtools sort'
             + ' --threads ' + str(args_dict['threads'])
             + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
-            + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix)
+            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam'
             + str(args_dict['log']))
-        file_suffix = '_Aligned.sort.bam'
 
+    # Only take unique mappers (q = 255)
+    if args_dict['allow_multimappers'] == False:
+        os.system(
+            'samtools view'
+            + ' -h' # Keep SAM header in output
+            + ' -q 255' # Keep unique mappers
+            + ' --threads ' + str(args_dict['threads'])
+            + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
+            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+            + str(args_dict['log']))
+        os.system(
+            'mv '
+            + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
+            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+        file_suffix = '_Aligned.sort.bam'
+    else:
+        file_suffix = '_Aligned.sort.bam'
+        
     # Index BAM file
     os.system(
         'samtools index'
