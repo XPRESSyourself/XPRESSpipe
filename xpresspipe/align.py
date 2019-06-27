@@ -234,7 +234,7 @@ def alignment_process(
             + str(args_dict['log']))
 
     # Only take unique mappers (q = 255)
-    if args_dict['allow_multimappers'] == False:
+    if args_dict['no_multimappers'] == True:
         os.system(
             'samtools view'
             + ' -h' # Keep SAM header in output

@@ -351,8 +351,8 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     se_opts.add_argument(
-        '--allow_multimappers',
-        help = 'Include flag to allow multimapping reads to be output and used in downstream analyses',
+        '--no_multimappers',
+        help = 'Include flag to remove multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
         required = False)
     se_opts.add_argument(
@@ -509,8 +509,8 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     pe_opts.add_argument(
-        '--allow_multimappers',
-        help = 'Include flag to allow multimapping reads to be output and used in downstream analyses',
+        '--no_multimappers',
+        help = 'Include flag to remove multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
         required = False)
     pe_opts.add_argument(
@@ -665,8 +665,8 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     rp_opts.add_argument(
-        '--allow_multimappers',
-        help = 'Include flag to allow multimapping reads to be output and used in downstream analyses',
+        '--no_multimappers',
+        help = 'Include flag to remove multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
@@ -850,8 +850,8 @@ def get_arguments(
         action = 'store_true',
         required = False)
     align_opts.add_argument(
-        '--allow_multimappers',
-        help = 'Include flag to allow multimapping reads to be output and used in downstream analyses',
+        '--no_multimappers',
+        help = 'Include flag to remove multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
