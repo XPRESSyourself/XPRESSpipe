@@ -368,8 +368,8 @@ def align(
         paired=paired)
 
     # Clean up the output
-    #remove_intermediates(
-    #    args_dict)
+    remove_intermediates(
+        args_dict)
 
     args_dict['threads'] = thread_count
 
@@ -456,6 +456,6 @@ def run_peRNAseq(
             pe_align,
             files,
             args_dict)
-        #clean_reference_directory(args_dict)
+        clean_reference_directory(args_dict)
 
     return args_dict
