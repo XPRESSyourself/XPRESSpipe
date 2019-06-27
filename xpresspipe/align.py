@@ -246,11 +246,11 @@ def alignment_process(
         os.system(
             'mv '
             + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
-            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam')
         file_suffix = '_Aligned.sort.bam'
     else:
         file_suffix = '_Aligned.sort.bam'
-        
+
     # Index BAM file
     os.system(
         'samtools index'
