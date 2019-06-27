@@ -179,13 +179,17 @@ def check_inputs(
             if str(args_dict['stranded']).lower() == 'no' \
             or str(args_dict['stranded']).lower() == 'yes':
                 pass
+            elif str(args_dict['stranded']).lower() == 'fr-unstranded':
+                args_dict['stranded'] = 'no'
             else:
                 raise Exception('Invalid strandedness option for HTSeq-count')
         elif str(args_dict['quantification_method']).lower() == 'cufflinks':
-            if str(args_dict['stranded']).lower() == 'fr-unstranded ' \
+            if str(args_dict['stranded']).lower() == 'fr-unstranded' \
             or str(args_dict['stranded']).lower() == 'fr-firststrand' \
             or str(args_dict['stranded']).lower() == 'fr-secondstrand':
                 pass
+            elif str(args_dict['stranded']).lower() == 'no':
+                args_dict['stranded'] = 'fr-unstranded'
             else:
                 raise Exception('Invalid strandedness option for Cufflinks')
 
@@ -239,13 +243,16 @@ def check_inputs(
     os.system(
         'echo \"======================\nUser commands summary:\n======================\"'
         + str(args_dict['log']))
+    print('echo \"======================\nUser commands summary:\n======================\"')
     for key, value in args_dict.items():
         os.system(
         'echo \"' + str(key) + ': ' + str(value) + '\"'
         + str(args_dict['log']))
+        print('echo \"' + str(key) + ': ' + str(value) + '\"')
     os.system(
         'echo \"=====================\nEnd commands summary\n=====================\n\"'
         + str(args_dict['log']))
+    print('echo \"=====================\nEnd commands summary\n=====================\n\"')
 
     return args_dict
 
@@ -376,7 +383,7 @@ def get_arguments(
         '--stranded',
         help = 'Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)',
         metavar = '<fr-unstranded/fr-firststrand/fr-secondstrand||no/yes>',
-        default = 'no',
+        default = 'fr-unstranded',
         type = str,
         required = False)
     se_opts.add_argument(
@@ -534,7 +541,7 @@ def get_arguments(
         '--stranded',
         help = 'Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)',
         metavar = '<fr-unstranded/fr-firststrand/fr-secondstrand||no/yes>',
-        default = 'no',
+        default = 'fr-unstranded',
         type = str,
         required = False)
     pe_opts.add_argument(
@@ -946,7 +953,7 @@ def get_arguments(
         '--stranded',
         help = 'Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)',
         metavar = '<fr-unstranded/fr-firststrand/fr-secondstrand||no/yes>',
-        default = 'no',
+        default = 'fr-unstranded',
         type = str,
         required = False)
     count_opts.add_argument(

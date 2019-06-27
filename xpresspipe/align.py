@@ -223,7 +223,7 @@ def alignment_process(
         'samtools sort'
         + ' -n'
         + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.namesort.bam'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam')
+        + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix))
 
         # Run fixmate
         os.system(
@@ -235,10 +235,10 @@ def alignment_process(
         # Convert back to coordinate sorted because markdup doesn't accept name sorted files
         os.system(
         'samtools sort'
-        + ' -o ' + str(args_dict['alignments']) + str(output) + '_fixed.sort.bam'
+        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
         + ' ' + str(args_dict['alignments']) + str(output) + '_fixed.namesort.bam')
 
-        file_suffix = '_fixed.sort.bam'
+        file_suffix = '_Aligned.sort.bam'
     else:
         # Sort SAM file
         os.system(
@@ -289,6 +289,8 @@ def remove_intermediates(
         + " " + str(args_dict['alignments'])
         + " ! -name '*_Aligned.sort.bam'"
         + " ! -name '*_Aligned.sort.bam.bai'"
+        + " ! -name '*_fixed.sort.bam'"
+        + " ! -name '*_fixed.sort.bam.bai'"
         + " ! -name '*_dedupMarked.bam'"
         + " ! -name '*_dedupRemoved.bam'"
         + " ! -name '*_dedupRemoved.bam.bai'"
@@ -366,8 +368,8 @@ def align(
         paired=paired)
 
     # Clean up the output
-    remove_intermediates(
-        args_dict)
+    #remove_intermediates(
+    #    args_dict)
 
     args_dict['threads'] = thread_count
 
@@ -454,6 +456,6 @@ def run_peRNAseq(
             pe_align,
             files,
             args_dict)
-        clean_reference_directory(args_dict)
+        #clean_reference_directory(args_dict)
 
     return args_dict
