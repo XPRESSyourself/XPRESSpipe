@@ -167,6 +167,8 @@ def check_inputs(
                     raise Exception('Adaptors sequence contains an invalid character')
                 else:
                     pass
+        elif args_dict['adaptors'] == None:
+            args_dict['adaptors'] = 'NONE'
         else:
             raise Exception('Something went wrong with the adaptor input formatting. Expected a list, but got ' \
             + str(type(args_dict['adaptors'])))
