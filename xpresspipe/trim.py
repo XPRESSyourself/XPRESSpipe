@@ -39,14 +39,14 @@ def determine_type(
             # Convert case
             adaptor_list = [x.upper() for x in adaptor_list]
             if len(adaptor_list) == 1:
-                if 'NONE' in adaptor_list:
+                if 'NONE' in adaptor_list or adaptor_list == 'NONE':
                     return 'AUTOSE'
-                elif 'POLYX' in adaptor_list:
+                elif 'POLYX' in adaptor_list or adaptor_list == 'POLYX':
                     return 'POLYX'
                 else:
                     return 'SE'
             elif len(adaptor_list) == 2:
-                if 'NONE' in adaptor_list:
+                if 'NONE' in adaptor_list or adaptor_list[0] == 'NONE':
                     return 'AUTOPE'
                 else:
                     return 'PE'

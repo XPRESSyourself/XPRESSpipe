@@ -174,7 +174,7 @@ def check_inputs(
                 raise Exception('A maximum of 2 adaptors may be provided')
 
         elif args_dict['adaptors'] == None:
-            args_dict['adaptors'] = 'NONE'
+            pass
 
         else:
             raise Exception('Something went wrong with the adaptor input formatting. Expected a list, but got ' \
