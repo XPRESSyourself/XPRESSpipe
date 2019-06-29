@@ -152,8 +152,10 @@ def check_inputs(
 
     # Check number of adaptors provided
     if 'adaptors' in args_dict:
+
         if isinstance(args_dict['adaptors'], list) == True:
             args_dict['adaptors'] = [a.upper() if a != None else None for a in args_dict['adaptors'] ]
+
             for x in args_dict['adaptors']:
                 if type(x) != str:
                     raise Exception('Adaptors must be provided as a list of strings')
@@ -167,14 +169,18 @@ def check_inputs(
                     raise Exception('Adaptors sequence contains an invalid character')
                 else:
                     pass
+
+            if len(args_dict['adaptors']) > 2:
+                raise Exception('A maximum of 2 adaptors may be provided')
+
         elif args_dict['adaptors'] == None:
             args_dict['adaptors'] = 'NONE'
+
         else:
             raise Exception('Something went wrong with the adaptor input formatting. Expected a list, but got ' \
             + str(type(args_dict['adaptors'])))
 
-        if len(args_dict['adaptors']) > 2:
-            raise Exception('A maximum of 2 adaptors may be provided')
+
 
     if 'quantification_method' in args_dict and 'stranded' in args_dict:
         if str(args_dict['quantification_method']).lower() == 'htseq':
