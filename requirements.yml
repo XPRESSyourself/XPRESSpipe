@@ -8,9 +8,7 @@ channels:
 
 dependencies:
   - pandas
-  - matplotlib
   - numpy
-  - plotly
   - scipy
   - r
   - libiconv
@@ -22,6 +20,7 @@ dependencies:
   - htseq
   - fastqc
   - biopython
+  - matplotlib<3.0.0,>=2.1.1
   - multiqc
   - numpydoc
   - psutil
