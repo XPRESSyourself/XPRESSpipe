@@ -39,33 +39,32 @@ def get_distribution(
     file2=None):
 
     # Get files
-    f1 = open(str(args_dict['input']) + str(file1), 'r').readlines()
-    if file2 != None:
-        f2 = open(str(args_dict['input']) + str(file1), 'r').readlines()
+    with open(str(args_dict['input']) + str(file1), 'r').readlines() as f1:
+        if file2 != None:
+            f2 = open(str(args_dict['input']) + str(file1), 'r').readlines()
 
-    # Get lengths of reads
-    dist_list = Counter()
-    for i, line in enumerate(f1[1:], 1):
-        if (i - 1) % 4 == 0:
-            length = len(line)
-            if file2 != None:
-                length += len(f2[i])
-            dist_list[length] += 1
+        # Get lengths of reads
+        dist_list = Counter()
+        for i, line in enumerate(f1[1:], 1):
+            if (i - 1) % 4 == 0:
+                length = len(line)
+                if file2 != None:
+                    length += len(f2[i])
+                dist_list[length] += 1
 
-    # Compile length statistics
-    distribution_profile = pd.DataFrame(dist_list, index=[0]).T
-    distribution_profile.columns = ['count']
+        # Compile length statistics
+        distribution_profile = pd.DataFrame(dist_list, index=[0]).T
+        distribution_profile.columns = ['count']
 
-    # Export metrics
-    distribution_profile['read size (bp)'] = distribution_profile.index
-    distribution_profile.to_csv(
-        str(args_dict['read_distributions']) + 'metrics/' + str(file1)[:-6] + '_metrics.txt',
-        sep='\t')
+        # Export metrics
+        distribution_profile['read size (bp)'] = distribution_profile.index
+        distribution_profile.to_csv(
+            str(args_dict['read_distributions']) + 'metrics/' + str(file1)[:-6] + '_metrics.txt',
+            sep='\t')
 
-    # Clean up variables
-    f1.close()
-    if file2 != None:
-        f2.close()
+        # Clean up variables
+        if file2 != None:
+            f2.close()
 
 """Single-end RNA-seq pipeline"""
 def se_dist(
