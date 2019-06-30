@@ -62,6 +62,11 @@ def get_distribution(
         str(args_dict['read_distributions']) + 'metrics/' + str(file1)[:-6] + '_metrics.txt',
         sep='\t')
 
+    # Clean up variables
+    f1.close()
+    if file2 != None:
+        f2.close()
+
 """Single-end RNA-seq pipeline"""
 def se_dist(
         args):
