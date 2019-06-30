@@ -405,12 +405,15 @@ def main(
 
         # Run quality control
         msg_quality()
+        # Get multiqc report and print close message
+        get_multiqc_summary(args_dict)
+
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
-        make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        make_complexity(args_dict)
         make_metagene(args_dict)
 
         check_process(
@@ -418,8 +421,6 @@ def main(
             msg_complete(),
             'QUALITY CONTROL') # Check log file for errors and exceptions
 
-        # Get multiqc report and print close message
-        get_multiqc_summary(args_dict)
         msg_finish()
 
     elif args.cmd == 'peRNAseq':
@@ -472,12 +473,15 @@ def main(
 
         # Run quality control
         msg_quality()
+        # Get multiqc report and print close message
+        get_multiqc_summary(args_dict)
+
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
-        make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
+        make_complexity(args_dict)
         make_metagene(args_dict)
 
         check_process(
@@ -485,8 +489,6 @@ def main(
             msg_complete(),
             'QUALITY CONTROL') # Check log file for errors and exceptions
 
-        # Get multiqc report and print close message
-        get_multiqc_summary(args_dict)
         msg_finish()
 
     elif args.cmd == 'riboseq':
@@ -539,6 +541,9 @@ def main(
 
         # Run quality control
         msg_quality()
+        # Get multiqc report and print close message
+        get_multiqc_summary(args_dict)
+
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
 
@@ -553,8 +558,6 @@ def main(
             msg_complete(),
             'QUALITY CONTROL') # Check log file for errors and exceptions
 
-        # Get multiqc report and print close message
-        get_multiqc_summary(args_dict)
         msg_finish()
 
     else:
