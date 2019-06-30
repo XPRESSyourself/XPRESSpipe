@@ -53,7 +53,7 @@ def get_distribution(
             dist_list[length] += 1
 
     # Compile length statistics
-    distribution_profile = pd.DataFrame(c, index=[0]).T
+    distribution_profile = pd.DataFrame(dist_list, index=[0]).T
     distribution_profile.columns = ['count']
 
     # Export metrics
