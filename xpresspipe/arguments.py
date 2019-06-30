@@ -29,6 +29,7 @@ import multiprocessing
 from textwrap import dedent
 
 """IMPORT INTERNAL DEPENDENCIES"""
+from .__init__ import __version__
 from .utils import check_directories
 
 """INITIALIZATION PARAMETERS"""
@@ -97,9 +98,6 @@ description_table  =  """\
 """Check arguments provided by user"""
 def check_inputs(
     args_dict):
-
-    print(args_dict)
-
 
     # Check user-provided directory formatting
     ignore_list = [
@@ -225,6 +223,15 @@ def check_inputs(
         args_dict['log_file'] = str(args_dict['log_loc']) + str(args_dict['experiment']) + '.log'
     else:
         cdt = datetime.datetime.now()
+        args_dict['experiment'] = (
+            str(args_dict['cmd'])
+            + '_' + str(cdt.year)
+            + '_' + str(cdt.month)
+            + '_' + str(cdt.day)
+            + '_' + str(cdt.hour)
+            + 'h_' + str(cdt.minute)
+            + 'm_' + str(cdt.second)
+            + 's')
         args_dict['log'] = (
             ' >> '
             + str(args_dict['log_loc'])
@@ -252,6 +259,12 @@ def check_inputs(
         'echo \"======================\nUser commands summary:\n======================\"'
         + str(args_dict['log']))
     print('======================\nUser commands summary:\n======================')
+    os.system(
+    'echo \"XPRESSpipe version: ' + str(__version__) + '\"'
+    + str(args_dict['log']))
+    print('XPRESSpipe version: ' + str(__version__))
+
+
     for key, value in args_dict.items():
         os.system(
         'echo \"' + str(key) + ': ' + str(value) + '\"'
@@ -1082,18 +1095,19 @@ def get_arguments(
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
-    metagene_reqs.add_argument(
-        '-e', '--experiment',
-        help = 'Experiment name',
-        metavar = '<experiment_name>',
-        type = str,
-        required = True)
+
     # Optional arguments
     metagene_opts  =  metagene_parser.add_argument_group('optional arguments')
     metagene_opts.add_argument(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    metagene_opts.add_argument(
+        '-e', '--experiment',
+        help = 'Experiment name',
+        metavar = '<experiment_name>',
+        type = str,
+        required = False)
     metagene_opts.add_argument(
         '--bam_suffix',
         help = 'Change from default suffix of _Aligned.sort.bam',
@@ -1148,18 +1162,18 @@ def get_arguments(
         metavar = '<gene name>',
         type = str,
         required = True)
-    coverage_reqs.add_argument(
-        '-e', '--experiment',
-        help = 'Experiment name',
-        metavar = '<experiment_name>',
-        type = str,
-        required = True)
     # Optional arguments
     coverage_opts  = coverage_parser.add_argument_group('optional arguments')
     coverage_opts.add_argument(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    coverage_opts.add_argument(
+        '-e', '--experiment',
+        help = 'Experiment name',
+        metavar = '<experiment_name>',
+        type = str,
+        required = False)
     coverage_opts.add_argument(
         '--bam_suffix',
         help = 'Change from default suffix of _Aligned.sort.bam',
@@ -1209,7 +1223,6 @@ def get_arguments(
         metavar = '<path>',
         type = str,
         required = True)
-
     # Optional arguments
     distribution_opts = distribution_parser.add_argument_group('optional arguments')
     distribution_opts.add_argument(
@@ -1220,8 +1233,22 @@ def get_arguments(
         '-t', '--type',
         help = 'Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
         metavar = '<SE or PE>',
+        default = 'SE',
         type = str,
-        required = True)
+        required = False)
+    distribution_opts.add_argument(
+        '-e', '--experiment',
+        help = 'Experiment name',
+        metavar = '<experiment_name>',
+        type = str,
+        required = False)
+    distribution_opts.add_argument(
+        '-m', '--max_processors',
+        help = 'Number of max processors to use for tasks (default: No limit)',
+        metavar = '<processors>',
+        type = int,
+        default = DEFAULT_MAX_PROCESSORS,
+        required = False)
 
     """PERIODICITY SUBPARSER"""
     period_parser = subparser.add_parser(
@@ -1248,12 +1275,6 @@ def get_arguments(
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
-    period_reqs.add_argument(
-        '-e', '--experiment',
-        help = 'Experiment name',
-        metavar = '<experiment_name>',
-        type = str,
-        required = True)
     # Optional arguments
     period_opts  =  period_parser.add_argument_group('optional arguments')
     period_opts.add_argument(
@@ -1266,6 +1287,19 @@ def get_arguments(
         metavar = '<suffix>',
         default = '_Aligned.sort.bam',
         type = str,
+        required = False)
+    period_opts.add_argument(
+        '-e', '--experiment',
+        help = 'Experiment name',
+        metavar = '<experiment_name>',
+        type = str,
+        required = False)
+    period_opts.add_argument(
+        '-m', '--max_processors',
+        help = 'Number of max processors to use for tasks (default: No limit)',
+        metavar = '<processors>',
+        type = int,
+        default = DEFAULT_MAX_PROCESSORS,
         required = False)
 
     """COMPLEXITY SUBPARSER"""
@@ -1294,24 +1328,26 @@ def get_arguments(
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
-    complex_reqs.add_argument(
-        '-t', '--type',
-        help = 'Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
-        metavar = '<SE or PE>',
-        type = str,
-        required = True)
-    complex_reqs.add_argument(
-        '-e', '--experiment',
-        help = 'Experiment name',
-        metavar = '<experiment_name>',
-        type = str,
-        required = True)
+
     # Optional arguments
     complex_opts = complex_parser.add_argument_group('optional arguments')
     complex_opts.add_argument(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    complex_opts.add_argument(
+        '-t', '--type',
+        help = 'Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
+        metavar = '<SE or PE>',
+        default = 'SE',
+        type = str,
+        required = False)
+    complex_opts.add_argument(
+        '-e', '--experiment',
+        help = 'Experiment name',
+        metavar = '<experiment_name>',
+        type = str,
+        required = False)
     complex_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
