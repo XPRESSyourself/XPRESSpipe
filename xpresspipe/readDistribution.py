@@ -24,6 +24,7 @@ import os
 import sys
 import pandas as pd
 from math import ceil
+from collections import Counter
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .parallel import parallelize, parallelize_pe
@@ -43,23 +44,17 @@ def get_distribution(
         f2 = open(str(args_dict['input']) + str(file1), 'r').readlines()
 
     # Get lengths of reads
-    dist_list = []
+    dist_list = Counter()
     for i, line in enumerate(f1[1:], 1):
-
         if (i - 1) % 4 == 0:
             length = len(line)
             if file2 != None:
                 length += len(f2[i])
-            dist_list.append(length)
+            dist_list[length] += 1
 
     # Compile length statistics
-    distribution_profile = pd.DataFrame(
-        0,
-        index = range(0, max(dist_list) + 5),
-        columns = ['count'])
-
-    for x in dist_list:
-        distribution_profile.at[x, 'count'] += 1
+    distribution_profile = pd.DataFrame(c, index=[0]).T
+    distribution_profile.columns = ['count']
 
     # Export metrics
     distribution_profile['read size (bp)'] = distribution_profile.index
