@@ -35,6 +35,7 @@ Func: Threshold number of workers if available RAM is insufficient with number o
 - Get max file size in list and total memory available
 - If it seems like the expansion of memory will kill the process, modify the number of workers allowed at a time to ensure RAM doesn't get overused at once
 - Assume incoming BAM files will expand a lot more than a normal, non-binary file
+Notes: If running into issues with OOM kills or a BrokenProcessPool, try upping the factor variable as a temporary fix until can make a better RAM-sensitive mod
 """
 def threshold_ram(
     args_dict,
