@@ -107,7 +107,7 @@ def run_pools(
     args_iter,
     args_dict):
 
-    pools = math.ceil(len(args_iter) / args_dict['workers'])
+    pools = int(math.ceil(len(args_iter) / args_dict['workers']))
 
     it_list = []
     range_number = 0
