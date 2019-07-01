@@ -381,7 +381,10 @@ def se_align(
 
     file, args_dict = args[0], args[1]
 
-    output = str(file[8:-6]) # Get output file name before adding path to file name(s)
+    if 'trimmed_' in file: # Get output file name before adding path to file name(s)
+        output = str(file[8:-7])
+    else:
+        output = str(file[:-7])
     file = str(args_dict['input']) + str(file)
 
     align(args_dict, output, file)
@@ -393,7 +396,10 @@ def pe_align(
     file1, file2, args_dict = args[0], args[1], args[2]
 
     # STAR first pass
-    output = str(file1[8:-7]) # Get output file name before adding path to file name(s)
+    if 'trimmed_' in file1: # Get output file name before adding path to file name(s)
+        output = str(file1[8:-7])
+    else:
+        output = str(file1[:-7])
     file = str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2)
 
     align(args_dict, output, file, paired=True)
