@@ -95,7 +95,7 @@ os.system(
 
 # Verify output by examining output count table with truth table and asserting on correlation
 r_vals = []
-rp_counts = str(rp_output) + 'counts/riboseq_test_cufflinks_FPKM_table.tsv'
+rp_counts = str(rp_output) + 'counts/riboseq_test_count_table_rpmNormalized.tsv'
 rp_truth = str(__path__) + 'other/riboseq_truth.tsv'
 rp_test_table = pd.read_csv(rp_counts, sep='\t', index_col=0)
 rp_truth_table = pd.read_csv(rp_truth, sep='\t', index_col=0)
