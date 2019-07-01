@@ -104,7 +104,7 @@ def count_file_cufflinks(
         + ' ' + str(args_dict['input']) + str(file)
         + ' --output-dir ' + str(args_dict['counts']) + str(dir_name)
         + ' --GTF ' + str(args_dict['gtf'])
-        + ' –-library-type ' + str(args_dict['stranded']).lower()
+        + ' --library-type ' + str(args_dict['stranded']).lower()
         + ' --num-threads 1'
         + str(args_dict['log']))
 
