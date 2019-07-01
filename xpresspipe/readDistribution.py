@@ -52,6 +52,11 @@ def get_distribution(
                 length += len(f2[i])
             dist_list[length] += 1
 
+    # Clean up variables
+    f1 = None
+    if file2 != None:
+        f2 = None
+
     # Compile length statistics
     distribution_profile = pd.DataFrame(dist_list, index=[0]).T
     distribution_profile.columns = ['count']
@@ -61,11 +66,6 @@ def get_distribution(
     distribution_profile.to_csv(
         str(args_dict['read_distributions']) + 'metrics/' + str(file1)[:-6] + '_metrics.txt',
         sep='\t')
-
-    # Clean up variables
-    f1 = None
-    if file2 != None:
-        f2 = None
 
 """Single-end RNA-seq pipeline"""
 def se_dist(

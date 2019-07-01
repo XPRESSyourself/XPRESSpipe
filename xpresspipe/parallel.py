@@ -49,9 +49,9 @@ def threshold_ram(
     _max = max(file_sizes)
 
     if file[-4:] == '.bam': # Assume binary files will expand by factor of 4 for decompression and additional data storage used in process
-        factor = 5
+        factor = 4
     else:
-        factor = 2
+        factor = 1
 
     threshold_workers = math.floor(total / (_max * factor)) # Set threshold based on max file size in set
     if threshold_workers < 1:
