@@ -75,6 +75,9 @@ def main(
         # Trim reads
         run_trim(args_dict)
 
+        print('Generating multiqc summary...')
+        get_multiqc_summary(args_dict)
+
         # Check log file for errors and exceptions
         check_process(
             args_dict['log_file'],
@@ -97,6 +100,9 @@ def main(
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
 
+        print('Generating multiqc summary...')
+        get_multiqc_summary(args_dict)
+
         # Check log file for errors and exceptions
         check_process(
             args_dict['log_file'],
@@ -113,6 +119,9 @@ def main(
         print('Collecting and collating counts...')
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
+
+        print('Generating multiqc summary...')
+        get_multiqc_summary(args_dict)
 
         # Check log file for errors and exceptions
         check_process(
