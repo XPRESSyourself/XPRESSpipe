@@ -18,6 +18,7 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
 """IMPORT DEPENDENCIES"""
 import os
@@ -28,6 +29,7 @@ import pandas as pd
 from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index, make_flatten
 from .utils import add_directory, get_files
 from .parallel import parallelize
+
 """Get meta and periodicity indices from GTF"""
 def get_indices(
     args_dict,

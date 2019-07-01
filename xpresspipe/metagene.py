@@ -55,12 +55,19 @@ def get_coordinate_records_meta(
         search_coordinate_start):
 
     record_array = []
-    chromosome_array = coordinate_index[chromosome_index[search_chromosome]]
-    for index, record in enumerate(chromosome_array):
-        if record[0] <= search_coordinate_start and record[1] >= search_coordinate_start:
-            record_array.append(record)
+    try:
+        chromosome_array = coordinate_index[chromosome_index[search_chromosome]]
+        for index, record in enumerate(chromosome_array):
+            if record[0] <= search_coordinate_start and record[1] >= search_coordinate_start:
+                record_array.append(record)
 
-    return record_array
+        return record_array
+    except:
+        print('Failed here:')
+        print(coordinate_index)
+        print(chromosome_index)
+        print(search_chromosome)
+        print(search_coordinate_start)
 
 """Get meta profile for bam file"""
 def get_meta_profile(
