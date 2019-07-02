@@ -38,8 +38,8 @@ gtf_base = [
 [19,	'havana',	'exon',	        60951,	61894,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "3"' ],
 
 [19,	'havana',	'transcript',	60951,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459";' ],
-[19,	'havana',	'exon',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
-[19,	'havana',	'exon',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
+[19,	'havana',	'exon',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
+[19,	'havana',	'exon',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'+',	'.',	'gene_id "ENSG00000282495";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'+',	'.',	'gene_id "ENSG00000282495"; transcript_id "ENST00000282460";' ],
@@ -49,14 +49,14 @@ gtf_base = [
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461";' ],
-[19,	'havana',	'exon',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
+[19,	'havana',	'exon',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
 [19,	'havana',	'exon',	        60970,	61500,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "2"' ],
-[19,	'havana',	'exon',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
+[19,	'havana',	'exon',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
 
 [19,	'havana',	'gene',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498";' ],
 [19,	'havana',	'transcript',	60951,	61050,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462";' ],
-[19,	'havana',	'exon',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462"; exon_number "1"' ],
-[19,	'havana',	'exon',	        61005,	61010,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462"; exon_number "2"' ],
+[19,	'havana',	'exon',	        61005,	61010,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462"; exon_number "1"' ],
+[19,	'havana',	'exon',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462"; exon_number "2"' ],
 
 [19,	'havana',	'gene',	        60951,	61000,	'.',	'+',	'.',	'gene_id "ENSG00000282499";' ],
 [19,	'havana',	'transcript',	60951,	61050,	'.',	'+',	'.',	'gene_id "ENSG00000282499"; transcript_id "ENST00000282463";' ],
@@ -87,10 +87,10 @@ gtf = [
 [19,	'havana',	'CDS',	        60951,	61894,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "3"' ],
 
 [19,	'havana',	'transcript',	60951,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459";' ],
-[19,	'havana',	'exon',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
-[19,	'havana',	'CDS',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
-[19,	'havana',	'exon',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
-[19,	'havana',	'CDS',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
+[19,	'havana',	'exon',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
+[19,	'havana',	'CDS',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
+[19,	'havana',	'exon',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
+[19,	'havana',	'CDS',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'+',	'.',	'gene_id "ENSG00000282495";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'+',	'.',	'gene_id "ENSG00000282495"; transcript_id "ENST00000282460";' ],
@@ -100,16 +100,17 @@ gtf = [
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461";' ],
-[19,	'havana',	'exon',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
-[19,	'havana',	'CDS',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
+[19,	'havana',	'exon',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
+[19,	'havana',	'CDS',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
 [19,	'havana',	'exon',	        60970,	61500,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "2"' ],
-[19,	'havana',	'exon',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
-[19,	'havana',	'CDS',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
+[19,	'havana',	'exon',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
+[19,	'havana',	'CDS',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
 
 [19,	'havana',	'gene',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498";' ],
 [19,	'havana',	'transcript',	60951,	61050,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462";' ],
-[19,	'havana',	'CDS',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462"; exon_number "1"' ],
-[19,	'havana',	'CDS',	        61005,	61010,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462"; exon_number "2"' ],
+[19,	'havana',	'CDS',	        61005,	61010,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462"; exon_number "1"' ],
+[19,	'havana',	'CDS',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST00000282462"; exon_number "2"' ],
+
 
 [19,	'havana',	'gene',	        60951,	61000,	'.',	'+',	'.',	'gene_id "ENSG00000282499";' ],
 [19,	'havana',	'transcript',	60951,	61050,	'.',	'+',	'.',	'gene_id "ENSG00000282499"; transcript_id "ENST00000282463";' ],
@@ -121,15 +122,15 @@ gtf = pd.DataFrame(gtf)
 gtf_truth0 = [
 [19,	'havana',	'gene',	        60951,	71626,	'.',	'-',	'.',	'gene_id "ENSG00000282458";' ],
 [19,	'havana',	'transcript',	60951,	70976,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458";' ],
-[19,	'havana',	'CDS',	        70943,	70976,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "1"' ],
+[19,	'havana',	'CDS',	        70928,	70931,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "1"' ],
 [19,	'havana',	'CDS',	        66346,	66499,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "2"' ],
-[19,	'havana',	'CDS',	        60951,	61849,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "3"' ],
+[19,	'havana',	'CDS',	        60966,	61894,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "3"' ],
 
 [19,	'havana',	'transcript',	60951,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459";' ],
-[19,	'havana',	'exon',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
-[19,	'havana',	'CDS',	        60966,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
-[19,	'havana',	'exon',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
-[19,	'havana',	'CDS',	        69000,	69955,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
+[19,	'havana',	'exon',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
+[19,	'havana',	'CDS',	        69000,	69955,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
+[19,	'havana',	'exon',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
+[19,	'havana',	'CDS',	        60966,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'+',	'.',	'gene_id "ENSG00000282495";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'+',	'.',	'gene_id "ENSG00000282495"; transcript_id "ENST00000282460";' ],
@@ -138,10 +139,10 @@ gtf_truth0 = [
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461";' ],
-[19,	'havana',	'exon',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
+[19,	'havana',	'exon',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
+[19,	'havana',	'CDS',	        62006,	62955,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
 [19,	'havana',	'exon',	        60970,	61500,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "2"' ],
-[19,	'havana',	'exon',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
-[19,	'havana',	'CDS',	        62006,	62955,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
+[19,	'havana',	'exon',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
 
 [19,	'havana',	'gene',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498";' ],
 
@@ -152,21 +153,20 @@ gtf_truth0 = pd.DataFrame(gtf_truth0)
 truncated_gtf0 = truncate_gtf(gtf, _5prime=45, _3prime=15)
 truncated_gtf0 = truncated_gtf0.reset_index(drop=True)
 
-assert truncated_gtf0.equals(gtf_truth0), run_debugger(range(0,19), gtf_truth0, truncated_gtf0)
+assert truncated_gtf0.equals(gtf_truth0), run_debugger(range(0,22), gtf_truth0, truncated_gtf0)
 
 
 gtf_truth1 = [
 [19,	'havana',	'gene',	        60951,	71626,	'.',	'-',	'.',	'gene_id "ENSG00000282458";' ],
 [19,	'havana',	'transcript',	60951,	70976,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458";' ],
-[19,	'havana',	'CDS',	        70933,	70976,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "1"' ],
-[19,	'havana',	'CDS',	        66346,	66499,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "2"' ],
-[19,	'havana',	'CDS',	        60951,	61844,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "3"' ],
+[19,	'havana',	'CDS',	        66346,	66497,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "2"' ],
+[19,	'havana',	'CDS',	        60956,	61894,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282458"; exon_number "3"' ],
 
 [19,	'havana',	'transcript',	60951,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459";' ],
-[19,	'havana',	'exon',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
-[19,	'havana',	'CDS',	        60956,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
-[19,	'havana',	'exon',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
-[19,	'havana',	'CDS',	        69000,	69950,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
+[19,	'havana',	'exon',	        69000,	70000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
+[19,	'havana',	'CDS',	        69000,	69950,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "4"' ],
+[19,	'havana',	'exon',	        60951,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
+[19,	'havana',	'CDS',	        60956,	62000,	'.',	'-',	'.',	'gene_id "ENSG00000282458"; transcript_id "ENST00000282459"; exon_number "5"' ],
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'+',	'.',	'gene_id "ENSG00000282495";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'+',	'.',	'gene_id "ENSG00000282495"; transcript_id "ENST00000282460";' ],
@@ -175,11 +175,11 @@ gtf_truth1 = [
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461";' ],
-[19,	'havana',	'exon',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
-[19,	'havana',	'CDS',	        60956,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
+[19,	'havana',	'exon',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
+[19,	'havana',	'CDS',	        62000,	62950,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "1"' ],
 [19,	'havana',	'exon',	        60970,	61500,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "2"' ],
-[19,	'havana',	'exon',	        62000,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
-[19,	'havana',	'CDS',	        62000,	62950,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
+[19,	'havana',	'exon',	        60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
+[19,	'havana',	'CDS',	        60956,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282496"; transcript_id "ENST00000282461"; exon_number "3"' ],
 
 [19,	'havana',	'gene',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498";' ],
 
@@ -190,8 +190,7 @@ gtf_truth1 = pd.DataFrame(gtf_truth1)
 truncated_gtf1 = truncate_gtf(gtf, _5prime=50, _3prime=5)
 truncated_gtf1 = truncated_gtf1.reset_index(drop=True)
 
-assert truncated_gtf1.equals(gtf_truth1), run_debugger(range(0,19), gtf_truth1, truncated_gtf1)
-
+assert truncated_gtf1.equals(gtf_truth1), run_debugger(range(0,22), gtf_truth1, truncated_gtf1)
 
 # Add more test cases where all exons get lost
 #1. All get trimmed out
@@ -235,9 +234,9 @@ gtf2 = [
 
 [19,	'havana',	'gene',	        60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282497";' ],
 [19,	'havana',	'transcript',	60951,	63000,	'.',	'-',	'.',	'gene_id "ENSG00000282497"; transcript_id "ENST0000028262";' ],
-[19,	'havana',	'CDS',	        60900,	60915,	'.',	'-',	'.',	'gene_id "ENSG00000282497"; transcript_id "ENST0000028262"; exon_number "1"' ],
+[19,	'havana',	'CDS',	        62000,	62045,	'.',	'-',	'.',	'gene_id "ENSG00000282497"; transcript_id "ENST0000028262"; exon_number "1"' ],
 [19,	'havana',	'CDS',	        60930,	61500,	'.',	'-',	'.',	'gene_id "ENSG00000282497"; transcript_id "ENST0000028262"; exon_number "2"' ],
-[19,	'havana',	'CDS',	        62000,	62045,	'.',	'-',	'.',	'gene_id "ENSG00000282497"; transcript_id "ENST0000028262"; exon_number "3"' ],
+[19,	'havana',	'CDS',	        60900,	60915,	'.',	'-',	'.',	'gene_id "ENSG00000282497"; transcript_id "ENST0000028262"; exon_number "3"' ],
 
 [19,	'havana',	'gene',	        60951,	61000,	'.',	'-',	'.',	'gene_id "ENSG00000282498";' ],
 [19,	'havana',	'transcript',	60951,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282498"; transcript_id "ENST0000028263";' ],
@@ -257,10 +256,10 @@ gtf2 = [
 
 [19,	'havana',	'gene',	        60956,	62955,	'.',	'-',	'.',	'gene_id "ENSG00000282505";' ],
 [19,	'havana',	'transcript',	60956,	62955,	'.',	'-',	'.',	'gene_id "ENSG00000282505"; transcript_id "ENST0000028267";' ],
-[19,	'havana',	'CDS',	        60956,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282505"; transcript_id "ENST0000028267"; exon_number "1"' ],
-[19,	'havana',	'CDS',	        60970,	62940,	'.',	'-',	'.',	'gene_id "ENSG00000282505"; transcript_id "ENST0000028267"; exon_number "2"' ],
+[19,	'havana',	'CDS',	        62950,	62955,	'.',	'-',	'.',	'gene_id "ENSG00000282505"; transcript_id "ENST0000028267"; exon_number "4"' ],
 [19,	'havana',	'CDS',	        62945,	62950,	'.',	'-',	'.',	'gene_id "ENSG00000282505"; transcript_id "ENST0000028267"; exon_number "3"' ],
-[19,	'havana',	'CDS',	        62950,	62955,	'.',	'-',	'.',	'gene_id "ENSG00000282505"; transcript_id "ENST0000028267"; exon_number "4"' ]
+[19,	'havana',	'CDS',	        60970,	62940,	'.',	'-',	'.',	'gene_id "ENSG00000282505"; transcript_id "ENST0000028267"; exon_number "2"' ],
+[19,	'havana',	'CDS',	        60956,	60960,	'.',	'-',	'.',	'gene_id "ENSG00000282505"; transcript_id "ENST0000028267"; exon_number "1"' ]
 ]
 gtf2 = pd.DataFrame(gtf2)
 

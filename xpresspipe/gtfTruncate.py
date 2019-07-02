@@ -75,7 +75,7 @@ def scan_forward(
 
             # Exon 1 will be last exon
             elif sign == '-':
-                gtf, bad_exons = minus_3prime(
+                gtf, bad_exons = minus_5prime(
                     gtf,
                     bad_exons,
                     n,
@@ -132,8 +132,8 @@ def plus_5prime(
             _3prime,
             penalty + 1) # Penalty takes current position plus one for next round
 
-"""Truncate 3' amount from the first listed minus stranded exon"""
-def minus_3prime(
+"""Truncate 5' amount from the first listed minus stranded exon"""
+def minus_5prime(
     gtf,
     bad_exons,
     current_position,
@@ -145,19 +145,19 @@ def minus_3prime(
     penalty):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, gtf_leftCoordinate_column] + _3prime \
-    < gtf.at[current_position, gtf_rightCoordinate_column]:
+    if gtf.at[current_position, gtf_rightCoordinate_column] - _5prime \
+    > gtf.at[current_position, gtf_leftCoordinate_column]:
 
-        gtf.at[current_position, gtf_leftCoordinate_column] \
-            = gtf.at[current_position, gtf_leftCoordinate_column] \
-            + _3prime
+        gtf.at[current_position, gtf_rightCoordinate_column] \
+            = gtf.at[current_position, gtf_rightCoordinate_column] \
+            - _5prime
 
         return gtf, bad_exons
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
         bad_exons.append(current_position) # Remove short exon from record
-        remainder = _3prime \
+        remainder = _5prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
             - gtf.at[current_position, gtf_leftCoordinate_column])
 
@@ -168,9 +168,9 @@ def minus_3prime(
             start_index,
             stop_index,
             trim_type,
-            _5prime,
             remainder,
-            penalty + 1) # Penalty takes current position plus one for next round
+            _3prime,
+            penalty + 1)
 
 """Scan first exons recursively by chromosome position and truncate"""
 def scan_backward(
@@ -215,7 +215,7 @@ def scan_backward(
 
             # Exon 1 will be last exon
             elif sign == '-':
-                gtf, bad_exons = minus_5prime(
+                gtf, bad_exons = minus_3prime(
                     gtf,
                     bad_exons,
                     n,
@@ -273,8 +273,8 @@ def plus_3prime(
             remainder,
             penalty + 1) # Penalty takes current position plus one for next round
 
-"""Truncate 5' amount from the first listed minus stranded exon"""
-def minus_5prime(
+"""Truncate 3' amount from the first listed minus stranded exon"""
+def minus_3prime(
     gtf,
     bad_exons,
     current_position,
@@ -286,19 +286,19 @@ def minus_5prime(
     penalty):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, gtf_rightCoordinate_column] - _5prime \
-    > gtf.at[current_position, gtf_leftCoordinate_column]:
+    if gtf.at[current_position, gtf_leftCoordinate_column] + _3prime \
+    < gtf.at[current_position, gtf_rightCoordinate_column]:
 
-        gtf.at[current_position, gtf_rightCoordinate_column] \
-            = gtf.at[current_position, gtf_rightCoordinate_column] \
-            - _5prime
+        gtf.at[current_position, gtf_leftCoordinate_column] \
+            = gtf.at[current_position, gtf_leftCoordinate_column] \
+            + _3prime
 
         return gtf, bad_exons
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
         bad_exons.append(current_position) # Remove short exon from record
-        remainder = _5prime \
+        remainder = _3prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
             - gtf.at[current_position, gtf_leftCoordinate_column])
 
@@ -309,9 +309,9 @@ def minus_5prime(
             start_index,
             stop_index,
             trim_type,
+            _5prime,
             remainder,
-            _3prime,
-            penalty + 1)
+            penalty + 1) # Penalty takes current position plus one for next round
 
 """Run MAIN function for GTF truncation"""
 def truncate_gtf(
