@@ -109,6 +109,7 @@ def run_pools(
 
     pools = int(math.ceil(len(args_iter) / args_dict['workers']))
     print('pools',pools)
+    print(args_iter)
     it_list = []
     range_number = 0
     for x in range(pools):
