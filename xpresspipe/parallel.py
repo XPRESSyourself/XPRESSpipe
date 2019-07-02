@@ -181,12 +181,15 @@ def parallelize_pe(
         args_dict,
         mod_workers)
 
+
     # Check and apply RAM threshold if necessary
     if mod_workers == True:
         args_dict['threads'], args_dict['workers'] = threshold_ram(
             args_dict,
             file_list)
 
+    print(args_dict['threads'])
+    print(args_dict['workers'])
     run_pools(
         func,
         args_iter,

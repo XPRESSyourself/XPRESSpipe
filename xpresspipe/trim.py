@@ -226,6 +226,7 @@ def run_trim(
         if len(files) % 2 != 0:
             raise Exception('An uneven number of paired-end files were specified in the input directory')
         else:
+            print('Im here')
             parallelize_pe(
                 auto_pe_trim,
                 files,
