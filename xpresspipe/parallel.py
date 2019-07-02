@@ -112,6 +112,7 @@ def run_pools(
     if pools < 1:
         pools = 1
 
+    it_list = []
     range_number = 0
     for x in range(pools):
         it_list.append([iter for iter in args_iter[range_number:range_number + args_dict['workers']]])
