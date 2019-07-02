@@ -66,7 +66,7 @@ def get_coding_length(
 
     transcript_length = 0
     for y in coordinates:
-        transcript_length += abs(int(y[1]) - int(y[0]))
+        transcript_length += abs(int(y[1]) - int(y[0])) + 1
 
     return transcript_length
 
