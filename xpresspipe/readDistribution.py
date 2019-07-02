@@ -133,6 +133,9 @@ def make_readDistributions(
     file_number = ceil(len(files) / 6)
     file_lists = []
 
+    if file_number < 1:
+        file_number = 1
+
     y = 0
     for x in range(file_number):
         file_lists.append(files[y:y+6])
