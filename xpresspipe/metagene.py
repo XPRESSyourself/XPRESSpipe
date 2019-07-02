@@ -68,6 +68,7 @@ def get_coordinate_records_meta(
         print(chromosome_index)
         print(search_chromosome)
         print(search_coordinate_start)
+        return record_array
 
 """Get meta profile for bam file"""
 def get_meta_profile(
@@ -118,6 +119,7 @@ def get_metagene(
     # Read in indexed bam file
     bam = read_bam(
         str(args_dict['input']) + str(file))
+
     bam_coordinates = meta_coordinates(bam)
 
     bam = None # Some clean-up
@@ -129,6 +131,7 @@ def get_metagene(
         coordinate_index,
         chromosome_index)
     profile_data['representative transcript'] = profile_data.index
+
     profile_data.to_csv(
         str(args_dict['metagene']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
         sep='\t')
@@ -203,6 +206,99 @@ def make_metagene(
     gc.collect()
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def get_cov_position(
+        position,
+        coordinates):
+
+    # Can order operations same since reference puts - strand records in reverse already
+    location = 0
+    last_coordinate = 0
+    print(coordinates)
+    for y in coordinates:
+
+        # Map to exon position
+        if position >= min(y) and position <= max(y):
+            return position
+        else:
+            return None
+
+"""Get meta profile for bam file"""
+def get_cov_profile(
+        aligned_reads_index,
+        coordinate_index,
+        chromosome_index):
+
+    # Initialize profile dataframe for storage
+    metagene_profile = pd.DataFrame(
+        0,
+        index = range(coordinate_index[0][0][0], coordinate_index[0][0][1] + 1),
+        columns = ['count'])
+
+    # Search through each mapped read coordinate
+    for index, record in enumerate(aligned_reads_index):
+        position = get_cov_position(
+            record[1],
+            coordinate_index[3])
+
+        if position != None:
+            metagene_profile.at[position, 'count'] += 1
+
+    return metagene_profile
+
+"""Generate metagene profiles"""
+def get_coverage(
+        args,
+        chromosome_index,
+        coordinate_index):
+
+    file, args_dict = args[0], args[1] # Parse args
+
+    # Read in indexed bam file
+    bam = read_bam(
+        str(args_dict['input']) + str(file))
+
+    # Get BAM file relevant to gene of interest if using geneCoverage
+    chr = []
+    for key, value in chromosome_index.items():
+        chr.append(key)
+
+    if len(coordinate_index) == 1 and len(coordinate_index[0]) == 1 and len(chr) == 1:
+        bam = bam.loc[(bam[2] == chr[0]) & (bam[3] >= (coordinate_index[0][0][0] - coordinate_index[0][0][4])) & (bam[3] <= (coordinate_index[0][0][1] + coordinate_index[0][0][4]))]
+    else:
+        raise Exception('A single gene record was not selected.')
+
+    bam_coordinates = meta_coordinates(bam)
+
+    bam = None # Some clean-up
+    del bam
+
+    # Get profile
+    profile_data = get_cov_profile(
+        bam_coordinates,
+        coordinate_index,
+        chromosome_index)
+    profile_data['transcript'] = profile_data.index
+
+    profile_data.to_csv(
+        str(args_dict['coverage']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
+        sep='\t')
+
 """Get coverage profile for a specific gene"""
 def make_coverage(
     args_dict):
@@ -245,7 +341,7 @@ def make_coverage(
     # Perform metagene analysis
     print('Generating coverage profiles for each sample across ' + str(args_dict['gene_name']) + '...')
     func = partial(
-        get_metagene,
+        get_coverage,
         chromosome_index = chromosome_index,
         coordinate_index = coordinate_index)
     parallelize(
@@ -277,8 +373,8 @@ def make_coverage(
             file_list,
             chromosome_index,
             coordinate_index,
-            'representative transcript',
-            'metacount',
+            'transcript',
+            'count',
             'coverage',
             args_dict['experiment'],
             args_dict['coverage'],
