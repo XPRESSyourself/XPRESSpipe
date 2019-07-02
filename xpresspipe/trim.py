@@ -117,24 +117,7 @@ def se_trim(
 def auto_pe_trim(
     args):
 
-    print('In')
     file1, file2, args_dict = args[0], args[1], args[2] # Parse args
-    print(file1)
-    print(file2)
-
-    print(
-        'fastp'
-        + ' -f 1'
-        + ' --thread ' + str(args_dict['threads'])
-        + ' -i ' + str(args_dict['input']) + str(file1)
-        + ' -I ' + str(args_dict['input']) + str(file2)
-        + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file1)
-        + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file2)
-        + ' -l ' + str(args_dict['min_length'])
-        + ' -q ' + str(args_dict['quality'])
-        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.json'
-        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.html'
-        + str(args_dict['log']))
 
     os.system(
         'fastp'
@@ -185,11 +168,11 @@ def run_trim(
     files = get_files(
         args_dict['input'],
         ['.fastq','.fq','.txt'])
-    print(files)
+
     # Determine sequencing type based on args_dict['adaptors']
     type = determine_type(
         args_dict['adaptors'])
-    print(type)
+
     # Mod workers if threads > 16 as fastp maxes at 16 per task
     if (isinstance(args_dict['max_processors'], int) and args_dict['max_processors'] > 16) \
     or (args_dict['max_processors'] == None and cpu_count() > 16):
@@ -226,7 +209,6 @@ def run_trim(
         if len(files) % 2 != 0:
             raise Exception('An uneven number of paired-end files were specified in the input directory')
         else:
-            print('Im here')
             parallelize_pe(
                 auto_pe_trim,
                 files,

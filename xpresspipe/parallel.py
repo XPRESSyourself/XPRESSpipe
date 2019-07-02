@@ -108,16 +108,15 @@ def run_pools(
     args_dict):
 
     pools = int(math.ceil(len(args_iter) / args_dict['workers']))
-    print('pools',pools)
-    print(args_iter)
-    it_list = []
+
+    if pools < 1:
+        pools = 1
+
     range_number = 0
     for x in range(pools):
         it_list.append([iter for iter in args_iter[range_number:range_number + args_dict['workers']]])
         range_number += args_dict['workers']
 
-    print('print the it list')
-    print(it_list)
     batch_number = 1
     for batch in it_list:
         with concurrent.futures.ProcessPoolExecutor(max_workers=args_dict['workers']) as executor:
@@ -191,8 +190,6 @@ def parallelize_pe(
             args_dict,
             file_list)
 
-    print(args_dict['threads'])
-    print(args_dict['workers'])
     run_pools(
         func,
         args_iter,
