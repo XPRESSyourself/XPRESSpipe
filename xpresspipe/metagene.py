@@ -36,7 +36,12 @@ from .utils import add_directory, get_files
 from .processBAM import read_bam, bam_sample
 from .quality import get_indices, get_position
 
-"""Retrieve meta-coordinate for each read in input BAM matrix"""
+"""
+Func: Retrieve meta-coordinate for each read in input BAM matrix
+- Find middle coordinate of each read
+@param bam: BAM file in pandas dataframe format
+@return: Middle coordinates and respective chromosome as multi-dimensional list
+"""
 def meta_coordinates(
         bam):
 
@@ -47,7 +52,15 @@ def meta_coordinates(
     mid_coordinates = bam[[2,16]]
     return mid_coordinates.values.tolist()
 
-"""Search for plausible records per provided coordinate"""
+"""
+Func: Search for plausible records per provided coordinate
+- Searches for a gene range where search coordinate falls within
+@param coordinate_index: Multi-dimensional array for each gene with start, stop, strand, length, and exon region information
+@param chromosome_index: Dictionary with chromosome number and ordered position in the index
+@param search_chromosome: Chromosome number of coordinate to search
+@param search_coordinate_start: Leftmost coordinate of search read
+@return: Updated record_array if search coordinate falls in gene range
+"""
 def get_coordinate_records_meta(
         coordinate_index,
         chromosome_index,
@@ -63,11 +76,6 @@ def get_coordinate_records_meta(
 
         return record_array
     except:
-        print('Failed here:')
-        print(coordinate_index)
-        print(chromosome_index)
-        print(search_chromosome)
-        print(search_coordinate_start)
         return record_array
 
 """Get meta profile for bam file"""
@@ -219,53 +227,67 @@ def make_metagene(
 
 
 
+def cov_coordinates(
+    bam):
 
+    # Map middle point of each read as left-most position plus half of read length
+    bam[16] = bam[3] + (bam[9].str.len()).astype('int64')
+
+    # Return as array
+    mid_coordinates = bam[[2,3,16]]
+    return mid_coordinates.values.tolist()
 
 
 def get_cov_position(
-        position,
-        coordinates):
+    position,
+    coordinates):
 
     # Can order operations same since reference puts - strand records in reverse already
     location = 0
     last_coordinate = 0
-    print(coordinates)
+
     for y in coordinates:
 
         # Map to exon position
         if position >= min(y) and position <= max(y):
             return position
         else:
-            return None
+            pass
+
+    return None
 
 """Get meta profile for bam file"""
 def get_cov_profile(
-        aligned_reads_index,
-        coordinate_index,
-        chromosome_index):
+    aligned_reads_index,
+    coordinate_index,
+    chromosome_index):
 
     # Initialize profile dataframe for storage
     metagene_profile = pd.DataFrame(
         0,
         index = range(coordinate_index[0][0][0], coordinate_index[0][0][1] + 1),
-        columns = ['count'])
+        columns = ['raw_count'])
 
     # Search through each mapped read coordinate
     for index, record in enumerate(aligned_reads_index):
-        position = get_cov_position(
-            record[1],
-            coordinate_index[3])
+        for x in range(record[1], (record[2] + 1)):
+            position = get_cov_position(
+                x,
+                coordinate_index[0][0][3])
 
-        if position != None:
-            metagene_profile.at[position, 'count'] += 1
+            if position != None:
+                metagene_profile.at[position, 'raw_count'] += 1
 
     return metagene_profile
 
-"""Generate metagene profiles"""
+"""
+func: Generate metagene profiles
+- Parse through BAM file for plausible reads falling within specified gene
+"""
 def get_coverage(
-        args,
-        chromosome_index,
-        coordinate_index):
+    args,
+    chromosome_index,
+    coordinate_index):
 
     file, args_dict = args[0], args[1] # Parse args
 
@@ -283,7 +305,8 @@ def get_coverage(
     else:
         raise Exception('A single gene record was not selected.')
 
-    bam_coordinates = meta_coordinates(bam)
+    # Get meta-data for bam file relevant to gene region
+    bam_coordinates = cov_coordinates(bam)
 
     bam = None # Some clean-up
     del bam
@@ -294,6 +317,12 @@ def get_coverage(
         coordinate_index,
         chromosome_index)
     profile_data['transcript'] = profile_data.index
+
+    coding_space = []
+    for x in coordinate_index[0][0][3]:
+        for y in range(min(x), (max(x) + 1)):
+            coding_space.append(y)
+    profile_data = profile_data.reindex(coding_space)
 
     profile_data.to_csv(
         str(args_dict['coverage']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
