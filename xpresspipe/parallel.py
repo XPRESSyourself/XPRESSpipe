@@ -54,7 +54,7 @@ def threshold_ram(
     else:
         factor = 1.5
 
-    threshold_workers = math.floor(total / (_max * factor)) # Set threshold based on max file size in set
+    threshold_workers = int(math.floor(total / (_max * factor))) # Set threshold based on max file size in set
     if threshold_workers < 1:
         threshold_workers = 1
 
@@ -62,7 +62,7 @@ def threshold_ram(
         threshold_workers = cpu_count()
 
     if threshold_workers < args_dict['workers']: # Modify if set # of workers is greater than memory threshold
-        threshold_threads = math.floor(args_dict['threads'] / threshold_workers)
+        threshold_threads = int(math.floor(args_dict['threads'] / threshold_workers))
         print('Resetting parallelization specs based on max file size to be processed:\nMax number of workers: ' + str(threshold_workers) + '\nNumber of threads per worker (where available): ' + str(threshold_threads))
         return threshold_threads, threshold_workers
     else:
