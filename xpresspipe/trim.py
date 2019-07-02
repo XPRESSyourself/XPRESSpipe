@@ -117,7 +117,10 @@ def se_trim(
 def auto_pe_trim(
     args):
 
+    print('In')
     file1, file2, args_dict = args[0], args[1], args[2] # Parse args
+    print(file1)
+    print(file2)
 
     print(
         'fastp'
