@@ -146,7 +146,6 @@ def make_readDistributions(
 
         # Plot metrics for each file
         compile_matrix_metrics(
-            args_dict,
             str(args_dict['read_distributions']) + 'metrics/',
             file_list,
             'read size (bp)',

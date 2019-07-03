@@ -82,7 +82,7 @@ def compile_matrix_metrics(
     for file in file_list:
         x = 0
         df = pd.read_csv(
-            str(path + file),
+            str(path) + str(file),
             sep = '\t') # Initialize dataframe for relevant data
         df = df.dropna(
             axis = 0,
