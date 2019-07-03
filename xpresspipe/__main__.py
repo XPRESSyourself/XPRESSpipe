@@ -38,7 +38,8 @@ from .normalizeMatrix import run_normalization
 from .convert import create_bed
 from .rrnaProbe import rrnaProbe
 from .quality import get_multiqc_summary, get_fastqc
-from .metagene import make_metagene, make_coverage
+from .metagene import make_metagene
+from .geneCoverage import make_coverage
 from .readDistribution import make_readDistributions
 from .periodicity import make_periodicity
 from .complexity import make_complexity

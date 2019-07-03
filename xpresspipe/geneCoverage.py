@@ -149,9 +149,7 @@ def get_coverage(
     # Get profile
     profile_data = get_cov_profile(
         coordinates,
-        coordinate_index,
-        chromosome_index)
-    profile_data['transcript'] = profile_data.index
+        coordinate_index)
 
     coding_space = []
     for x in coordinate_index[0][0][3]:
@@ -196,7 +194,7 @@ def make_coverage(
     # Get list of bam files from user input
     files = get_files(
         args_dict['input'],
-        [str(args_dict['suffix'])])
+        [str(args_dict['bam_suffix'])])
 
     # Get samples user specified
     if args_dict['samples'] != None:
@@ -238,21 +236,19 @@ def make_coverage(
         file_lists.append(files[y:y+plots_per_page])
         y += plots_per_page
 
+    z = 1
     for file_list in file_lists:
 
         # Plot metrics for each file
         compile_coverage(
-            args_dict,
             str(args_dict['coverage']) + 'metrics/',
             file_list,
-            chromosome_index,
-            coordinate_index,
             coordinate_index[0][0][2],
-            'transcript',
-            'count',
-            'coverage',
+            'coverage' + str(z),
             args_dict['experiment'],
             args_dict['coverage'],
             str(args_dict['coverage']) + 'individual_plots/')
+
+        z += 1
 
     gc.collect()

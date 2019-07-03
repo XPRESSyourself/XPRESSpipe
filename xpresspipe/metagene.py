@@ -199,7 +199,6 @@ def make_metagene(
 
         # Plot metrics for each file
         compile_matrix_metrics(
-            args_dict,
             str(args_dict['metagene']) + 'metrics/',
             file_list,
             'representative transcript',

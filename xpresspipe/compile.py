@@ -36,9 +36,11 @@ import seaborn as sns
 """IMPORT INTERNAL DEPENDENCIES"""
 from .utils import add_directory
 
+input_count = 'raw_count'
+window = 20
+
 """Compile images from a list of metrics matrices"""
 def compile_matrix_metrics(
-        args_dict,
         path,
         file_list,
         lab_x,
@@ -143,11 +145,11 @@ def compile_matrix_metrics(
 
 """"""
 def compile_complexity_metrics(
-        args_dict,
         path,
         file_list,
         column_x,
         column_y,
+        strand,
         plot_type,
         experiment,
         plot_output,
@@ -245,13 +247,9 @@ def compile_complexity_metrics(
         bbox_inches = 'tight')
 
 def compile_coverage(
-    args_dict,
     path,
     file_list,
-    chromosome_index,
-    coordinate_index,
-    lab_x,
-    lab_y,
+    strand,
     plot_type,
     experiment,
     plot_output,
@@ -262,57 +260,71 @@ def compile_coverage(
     # Auto formats figure summary size based on number of plots
 
     # Set up figure space
+    row_number = len(file_list)
+    if row_number < 2:
+        row_number = 2
+
     fig, axes = plt.subplots(
-        nrows = len(file_list) + 1,
+        nrows = row_number,
         ncols = 1,
-        figsize = (3, 30),
+        figsize = (16, 2 * row_number),
+        sharey=True,
+        sharex=True,
         subplot_kw = {'facecolor':'none'})
     plt.subplots_adjust(
-        bottom = 0.3)
+        bottom = 0.0)
 
     # Initialize file and axis counters for formatting summary figure
-    file_number = 0
-    ax_x = 0
     ax_y = 0
 
     for file in file_list:
-        x = 0
         df = pd.read_csv(
-            str(path + file),
-            sep = '\t') # Initialize dataframe for relevant data
-        df = df.dropna(
-            axis = 0,
-            subset = [str(lab_x), str(lab_y)]) # Remove rows where pertinent information is missing
+            str(path) + str(file),
+            sep = '\t')
 
-        # Plot figure
-        sns.distplot(
-            df[lab_y],
-            hist = False,
-            kde = True,
-            kde_kws = {'shade': True, 'linewidth': 3},
-            label = file[:-4],
-            ax = axes[ax_y, ax_x])
+        df['coverage'] = df[input_count].rolling(window = window).mean()
+        df['coverage'] = df['coverage'].fillna(0)
 
-        """
-        axes[ax_y, ax_x].axhline(
-            0,
-            xmin = 0.048,
-            ls = '-',
-            color = 'black')
-        axes[ax_y, ax_x].axvline(
-            0,
-            ymin = 0.048,
-            ls = '-',
-            color = 'black')
-        """
+        if strand == '-':
+            df = df.reindex(index=df.index[::-1])
+
+        last = -100
+
+        exon_count = 1
+        for index, row in df.iterrows():
+            if abs(row[2]) - last > 1:
+                df.at[index,'exon'] = 'Exon ' + str(exon_count)
+                exon_count += 1
+                last = row[2]
+            else:
+                df.at[index,'exon'] = ''
+                last = row[2]
+
+        for index, row in df.iterrows():
+            if 'Exon' in row[4]:
+                axes[ax_y].axvline(index, ls='-', color='black', ymin=0, ymax=1)
+
+        df.plot.bar(
+            x = 'exon',
+            y = 'coverage',
+            ax = axes[ax_y],
+            grid = None,
+            width=1.0,
+            fontsize=12,
+            color='red')
+
+        axes[ax_y].set_xlabel('')
 
         fig.savefig(
             str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
             dpi = dpi,
             bbox_inches = 'tight')
 
-        file_number += 1
-        del df
+        if ax_y == row_number - 1:
+            pass
+        else:
+            axes[ax_y].tick_params(labelbottom=False)
+
         ax_y += 1
 
     # Save catenated figure

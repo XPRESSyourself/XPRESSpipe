@@ -98,7 +98,6 @@ def make_complexity(args_dict):
     for file_list in file_lists:
 
         compile_complexity_metrics(
-            args_dict,
             str(args_dict['complexity']) + 'metrics/',
             file_list,
             'RPK',

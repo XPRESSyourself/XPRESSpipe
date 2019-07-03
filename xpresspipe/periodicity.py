@@ -209,7 +209,6 @@ def make_periodicity(
 
         # Plot metrics for each file
         compile_matrix_metrics(
-            args_dict,
             str(args_dict['periodicity']) + 'metrics/',
             file_list,
             'position from start',
