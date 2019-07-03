@@ -230,7 +230,7 @@ def get_chunks(
     if threads == None or threads >= cores:
         pass
     elif threads < 1:
-        warnings.warn('Indicated less than 1 CPU, setting to 1')
+        print('Warning: Indicated less than 1 CPU, setting to 1')
         cores = 1
     else:
         cores = int(threads)
