@@ -1197,6 +1197,21 @@ def get_arguments(
         default = None,
         required = False)
     coverage_opts.add_argument(
+        '--sample_names',
+        help = 'Provide a space-separated list of sample names to use for labels',
+        metavar = '<sample_names>',
+        type = str,
+        nargs = '+',
+        default = None,
+        required = False)
+    coverage_opts.add_argument(
+        '--plot_color',
+        help = 'Indicate plotting color',
+        metavar = '<color>',
+        type = str,
+        default = 'red',
+        required = False)
+    coverage_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',

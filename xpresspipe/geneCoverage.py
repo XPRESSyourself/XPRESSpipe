@@ -163,7 +163,7 @@ def get_coverage(
 
 """
 Func: Get coverage profile for a specific gene
-- Creates output directories for coverage (parent), metrics, and individual plots
+- Creates output directories for coverage (parent) and metrics
 - Gets BAM files to plot coverage profiles
 - Optionally orders files if specified by user, if not will order alphanumerically
 - Generates chromosome and coordinate indices for gene of interest
@@ -186,10 +186,6 @@ def make_coverage(
         args_dict,
         'coverage',
         'metrics')
-    args_dict = add_directory(
-        args_dict,
-        'coverage',
-        'individual_plots')
 
     # Get list of bam files from user input
     files = get_files(
@@ -243,11 +239,13 @@ def make_coverage(
         compile_coverage(
             str(args_dict['coverage']) + 'metrics/',
             file_list,
+            args_dict['gene_name'],
+            args_dict['sample_names'],
             coordinate_index[0][0][2],
             'coverage' + str(z),
             args_dict['experiment'],
             args_dict['coverage'],
-            str(args_dict['coverage']) + 'individual_plots/')
+            args_dict['plot_color'])
 
         z += 1
 

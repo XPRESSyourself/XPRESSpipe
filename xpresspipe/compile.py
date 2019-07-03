@@ -28,7 +28,6 @@ import numpy as np
 from math import ceil
 from scipy.stats import gaussian_kde
 import matplotlib
-#matplotlib.use('agg') #remove need for -X server connect
 import matplotlib.pyplot as plt
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
 import seaborn as sns
@@ -249,11 +248,13 @@ def compile_complexity_metrics(
 def compile_coverage(
     path,
     file_list,
+    gene_name,
+    sample_names,
     strand,
     plot_type,
     experiment,
     plot_output,
-    individual_output,
+    plot_color='red',
     dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
@@ -287,22 +288,31 @@ def compile_coverage(
 
         if strand == '-':
             df = df.reindex(index=df.index[::-1])
+            df = df.reset_index(drop=True)
 
-        last = -100
-
+        last = 0
         exon_count = 1
+        start = 'start'
         for index, row in df.iterrows():
-            if abs(row[2]) - last > 1:
+            if start == 'start':
                 df.at[index,'exon'] = 'Exon ' + str(exon_count)
                 exon_count += 1
-                last = row[2]
+                last = row[0]
+                start = 'stop'
+            elif abs(row[0] - last) > 1:
+                df.at[index,'exon'] = 'Exon ' + str(exon_count)
+                exon_count += 1
+                last = row[0]
             else:
                 df.at[index,'exon'] = ''
-                last = row[2]
+                last = row[0]
 
         for index, row in df.iterrows():
-            if 'Exon' in row[4]:
-                axes[ax_y].axvline(index, ls='-', color='black', ymin=0, ymax=1)
+            if 'Exon' in row[3]:
+                axes[ax_y].axvline(index, ls='-', linewidth=2, color='black', ymin=0, ymax=1)
+
+        axes[ax_y].axhline(0, ls='-', linewidth=5, color='black', xmin=0, xmax=1)
+        axes[ax_y].axvline(0, ls='-', linewidth=5, color='black', ymin=0, ymax=1)
 
         df.plot.bar(
             x = 'exon',
@@ -311,14 +321,15 @@ def compile_coverage(
             grid = None,
             width=1.0,
             fontsize=12,
-            color='red')
+            color = plot_color,
+            linewidth=0,
+            edgecolor=None)
 
         axes[ax_y].set_xlabel('')
-
-        fig.savefig(
-            str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
-            dpi = dpi,
-            bbox_inches = 'tight')
+        if sample_names != None:
+            axes[ax_y].set_ylabel(str(sample_names[ax_y]), fontsize=12)
+        else:
+            axes[ax_y].set_ylabel(str(file)[:-12], fontsize=12)
 
         if ax_y == row_number - 1:
             pass
@@ -328,6 +339,7 @@ def compile_coverage(
         ax_y += 1
 
     # Save catenated figure
+    fig.suptitle(gene_name)
     plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
     fig.savefig(
         str(plot_output) + plot_title + '_summary.pdf',
