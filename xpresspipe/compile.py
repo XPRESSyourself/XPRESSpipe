@@ -249,6 +249,7 @@ def compile_coverage(
     path,
     file_list,
     gene_name,
+    record_type,
     sample_names,
     strand,
     plot_type,
@@ -295,27 +296,27 @@ def compile_coverage(
         start = 'start'
         for index, row in df.iterrows():
             if start == 'start':
-                df.at[index,'exon'] = 'Exon ' + str(exon_count)
+                df.at[index, record_type] = str(record_type) + ' ' + str(exon_count)
                 exon_count += 1
                 last = row[0]
                 start = 'stop'
             elif abs(row[0] - last) > 1:
-                df.at[index,'exon'] = 'Exon ' + str(exon_count)
+                df.at[index, record_type] = str(record_type) + ' ' + str(exon_count)
                 exon_count += 1
                 last = row[0]
             else:
-                df.at[index,'exon'] = ''
+                df.at[index,record_type] = ''
                 last = row[0]
 
         for index, row in df.iterrows():
-            if 'Exon' in row[3]:
+            if str(record_type) in row[3]:
                 axes[ax_y].axvline(index, ls='-', linewidth=2, color='black', ymin=0, ymax=1)
 
         axes[ax_y].axhline(0, ls='-', linewidth=5, color='black', xmin=0, xmax=1)
         axes[ax_y].axvline(0, ls='-', linewidth=5, color='black', ymin=0, ymax=1)
 
         df.plot.bar(
-            x = 'exon',
+            x = record_type,
             y = 'coverage',
             ax = axes[ax_y],
             grid = None,

@@ -240,6 +240,7 @@ def make_coverage(
             str(args_dict['coverage']) + 'metrics/',
             file_list,
             args_dict['gene_name'],
+            args_dict['type'],
             args_dict['sample_names'],
             coordinate_index[0][0][2],
             'coverage' + str(z),
