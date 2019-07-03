@@ -211,8 +211,79 @@ Examples
 
 NOTE: As you can appreciate, there are systematic 5' biases in these library preparations. A good RNA-seq library should have even coverage across all transcripts.
 
+
 =================================
-Codon Periodicitiy Analysis
+Intron-collapsed Gene Coverage Analysis
+=================================
+| Plot the coverage of a given gene for a sample or set of samples with introns collapsed.
+
+.. code-block:: shell
+
+  $ xpresspipe geneCoverage --help
+
+.. list-table::
+   :widths: 35 50
+   :header-rows: 1
+
+   * - Required Arguments
+     - Description
+   * - :data:`-i \<path\>, --input \<path\>`
+     - Path to input directory of SAM alignment files
+   * - :data:`-o \<path\>, --output \<path\>`
+     - Path to output directory
+   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
+     - Path and file name to reference GTF
+   * - :data:`-n \<gene_name\>, --gene_name \<gene_name\>`
+     - Gene name
+
+.. list-table::
+  :widths: 35 50
+  :header-rows: 1
+
+  * - Optional Arguments
+    - Description
+  * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
+    - Experiment name to save output summaries as
+  * - :data:`--bam_suffix \<suffix\>`
+    - Change from default suffix of _Aligned.sort.bam if using a different BAM file
+  * - :data:`--type \<type>`
+    - Record type to map across (i.e. "exon", "CDS") (case-sensitive)
+  * - :data:`--samples \<sample_list\> [<sample_list> ...]`
+    - Provide a space-separated list of sample names to include in analysis (will only include those listed, and will plot in the order listed)
+  * - :data:`--sample_names \<suffix\>`
+    - Provide a space-separated list of sample names to use for labels
+  * - :data:`--plot_color \<color>`
+    - Indicate plotting color
+  * - :data:`-m \<processors\>, --max_processors \<processors\>`
+    - Number of max processors to use for tasks (default: No limit)
+
+
+-----------
+Examples
+-----------
+| **Example 1 -- Analyze gene coverage profile of sequence libraries**
+| - Use default transcript reference (will generate a longest transcript-only reference)
+| - Analyze SLC1A1
+| - Analyze along chosen record type (default: exon, but could also use CDS if looking at ribosome profiling data)
+| - Analyzing BAM files ending in :data:`.sort.bam`
+| - Specifying names to use in plotting -- if not using :data:`--samples`, these files will be plotted alphabetically, so the listed order should also be alphabetical. If using :data:`--samples`, need to specify names in the same order you provided for this argument.
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe geneCoverage -i /path/to/bam_files -o ./ -g /path/to/reference.gtf \
+    -n SLC1A1 --type exon --bam_suffix .sort.bam \
+    --sample_names SRR1795425 SRR1795433 SRR1795435 SRR1795437
+
+.. image:: geneCoverage_IGV_comparison.png
+  :width: 750px
+
+NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In the image above, subplot A is a snapshot from IGV (https://software.broadinstitute.org/software/igv/). Green boxes show approximate same region with the same exons for comparison.
+
+
+
+=================================
+Codon Periodicity Analysis
 =================================
 | Analyze periodicity of most abundant read length. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.
 

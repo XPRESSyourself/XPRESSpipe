@@ -4,7 +4,7 @@
 General Usage
 #############
 
-| XPRESSpipe can be run essentially from beginning to end as a pipeline, or as individual sub-modules. We will describe each option in more detail in each section of the documentation. The purpose of XPRESSpipe is to automate the alignment, quality control, and initial analysis of single-end (SE), paired-end (PE), and ribosome profiling data. It is intended that input data is in its own directory and that each file is a properly formatted :dat:`.fastq` file. However, the suffix for these files can be :data:`.fq` or :data:`.txt` as well. They can be zipped (:data:`.zip` or :data:`.gz`) or unzipped. When using intermediate sub-modules, such as :data:`align` or :data:`readDistribution`, input will vary and is explicated
+| XPRESSpipe can be run essentially from beginning to end as a pipeline, or as individual sub-modules. We will describe each option in more detail in each section of the documentation. The purpose of XPRESSpipe is to automate the alignment, quality control, and initial analysis of single-end (SE), paired-end (PE), and ribosome profiling data. It is intended that input data is in its own directory and that each file is a properly formatted :data:`.fastq` file. However, the suffix for these files can be :data:`.fq` or :data:`.txt` as well. They can be zipped (:data:`.zip` or :data:`.gz`) or unzipped. When using intermediate sub-modules, such as :data:`align` or :data:`readDistribution`, input will vary and is explicated
 in the :data:`--help` menu for each sub-module.
 
 | Further analysis on the resulting datasets can be performed using `XPRESSplot <https://github.com/XPRESSyourself/XPRESSplot>`_.

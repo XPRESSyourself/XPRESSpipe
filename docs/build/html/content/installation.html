@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; XPRESSpipe 0.1.3-beta documentation</title>
+  <title>Installation &mdash; XPRESSpipe 0.1.4-beta documentation</title>
   
 
   
@@ -199,6 +199,12 @@ $ python setup.py install
 </pre></div>
 </div>
 <div class="line-block">
+<div class="line">If you are installing on computer without sudo privileges (i.e. an HPC), you should install by substituting the last line of the last command block with this command block:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python setup.py install --prefix ~/.local
+</pre></div>
+</div>
+<div class="line-block">
 <div class="line">This will install XPRESSpipe as well as all required dependencies. If <a class="reference external" href="https://www.anaconda.com/distribution/">Anaconda</a> has not been installed by the user, this will take care of installation. Anaconda is a package manager and will install the other software packages XPRESSpipe relies on.</div>
 </div>
 <div class="line-block">
@@ -218,6 +224,7 @@ Processing dependencies <span class="k">for</span> <span class="nv">XPRESSpipe</
 Finished processing dependencies <span class="k">for</span> <span class="nv">XPRESSpipe</span><span class="o">==</span><span class="m">0</span>.0.1b0
 
 $ <span class="nb">echo</span> <span class="s2">&quot;export PATH=&#39;/Users/</span><span class="nv">$USERNAME</span><span class="s2">/anaconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&#39; &gt;&gt; ~/.bash_profile</span>
+$<span class="s2"> echo &quot;</span><span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s1">&#39;/Users/$USERNAME/anaconda3/lib/python3.6/site-packages&#39;</span><span class="s2">&quot;</span>
 </pre></div>
 </div>
 </div>

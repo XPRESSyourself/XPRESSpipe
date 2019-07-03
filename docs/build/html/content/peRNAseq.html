@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Paired-End RNA-seq Pipeline &mdash; XPRESSpipe 0.1.3-beta documentation</title>
+  <title>Paired-End RNA-seq Pipeline &mdash; XPRESSpipe 0.1.4-beta documentation</title>
   
 
   
@@ -236,31 +236,28 @@
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
 <td><p>Include flag to output BED files for each aligned file</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bigwig</span></code></p></td>
-<td><p>Include flag to output bigwig files for each aligned file</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-c</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--quantification_method</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-c</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--quantification_method</span></code></p></td>
 <td><p>Specify quantification method (default: cufflinks; other option: htseq. If using Cufflinks, no downstream sample normalization is required)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--method</span> <span class="pre">&lt;RPM,</span> <span class="pre">RPKM,</span> <span class="pre">FPKM,</span> <span class="pre">LOG&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--method</span> <span class="pre">&lt;RPM,</span> <span class="pre">RPKM,</span> <span class="pre">FPKM,</span> <span class="pre">LOG&gt;</span></code></p></td>
 <td><p>Normalization method to perform (options: “RPM”, “TPM”, “RPKM”, “FPKM”) – if using either TPM, RPKM, or FPKM, a GTF reference file must be included</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--batch</span> <span class="pre">&lt;/path/filename.tsv&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--batch</span> <span class="pre">&lt;/path/filename.tsv&gt;</span></code></p></td>
 <td><p>Include path and filename of dataframe with batch normalization parameters</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;sjdbOverhang_amount&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;sjdbOverhang_amount&gt;</span></code></p></td>
 <td><p>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--mismatchRatio</span> <span class="pre">&lt;mismatchRatio&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--mismatchRatio</span> <span class="pre">&lt;mismatchRatio&gt;</span></code></p></td>
 <td><p>Alignment ratio of mismatches to mapped length is less than this value. See STAR documentation for more information on setting this parameter</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--seedSearchStartLmax</span> <span class="pre">&lt;seedSearchStartLmax&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--seedSearchStartLmax</span> <span class="pre">&lt;seedSearchStartLmax&gt;</span></code></p></td>
 <td><p>Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">genome_size</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">genome_size</span></code></p></td>
 <td><p>Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>
 </tr>
 </tbody>

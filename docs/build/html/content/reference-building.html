@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Curating References &mdash; XPRESSpipe 0.1.3-beta documentation</title>
+  <title>Curating References &mdash; XPRESSpipe 0.1.4-beta documentation</title>
   
 
   
@@ -215,7 +215,6 @@
 <div class="line">The following is an example of how to get the reference files needed for generating a human reference:</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ mkdir human_reference
-$ mkdir human_reference/genome
 $ mkdir human_reference/genome_fasta
 $ <span class="nb">cd</span> human_reference/
 $ curl ftp://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz -o transcripts.gtf.gz
@@ -299,15 +298,15 @@ $ mv *fasta genome_fasta
 <div class="line">- The as 2x100bp paired-end sequencing was used, the default value for <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> is appropriate in this case</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -t <span class="m">12</span>
-
-<span class="p">|</span> **Example <span class="m">3</span> -- Create a single-end sequencing reference <span class="k">for</span> Saccharomyces cerevisiae:**
-<span class="p">|</span> - Paths to output and location of genome fasta files <span class="k">for</span> each chromosome are provided, as well as path and file name to transcripts.gtf file
-<span class="p">|</span> - Default number of threads are used <span class="k">for</span> preparing reference<span class="se">\</span>
-<span class="p">|</span> - Genome size is specified
-
-.. code-block:: shell
-
-  $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf --sjdbOverhang <span class="m">49</span> --genome_size <span class="m">11</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><strong>Example 3 – Create a single-end sequencing reference for Saccharomyces cerevisiae:</strong></div>
+<div class="line">- Paths to output and location of genome fasta files for each chromosome are provided, as well as path and file name to transcripts.gtf file</div>
+<div class="line">- Default number of threads are used for preparing reference</div>
+<div class="line">- Genome size is specified</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf --sjdbOverhang <span class="m">49</span> --genome_size <span class="m">11</span>
 </pre></div>
 </div>
 </div>

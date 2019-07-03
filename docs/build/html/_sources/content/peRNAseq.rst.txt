@@ -38,8 +38,6 @@ Paired-End RNA-seq Pipeline
      - Include flag to quantify reads with de-duplication (will search for files with suffix :data:`_dedupRemoved.bam`)
    * - :data:`--output_bed`
      - Include flag to output BED files for each aligned file
-   * - :data:`--output_bigwig`
-     - Include flag to output bigwig files for each aligned file
    * - :data:`-c <method>`, :data:`--quantification_method <method>`
      - Specify quantification method (default: cufflinks; other option: htseq. If using Cufflinks, no downstream sample normalization is required)
    * - :data:`--method \<RPM, RPKM, FPKM, LOG\>`

@@ -23,6 +23,12 @@ Install from Source (Recommended)
   $ cd XPRESSpipe-v0.1.3b2
   $ python setup.py install
 
+| If you are installing on computer without sudo privileges (i.e. an HPC), you should install by substituting the last line of the last command block with this command block:
+
+.. code-block:: shell
+
+  $ python setup.py install --prefix ~/.local
+
 | This will install XPRESSpipe as well as all required dependencies. If `Anaconda <https://www.anaconda.com/distribution/>`_ has not been installed by the user, this will take care of installation. Anaconda is a package manager and will install the other software packages XPRESSpipe relies on.
 
 | 4. Test installation by executing the following in the command line:
@@ -43,6 +49,7 @@ Install from Source (Recommended)
   Finished processing dependencies for XPRESSpipe==0.0.1b0
 
   $ echo "export PATH='/Users/$USERNAME/anaconda3/bin:$PATH' >> ~/.bash_profile
+  $ echo "export PYTHONPATH='/Users/$USERNAME/anaconda3/lib/python3.6/site-packages'"
 
 ======================
 Docker Container
