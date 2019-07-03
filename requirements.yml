@@ -12,7 +12,7 @@ dependencies:
   - scipy
   - r
   - libiconv
-  - conda-forge::ncurses
+  - ncurses
   - fastp
   - STAR
   - samtools
