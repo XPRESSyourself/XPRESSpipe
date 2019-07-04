@@ -17,7 +17,8 @@ col = ['gene', 'strand', 'chromosome', 'start', 'end', 'coordinates', 'length']
 gtf_truth = [['ENSG00000186092', '+', '1', 65419, 71585, [[65419, 65433], [65520, 65573], [69037, 71585]], 2618]]
 gtf_truth = pd.DataFrame(gtf_truth, columns = col)
 flat_gtf = flatten_reference(gtf)
-assert flat_gtf.equals(gtf_truth), 'flatten_reference() failed with gtf dataframe input'
+assert flat_gtf.equals(gtf_truth), (print(flat_gtf), print(gtf_truth), 'flatten_reference() failed with gtf dataframe input')
+
 
 # Indexing truth set
 flat = [['ENSG00000176695', '+', '19', 107104, 117102, [[107104, 107157], [107473, 107555], [110625, 110681], [116507, 117102]], 790],
