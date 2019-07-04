@@ -25,12 +25,15 @@ import os
 import sys
 import pandas as pd
 
+chromosome_position = 2
+
 """EXTERNAL DEPENDENCIES"""
 # samtools
 
 """Read in indexed BAM file to Pandas dataframe"""
 def read_bam(
     file,
+    keep_unmapped = False,
     threads = 1):
 
     # Read in BAM file
@@ -52,7 +55,9 @@ def read_bam(
         'rm'
         ' ' + str(file)[:-4] + '.tmp')
 
-    bam[2] = bam[2].astype(str) # Make chromosome info consisitent with reference file
+    bam[chromosome_position] = bam[chromosome_position].astype(str) # Make chromosome info consisitent with reference file
+    if keep_unmapped == False:
+        bam = bam.loc[bam[chromosome_position] != '*']
 
     return bam
 
