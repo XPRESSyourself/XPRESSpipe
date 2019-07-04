@@ -83,10 +83,12 @@ def compile_matrix_metrics(
         x = 0
         df = pd.read_csv(
             str(path) + str(file),
-            sep = '\t') # Initialize dataframe for relevant data
+            sep = '\t',
+            index_col = 0) # Initialize dataframe for relevant data
         df = df.dropna(
             axis = 0,
             subset = [str(lab_x), str(lab_y)]) # Remove rows where pertinent information is missing
+        df = df.sort_index()
 
         # Prepare subplots
         if (file_number % 2) == 0:
@@ -108,6 +110,14 @@ def compile_matrix_metrics(
                 grid = None)
             axes[ax_y, ax_x].set_xticklabels(tix)
             axes[ax_y, ax_x].tick_params(which='major', length=7, width=2, direction='out')
+        elif plot_type == 'read_distribution':
+            df.plot.bar(
+                x = lab_x,
+                y = lab_y,
+                title = file[:-4],
+                ax = axes[ax_y, ax_x],
+                grid = None,
+                width = 0.8)
         else:
             df.plot.line(
                 x = lab_x,
@@ -121,19 +131,8 @@ def compile_matrix_metrics(
             xmin = 0,
             ls = '-',
             color = 'black')
-        axes[ax_y, ax_x].axvline(
-            0,
-            ymin = 0,
-            ls = '-',
-            color = 'black')
-
-        fig.savefig(
-            str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
-            dpi = dpi,
-            bbox_inches = 'tight')
 
         file_number += 1
-        del df
 
     # Save catenated figure
     plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
