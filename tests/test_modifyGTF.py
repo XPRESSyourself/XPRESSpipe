@@ -117,6 +117,10 @@ gtf_edit = edit_gtf(
     _3prime=15,
     output=False,
     threads=None)
+gtf_longest_truth1 = [
+[1,	'ensembl', 'transcript',	69055,	70108],
+[1,	'ensembl_havana',	'transcript',	450703,	451697]]
+gtf_longest_truth1 = pd.DataFrame(gtf_longest_truth1, index=[34,101])
 assert gtf_edit.iloc[0:125,].loc[(gtf_edit[2] == 'transcript') & (gtf_edit[8].str.contains('CCDS'))].iloc[:,0:5].equals(gtf_longest_truth1), 'failed to catch CCDS domains'
 assert gtf_edit.iloc[0:25,].loc[gtf_edit[2] == 'transcript'].iloc[:,0:5].equals(gtf_longest_truth2), 'failed to pass general check of transcript choosing'
 
