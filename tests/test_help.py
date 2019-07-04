@@ -2,7 +2,7 @@ import subprocess
 
 def run_command(command):
     try:
-        subprocess.check_output(batcmd, shell=True)
+        subprocess.check_output(command, shell=True)
     except:
         assert 1 == 2, str(command) + ' did not work'
 
