@@ -99,7 +99,7 @@ def make_flatten(
                 else:
                     item = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
 
-                    if gtf.at[index + n, 2] == record_type.lower(): # Append coordinate paires for each exon of the transcript
+                    if gtf.at[index + n, 2] == record_type: # Append coordinate paires for each exon of the transcript
                         coordinates.append([gtf.at[index + n, 3], gtf.at[index + n, 4]])
 
             # Get start and end positions for transcript/gene
@@ -112,7 +112,7 @@ def make_flatten(
                 records.append([gene, strand, chromosome, start, end, coordinates])
             except:
                 warning = 1
-                print('Warning: No ' + str(record_type.lower()) +  ' records found for gene record ' + str(gene))
+                print('Warning: No ' + str(record_type) +  ' records found for gene record ' + str(gene))
 
     # Push flattened reference into pandas dataframe
     gtf = None
