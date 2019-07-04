@@ -1,25 +1,27 @@
-import os
-import sys
+import subprocess
 
-__path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
-#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
+def run_command(command):
+    try:
+        subprocess.check_output(batcmd, shell=True)
+    except:
+        assert 1 == 2, str(command) + ' did not work'
 
 # Test software install
-assert os.system('xpresspipe --help') == 0, 'xpresspipe help call not working'
-assert os.system('xpresspipe seRNAseq --help') == 0, 'seRNAseq help call not working'
-assert os.system('xpresspipe peRNAseq --help') == 0, 'peRNAseq help call not working'
-assert os.system('xpresspipe riboseq --help') == 0, 'riboseq help call not working'
-assert os.system('xpresspipe trim --help') == 0, 'trim help call not working'
-assert os.system('xpresspipe align --help') == 0, 'align help call not working'
-assert os.system('xpresspipe count --help') == 0, 'count help call not working'
-assert os.system('xpresspipe normalizeMatrix --help') == 0, 'normalizeMatrix help call not working'
-assert os.system('xpresspipe diffxpress --help') == 0, 'diffxpress help call not working'
-assert os.system('xpresspipe metagene --help') == 0, 'metagene help call not working'
-assert os.system('xpresspipe readDistribution --help') == 0, 'readDistribution help call not working'
-assert os.system('xpresspipe periodicity --help') == 0, 'periodicity help call not working'
-assert os.system('xpresspipe complexity --help') == 0, 'complexity help call not working'
-assert os.system('xpresspipe curateReference --help') == 0, 'curateReference help call not working'
-assert os.system('xpresspipe makeReference --help') == 0, 'makeReference help call not working'
-assert os.system('xpresspipe modifyGTF --help') == 0, 'modifyGTF help call not working'
-assert os.system('xpresspipe rrnaProbe --help') == 0, 'rrnaProbe help call not working'
-assert os.system('xpresspipe convertNames --help') == 0, 'convertNames help call not working'
+run_command('xpresspipe --help')
+run_command('xpresspipe seRNAseq --help')
+run_command('xpresspipe peRNAseq --help')
+run_command('xpresspipe riboseq --help')
+run_command('xpresspipe trim --help')
+run_command('xpresspipe align --help')
+run_command('xpresspipe count --help')
+run_command('xpresspipe normalizeMatrix --help')
+run_command('xpresspipe diffxpress --help')
+run_command('xpresspipe metagene --help')
+run_command('xpresspipe readDistribution --help')
+run_command('xpresspipe periodicity --help')
+run_command('xpresspipe complexity --help')
+run_command('xpresspipe curateReference --help')
+run_command('xpresspipe makeReference --help')
+run_command('xpresspipe modifyGTF --help')
+run_command('xpresspipe rrnaProbe --help')
+run_command('xpresspipe convertNames --help')

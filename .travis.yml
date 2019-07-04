@@ -77,7 +77,6 @@ script:
   - coverage run -a tests/test_modifyGTF.py
   - coverage run -a tests/test_truncateGTF.py
   - coverage run -a tests/test_analysis.py
-  - coverage run -a tests/test_pipelines.py
   - coverage run -a tests/test_help.py
 
 after_success:
