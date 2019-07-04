@@ -132,7 +132,7 @@ def check_inputs(
             raise Exception('Invalid quantification method provided: must be \"cufflinks\" or \"htseq\"')
 
     if 'gtf' in args_dict and args_dict['gtf'] != None and str(args_dict['gtf']).lower()[-4:] != '.gtf':
-        raise Exception('Invalid reference_type value provided')
+        raise Exception('Invalid reference_type value provided. Could not find a file ending with .gtf')
 
     # Check max_processor input
     if 'max_processors' in args_dict \
