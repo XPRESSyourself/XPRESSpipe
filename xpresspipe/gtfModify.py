@@ -239,10 +239,11 @@ def get_chunks(
     if len(gtf.columns.tolist()) == 9:
         gene_instances = len(gtf.loc[gtf[gtf_type_column] == 'gene'][gtf_type_column].tolist())
         if gene_instances == 0:
-            gene_instances = gtf.loc[gtf[gtf_type_column] == 'transcript'].shape[0]
+            gene_instances = len(gtf.loc[gtf[gtf_type_column] == 'transcript'][gtf_type_column].tolist())
             if gene_instances == 0:
                 raise Exception('No gene or transcript records found in GTF')
     else:
+        print(gtf)
         raise Exception('It appears a properly formatted GTF file was not provided')
 
     if cores > gene_instances:
