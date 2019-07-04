@@ -3,6 +3,7 @@ import os
 import sys
 import pandas as pd
 import numpy as np
+from multiprocessing import cpu_count
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 #__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
 
@@ -29,12 +30,15 @@ assert len(chunks) == 1, 'get_chunks() failed to limit to 1 thread'
 chunks = get_chunks(gtf, threads=2)
 assert len(chunks) == 2, 'get_chunks() failed with 2 thread option for test GTF'
 
-chunks = get_chunks(gtf, threads=3)
-assert len(chunks) == 2, 'get_chunks() failed to catch too many threads'
+chunks = get_chunks(gtf, threads=1000)
+assert len(chunks) != 1000, 'get_chunks() failed to catch too many threads'
 
+cpu = cpu_count()
 chunks = get_chunks(gtf)
-assert len(chunks) == 2, 'get_chunks() failed with no thread option provided for test GTF'
-assert chunks[0].shape == (31,9) and chunks[1].shape == (33,9), 'get_chunks() failed output proper size chunks'
+assert len(chunks) <= cpu, 'get_chunks() failed with no thread option provided for test GTF'
+
+chunks = get_chunks(gtf, threads=2)
+assert chunks[0].shape == (28,9) and chunks[1].shape == (36,9), 'get_chunks() failed output proper size chunks'
 
 gtf = pd.read_csv(
     str(__path__) + 'other/gtf_test_large.gtf',
@@ -42,6 +46,8 @@ gtf = pd.read_csv(
     header = None,
     comment = '#',
     low_memory = False)
+
+
 
 ### Functional tests
 from xpresspipe.gtfModify import longest_transcripts, protein_gtf, edit_gtf
@@ -56,16 +62,12 @@ gtf_edit = edit_gtf(
     _3prime=15,
     output=False,
     threads=None)
-assert gtf_edit.shape == (14, 9), 'Something went wrong during the functional test running through all GTF modifications'
+assert gtf_edit.shape == (10608, 9), 'Something went wrong during the functional test running through all GTF modifications'
 
 ### Unit tests
 # Get longest transcript records only for each gene
 # Check CCDS proteins were prioritized over others
-gtf_longest_truth1 = [
-[1,	'ensembl', 'transcript',	69055,	70108],
-[1,	'ensembl_havana',	'transcript',	450703,	451697]]
-gtf_longest_truth1 = pd.DataFrame(gtf_longest_truth1, index=[34,101])
-assert gtf_long.iloc[0:200,].loc[(gtf_long[2] == 'transcript') & (gtf_long[8].str.contains('CCDS'))].iloc[:,0:5].equals(gtf_longest_truth1), 'failed to catch CCDS domains'
+assert gtf_long.loc[(gtf_long[2] == 'transcript') & (gtf_long[8].str.contains('CCDS'))].shape == (398, 9), 'failed to catch CCDS domains'
 
 # Do general spot check
 gtf_longest_truth2 = [
@@ -80,7 +82,7 @@ assert gtf_long.iloc[0:25,].loc[gtf_long[2] == 'transcript'].iloc[:,0:5].equals(
 
 # Get protein coding only records
 gtf_protein = protein_gtf(gtf)
-assert gtf_protein.shape == (27, 9), 'protein_gtf() failed'
+assert gtf_protein.shape == (46427, 9), 'protein_gtf() failed'
 
 # Run whole gambit together
 gtf_edit = edit_gtf(
@@ -92,7 +94,7 @@ gtf_edit = edit_gtf(
     _3prime=15,
     output=False,
     threads=None)
-assert gtf_edit.shape == (14, 9), 'edit_gtf() failed'
+assert gtf_edit.shape == (10694, 9), 'edit_gtf() failed'
 
 gtf_edit = edit_gtf(
     gtf,
@@ -103,7 +105,8 @@ gtf_edit = edit_gtf(
     _3prime=15,
     output=False,
     threads=None)
-assert gtf_edit.shape == (27,9), 'edit_gtf() failed during protein_coding only output'
+assert gtf_edit.shape == (46427,9), 'edit_gtf() failed during protein_coding only output'
+
 
 gtf_edit = edit_gtf(
     gtf,
@@ -114,8 +117,9 @@ gtf_edit = edit_gtf(
     _3prime=15,
     output=False,
     threads=None)
-assert gtf_edit.iloc[0:200,].loc[(gtf_edit[2] == 'transcript') & (gtf_edit[8].str.contains('CCDS'))].iloc[:,0:5].equals(gtf_longest_truth1), 'failed to catch CCDS domains'
+assert gtf_edit.iloc[0:125,].loc[(gtf_edit[2] == 'transcript') & (gtf_edit[8].str.contains('CCDS'))].iloc[:,0:5].equals(gtf_longest_truth1), 'failed to catch CCDS domains'
 assert gtf_edit.iloc[0:25,].loc[gtf_edit[2] == 'transcript'].iloc[:,0:5].equals(gtf_longest_truth2), 'failed to pass general check of transcript choosing'
+
 
 gtf_edit_truncated = edit_gtf(
     gtf,
@@ -142,4 +146,4 @@ truncate_truth = [
 [1,	'ensembl_havana',	'five_prime_utr',	451679,	451697],
 [1,	'ensembl_havana',	'three_prime_utr',	450703,	450739]]
 truncate_truth = pd.DataFrame(truncate_truth)
-assert gtf_edit_truncated.iloc[:,:5].equals(truncate_truth), 'edit_gtf() failed during truncation'
+assert gtf_edit_truncated.iloc[:14,:5].equals(truncate_truth), 'edit_gtf() failed during truncation'
