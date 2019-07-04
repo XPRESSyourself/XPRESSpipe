@@ -36,18 +36,56 @@ from .utils import add_directory, get_files
 from .processBAM import read_bam, bam_sample
 from .quality import get_indices, get_position
 
+len_dictionary = {
+    17:16,
+    18:15,
+    19:16,
+    20:16,
+    21:16,
+    22:16,
+    23:16,
+    24:16,
+    25:16,
+    26:15,
+    27:16,
+    28:16,
+    29:16,
+    30:17,
+    31:17,
+    32:16,
+    33:16
+}
+
+
 """P site ranges for 28-30mers"""
 def psite_ranges(
         bam):
 
     # Keep only optimal footprint size
-    bam = bam[(bam[9].str.len() == 28)]
+    bam = bam[(
+        (bam[9].str.len() == 17) |
+        (bam[9].str.len() == 18) |
+        (bam[9].str.len() == 19) |
+        (bam[9].str.len() == 21) |
+        (bam[9].str.len() == 22) |
+        (bam[9].str.len() == 23) |
+        (bam[9].str.len() == 24) |
+        (bam[9].str.len() == 25) |
+        (bam[9].str.len() == 26) |
+        (bam[9].str.len() == 27) |
+        (bam[9].str.len() == 28) |
+        (bam[9].str.len() == 29) |
+        (bam[9].str.len() == 30) |
+        (bam[9].str.len() == 31) |
+        (bam[9].str.len() == 32) |
+        (bam[9].str.len() == 33)
+        )]
 
     # Get rightmost coordinates for each read
-    bam[16] = bam[3] + bam[9].str.len()
+    bam['right_coordinate'] = bam[3] + bam[9].str.len()
 
     # Return as array
-    phased_coordinates = bam[[2,3,16]]
+    phased_coordinates = bam[[2,3,'right_coordinate']]
 
     if len(phased_coordinates.index) == 0:
         return None
@@ -62,17 +100,19 @@ def get_coordinate_records_period(
         search_coordinate_reverse,
         search_coordinate_forward):
 
-    search_coordinate_reverse += 16
-    search_coordinate_forward -= 16
+    length = abs(search_coordinate_forward - search_coordinate_reverse)
+    search_coordinate_reverse += len_dictionary[length]
+    search_coordinate_forward -= len_dictionary[length]
 
     record_array = []
+
     chromosome_array = coordinate_index[chromosome_index[search_chromosome]]
     for index, record in enumerate(chromosome_array):
         if record[0] <= search_coordinate_reverse and record[1] >= search_coordinate_reverse \
         or record[0] <= search_coordinate_forward and record[1] >= search_coordinate_forward:
             record_array.append(record)
 
-    return record_array
+    return record_array, len_dictionary[length]
 
 """Get periodicity profile for bam file"""
 def get_periodicity_profile(
@@ -90,7 +130,7 @@ def get_periodicity_profile(
 
     # Search through each mapped read coordinate
     for index, record in enumerate(aligned_reads_index):
-        record_array = get_coordinate_records_period(
+        record_array, p_length = get_coordinate_records_period(
                 coordinate_index,
                 chromosome_index,
                 record[0],
@@ -103,9 +143,9 @@ def get_periodicity_profile(
             for index, transcript_record in enumerate(record_array):
                 # Determine P-site coordinate to search
                 if transcript_record[1] == '+':
-                    coordinate = record[2] - 16
+                    coordinate = record[2] - p_length
                 else:
-                    coordinate = record[1] + 16
+                    coordinate = record[1] + p_length
 
                 # Get position relative to start of the p-site
                 position = get_position(
@@ -137,7 +177,7 @@ def get_peaks(
 
     bam_coordinates = psite_ranges(bam)
     if bam_coordinates == None:
-        print('Warning: No reads passed filtering (28 nt) for file ' + str(file))
+        print('Warning: No reads passed filtering for file ' + str(file))
         return
 
     bam = None # Some clean-up
