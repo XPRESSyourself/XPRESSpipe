@@ -46,6 +46,8 @@ from .complexity import make_complexity
 from .parallel import get_cores
 from .gtfModify import edit_gtf
 from .utils import get_files, get_directories, unzip_files
+from .test import test_install
+from .buildCommand import build_command
 
 """Main function to call necessary functions for sub-modules
 
@@ -70,7 +72,13 @@ def main(
             args_dict['log'])
 
     # Execute corresponding functions determined by arguments provided by user
-    if args.cmd == 'trim':
+    if args.cmd == 'build':
+        build_command()
+
+    elif args.cmd == 'test':
+        test_install()
+        
+    elif args.cmd == 'trim':
         print('Trimming reads...')
 
         # Trim reads

@@ -300,6 +300,30 @@ def get_arguments(
     """MODULE SUBPARSER PROGRAMS"""
     subparser = parser.add_subparsers(dest = 'cmd')
 
+    """TEST SUBPARSER"""
+    test_parser = subparser.add_parser(
+        'test',
+        description = 'Test install',
+        add_help = False)
+    # Optional arguments
+    test_opts  =  test_parser.add_argument_group('optional arguments')
+    test_opts.add_argument(
+        '-h', '--help',
+        action = 'help',
+        help = 'Show help message and exit')
+
+    """BUILD SUBPARSER"""
+    build_parser = subparser.add_parser(
+        'build',
+        description = 'Build command',
+        add_help = False)
+    # Optional arguments
+    build_opts  =  build_parser.add_argument_group('optional arguments')
+    build_opts.add_argument(
+        '-h', '--help',
+        action = 'help',
+        help = 'Show help message and exit')
+
     """SERNASEQ SUBPARSER"""
     se_parser = subparser.add_parser(
         'seRNAseq',

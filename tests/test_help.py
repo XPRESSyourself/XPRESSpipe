@@ -1,10 +1,6 @@
 import subprocess
 
-def run_command(command):
-    try:
-        subprocess.check_output(command, shell=True)
-    except:
-        assert 1 == 2, str(command) + ' did not work'
+from xpresspipe.test import run_command
 
 # Test software install
 run_command('xpresspipe --help')

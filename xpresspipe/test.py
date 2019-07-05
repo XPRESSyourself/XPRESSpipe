@@ -18,30 +18,20 @@ PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
-__version__ = '0.1.4-beta'
+import subprocess
 
-from .__main__ import *
-from .align import *
-from .arguments import *
-from .buildCommand import *
-from .compile import *
-from .complexity import *
-from .convert import *
-from .count import *
-from .geneCoverage import *
-from .gtfFlatten import *
-from .gtfModify import *
-from .gtfTruncate import *
-from .messages import *
-from .metagene import *
-from .normalizeMatrix import *
-from .parallel import *
-from .periodicity import *
-from .processBAM import *
-from .quality import *
-from .readDistribution import *
-from .rrnaProbe import *
-from .test import *
-from .trim import *
-from .utils import *
+def run_command(command):
+    try:
+        subprocess.check_output(command, shell=True)
+        return 0
+    except:
+        assert 1 == 2, str(command) + ' did not work'
+
+# Test software install
+def test_install():
+    if run_command('xpresspipe --help') == 0:
+        print('Installation successful')
+    else:
+        print('Installation failed')
