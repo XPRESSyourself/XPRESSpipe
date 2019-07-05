@@ -19,4 +19,26 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from .__main__ import *
+from .align import *
+from .arguments import *
+from .compile import *
+from .complexity import *
+from .convert import *
+from .count import *
+from .geneCoverage import *
+from .gtfFlatten import *
+from .gtfModify import *
+from .gtfTruncate import *
+from .messages import *
+from .metagene import *
+from .normalizeMatrix import *
+from .parallel import *
+from .periodicity import *
+from .processBAM import *
+from .quality import *
+from .readDistribution import *
+from .rrnaProbe import *
+from .trim import *
+from .utils import *
 __version__ = '0.1.4-beta'
