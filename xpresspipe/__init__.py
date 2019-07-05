@@ -19,6 +19,8 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+__version__ = '0.1.4-beta'
+
 from .__main__ import *
 from .align import *
 from .arguments import *
@@ -41,4 +43,3 @@ from .readDistribution import *
 from .rrnaProbe import *
 from .trim import *
 from .utils import *
-__version__ = '0.1.4-beta'
