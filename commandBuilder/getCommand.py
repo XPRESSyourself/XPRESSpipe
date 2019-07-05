@@ -19,6 +19,11 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+from flask import Flask
+
+app = Flask(__name__)
+
+
 
 print('The following program will help you design a command for use with XPRESSpipe\n')
 
