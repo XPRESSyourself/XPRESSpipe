@@ -181,6 +181,7 @@ def guided_star(
         + ' --outSAMattributes NH HI NM MD AS XS'
         + ' --outSAMunmapped Within'
         + ' --outSAMtype BAM Unsorted' # Allow for multithreading STAR run without file overload
+        + ' --quantMode TranscriptomeSAM'
         + ' --outSAMheaderHD @HD VN:1.4'
         + str(args_dict['log']))
 
@@ -282,6 +283,15 @@ def alignment_process(
         + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam'
         + str(args_dict['log']))
 
+def store_transcriptome_alignments(
+    output,
+    args_dict):
+
+    os.system(
+        'mv'
+        + ' ' + str(output) + '*Aligned.toTranscriptome.out.bam'
+        + ' ' + str(args_dict['output']) + 'transcriptome_alignments' )
+
 """Remove all intermediate alignment files and references after alignment is complete"""
 def remove_intermediates(
         args_dict):
@@ -360,6 +370,9 @@ def align(
         # One-pass STAR with GTF guiding splice mapping
         guided_star(
             file,
+            output,
+            args_dict)
+        store_transcriptome_alignments(
             output,
             args_dict)
 
@@ -444,6 +457,11 @@ def run_peRNAseq(
         args_dict,
         'output',
         'alignments')
+
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'transcriptome_alignments')
 
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
         args_dict = add_directory(
