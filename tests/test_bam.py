@@ -18,15 +18,15 @@ bam_truth = [
 bam_truth = pd.DataFrame(bam_truth)
 
 bam = read_bam(bam_file)
-assert bam.head().equals(bam_truth), 'read_bam() failed'
+assert bam.head().equals(bam_truth[[2,3,9]]), 'read_bam() failed'
 
 bam = read_bam(bam_file, threads=2)
-assert bam.head().equals(bam_truth), 'read_bam() failed with multiprocessing included'
+assert bam.head().equals(bam_truth[[2,3,9]]), 'read_bam() failed with multiprocessing included'
 
 # Sample bam file
 from xpresspipe.processBAM import bam_sample
 bam_small = bam_sample(bam, 3)
-assert bam_small.shape == (3,16), 'bam_sample() failed '
+assert bam_small.shape == (3,3), 'bam_sample() failed '
 
 bam_small = bam_sample(bam, 135)
-assert bam_small.shape == (135,16), 'bam_sample() failed '
+assert bam_small.shape == (135,3), 'bam_sample() failed '
