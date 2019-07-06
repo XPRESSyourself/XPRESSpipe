@@ -135,6 +135,8 @@ def get_coverage(
     for key, value in chromosome_index.items():
         chr.append(key)
 
+    # Check that there is only one gene record for gene coverage
+    # Get plausible gene locations in BAM file for gene record of interest
     if len(coordinate_index) == 1 and len(coordinate_index[0]) == 1 and len(chr) == 1:
         bam = bam.loc[(bam[chromosome_position] == chr[0]) & (bam[leftCoordinate_position] >= (coordinate_index[0][0][0] - coordinate_index[0][0][4])) & (bam[leftCoordinate_position] <= (coordinate_index[0][0][1] + coordinate_index[0][0][4]))]
     else:
