@@ -26,6 +26,8 @@ import sys
 import pandas as pd
 
 chromosome_position = 2
+leftCoordinate_position = 3
+read_position = 9
 
 """EXTERNAL DEPENDENCIES"""
 # samtools
@@ -37,23 +39,35 @@ def read_bam(
     threads = 1):
 
     # Read in BAM file
-    os.system(
-        'samtools view'
-        + ' --threads ' + str(threads)
-        + ' ' + str(file)
-        + ' -o ' + str(file)[:-4] + '.tmp')
+    if str(file).lower()[-4:] == '.bam':
+        os.system(
+            'samtools view'
+            + ' --threads ' + str(threads)
+            + ' ' + str(file)
+            + ' -o ' + str(file)[:-4] + '.sam')
 
-    #read sorted, unique only sam files, get most abundant length and make new file
-    bam = pd.read_csv(
-        str(file)[:-4] + '.tmp',
-        sep = '\t',
-        header = None,
-        usecols = list(range(0, 16)),
-        low_memory = False)
+        #read sorted, unique only sam files, get most abundant length and make new file
+        bam = pd.read_csv(
+            str(file)[:-4] + '.sam',
+            sep = '\t',
+            header = None,
+            usecols = [chromosome_position, leftCoordinate_position, read_position],
+            low_memory = False)
 
-    os.system(
-        'rm'
-        ' ' + str(file)[:-4] + '.tmp')
+        os.system(
+            'rm'
+            ' ' + str(file)[:-4] + '.sam')
+
+    elif str(file).lower()[-4:] == '.sam':
+        bam = pd.read_csv(
+            str(file)[:-4] + '.sam',
+            sep = '\t',
+            header = None,
+            usecols = [chromosome_position, leftCoordinate_position, read_position],
+            low_memory = False)
+
+    else:
+        raise Exception('A SAM/BAM format file was not provided.')
 
     bam[chromosome_position] = bam[chromosome_position].astype(str) # Make chromosome info consisitent with reference file
     if keep_unmapped == False:
