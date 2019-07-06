@@ -44,7 +44,7 @@ def get_indices(
         low_memory=False)
 
     if gene_name != None:
-        gtf = gtf.loc[gtf[8].str.contains('gene_name \"' + str(gene_name) + '\";')]
+        gtf = gtf.loc[gtf[8].str.contains(str(gene_name))]
 
     # Flatten GTF
     if args_dict['gtf'].endswith('_LC.gtf') == True:
