@@ -82,7 +82,6 @@ def make_flatten(
     for index, row in gtf.iterrows():
 
         if row[2] == 'transcript':
-
             gene = gtf.at[index, 8][(gtf.at[index, 8].find('gene_id \"') + 9):].split('\";')[0]
             strand = row[6]
             chromosome = row[0]
@@ -94,14 +93,12 @@ def make_flatten(
             while item == gene:
                 n += 1
 
-                if index + n > len(gtf.index) - 1 or gtf.at[index + n, 2] == 'transcript':
+                if index + n > gtf.index[-1] - 1 or gtf.at[index + n, 2] == 'transcript':
                     break
                 else:
                     item = gtf.at[index + n, 8][(gtf.at[index + n, 8].find('gene_id \"') + 9):].split('\";')[0]
-
                     if gtf.at[index + n, 2] == record_type: # Append coordinate paires for each exon of the transcript
                         coordinates.append([gtf.at[index + n, 3], gtf.at[index + n, 4]])
-
             # Get start and end positions for transcript/gene
             # Assumes start and stop will be start and end of a protein coding transcript
             try:
@@ -110,6 +107,7 @@ def make_flatten(
 
                 # Push information to record
                 records.append([gene, strand, chromosome, start, end, coordinates])
+                
             except:
                 warning = 1
                 print('Warning: No ' + str(record_type) +  ' records found for gene record ' + str(gene))
