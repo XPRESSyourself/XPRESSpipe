@@ -50,7 +50,7 @@ def threshold_ram(
     _max = max(file_sizes)
 
     if file[-4:] == '.bam': # Assume binary files will expand by factor of 4 for decompression and additional data storage used in process
-        factor = 4
+        factor =  5
     else:
         factor = 1.5
 
