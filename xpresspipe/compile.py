@@ -47,7 +47,6 @@ def compile_matrix_metrics(
         plot_type,
         experiment,
         plot_output,
-        individual_output,
         dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
@@ -151,7 +150,6 @@ def compile_complexity_metrics(
         plot_type,
         experiment,
         plot_output,
-        individual_output,
         dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
@@ -227,12 +225,6 @@ def compile_complexity_metrics(
         axes[ax_y, ax_x].set_ylabel('% duplicate reads')
         axes[ax_y, ax_x].set_title(str(file[:-4]))
         axes[ax_y, ax_x].grid(False)
-
-        # Output individual plot
-        fig.savefig(
-            str(individual_output) + str(file[:-4]) + '_' + str(plot_type) + '.pdf',
-            dpi = dpi,
-            bbox_inches = 'tight')
 
         file_number += 1
         del df

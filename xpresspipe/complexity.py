@@ -64,10 +64,6 @@ def make_complexity(args_dict):
         args_dict,
         'complexity',
         'metrics')
-    args_dict = add_directory(
-        args_dict,
-        'complexity',
-        'individual_plots')
 
     # Get BAM files
     files = get_files(
@@ -104,7 +100,6 @@ def make_complexity(args_dict):
             'dupRate',
             'library_complexity_plot' + str(y),
             args_dict['experiment'],
-            args_dict['complexity'],
-            str(args_dict['complexity']) + 'individual_plots/')
+            args_dict['complexity'])
 
         y += 1
