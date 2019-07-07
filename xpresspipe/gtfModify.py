@@ -375,23 +375,6 @@ def edit_gtf(
         if output == True:
             file_name = str(file_name) + 'C'
 
-    if len(chunks) > 0:
-        gtf = pd.concat(chunks)
-        gtf = gtf.reset_index(drop=True)
-
-        if output == True:
-            gtf.to_csv(
-                str(file_name) + '.gtf',
-                sep = '\t',
-                header = None,
-                index = False,
-                quoting = csv.QUOTE_NONE)
-            gtf = None
-        else:
-            return gtf
-    else:
-        raise Warning('0 chunks of the original file remain')
-
     # Truncate by unique transcript
     # If file has not been parsed for longest transcript per gene, will truncate each isoform
     if truncate_reference == True:
@@ -407,27 +390,23 @@ def edit_gtf(
         if output == True:
             file_name = str(file_name) + 'T'
 
-        # Merge final GTF from chunks and output
-        if len(chunks) > 0:
-            gtf = pd.concat(chunks)
-            gtf = gtf.reset_index(drop=True)
+    # Merge final GTF from chunks and output
+    if len(chunks) > 0:
+        gtf = pd.concat(chunks)
+        gtf = gtf.reset_index(drop=True)
 
-            chunks = None # Garbage management
-            gc.collect()
+        chunks = None # Garbage management
+        gc.collect()
 
-            if output == True:
-                gtf.to_csv(
-                    str(file_name) + '.gtf',
-                    sep = '\t',
-                    header = None,
-                    index = False,
-                    quoting = csv.QUOTE_NONE)
-            else:
-                return gtf
-
+        if output == True:
+            gtf.to_csv(
+                str(file_name) + '.gtf',
+                sep = '\t',
+                header = None,
+                index = False,
+                quoting = csv.QUOTE_NONE)
         else:
-            raise Warning('0 chunks of the original file remain')
+            return gtf
 
-    chunks = None # Garbage management
-    gc.collect()
-    return
+    else:
+        raise Warning('0 chunks of the original file remain')
