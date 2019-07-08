@@ -289,7 +289,7 @@ def store_transcriptome_alignments(
 
     os.system(
         'mv'
-        + ' ' + str(output) + '*Aligned.toTranscriptome.out.bam'
+        + ' ' + str(args_dict['alignments']) + str(output) + '*Aligned.toTranscriptome.out.bam'
         + ' ' + str(args_dict['output']) + 'transcriptome_alignments' )
 
 """Remove all intermediate alignment files and references after alignment is complete"""
@@ -432,6 +432,11 @@ def run_seRNAseq(
             args_dict,
             'alignments',
             'intermediate_references')
+    else:
+        args_dict = add_directory(
+            args_dict,
+            'output',
+            'transcriptome_alignments')
 
     # Get list of files to align based on acceptable file types
     files = get_files(
@@ -458,16 +463,16 @@ def run_peRNAseq(
         'output',
         'alignments')
 
-    args_dict = add_directory(
-        args_dict,
-        'output',
-        'transcriptome_alignments')
-
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
         args_dict = add_directory(
             args_dict,
             'alignments',
             'intermediate_references')
+    else:
+        args_dict = add_directory(
+            args_dict,
+            'output',
+            'transcriptome_alignments')
 
     # Get list of files to align based on acceptable file types
     files = get_files(
