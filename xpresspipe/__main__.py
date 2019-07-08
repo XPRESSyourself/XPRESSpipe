@@ -77,7 +77,7 @@ def main(
 
     elif args.cmd == 'test':
         test_install()
-        
+
     elif args.cmd == 'trim':
         print('Trimming reads...')
 
