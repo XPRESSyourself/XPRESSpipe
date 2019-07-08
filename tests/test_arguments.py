@@ -10,8 +10,7 @@ __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 # Check max_processors argument
 test0_dict = {
     'max_processors': 1000000,
-    'cmd': 'riboseq',
-    'output': __path__} # Where input is more than available cores
+    'cmd': 'riboseq'} # Where input is more than available cores
 test1_dict = {
     'max_processors': 'None',
     'cmd': 'riboseq',

@@ -276,10 +276,10 @@ def check_inputs(
     # Make dependencies log
     os.system('echo \"Conda dependencies:\n===================\" >> /Users/jordan/Desktop/dependencies.log')
     for d in deps:
-        os.system('conda list | grep -i \"' + str(d) + '\" >> ' + str(args_dict['output']) + 'dependencies.log')
+        os.system('conda list | grep -i \"' + str(d) + '\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
     os.system('echo \"R dependencies:\n===================\" >> /Users/jordan/Desktop/dependencies.log')
     for r in r_deps:
-        os.system('R -e \"print(as.data.frame(installed.packages()[,c(1,3:4)]))\" | grep -i \"' + str(r) + '\" >> ' + str(args_dict['output']) + 'dependencies.log')
+        os.system('R -e \"print(as.data.frame(installed.packages()[,c(1,3:4)]))\" | grep -i \"' + str(r) + '\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
 
     # Check program version
     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
