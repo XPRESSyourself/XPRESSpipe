@@ -24,25 +24,11 @@ Berg, JA, et. al. (2019). XPRESSyourself: Automating and Democratizing High-Thro
 
 ### Installation:   
 #### Installing from source
-1. Installation requires Python (distributed with most operating systems automatically) and setuptools. If you have a more current version of Python, you can install setuptools as follows:
-```
-$ pip install setuptools
-```
-If this does not work, please refer to this [site](https://pip.pypa.io/en/stable/installing/) for more information
-2. Get XPRESSpipe by downloading and unpacking the most recent archive found [here](https://github.com/XPRESSyourself/XPRESSpipe/releases)
-3. Unzip the folder and navigate to the appropriate directory in the command line
-```
-$ cd /path/to/XPRESSpipe
-```
-4. Install XPRESSpipe
-```
-$ python setup.py install
-```
-5. Test the installation
-```
-$ xpresspipe -h
-```
-If the help menu is not displayed, try adding the path where you installed XPRESSpipe to the system PATH
+The following is a short tutorial showing you how to install XPRESSpipe:
+[![asciicast](https://asciinema.org/a/256347.svg)](https://asciinema.org/a/256347)
+
+- Make sure you let Anaconda set up the PATH info for you.
+- If the help menu is not displayed when testing, try adding the path where you installed XPRESSpipe to the system PATH
 ```
 $ echo 'export PATH=$PATH:/path/to/xpresspipe' >> ~/.bash_profile
 ```
@@ -61,9 +47,11 @@ docker run jordanberg/xpresspipe --help
 ```
 
 ### QuickStart:   
-```
-$ xpresspipe riboprof -i /path/to/raw/data/ -o /path/to/output/ -r /path/to/reference/ ...
-```
+- Reference building
+[![asciicast](https://asciinema.org/a/256340.svg)](https://asciinema.org/a/256340)
+
+- Running XPRESSpipe on data
+[![asciicast](https://asciinema.org/a/256343.svg)](https://asciinema.org/a/256343)
 
 ### Important Notes:    
 #### Basic Starting Input
