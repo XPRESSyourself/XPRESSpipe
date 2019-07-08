@@ -51,7 +51,6 @@ def get_distribution(
             length = len(line)
             if file2 != None:
                 length += len(f2[i])
-            dist_list[length] += 1
 
     # Clean up variables
     f1 = None
@@ -141,7 +140,7 @@ def make_readDistributions(
         file_lists.append(files[y:y+6])
         y += 6
 
-    y = 1
+    z = 1
     for file_list in file_lists:
 
         # Plot metrics for each file
@@ -150,9 +149,9 @@ def make_readDistributions(
             file_list,
             'read size (bp)',
             'count',
-            'read_distribution',
+            'read_distribution_' + str(z),
             args_dict['experiment'],
             args_dict['read_distributions'],
             str(args_dict['read_distributions']) + 'individual_plots/')
 
-        y += 1
+        z += 1
