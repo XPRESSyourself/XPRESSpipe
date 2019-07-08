@@ -23,7 +23,7 @@ from __future__ import print_function
 """IMPORT DEPENDENCIES"""
 import os
 import sys
-import urllib
+from urllib.request import Request, urlopen
 import argparse
 import datetime
 import multiprocessing
@@ -274,39 +274,39 @@ def check_inputs(
             + 's.log')
 
     # Make dependencies log
+    os.system('echo \"Conda dependencies:\n===================\" >> /Users/jordan/Desktop/dependencies.log')
     for d in deps:
         os.system('conda list | grep -i \"' + str(d) + '\" >> ' + str(args_dict['output']) + 'dependencies.log')
+    os.system('echo \"R dependencies:\n===================\" >> /Users/jordan/Desktop/dependencies.log')
     for r in r_deps:
         os.system('R -e \"print(as.data.frame(installed.packages()[,c(1,3:4)]))\" | grep -i \"' + str(r) + '\" >> ' + str(args_dict['output']) + 'dependencies.log')
 
     # Check program version
-    try:
-        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        webpage = urlopen(req).read()
-        page = webpage.decode('utf-8').splitlines()
-        for p in page:
-            if '__version__' in p:
-                if p.strip("__version__ = '") == __version__:
-                    pass
-                else:
-                    os.system(
-                        'echo \"WARNING: You appear to be using an outdated version of XPRESSpipe. The current version is ' + str(p.strip("__version__ = '")) + '\"'
-                        + str(args_dict['log']))
-                    print('')
-
-
-
+    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    webpage = urlopen(req).read()
+    page = webpage.decode('utf-8').splitlines()
+    found = False
+    for p in page:
+        if '__version__' in p:
+            if p.replace("__version__ = \'",'').replace("\'","") == str(__version__):
+                os.system(
+                    'echo \"You are using the current version of XPRESSpipe...\"'
+                    + str(args_dict['log']))
+                print('\nYou are using the current version of XPRESSpipe...')
+                found = True
+                break
             else:
                 os.system(
-                    'echo \"Warning: Cannot retrieve current version of XPRESSpipe. Please ensure you are using the most up-to-date version of \"'
+                    'echo \"WARNING: You appear to be using an outdated version of XPRESSpipe.\nThe current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\"'
                     + str(args_dict['log']))
-                print('Warning: Cannot retrieve current version of XPRESSpipe')
-
-    except:
+                print('\nWARNING: You appear to be using an outdated version of XPRESSpipe.\nThe current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) )
+                found = True
+                break
+    if found == False:
         os.system(
-            'echo \"Warning: Cannot retrieve current version of XPRESSpipe\"'
+            'echo \"WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\"'
             + str(args_dict['log']))
-        print('Warning: Cannot retrieve current version of XPRESSpipe')
+        print('\nWARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.')
 
     # Print out user commands to log file
     os.system(
