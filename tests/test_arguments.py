@@ -10,21 +10,37 @@ __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 # Check max_processors argument
 test0_dict = {
     'max_processors': 1000000,
-    'cmd': 'riboseq'} # Where input is more than available cores
+    'cmd': 'riboseq',
+    'output': __path__} # Where input is more than available cores
 test1_dict = {
     'max_processors': 'None',
-    'cmd': 'riboseq'} # Where no limit is specified
+    'cmd': 'riboseq',
+    'output': __path__} # Where no limit is specified
 test2_dict = {
     'max_processors': multiprocessing.cpu_count(),
-    'cmd': 'riboseq'} # Where limit equals available cores
+    'cmd': 'riboseq',
+    'output': __path__} # Where limit equals available cores
 test3_dict = {
     'max_processors': multiprocessing.cpu_count() - 1,
-    'cmd': 'riboseq'} # Where limit is less than available cores
+    'cmd': 'riboseq',
+    'output': __path__} # Where limit is less than available cores
 
 try:
     t0 = check_inputs(test0_dict)
+except:
+    raise Exception('check_inputs() failed checking max_processors')
+
+try:
     t1 = check_inputs(test1_dict)
+except:
+    raise Exception('check_inputs() failed checking max_processors')
+
+try:
     t2 = check_inputs(test2_dict)
+except:
+    raise Exception('check_inputs() failed checking max_processors')
+
+try:
     t3 = check_inputs(test3_dict)
 except:
     raise Exception('check_inputs() failed checking max_processors')
