@@ -90,7 +90,7 @@ def make_complexity(args_dict):
         file_lists.append(files[y:y+6])
         y += 6
 
-    y = 1
+    z = 1
     for file_list in file_lists:
 
         compile_complexity_metrics(
@@ -98,8 +98,8 @@ def make_complexity(args_dict):
             file_list,
             'RPK',
             'dupRate',
-            'library_complexity_plot' + str(y),
+            'library_complexity_' + str(z),
             args_dict['experiment'],
             args_dict['complexity'])
 
-        y += 1
+        z += 1

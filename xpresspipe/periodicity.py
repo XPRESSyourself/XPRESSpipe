@@ -240,7 +240,7 @@ def make_periodicity(
         file_lists.append(files[y:y+6])
         y += 6
 
-    y = 1
+    z = 1
     for file_list in file_lists:
 
         # Plot metrics for each file
@@ -249,11 +249,11 @@ def make_periodicity(
             file_list,
             'position from start',
             'count',
-            'periodicity',
+            'periodicity_' + str(z),
             args_dict['experiment'],
             args_dict['periodicity'])
 
-        y += 1
+        z += 1
 
     chromosome_index = None
     coordinate_index = None

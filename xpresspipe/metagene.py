@@ -191,6 +191,7 @@ def make_metagene(
         file_lists.append(files[y:y+6])
         y += 6
 
+    z = 1
     for file_list in file_lists:
 
         # Plot metrics for each file
@@ -199,9 +200,10 @@ def make_metagene(
             file_list,
             'representative transcript',
             'metacount',
-            'metagene',
+            'metagene_' + str(z),
             args_dict['experiment'],
             args_dict['metagene'])
+        z += 1
 
     chromosome_index = None
     coordinate_index = None
