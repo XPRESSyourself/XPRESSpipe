@@ -23,6 +23,7 @@ from __future__ import print_function
 """IMPORT DEPENDENCIES"""
 import os
 import sys
+import urllib
 import argparse
 import datetime
 import multiprocessing
@@ -35,6 +36,26 @@ from .utils import check_directories
 """INITIALIZATION PARAMETERS"""
 # Retrieve path for scripts used in this pipeline, appended to argument dictionary for every function
 __path__  =  os.path.dirname(os.path.realpath(__file__))
+url = 'https://raw.githubusercontent.com/XPRESSyourself/XPRESSpipe/master/xpresspipe/__init__.py'
+deps = [
+    'fastp',
+    'star',
+    'samtools',
+    'bedtools',
+    'fastqc',
+    'htseq',
+    'matplotlib',
+    'pandas',
+    'numpy',
+    'scipy',
+    'scikit-learn',
+    'multiqc',
+    'XPRESSplot',
+    'seaborn']
+r_deps = [
+    'sva',
+    'deseq',
+    'dupradar']
 
 # Set default values for arguments
 DEFAULT_READ_MIN  =  18
@@ -178,8 +199,6 @@ def check_inputs(
             raise Exception('Something went wrong with the adaptor input formatting. Expected a list, but got ' \
             + str(type(args_dict['adaptors'])))
 
-
-
     if 'quantification_method' in args_dict and 'stranded' in args_dict:
         if str(args_dict['quantification_method']).lower() == 'htseq':
             if str(args_dict['stranded']).lower() == 'no' \
@@ -253,6 +272,41 @@ def check_inputs(
             + 'h_' + str(cdt.minute)
             + 'm_' + str(cdt.second)
             + 's.log')
+
+    # Make dependencies log
+    for d in deps:
+        os.system('conda list | grep -i \"' + str(d) + '\" >> ' + str(args_dict['output']) + 'dependencies.log')
+    for r in r_deps:
+        os.system('R -e \"print(as.data.frame(installed.packages()[,c(1,3:4)]))\" | grep -i \"' + str(r) + '\" >> ' + str(args_dict['output']) + 'dependencies.log')
+
+    # Check program version
+    try:
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        webpage = urlopen(req).read()
+        page = webpage.decode('utf-8').splitlines()
+        for p in page:
+            if '__version__' in p:
+                if p.strip("__version__ = '") == __version__:
+                    pass
+                else:
+                    os.system(
+                        'echo \"WARNING: You appear to be using an outdated version of XPRESSpipe. The current version is ' + str(p.strip("__version__ = '")) + '\"'
+                        + str(args_dict['log']))
+                    print('')
+
+
+
+            else:
+                os.system(
+                    'echo \"Warning: Cannot retrieve current version of XPRESSpipe. Please ensure you are using the most up-to-date version of \"'
+                    + str(args_dict['log']))
+                print('Warning: Cannot retrieve current version of XPRESSpipe')
+
+    except:
+        os.system(
+            'echo \"Warning: Cannot retrieve current version of XPRESSpipe\"'
+            + str(args_dict['log']))
+        print('Warning: Cannot retrieve current version of XPRESSpipe')
 
     # Print out user commands to log file
     os.system(
@@ -412,9 +466,9 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'cufflinks',
+        default = 'htseq',
         type = str,
         required = False)
     se_opts.add_argument(
@@ -570,9 +624,9 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
-        default = 'cufflinks',
+        default = 'htseq',
         type = str,
         required = False)
     pe_opts.add_argument(
@@ -982,9 +1036,9 @@ def get_arguments(
         required = False)
     count_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: cufflinks; other option: htseq). If using cufflinks, no sample normalization is needed. HTSeq is recommended for ribosome profiling data as it allows quantification across the CDS.',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed. HTSeq is recommended for ribosome profiling data as it allows quantification across the CDS.',
         metavar = '<method>',
-        default = 'cufflinks',
+        default = 'htseq',
         type = str,
         required = False)
     count_opts.add_argument(
