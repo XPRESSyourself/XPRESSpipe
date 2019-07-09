@@ -67,13 +67,6 @@ def compile_matrix_metrics(
     plt.subplots_adjust(
         bottom = 0.3)
 
-    if 'periodicity' in plot_type:
-        tix = ['']
-        for t in range(0,101,3):
-            tix.append(str(t))
-            tix.append('')
-            tix.append('')
-
     # Initialize file and axis counters for formatting summary figure
     file_number = 0
     ax_y = 0
@@ -100,16 +93,7 @@ def compile_matrix_metrics(
                 ax_y += 1
 
         # Plot figure
-        if 'periodicity' in plot_type:
-            df.plot.bar(
-                x = lab_x,
-                y = lab_y,
-                title = file[:-4],
-                ax = axes[ax_y, ax_x],
-                grid = None)
-            axes[ax_y, ax_x].set_xticklabels(tix)
-            axes[ax_y, ax_x].tick_params(which='major', length=7, width=2, direction='out')
-        elif 'read_distribution' in plot_type:
+        if 'read_distribution' in plot_type:
             df.plot.bar(
                 x = lab_x,
                 y = lab_y,
@@ -132,6 +116,125 @@ def compile_matrix_metrics(
             color = 'black')
 
         file_number += 1
+
+    # Save catenated figure
+    plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
+    fig.savefig(
+        str(plot_output) + plot_title + '_summary.pdf',
+        dpi = dpi,
+        bbox_inches = 'tight')
+
+
+"""
+"""
+def compile_periodicity_metrics(
+        path,
+        file_list,
+        plot_type,
+        experiment,
+        plot_output,
+        dpi=600):
+
+    # Keep axes happy to avoid 'IndexError: too many indices for array' error
+    # Auto formats figure summary size based on number of plots
+    if (len(file_list) / 2) < 2:
+        plot_rows = 2
+        fig_size = (15, 16)
+    else:
+        plot_rows = ceil(len(file_list) / 2)
+        fig_size = (15, (8 * (int(len(file_list) / 2))))
+
+    # Set up figure space
+    fig, axes = plt.subplots(
+        nrows = plot_rows,
+        ncols = 2,
+        figsize = fig_size,
+        sharey = True,
+        subplot_kw = {'facecolor':'none'})
+    plt.subplots_adjust(
+        bottom = 0.3)
+
+    tix_5prime = ['']
+    for t in range(-24,76,3):
+        if t == 0:
+            tix_5prime.append('START')
+            tix_5prime.append('')
+            tix_5prime.append('')
+        elif t == 75:
+            tix_5prime.append(str(t))
+        else:
+            tix_5prime.append(str(t))
+            tix_5prime.append('')
+            tix_5prime.append('')
+
+    tix_3prime = []
+    for t in range(-75,26,3):
+        if t == 0:
+            tix_3prime.append('STOP')
+            tix_3prime.append('')
+            tix_3prime.append('')
+        elif t == 24:
+            tix_3prime.append(str(t))
+            tix_3prime.append('')
+        else:
+            tix_3prime.append(str(t))
+            tix_3prime.append('')
+            tix_3prime.append('')
+
+    # Initialize file and axis counters for formatting summary figure
+    ax_y = 0
+
+    for file in file_list:
+
+        # Get data
+        df = pd.read_csv(
+            str(path) + str(file),
+            sep = '\t',
+            index_col = 0) # Initialize dataframe for relevant data
+        df = df.dropna(axis = 0)
+        df['distance'] = df['distance'].astype(int)
+
+        # Get start data and fill missing points
+        df_start = df[df['reg'].str.contains('start')]
+        counter = max(df_start.index.tolist())
+        indexer = df_start['distance'].tolist()
+        for i in range(-25, 76):
+            if i not in indexer:
+                counter += 1
+                df_start.loc[counter] = [i,0.2,'start']
+        df_start = df_start.sort_values('distance')
+        df_start = df_start.reset_index(drop=True)
+
+        # Get stop data and fill missing points
+        df_stop = df[df['reg'].str.contains('stop')]
+        counter = max(df_stop.index.tolist())
+        indexer = df_stop['distance'].tolist()
+        for i in range(-75, 26):
+            if i not in indexer:
+                counter += 1
+                df_stop.loc[counter] = [i,0.2,'stop']
+        df_stop = df_stop.sort_values('distance')
+        df_stop = df_stop.reset_index(drop=True)
+
+        # Plot 5prime figure
+        df_start.plot.bar(
+            x = 'distance',
+            y = 'reads',
+            title = file[:-4],
+            ax = axes[ax_y, 0],
+            width = 0.9)
+        axes[ax_y, 0].set_xticklabels(tix_5prime)
+
+        # Plot 3prime figure
+        df_stop.plot.bar(
+            x = 'distance',
+            y = 'reads',
+            ax = axes[ax_y, 1],
+            width = 0.9)
+        axes[ax_y, 1].set_xticklabels(tix_3prime)
+
+        # Next file/plot line counter
+        ax_y += 1
 
     # Save catenated figure
     plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
