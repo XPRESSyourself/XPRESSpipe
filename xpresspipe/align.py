@@ -30,13 +30,13 @@ from .parallel import parallelize, parallelize_pe
 
 """Create STAR reference genome"""
 def create_star_reference(
-        output_directory,
-        fasta_directory,
-        gtf,
-        log,
-        threads=1,
-        sjdbOverhang=100,
-        genome_size=14):
+    output_directory,
+    fasta_directory,
+    gtf,
+    log,
+    threads=1,
+    sjdbOverhang=100,
+    genome_size=14):
 
     # Create output directory
     output_directory = check_directories(output_directory)
@@ -62,8 +62,8 @@ def create_star_reference(
 
 """Build intermediate STAR alignment reference using splice junction annotations from first pass"""
 def build_star_splice_junction_intermediate(
-        output,
-        args_dict):
+    output,
+    args_dict):
 
     os.system(
         'mkdir'
@@ -77,7 +77,7 @@ def build_star_splice_junction_intermediate(
         'STAR'
         + ' --runMode genomeGenerate'
         + ' --runThreadN ' + str(args_dict['threads'])
-        + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments']) + str(output) + '_SJ.out.tab' # Splice junction annotation file output in first pass alignment
+        + ' --sjdbFileChrStartEnd ' + str(args_dict['alignments_coordinates']) + str(output) + '_SJ.out.tab' # Splice junction annotation file output in first pass alignment
         + ' --genomeFastaFiles ' + str(args_dict['fasta_list']) # Input chromosomal fasta files for reference building
         + ' --genomeSAindexNbases ' + str(args_dict['genome_size'])
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output) # Location for output revised reference
@@ -86,16 +86,16 @@ def build_star_splice_junction_intermediate(
 
 """Run first pass STAR alignment to map splice junctions"""
 def first_pass_star(
-        file,
-        output,
-        args_dict):
+    file,
+    output,
+    args_dict):
 
     os.system(
         'STAR'
         + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
         + ' --genomeDir ' + str(args_dict['reference']) + 'genome' # Argument for specifying STAR reference directory
         + ' --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
-        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_' # Argument to dictate output directory
+        + ' --outFileNamePrefix ' + str(args_dict['alignments_coordinates']) + str(output) + '_' # Argument to dictate output directory
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax']) #
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang']) # Read overhand amount to allow for splice mapping (should be same used in curation of reference)
@@ -117,16 +117,24 @@ def first_pass_star(
 
 """Run second pass STAR alignment to map reads splice-aware"""
 def second_pass_star(
-        file,
-        output,
-        args_dict):
+    file,
+    output,
+    args_dict):
+
+    if 'vcf' in args_dict and args_dict['vcf'] != None:
+        attr_cols = ' --outSAMattributes NH HI NM MD AS XS vG vA'
+        vcf_line = ' --varVCFfile ' + str(args_dict['vcf'])
+    else:
+        attr_cols = ' --outSAMattributes NH HI NM MD AS XS'
+        vcf_line = ''
 
     os.system(
         'STAR'
         + ' --runThreadN ' + str(args_dict['threads'])
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output)
         + ' --readFilesIn ' + str(file)
-        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_'
+        + ' --sjdbGTFfile ' + str(args_dict['reference']) + 'transcripts.gtf'
+        + ' --outFileNamePrefix ' + str(args_dict['alignments_coordinates']) + str(output) + '_'
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang'])
@@ -143,9 +151,11 @@ def second_pass_star(
         + ' --outFilterMatchNminOverLread 0.33'
         + ' --outFilterScoreMinOverLread 0.33'
         + ' --outSAMstrandField intronMotif'
-        + ' --outSAMattributes NH HI NM MD AS XS'
+        + str(attr_cols)
+        + str(vcf_line)
         + ' --outSAMunmapped Within'
         + ' --outSAMtype BAM Unsorted' # Allow for multithreading STAR run without file overload
+        + ' --quantMode TranscriptomeSAM'
         + ' --outSAMheaderHD @HD VN:1.4'
         + str(args_dict['log']))
 
@@ -155,13 +165,20 @@ def guided_star(
     output,
     args_dict):
 
+    if 'vcf' in args_dict and args_dict['vcf'] != None:
+        attr_cols = ' --outSAMattributes NH HI NM MD AS XS vG vA'
+        vcf_line = ' --varVCFfile ' + str(args_dict['vcf'])
+    else:
+        attr_cols = ' --outSAMattributes NH HI NM MD AS XS'
+        vcf_line = ''
+
     os.system(
         'STAR'
         + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
         + ' --genomeDir ' + str(args_dict['reference']) + 'genome' # Argument for specifying STAR reference directory
         + ' --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
         + ' --sjdbGTFfile ' + str(args_dict['reference']) + 'transcripts.gtf'
-        + ' --outFileNamePrefix ' + str(args_dict['alignments']) + str(output) + '_'
+        + ' --outFileNamePrefix ' + str(args_dict['alignments_coordinates']) + str(output) + '_'
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])
         + ' --sjdbOverhang ' + str(args_dict['sjdbOverhang'])
@@ -178,7 +195,8 @@ def guided_star(
         + ' --outFilterMatchNminOverLread 0.33'
         + ' --outFilterScoreMinOverLread 0.33'
         + ' --outSAMstrandField intronMotif'
-        + ' --outSAMattributes NH HI NM MD AS XS'
+        + str(attr_cols)
+        + str(vcf_line)
         + ' --outSAMunmapped Within'
         + ' --outSAMtype BAM Unsorted' # Allow for multithreading STAR run without file overload
         + ' --quantMode TranscriptomeSAM'
@@ -187,8 +205,8 @@ def guided_star(
 
 """Remove intermediate reference files for the file being processed in the instance"""
 def remove_intermediate_reference(
-        output,
-        args_dict):
+    output,
+    args_dict):
 
     # Clear the current file's splice junction intermediate reference
     os.system(
@@ -198,9 +216,9 @@ def remove_intermediate_reference(
 
 """Sort reads per file by chromosome position and keep only unique mappers"""
 def alignment_process(
-        output,
-        args_dict,
-        paired=False):
+    output,
+    args_dict,
+    paired=False):
 
     # Fixmates for paired-end
     if paired == True:
@@ -209,29 +227,29 @@ def alignment_process(
         os.system(
         'samtools sort'
         + ' -n'
-        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.namesort.bam'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam')
+        + ' -o ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.namesort.bam'
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.out.bam')
 
         # Run fixmate
         os.system(
         'samtools fixmate'
         + ' -m'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.namesort.bam'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_fixed.namesort.bam')
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.namesort.bam'
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_fixed.namesort.bam')
 
         # Convert back to coordinate sorted because markdup doesn't accept name sorted files
         os.system(
         'samtools sort'
-        + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_fixed.namesort.bam')
+        + ' -o ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.sort.bam'
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_fixed.namesort.bam')
 
     else:
         # Sort SAM file
         os.system(
             'samtools sort'
             + ' --threads ' + str(args_dict['threads'])
-            + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
-            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.out.bam'
+            + ' -o ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.sort.bam'
+            + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.out.bam'
             + str(args_dict['log']))
 
     # Only take unique mappers (q = 255)
@@ -241,13 +259,13 @@ def alignment_process(
             + ' -h' # Keep SAM header in output
             + ' -q 255' # Keep unique mappers
             + ' --threads ' + str(args_dict['threads'])
-            + ' -o ' + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
-            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam'
+            + ' -o ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.unique.bam'
+            + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.sort.bam'
             + str(args_dict['log']))
         os.system(
             'mv '
-            + str(args_dict['alignments']) + str(output) + '_Aligned.unique.bam'
-            + ' ' + str(args_dict['alignments']) + str(output) + '_Aligned.sort.bam')
+            + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.unique.bam'
+            + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.sort.bam')
         file_suffix = '_Aligned.sort.bam'
     else:
         file_suffix = '_Aligned.sort.bam'
@@ -255,50 +273,50 @@ def alignment_process(
     # Index BAM file
     os.system(
         'samtools index'
-        + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix)
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix)
         + str(args_dict['log']))
 
     # Use sorted BAM file to find any duplicate reads
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix) # Input BAM
-        + ' ' + str(args_dict['alignments']) + str(output) + '_dedupMarked.bam' # Output BAM
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix) # Input BAM
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_dedupMarked.bam' # Output BAM
         + ' -s' # Print some basic stats
         + str(args_dict['log']))
     os.system(
         'samtools index'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_dedupMarked.bam'
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_dedupMarked.bam'
         + str(args_dict['log']))
 
     # Create sorted BAM file with duplicates removed
     os.system(
         'samtools markdup'
-        + ' ' + str(args_dict['alignments']) + str(output) + str(file_suffix) # Input BAM
-        + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam' # Output BAM
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix) # Input BAM
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_dedupRemoved.bam' # Output BAM
         + ' -s' # Print some basic stats to STDOUT
         + ' -r' # Remove duplicate reads
         + str(args_dict['log']))
     os.system(
         'samtools index'
-        + ' ' + str(args_dict['alignments']) + str(output) + '_dedupRemoved.bam'
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_dedupRemoved.bam'
         + str(args_dict['log']))
 
-def store_transcriptome_alignments(
+def store_alignments_transcriptome(
     output,
     args_dict):
 
     os.system(
         'mv'
-        + ' ' + str(args_dict['alignments']) + str(output) + '*Aligned.toTranscriptome.out.bam'
-        + ' ' + str(args_dict['output']) + 'transcriptome_alignments' )
+        + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '*Aligned.toTranscriptome.out.bam'
+        + ' ' + str(args_dict['output']) + 'alignments_transcriptome' )
 
 """Remove all intermediate alignment files and references after alignment is complete"""
 def remove_intermediates(
-        args_dict):
+    args_dict):
 
     os.system(
         "find"
-        + " " + str(args_dict['alignments'])
+        + " " + str(args_dict['alignments_coordinates'])
         + " ! -name '*_Aligned.sort.bam'"
         + " ! -name '*_Aligned.sort.bam.bai'"
         + " ! -name '*_fixed.sort.bam'"
@@ -311,11 +329,11 @@ def remove_intermediates(
         + str(args_dict['log']))
 
 def clean_reference_directory(
-        args_dict):
+    args_dict):
 
     os.system(
         'rm -r'
-        + ' ' + str(args_dict['alignments']) + '*_STARgenome'
+        + ' ' + str(args_dict['alignments_coordinates']) + '*_STARgenome'
         + str(args_dict['log']))
 
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
@@ -372,7 +390,7 @@ def align(
             file,
             output,
             args_dict)
-        store_transcriptome_alignments(
+        store_alignments_transcriptome(
             output,
             args_dict)
 
@@ -390,7 +408,7 @@ def align(
 
 """Single-end RNA-seq pipeline"""
 def se_align(
-        args):
+    args):
 
     file, args_dict = args[0], args[1]
 
@@ -404,7 +422,7 @@ def se_align(
 
 """Paired-end RNA-seq pipeline"""
 def pe_align(
-        args):
+    args):
 
     file1, file2, args_dict = args[0], args[1], args[2]
 
@@ -419,24 +437,23 @@ def pe_align(
 
 """Manage single-end RNA-seq pipeline"""
 def run_seRNAseq(
-        args_dict):
+    args_dict):
 
     # Add output directories
     args_dict = add_directory(
         args_dict,
         'output',
-        'alignments')
+        'alignments_coordinates')
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'alignments_transcriptome')
 
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
         args_dict = add_directory(
             args_dict,
-            'alignments',
+            'alignments_coordinates',
             'intermediate_references')
-    else:
-        args_dict = add_directory(
-            args_dict,
-            'output',
-            'transcriptome_alignments')
 
     # Get list of files to align based on acceptable file types
     files = get_files(
@@ -455,24 +472,23 @@ def run_seRNAseq(
 
 """Manage paired-end RNA-seq pipeline"""
 def run_peRNAseq(
-        args_dict):
+    args_dict):
 
     # Add output directories
     args_dict = add_directory(
         args_dict,
         'output',
-        'alignments')
+        'alignments_coordinates')
+    args_dict = add_directory(
+        args_dict,
+        'output',
+        'alignments_transcriptome')
 
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
         args_dict = add_directory(
             args_dict,
-            'alignments',
+            'alignments_coordinates',
             'intermediate_references')
-    else:
-        args_dict = add_directory(
-            args_dict,
-            'output',
-            'transcriptome_alignments')
 
     # Get list of files to align based on acceptable file types
     files = get_files(
