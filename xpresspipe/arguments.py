@@ -55,7 +55,9 @@ deps = [
 r_deps = [
     'sva',
     'deseq',
-    'dupradar']
+    'dupradar',
+    'riboWaltz',
+    ]
 
 # Set default values for arguments
 DEFAULT_READ_MIN  =  18
@@ -115,6 +117,20 @@ description_table  =  """\
         |    convertNames       |   Convert gene identifiers using a GTF reference                                      |
         +-----------------------+---------------------------------------------------------------------------------------+
 """
+
+"""
+Get dependencies after xpresspipe run
+"""
+def get_dependencies(args_dict):
+
+    # Make dependencies log
+    os.system('echo \"Conda dependencies:\n===================\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
+    for d in deps:
+        os.system('conda list | grep -i \"' + str(d) + '\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
+    os.system('echo \"R dependencies:\n===================\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
+    for r in r_deps:
+        os.system('R -e \"print(as.data.frame(installed.packages()[,c(1,3:4)]))\" | grep -i \"' + str(r) + '\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
+
 
 """Check arguments provided by user"""
 def check_inputs(
@@ -272,14 +288,6 @@ def check_inputs(
             + 'h_' + str(cdt.minute)
             + 'm_' + str(cdt.second)
             + 's.log')
-
-    # Make dependencies log
-    os.system('echo \"Conda dependencies:\n===================\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
-    for d in deps:
-        os.system('conda list | grep -i \"' + str(d) + '\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
-    os.system('echo \"R dependencies:\n===================\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
-    for r in r_deps:
-        os.system('R -e \"print(as.data.frame(installed.packages()[,c(1,3:4)]))\" | grep -i \"' + str(r) + '\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
 
     # Check program version
     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -492,6 +500,13 @@ def get_arguments(
         type = str,
         required = False)
     se_opts.add_argument(
+        '--vcf',
+        help = 'Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments',
+        metavar = '</path/to/file.vcf>',
+        type = str,
+        default = None,
+        required = False)
+    se_opts.add_argument(
         '--batch',
         help = 'Include path and filename of dataframe with batch normalization parameters',
         metavar = '<path>',
@@ -650,6 +665,13 @@ def get_arguments(
         type = str,
         required = False)
     pe_opts.add_argument(
+        '--vcf',
+        help = 'Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments',
+        metavar = '</path/to/file.vcf>',
+        type = str,
+        default = None,
+        required = False)
+    pe_opts.add_argument(
         '--batch',
         help = 'Include path and filename of dataframe with batch normalization parameters',
         metavar = '<path>',
@@ -806,6 +828,13 @@ def get_arguments(
         type = str,
         required = False)
     rp_opts.add_argument(
+        '--vcf',
+        help = 'Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments',
+        metavar = '</path/to/file.vcf>',
+        type = str,
+        default = None,
+        required = False)
+    rp_opts.add_argument(
         '--batch',
         help = 'Include path and filename of dataframe with batch normalization parameters',
         metavar = '<path>',
@@ -952,6 +981,13 @@ def get_arguments(
         '--no_multimappers',
         help = 'Include flag to remove multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
+        required = False)
+    align_opts.add_argument(
+        '--vcf',
+        help = 'Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments',
+        metavar = '</path/to/file.vcf>',
+        type = str,
+        default = None,
         required = False)
     align_opts.add_argument(
         '--output_bed',
@@ -1352,7 +1388,7 @@ def get_arguments(
     period_reqs = period_parser.add_argument_group('required arguments')
     period_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _Aligned.sort.bam)',
+        help = 'Path to input directory of transcriptome-aligned BAM files (will grab files with suffix \'toTranscriptome.out.bam\')',
         metavar = '<path>',
         type = str,
         required = True)
