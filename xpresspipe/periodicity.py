@@ -55,7 +55,7 @@ def make_periodicity(
     # Get list of all files from input directory
     files = get_files(
         args_dict['input'],
-        [''])
+        ['.bam'])
 
     # Get files read distributions
     for f in files:
@@ -70,8 +70,6 @@ def make_periodicity(
         and bam['read_length'].quantile(upper_quantile_bound) <= 33 \
         and f.endswith('toTranscriptome.out.bam'):
             pass
-        elif not f.endswith('.bam'):
-            print('Warning: ' + str(f) + ' does not appear to be a transcriptome-aligned BAM file')
         else:
             os.system(
                 'mv'
