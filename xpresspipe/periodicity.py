@@ -30,169 +30,13 @@ from math import ceil
 from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .parallel import parallelize
 from .compile import compile_matrix_metrics
+from .processBAM import read_bam
 from .utils import add_directory, get_files
-from .processBAM import read_bam, bam_sample
-from .quality import get_indices, get_position
 
-len_dictionary = {
-    17:16,
-    18:15,
-    19:16,
-    20:16,
-    21:16,
-    22:16,
-    23:16,
-    24:16,
-    25:16,
-    26:15,
-    27:16,
-    28:16,
-    29:16,
-    30:17,
-    31:17,
-    32:16,
-    33:16
-}
-
-
-"""P site ranges for 28-30mers"""
-def psite_ranges(
-        bam):
-
-    # Keep only optimal footprint size
-    bam = bam[(
-        (bam[9].str.len() == 17) |
-        (bam[9].str.len() == 18) |
-        (bam[9].str.len() == 19) |
-        (bam[9].str.len() == 21) |
-        (bam[9].str.len() == 22) |
-        (bam[9].str.len() == 23) |
-        (bam[9].str.len() == 24) |
-        (bam[9].str.len() == 25) |
-        (bam[9].str.len() == 26) |
-        (bam[9].str.len() == 27) |
-        (bam[9].str.len() == 28) |
-        (bam[9].str.len() == 29) |
-        (bam[9].str.len() == 30) |
-        (bam[9].str.len() == 31) |
-        (bam[9].str.len() == 32) |
-        (bam[9].str.len() == 33)
-        )]
-
-    # Get rightmost coordinates for each read
-    bam['right_coordinate'] = bam[3] + bam[9].str.len()
-
-    # Return as array
-    phased_coordinates = bam[[2,3,'right_coordinate']]
-
-    if len(phased_coordinates.index) == 0:
-        return None
-    else:
-        return phased_coordinates.values.tolist()
-
-"""Search for plausible records per provided coordinate"""
-def get_coordinate_records_period(
-        coordinate_index,
-        chromosome_index,
-        search_chromosome,
-        search_coordinate_reverse,
-        search_coordinate_forward):
-
-    length = abs(search_coordinate_forward - search_coordinate_reverse)
-    search_coordinate_reverse += len_dictionary[length]
-    search_coordinate_forward -= len_dictionary[length]
-
-    record_array = []
-
-    chromosome_array = coordinate_index[chromosome_index[search_chromosome]]
-    for index, record in enumerate(chromosome_array):
-        if record[0] <= search_coordinate_reverse and record[1] >= search_coordinate_reverse \
-        or record[0] <= search_coordinate_forward and record[1] >= search_coordinate_forward:
-            record_array.append(record)
-
-    return record_array, len_dictionary[length]
-
-"""Get periodicity profile for bam file"""
-def get_periodicity_profile(
-        aligned_reads_index,
-        coordinate_index,
-        chromosome_index,
-        start_range=-1,
-        end_range=101):
-
-    # Initialize profile dataframe for storage
-    metagene_profile = pd.DataFrame(
-        0,
-        index = range(start_range, end_range),
-        columns = ['count'])
-
-    # Search through each mapped read coordinate
-    for index, record in enumerate(aligned_reads_index):
-        record_array, p_length = get_coordinate_records_period(
-                coordinate_index,
-                chromosome_index,
-                record[0],
-                record[1],
-                record[2])
-
-        # If a record array is not None, get the exonic position from start for each record for the coordinate
-        if record_array:
-            position_count = []
-            for index, transcript_record in enumerate(record_array):
-                # Determine P-site coordinate to search
-                if transcript_record[1] == '+':
-                    coordinate = record[2] - p_length
-                else:
-                    coordinate = record[1] + p_length
-
-                # Get position relative to start of the p-site
-                position = get_position(
-                    coordinate,
-                    transcript_record[3],
-                    transcript_record[2])
-
-                if position != None and position > start_range and position < end_range:
-                    # Position cannot be inclusive of start or end coorindate or will throw invalid index error
-                    position_count.append(position)
-
-            for x in position_count:
-                count = 1 / len(position_count)
-                metagene_profile.at[x, 'count'] += count
-
-    return metagene_profile
-
-"""Generate periodicity maps"""
-def get_peaks(
-        args,
-        chromosome_index,
-        coordinate_index):
-
-    file, args_dict = args[0], args[1] # Parse args
-
-    # Read in indexed bam file
-    bam = read_bam(
-        str(args_dict['input']) + str(file))
-
-    bam_coordinates = psite_ranges(bam)
-    if bam_coordinates == None:
-        print('Warning: No reads passed filtering for file ' + str(file))
-        return
-
-    bam = None # Some clean-up
-    del bam
-    gc.collect()
-
-    # Get profile
-    profile_data = get_periodicity_profile(
-        bam_coordinates,
-        coordinate_index,
-        chromosome_index)
-    profile_data['position from start'] = profile_data.index
-    profile_data.to_csv(
-        str(args_dict['periodicity']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
-        sep='\t')
+transcriptome_alignment_read = 9
+lower_quantile_bound = 0.125
+upper_quantile_bound = 0.875
 
 """Manager for running periodicity summary plotting"""
 def make_periodicity(
@@ -208,24 +52,40 @@ def make_periodicity(
         'periodicity',
         'metrics')
 
-    # Get list of bam files from user input
+    # Get list of all files from input directory
     files = get_files(
         args_dict['input'],
-        [str(args_dict['bam_suffix'])])
+        [''])
 
-    # Get indices
-    chromosome_index, coordinate_index = get_indices(args_dict, record_type='CDS')
+    # Get files read distributions
+    for f in files:
+        bam = read_bam(
+            str(args_dict['input']) + str(f))
 
-    # Perform periodicity analysis
-    func = partial(
-        get_peaks,
-        chromosome_index = chromosome_index,
-        coordinate_index = coordinate_index)
-    parallelize(
-        func,
-        files,
-        args_dict,
-        mod_workers = True)
+        # Get lengths of reads
+        bam['read_length'] = bam[transcriptome_alignment_read].str.len()
+
+        # Give non riboseq samples a bad suffix so they can't be searched by riboWaltz
+        if bam['read_length'].quantile(lower_quantile_bound) >= 17 \
+        and bam['read_length'].quantile(upper_quantile_bound) <= 33 \
+        and f.endswith('toTranscriptome.out.bam'):
+            pass
+        elif not f.endswith('.bam'):
+            print('Warning: ' + str(f) + ' does not appear to be a transcriptome-aligned BAM file')
+        else:
+            os.system(
+                'mv'
+                + ' ' + str(args_dict['input']) + str(f)
+                + ' ' + str(args_dict['input']) + str(f) + '.rnaseq')
+
+    # Run dupRadar in R
+    os.system(
+        'Rscript'
+        + ' ' + str(args_dict['path']) + 'Rperiodicity.r'
+        + ' ' + str(args_dict['input'])
+        + ' ' + str(args_dict['gtf'])
+        + ' ' + str(args_dict['periodicity']) + 'metrics/'
+        + str(args_dict['log']))
 
     # Get metrics to plot
     files = get_files(
@@ -244,11 +104,9 @@ def make_periodicity(
     for file_list in file_lists:
 
         # Plot metrics for each file
-        compile_matrix_metrics(
+        compile_periodicity_metrics(
             str(args_dict['periodicity']) + 'metrics/',
             file_list,
-            'position from start',
-            'count',
             'periodicity_' + str(z),
             args_dict['experiment'],
             args_dict['periodicity'])
