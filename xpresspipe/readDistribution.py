@@ -51,6 +51,7 @@ def get_distribution(
             length = len(line)
             if file2 != None:
                 length += len(f2[i])
+            dist_list[length] += 1
 
     # Clean up variables
     f1 = None
@@ -60,6 +61,11 @@ def get_distribution(
     # Compile length statistics
     distribution_profile = pd.DataFrame(dist_list, index=[0]).T
     distribution_profile.columns = ['count']
+    index_dist = distribution_profile.index.tolist()
+    for i in range(min(index_dist), max(index_dist) + 1):
+        if i not in index_dist:
+            distribution_profile.loc[i] = 0
+    distribution_profile = distribution_profile.sort_index()
 
     # Export metrics
     distribution_profile['read size (bp)'] = distribution_profile.index
