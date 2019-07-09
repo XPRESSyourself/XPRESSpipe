@@ -67,7 +67,7 @@ def compile_matrix_metrics(
     plt.subplots_adjust(
         bottom = 0.3)
 
-    if plot_type == 'periodicity':
+    if 'periodicity' in plot_type:
         tix = ['']
         for t in range(0,101,3):
             tix.append(str(t))
@@ -100,7 +100,7 @@ def compile_matrix_metrics(
                 ax_y += 1
 
         # Plot figure
-        if plot_type == 'periodicity':
+        if 'periodicity' in plot_type:
             df.plot.bar(
                 x = lab_x,
                 y = lab_y,
@@ -109,7 +109,7 @@ def compile_matrix_metrics(
                 grid = None)
             axes[ax_y, ax_x].set_xticklabels(tix)
             axes[ax_y, ax_x].tick_params(which='major', length=7, width=2, direction='out')
-        elif plot_type == 'read_distribution':
+        elif 'read_distribution' in plot_type:
             df.plot.bar(
                 x = lab_x,
                 y = lab_y,
@@ -146,7 +146,6 @@ def compile_complexity_metrics(
         file_list,
         column_x,
         column_y,
-        strand,
         plot_type,
         experiment,
         plot_output,
