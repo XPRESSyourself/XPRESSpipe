@@ -18,21 +18,27 @@ library(DESeq2)
 # args[4] = DE equation
 args = commandArgs(trailingOnly=TRUE)
 
+# Set parameters
+DATAFRAME <- args[1] # Directory containing
+INFO <- args[2]
+OUTPUT <- args[3] # Path and filename with .txt extension
+EQUATION <- args[4]
+
 # Import counts_data
-count_table <- read.table(args[1],sep='\t',header=TRUE,row.names=1)
+count_table <- read.table(DATAFRAME, sep = '\t', header = TRUE, row.names = 1)
 
 # Create conditions dataframe
-sample_table <- read.table(text=readLines(args[2], warn = FALSE), header=TRUE, sep='\t')
+sample_table <- read.table(text = readLines(INFO, warn = FALSE), header = TRUE, sep = '\t')
 names(sample_table) <- tolower(names(sample_table))
 
 # Run DESeq2 analysis on data
 dds <- DESeqDataSetFromMatrix(
   countData = count_table,
   colData = sample_table,
-  design = as.formula(paste('~', tolower(toString(args[4])))))
+  design = as.formula(paste('~', tolower(toString(EQUATION)))))
 dds <- DESeq(dds)
 res <- results(dds)
 resOrdered <- res[order(res$padj),]
 
 # Write output to new file
-write.table(as.data.frame(resOrdered), file=args[3], sep='\t', col.names=T, row.names=T)
+write.table(as.data.frame(resOrdered), file = OUTPUT, sep = '\t', col.names = T, row.names = T)
