@@ -137,39 +137,28 @@ def check_inputs(
     args_dict):
 
     # Check user-provided directory formatting
-    ignore_list = [
-        'normalizeMatrix',
-        'diffxpress',
-        'convertNames',
-        'rrnaProbe']
+    for key, value in args_dict.items():
+        if key == 'cmd':
+            pass
+        elif os.path.isdir(str(value)) == True:
+            print('= ',value)
+            args_dict[key] = check_directories(
+                args_dict[key],
+                key)
+        else:
+            pass
 
-    if 'input' in args_dict and args_dict['cmd'] not in ignore_list:
-        args_dict['input'] = check_directories(
-            args_dict['input'],
-            'input')
-    if 'output' in args_dict and args_dict['cmd'] not in ignore_list:
-        args_dict['output'] = check_directories(
-            args_dict['output'],
-            'output')
-    if 'reference' in args_dict:
-        args_dict['reference'] = check_directories(
-            args_dict['reference'],
-            'reference')
     if 'gtf' in args_dict and args_dict['cmd'] not in ignore_list:
         args_dict['gtf'] = os.path.abspath(args_dict['gtf'])
-    if 'fasta' in args_dict:
-        args_dict['fasta'] = check_directories(
-            args_dict['fasta'],
-            'fasta')
+
+    if 'gtf' in args_dict and args_dict['gtf'] != None and str(args_dict['gtf']).lower()[-4:] != '.gtf':
+        raise Exception('Invalid reference_type value provided. Could not find a file ending with .gtf')
 
     if 'quantification_method' in args_dict:
         if str(args_dict['quantification_method']).lower() == 'cufflinks' or str(args_dict['quantification_method']).lower() == 'htseq':
             pass
         else:
             raise Exception('Invalid quantification method provided: must be \"cufflinks\" or \"htseq\"')
-
-    if 'gtf' in args_dict and args_dict['gtf'] != None and str(args_dict['gtf']).lower()[-4:] != '.gtf':
-        raise Exception('Invalid reference_type value provided. Could not find a file ending with .gtf')
 
     # Check max_processor input
     if 'max_processors' in args_dict \

@@ -34,6 +34,8 @@ def check_directories(
         raise Exception(str(input) + ' is not a directory')
 
     # Check input directory name is formatted correctly and fix if necessary
+    input = os.path.abspath(input)
+
     if input.endswith('/'):
         pass
     else:
