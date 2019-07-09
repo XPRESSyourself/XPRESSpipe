@@ -53,6 +53,11 @@ docker run jordanberg/xpresspipe --help
 - Running XPRESSpipe on data   
 [![asciicast](https://asciinema.org/a/256343.svg)](https://asciinema.org/a/256343)
 
+- You can also use the XPRESSpipe command builder and executor for curation or the pipeline by running the following:
+```
+$ xpresspipe build
+```
+
 ### Important Notes:    
 #### Basic Starting Input
 - `input` directory with raw sequence data
