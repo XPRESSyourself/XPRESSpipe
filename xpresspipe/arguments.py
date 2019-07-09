@@ -274,10 +274,10 @@ def check_inputs(
             + 's.log')
 
     # Make dependencies log
-    os.system('echo \"Conda dependencies:\n===================\" >> /Users/jordan/Desktop/dependencies.log')
+    os.system('echo \"Conda dependencies:\n===================\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
     for d in deps:
         os.system('conda list | grep -i \"' + str(d) + '\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
-    os.system('echo \"R dependencies:\n===================\" >> /Users/jordan/Desktop/dependencies.log')
+    os.system('echo \"R dependencies:\n===================\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
     for r in r_deps:
         os.system('R -e \"print(as.data.frame(installed.packages()[,c(1,3:4)]))\" | grep -i \"' + str(r) + '\" >> ' + str(args_dict['log_loc']) + 'dependencies.log')
 
