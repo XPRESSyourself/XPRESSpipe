@@ -27,19 +27,19 @@ library(dupRadar)
 args = commandArgs(trailingOnly=TRUE)
 
 # Set parameters
-bam_no_dups <- args[1]
-gtf <- args[2]
-stranded <- 0 # '0' (unstranded), '1' (stranded) and '2' (reversely stranded)
-paired <- args[3] # True if paired, or else will assume false
-threads <- as.numeric(args[4])
-output <- args[5] # Path and filename with .txt extension
+BAM_NO_DUPS <- args[1]
+GTF <- args[2]
+STRANDED <- 0 # '0' (unstranded), '1' (stranded) and '2' (reversely stranded)
+PAIRED <- args[3] # True if paired, or else will assume false
+THREADS <- as.numeric(args[4])
+OUTPUT <- args[5] # Path and filename with .txt extension
 
-if (paired == 'True') {
-  paired = TRUE} else {
-  paired = FALSE}
+if (PAIRED == 'True') {
+  PAIRED = TRUE} else {
+  PAIRED = FALSE}
 
 # Duplication rate analysis
-dm <- analyzeDuprates(bam_no_dups, gtf, stranded, paired, threads)
+dm <- analyzeDuprates(BAM_NO_DUPS, GTF, STRANDED, PAIRED, THREADS)
 
 ## Save metrics
-write.table(as.data.frame(dm), file=output, sep='\t', col.names=NA)
+write.table(as.data.frame(dm), file=OUTPUT, sep='\t', col.names=NA)
