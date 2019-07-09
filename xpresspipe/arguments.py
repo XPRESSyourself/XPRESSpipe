@@ -1759,6 +1759,8 @@ def get_arguments(
     args_dict['path'] = str(__path__) + '/'
 
     #Check inputs validity
-    args_dict = check_inputs(args_dict)
-
-    return args, args_dict
+    if args_dict['cmd'] == 'build':
+        return args, args_dict
+    else:
+        args_dict = check_inputs(args_dict)
+        return args, args_dict
