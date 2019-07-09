@@ -30,7 +30,7 @@ from xpressplot import rpm, r_fpkm, batch_normalize, convert_names #tpm, add bac
 """IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__
 from .messages import *
-from .arguments import get_arguments
+from .arguments import get_arguments, get_dependencies
 from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq, create_star_reference
 from .count import count_reads, collect_counts
@@ -88,6 +88,7 @@ def main(
         get_multiqc_summary(args_dict)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -105,7 +106,7 @@ def main(
             raise Exception('Invalid type argument provided')
 
         # Get other formatted files
-        args_dict['input'] = args_dict['alignments']
+        args_dict['input'] = args_dict['alignments_coordinates']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
 
@@ -113,6 +114,7 @@ def main(
         get_multiqc_summary(args_dict)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -133,6 +135,7 @@ def main(
         get_multiqc_summary(args_dict)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -157,7 +160,7 @@ def main(
 
         # Run deseq2 in R
         os.system('rscript' \
-            + ' ' + str(args_dict['path']) + 'diffxpress.r' \
+            + ' ' + str(args_dict['path']) + 'Rdiffxpress.r' \
             + ' ' + str(args_dict['input']) \
             + ' ' + str(args_dict['sample']) \
             + ' ' + str(output_file) \
@@ -165,6 +168,7 @@ def main(
             + str(args_dict['log']))
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -177,6 +181,7 @@ def main(
         make_metagene(args_dict)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -189,6 +194,7 @@ def main(
         make_coverage(args_dict)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -201,6 +207,7 @@ def main(
         make_readDistributions(args_dict)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -213,6 +220,7 @@ def main(
         make_periodicity(args_dict)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -225,6 +233,7 @@ def main(
         make_complexity(args_dict)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -259,6 +268,7 @@ def main(
                 threads = args_dict['threads'])
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -281,6 +291,7 @@ def main(
             genome_size = args_dict['genome_size'])
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -304,6 +315,7 @@ def main(
             threads = args_dict['threads'])
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         # check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
 
     elif args.cmd == 'rrnaProbe':
@@ -324,6 +336,7 @@ def main(
             print(probe_out, file = text_file)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -357,6 +370,7 @@ def main(
             index = False)
 
         # Check log file for errors and exceptions
+        get_dependencies(args_dict)
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -367,6 +381,7 @@ def main(
 
         #Run in sample normalization
         run_normalization(args_dict)
+        get_dependencies(args_dict)
 
         # Check log file for errors and exceptions
         #No os.sys call, no log created when run on own
@@ -391,7 +406,7 @@ def main(
         args_dict = run_seRNAseq(args_dict)
 
         # Get other formatted files
-        args_dict['input'] = args_dict['alignments']
+        args_dict['input'] = args_dict['alignments_coordinates']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(
@@ -429,7 +444,7 @@ def main(
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
 
-        args_dict['input'] = args_dict['alignments']
+        args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
         make_metagene(args_dict)
@@ -439,6 +454,7 @@ def main(
             msg_complete(),
             'QUALITY CONTROL') # Check log file for errors and exceptions
 
+        get_dependencies(args_dict)
         msg_finish()
 
     elif args.cmd == 'peRNAseq':
@@ -459,7 +475,7 @@ def main(
         msg_align()
         args_dict = run_peRNAseq(args_dict)
         # Get other formatted files
-        args_dict['input'] = args_dict['alignments']
+        args_dict['input'] = args_dict['alignments_coordinates']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(
@@ -497,7 +513,7 @@ def main(
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
 
-        args_dict['input'] = args_dict['alignments']
+        args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
         make_metagene(args_dict)
@@ -507,6 +523,7 @@ def main(
             msg_complete(),
             'QUALITY CONTROL') # Check log file for errors and exceptions
 
+        get_dependencies(args_dict)
         msg_finish()
 
     elif args.cmd == 'riboseq':
@@ -527,7 +544,7 @@ def main(
         msg_align()
         args_dict = run_seRNAseq(args_dict)
         # Get other formatted files
-        args_dict['input'] = args_dict['alignments']
+        args_dict['input'] = args_dict['alignments_coordinates']
         if args_dict['output_bed'] == True:
             create_bed(args_dict)
         check_process(
@@ -565,10 +582,12 @@ def main(
         args_dict['input'] = args_dict['trimmed_fastq']
         make_readDistributions(args_dict)
 
-        args_dict['input'] = args_dict['alignments']
+        args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
         make_metagene(args_dict)
+
+        args_dict['input'] = args_dict['alignments_transcriptome']
         make_periodicity(args_dict)
 
         check_process(
@@ -576,6 +595,7 @@ def main(
             msg_complete(),
             'QUALITY CONTROL') # Check log file for errors and exceptions
 
+        get_dependencies(args_dict)
         msg_finish()
 
     else:
