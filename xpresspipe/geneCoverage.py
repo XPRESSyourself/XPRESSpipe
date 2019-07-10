@@ -206,7 +206,11 @@ def make_coverage(
 
     # Get indices
     print('Generating index for gene...')
-    chromosome_index, coordinate_index = get_indices(args_dict, record_type=args_dict['type'], gene_name=args_dict['gene_name'])
+    chromosome_index, coordinate_index = get_indices(
+        args_dict,
+        record_type=args_dict['type'],
+        gene_name=args_dict['gene_name'],
+        threads=1)
 
     # Perform metagene analysis
     print('Generating coverage profiles for each sample across ' + str(args_dict['gene_name']) + '...')

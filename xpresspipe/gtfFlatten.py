@@ -107,7 +107,7 @@ def make_flatten(
 
                 # Push information to record
                 records.append([gene, strand, chromosome, start, end, coordinates])
-                
+
             except:
                 warning = 1
                 print('Warning: No ' + str(record_type) +  ' records found for gene record ' + str(gene))
@@ -148,7 +148,6 @@ def flatten_reference(
             low_memory = False)
     elif isinstance(gtf_file, pd.DataFrame):
         gtf = gtf_file
-
     else:
         raise Exception('Error: A GTF-formatted file or dataframe was not provided')
 
@@ -157,31 +156,38 @@ def flatten_reference(
     gc.collect()
 
     # Get chunks
-    chunks = get_chunks(
-        gtf,
-        threads = threads)
-
-    # Get longest transcripts
-    chunks = run_chunks(
-        longest_transcripts,
-        chunks,
-        target_message = 'longest transcripts')
-
-    # Get only protein coding annotated records
-    chunks = run_chunks(
-        protein_gtf,
-        chunks,
-        target_message = 'protein coding genes')
-
-    # Rejoin chunks into single GTF and flatten
-    if len(chunks) > 0:
-        gtf = pd.concat(chunks)
-        chunks = None
-        del chunks
+    if threads == 1:
+        gtf = longest_transcripts(gtf)
+        gtf = protein_gtf(gtf)
         gtf = gtf.reset_index(drop=True)
         gtf = make_flatten(gtf, record_type)
-
         return gtf
-
     else:
-        return
+        chunks = get_chunks(
+            gtf,
+            threads = threads)
+
+        # Get longest transcripts
+        chunks = run_chunks(
+            longest_transcripts,
+            chunks,
+            target_message = 'longest transcripts')
+
+        # Get only protein coding annotated records
+        chunks = run_chunks(
+            protein_gtf,
+            chunks,
+            target_message = 'protein coding genes')
+
+        # Rejoin chunks into single GTF and flatten
+        if len(chunks) > 0:
+            gtf = pd.concat(chunks)
+            chunks = None
+            del chunks
+            gtf = gtf.reset_index(drop=True)
+            gtf = make_flatten(gtf, record_type)
+
+            return gtf
+
+        else:
+            return
