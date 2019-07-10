@@ -141,14 +141,13 @@ def check_inputs(
         if key == 'cmd':
             pass
         elif os.path.isdir(str(value)) == True:
-            print('= ',value)
             args_dict[key] = check_directories(
                 args_dict[key],
                 key)
         else:
             pass
 
-    if 'gtf' in args_dict and args_dict['cmd'] not in ignore_list:
+    if 'gtf' in args_dict:
         args_dict['gtf'] = os.path.abspath(args_dict['gtf'])
 
     if 'gtf' in args_dict and args_dict['gtf'] != None and str(args_dict['gtf']).lower()[-4:] != '.gtf':
@@ -851,7 +850,7 @@ def get_arguments(
         25 nts). See STAR documentation for more information on setting this parameter',
         metavar = '<seedSearchStartLmax>',
         type = int,
-        default = 50,
+        default = 15,
         required = False)
     rp_opts.add_argument(
         '--genome_size',
