@@ -972,13 +972,6 @@ def get_arguments(
         default = None,
         required = False)
     trim_opts.add_argument(
-        '--umi_length',
-        help = 'Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
-        metavar = '<length_value>',
-        type = int,
-        default = DEFAULT_READ_MIN,
-        required = False)
-    trim_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
