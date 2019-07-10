@@ -34,7 +34,7 @@ from .__init__ import __version__
 from .utils import check_directories
 
 """INITIALIZATION PARAMETERS"""
-# Retrieve path for scripts used in this pipeline, appended to argument dictionary for every function
+# Retrieve path for scripts used in this pipeline, appended to parameter dictionary for every function
 __path__  =  os.path.dirname(os.path.realpath(__file__))
 url = 'https://raw.githubusercontent.com/XPRESSyourself/XPRESSpipe/master/xpresspipe/__init__.py'
 deps = [
@@ -446,6 +446,20 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     se_opts.add_argument(
+        '--umi_location',
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)'
+        metavar = '<location>',
+        type = str,
+        default = None,
+        required = False)
+    se_opts.add_argument(
+        '--umi_length',
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)'
+        metavar = '<length>',
+        type = int,
+        default = None,
+        required = False)
+    se_opts.add_argument(
         '--no_multimappers',
         help = 'Include flag to remove multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
@@ -526,7 +540,7 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--genome_size',
-        help = 'Only needs to be changed if provided argument during reference building and using a two-pass alignment',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment',
         default = 14,
         metavar = '<value>',
         type = int,
@@ -611,6 +625,20 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     pe_opts.add_argument(
+        '--umi_location',
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)'
+        metavar = '<location>',
+        type = str,
+        default = None,
+        required = False)
+    pe_opts.add_argument(
+        '--umi_length',
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)'
+        metavar = '<length>',
+        type = int,
+        default = None,
+        required = False)
+    pe_opts.add_argument(
         '--no_multimappers',
         help = 'Include flag to remove multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
@@ -689,7 +717,7 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--genome_size',
-        help = 'Only needs to be changed if provided argument during reference building and using a two-pass alignment',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment',
         default = 14,
         metavar = '<value>',
         type = int,
@@ -774,6 +802,20 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     rp_opts.add_argument(
+        '--umi_location',
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)'
+        metavar = '<location>',
+        type = str,
+        default = None,
+        required = False)
+    rp_opts.add_argument(
+        '--umi_length',
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)'
+        metavar = '<length>',
+        type = int,
+        default = None,
+        required = False)
+    rp_opts.add_argument(
         '--no_multimappers',
         help = 'Include flag to remove multimapping reads to be output and used in downstream analyses',
         action = 'store_true',
@@ -854,7 +896,7 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '--genome_size',
-        help = 'Only needs to be changed if provided argument during reference building and using a two-pass alignment',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment',
         default = 14,
         metavar = '<value>',
         type = int,
@@ -916,6 +958,27 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     trim_opts.add_argument(
+        '--umi_location',
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)'
+        metavar = '<location>',
+        type = str,
+        default = None,
+        required = False)
+    trim_opts.add_argument(
+        '--umi_length',
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)'
+        metavar = '<length>',
+        type = int,
+        default = None,
+        required = False)
+    trim_opts.add_argument(
+        '--umi_length',
+        help = 'Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_READ_MIN,
+        required = False)
+    trim_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -971,6 +1034,11 @@ def get_arguments(
         action = 'store_true',
         required = False)
     align_opts.add_argument(
+        '--umi',
+        help = 'Include flag to de-duplicate on UMI tags (assumes UMI grouping was performed using XPRESSpipe trim module)',
+        action = 'store_true',
+        required = False)
+    align_opts.add_argument(
         '--vcf',
         help = 'Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments',
         metavar = '</path/to/file.vcf>',
@@ -1008,7 +1076,7 @@ def get_arguments(
         required = False)
     align_opts.add_argument(
         '--genome_size',
-        help = 'Only needs to be changed if provided argument during reference building and using a two-pass alignment',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment',
         default = 14,
         metavar = '<value>',
         type = int,
@@ -1506,17 +1574,17 @@ def get_arguments(
         help = 'Show help message and exit')
     curate_opts.add_argument(
         '-l', '--longest_transcript',
-        help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
+        help = 'Provide parameter to keep only longest transcript per gene record (RECOMMENDED)',
         action = 'store_true',
         required = False)
     curate_opts.add_argument(
         '-p', '--protein_coding',
-        help = 'Provide argument to keep only gene records annotated as protein coding genes',
+        help = 'Provide parameter to keep only gene records annotated as protein coding genes',
         action = 'store_true',
         required = False)
     curate_opts.add_argument(
         '-t', '--truncate',
-        help = 'Provide argument to truncate gene records',
+        help = 'Provide parameter to truncate gene records',
         action = 'store_true',
         required = False)
     curate_opts.add_argument(
@@ -1577,29 +1645,29 @@ def get_arguments(
         help = 'Show help message and exit')
     truncate_opts.add_argument(
         '-l', '--longest_transcript',
-        help = 'Provide argument to keep only longest transcript per gene record (RECOMMENDED)',
+        help = 'Provide parameter to keep only longest transcript per gene record (RECOMMENDED)',
         action = 'store_true',
         required = False)
     truncate_opts.add_argument(
         '-p', '--protein_coding',
-        help = 'Provide argument to keep only gene records annotated as protein coding genes',
+        help = 'Provide parameter to keep only gene records annotated as protein coding genes',
         action = 'store_true',
         required = False)
     truncate_opts.add_argument(
         '-t', '--truncate',
-        help = 'Provide argument to truncate gene records',
+        help = 'Provide parameter to truncate gene records',
         action = 'store_true',
         required = False)
     truncate_opts.add_argument(
         '--truncate_5prime',
-        help = 'Amount to truncate from 5\' end of each transcript, requires --truncate argument (default: %s)' % DEFAULT_TRUNCATE_5PRIME,
+        help = 'Amount to truncate from 5\' end of each transcript, requires --truncate parameter (default: %s)' % DEFAULT_TRUNCATE_5PRIME,
         metavar = '<amount>',
         type = int,
         default = DEFAULT_TRUNCATE_5PRIME,
         required = False)
     truncate_opts.add_argument(
         '--truncate_3prime',
-        help = 'Amount to truncate from 3\' end of each transcript, requires --truncate argument (default: %s)' % DEFAULT_TRUNCATE_3PRIME,
+        help = 'Amount to truncate from 3\' end of each transcript, requires --truncate parameter (default: %s)' % DEFAULT_TRUNCATE_3PRIME,
         metavar = '<amount>',
         type = int,
         default = DEFAULT_TRUNCATE_3PRIME,
@@ -1778,7 +1846,7 @@ def get_arguments(
     #Parse arguments into NameSpace
     args = parser.parse_args(args)
 
-    #Collect subargs and package, add XPRESSpipe script path to argument dictionary
+    #Collect subargs and package, add XPRESSpipe script path to parameter dictionary
     args_dict = vars(args)
     args_dict['path'] = str(__path__) + '/'
 

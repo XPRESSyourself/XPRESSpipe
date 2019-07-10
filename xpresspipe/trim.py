@@ -71,8 +71,9 @@ def auto_trim(
         + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
         + ' -l ' + str(args_dict['min_length'])
         + ' -q ' + str(args_dict['quality'])
-        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.json'
-        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.html'
+        + str(args_dict['umi'])
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
 """Trim polyX adaptors"""
@@ -90,8 +91,8 @@ def polyx_trim(
         + ' --trim_poly_x'
         + ' -l ' + str(args_dict['min_length'])
         + ' -q ' + str(args_dict['quality'])
-        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.json'
-        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.html'
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
 """Trim SE adaptors"""
@@ -109,8 +110,9 @@ def se_trim(
     + ' -a ' + str(args_dict['adaptors'][0])
     + ' -l ' + str(args_dict['min_length'])
     + ' -q ' + str(args_dict['quality'])
-    + ' -j ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.json'
-    + ' -h ' + str(args_dict['trimmed_fastq']) + str(file[:-6]) + 'fastp.html'
+    + str(args_dict['umi'])
+    + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
+    + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
     + str(args_dict['log']))
 
 """Auto-detect and trim PE adaptors"""
@@ -129,8 +131,9 @@ def auto_pe_trim(
         + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file2)
         + ' -l ' + str(args_dict['min_length'])
         + ' -q ' + str(args_dict['quality'])
-        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.json'
-        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.html'
+        + str(args_dict['umi'])
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.json'
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
 """Trim PE adaptors"""
@@ -150,8 +153,9 @@ def pe_trim(
         + ' -a ' + str(args_dict['adaptors'][0]) + ' --adapter_sequence_r2 ' + str(args_dict['adaptors'][1])
         + ' -l ' + str(args_dict['min_length'])
         + ' -q ' + str(args_dict['quality'])
-        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.json'
-        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1[:-6]) + 'fastp.html'
+        + str(args_dict['umi'])
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.json'
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
 """Trim RNAseq reads of adaptors and for quality"""
@@ -172,6 +176,14 @@ def run_trim(
     # Determine sequencing type based on args_dict['adaptors']
     type = determine_type(
         args_dict['adaptors'])
+
+    # Get UMI info
+    if args_dict['umi_location'] != None:
+        args_dict['umi'] = ' -U --umi_prefix UMI --umi_loc ' + str(args_dict['umi_location'])
+        if args_dict['umi_length'] != None:
+            args_dict['umi'] = str(args_dict['umi_location']) + ' --umi_len ' + args_dict['umi_length']
+    else:
+        args_dict['umi'] = ''
 
     # Mod workers if threads > 16 as fastp maxes at 16 per task
     if (isinstance(args_dict['max_processors'], int) and args_dict['max_processors'] > 16) \
@@ -225,5 +237,16 @@ def run_trim(
                 files,
                 args_dict,
                 mod_workers=workers)
+
+    if args_dict['umi'] != '':
+        files = get_files(
+            args_dict['trimmed_fastq'],
+            ['.fastq','.fq','.txt'])
+
+        parallelize(
+            umi_deduplicate,
+            files,
+            args_dict,
+            mod_workers=workers)
 
     return args_dict

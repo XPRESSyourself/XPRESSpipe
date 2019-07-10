@@ -68,7 +68,7 @@ def make_complexity(args_dict):
     # Get BAM files
     files = get_files(
         args_dict['input'],
-        ['_dedupMarked.bam'])
+        ['dedupMarked.bam', 'UMImarked.bam'])
 
     # Perform metagene analysis
     parallelize(
