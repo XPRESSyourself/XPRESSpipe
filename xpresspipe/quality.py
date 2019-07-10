@@ -34,10 +34,12 @@ from .parallel import parallelize
 def get_indices(
     args_dict,
     record_type='exon',
-    gene_name=None):
+    gene_name=None,
+    threads=None):
 
     # Read in GTF
-    gtf = pd.read_csv(str(args_dict['gtf']),
+    gtf = pd.read_csv(
+        str(args_dict['gtf']),
         sep='\t',
         header=None,
         comment='#',
@@ -45,6 +47,7 @@ def get_indices(
 
     if gene_name != None:
         gtf = gtf.loc[gtf[8].str.contains(str(gene_name))]
+        gtf = gtf.reset_index(drop=True)
 
     # Flatten GTF
     if args_dict['gtf'].endswith('_LC.gtf') == True:
@@ -55,7 +58,7 @@ def get_indices(
         gtf_flat = flatten_reference(
             gtf,
             record_type,
-            threads = None)
+            threads = threads)
 
     # Get GTF indices
     chromosome_index = create_chromosome_index(gtf_flat)
