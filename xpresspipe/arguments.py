@@ -447,14 +447,14 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)'
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
         type = str,
         default = None,
         required = False)
     se_opts.add_argument(
         '--umi_length',
-        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)'
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
         metavar = '<length>',
         type = int,
         default = None,
@@ -626,14 +626,14 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)'
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
         type = str,
         default = None,
         required = False)
     pe_opts.add_argument(
         '--umi_length',
-        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)'
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
         metavar = '<length>',
         type = int,
         default = None,
@@ -803,14 +803,14 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)'
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
         type = str,
         default = None,
         required = False)
     rp_opts.add_argument(
         '--umi_length',
-        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)'
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
         metavar = '<length>',
         type = int,
         default = None,
@@ -959,14 +959,14 @@ def get_arguments(
         required = False)
     trim_opts.add_argument(
         '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)'
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
         type = str,
         default = None,
         required = False)
     trim_opts.add_argument(
         '--umi_length',
-        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)'
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
         metavar = '<length>',
         type = int,
         default = None,
