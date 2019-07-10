@@ -97,7 +97,7 @@ def compile_matrix_metrics(
             df.plot.bar(
                 x = lab_x,
                 y = lab_y,
-                title = file[:-4],
+                title = file.rsplit('.',1)[0],
                 ax = axes[ax_y, ax_x],
                 grid = None,
                 width = 0.8)
@@ -105,7 +105,7 @@ def compile_matrix_metrics(
             df.plot.line(
                 x = lab_x,
                 y = lab_y,
-                title = file[:-4],
+                title = file.rsplit('.',1)[0],
                 ax = axes[ax_y, ax_x],
                 grid = None)
 
@@ -220,7 +220,7 @@ def compile_periodicity_metrics(
         df_start.plot.bar(
             x = 'distance',
             y = 'reads',
-            title = file[:-4],
+            title = file.rsplit('.',1)[0],
             ax = axes[ax_y, 0],
             width = 0.9)
         axes[ax_y, 0].set_xticklabels(tix_5prime)
@@ -325,7 +325,7 @@ def compile_complexity_metrics(
 
         axes[ax_y, ax_x].set_xlabel('log$_1$$_0$expression (reads/kb)')
         axes[ax_y, ax_x].set_ylabel('% duplicate reads')
-        axes[ax_y, ax_x].set_title(str(file[:-4]))
+        axes[ax_y, ax_x].set_title(str(file.rsplit('.',1)[0]))
         axes[ax_y, ax_x].grid(False)
 
         file_number += 1

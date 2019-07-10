@@ -141,7 +141,7 @@ def get_metagene(
     profile_data['representative transcript'] = profile_data.index
 
     profile_data.to_csv(
-        str(args_dict['metagene']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
+        str(args_dict['metagene']) + 'metrics/' + str(file).rsplit('.',1)[0] + '_metrics.txt',
         sep='\t')
 
 """Manager for running metagene summary plotting"""

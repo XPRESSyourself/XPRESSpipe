@@ -47,7 +47,7 @@ def run_normalization(
             type = 'rpm'
             df = rpm(df)
             df.to_csv(
-                str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv',
+                str(args_dict['input']).rsplit('.',1)[0] + '_' + str(type) + 'Normalized.tsv',
                 sep = '\t')
 
         # RPKM or FPKM normalization
@@ -60,7 +60,7 @@ def run_normalization(
                 df,
                 args_dict['gtf'])
             df.to_csv(
-                str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv',
+                str(args_dict['input']).rsplit('.',1)[0] + '_' + str(type) + 'Normalized.tsv',
                 sep = '\t')
         elif args_dict['method'].upper() == 'TPM':
             if args_dict['gtf'] == None:
@@ -70,7 +70,7 @@ def run_normalization(
                 df,
                 args_dict['gtf'])
             df.to_csv(
-                str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv',
+                str(args_dict['input']).rsplit('.',1)[0] + '_' + str(type) + 'Normalized.tsv',
                 sep = '\t')
 
         # Log normalization
@@ -80,7 +80,7 @@ def run_normalization(
                 df,
                 log_base = 10)
             df.to_csv(
-                str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.tsv',
+                str(args_dict['input']).rsplit('.',1)[0] + '_' + str(type) + 'Normalized.tsv',
                 sep = '\t')
         else:
             raise Exception('Unknown \"method\" argument provided')
@@ -88,7 +88,7 @@ def run_normalization(
     # Run in batch normalization
         if 'batch' in args_dict and args_dict['batch'] != None:
             batch_normalize(
-                str(args_dict['input'][:-4]) + '_' + str(type) + 'Normalized.csv',
+                str(args_dict['input']).rsplit('.',1)[0] + '_' + str(type) + 'Normalized.csv',
                 str(args_dict['batch']))
     else:
         if 'batch' in args_dict and args_dict['batch'] != None:

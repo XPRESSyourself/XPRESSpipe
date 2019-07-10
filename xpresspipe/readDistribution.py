@@ -70,7 +70,7 @@ def get_distribution(
     # Export metrics
     distribution_profile['read size (bp)'] = distribution_profile.index
     distribution_profile.to_csv(
-        str(args_dict['read_distributions']) + 'metrics/' + str(file1)[:-6] + '_metrics.txt',
+        str(args_dict['read_distributions']) + 'metrics/' + str(file1).rsplit('.',1)[0] + '_metrics.txt',
         sep='\t')
 
 """Single-end RNA-seq pipeline"""

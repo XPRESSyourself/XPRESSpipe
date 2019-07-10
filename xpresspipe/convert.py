@@ -37,8 +37,8 @@ def bed_convert(
     # Convert BAM to BED
     os.system(
         'bedtools bamtobed'
-        + ' -i ' + str(args_dict['input']) + str(file[:-4]) + '.bam'
-        + ' > ' + str(args_dict['bed_files']) + str(file[:-4]) + '.bed')
+        + ' -i ' + str(args_dict['input']) + str(file).rsplit('.',1)[0] + '.bam'
+        + ' > ' + str(args_dict['bed_files']) + str(file).rsplit('.',1)[0] + '.bed')
 
 """Run BED creation manager"""
 def create_bed(

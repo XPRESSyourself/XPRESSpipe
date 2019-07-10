@@ -44,11 +44,11 @@ def read_bam(
             'samtools view'
             + ' --threads ' + str(threads)
             + ' ' + str(file)
-            + ' -o ' + str(file)[:-4] + '.sam')
+            + ' -o ' + str(file).rsplit('.',1)[0] + '.sam')
 
         #read sorted, unique only sam files, get most abundant length and make new file
         bam = pd.read_csv(
-            str(file)[:-4] + '.sam',
+            str(file).rsplit('.',1)[0] + '.sam',
             sep = '\t',
             header = None,
             usecols = [chromosome_position, leftCoordinate_position, read_position],
@@ -56,11 +56,11 @@ def read_bam(
 
         os.system(
             'rm'
-            ' ' + str(file)[:-4] + '.sam')
+            ' ' + str(file).rsplit('.',1)[0] + '.sam')
 
     elif str(file).lower()[-4:] == '.sam':
         bam = pd.read_csv(
-            str(file)[:-4] + '.sam',
+            str(file).rsplit('.',1)[0] + '.sam',
             sep = '\t',
             header = None,
             usecols = [chromosome_position, leftCoordinate_position, read_position],

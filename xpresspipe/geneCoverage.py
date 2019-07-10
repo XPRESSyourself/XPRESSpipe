@@ -160,7 +160,7 @@ def get_coverage(
     profile_data = profile_data.reindex(coding_space)
 
     profile_data.to_csv(
-        str(args_dict['coverage']) + 'metrics/' + str(file)[:-4] + '_metrics.txt',
+        str(args_dict['coverage']) + 'metrics/' + str(file).rsplit('.',1)[0] + '_metrics.txt',
         sep='\t')
 
 """

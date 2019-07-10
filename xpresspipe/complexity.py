@@ -50,7 +50,7 @@ def run_complexity(
         + ' ' + str(args_dict['gtf'])
         + ' ' + str(paired)
         + ' ' + str(args_dict['threads'])
-        + ' ' + str(args_dict['complexity']) + 'metrics/' + str(file[:-4]) + '_metrics.txt'
+        + ' ' + str(args_dict['complexity']) + 'metrics/' + str(file).rsplit('.',1)[0] + '_metrics.txt'
         + str(args_dict['log']))
 
 """Manager for running complexity summary plotting"""

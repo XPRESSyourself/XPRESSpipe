@@ -79,7 +79,7 @@ def count_file_htseq(
         + ' -s ' + str(args_dict['stranded']).lower()
         + ' ' + str(args_dict['input']) + str(file)
         + ' ' + str(args_dict['gtf'])
-        + ' > ' + str(args_dict['counts']) + str(file[:-4]) + '.tsv')
+        + ' > ' + str(args_dict['counts']) + str(file).rsplit('.',1)[0] + '.tsv')
 
 """Create counts tables from cufflinks"""
 def count_file_cufflinks(
