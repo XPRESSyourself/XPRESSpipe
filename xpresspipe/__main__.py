@@ -449,6 +449,10 @@ def main(
         make_complexity(args_dict)
         make_metagene(args_dict)
 
+        args_dict['gene_name'] = 'GAPDH'
+        args_dict['samples'] = None
+        make_coverage(args_dict)
+
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -518,6 +522,10 @@ def main(
         make_complexity(args_dict)
         make_metagene(args_dict)
 
+        args_dict['gene_name'] = 'GAPDH'
+        args_dict['samples'] = None
+        make_coverage(args_dict)
+
         check_process(
             args_dict['log_file'],
             msg_complete(),
@@ -586,6 +594,10 @@ def main(
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
         make_metagene(args_dict)
+
+        args_dict['gene_name'] = 'GAPDH'
+        args_dict['samples'] = None
+        make_coverage(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
         make_periodicity(args_dict)
