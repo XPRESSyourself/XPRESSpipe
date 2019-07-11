@@ -178,10 +178,11 @@ def run_trim(
         args_dict['adaptors'])
 
     # Get UMI info
-    if args_dict['umi_location'] != None:
-        args_dict['umi'] = ' -U --umi_prefix UMI --umi_loc ' + str(args_dict['umi_location'])
-        if args_dict['umi_length'] != None:
-            args_dict['umi'] = str(args_dict['umi_location']) + ' --umi_len ' + args_dict['umi_length']
+    args_dict['umi'] = ''
+    if str(args_dict['umi_location']).lower() != 'none':
+        args_dict['umi'] = str(args_dict['umi']) + ' -U --umi_prefix UMI --umi_loc ' + str(args_dict['umi_location'])
+        if str(args_dict['umi_length']).lower() != 'none':
+            args_dict['umi'] = str(args_dict['umi']) + ' --umi_len ' + args_dict['umi_length']
     else:
         args_dict['umi'] = ''
 
