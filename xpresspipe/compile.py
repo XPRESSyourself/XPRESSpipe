@@ -139,10 +139,10 @@ def compile_periodicity_metrics(
     # Auto formats figure summary size based on number of plots
     if (len(file_list) / 2) < 2:
         plot_rows = 2
-        fig_size = (15, 16)
+        fig_size = (15, 12)
     else:
-        plot_rows = ceil(len(file_list) / 2)
-        fig_size = (15, (8 * (int(len(file_list) / 2))))
+        plot_rows = len(file_list)
+        fig_size = (15, (6 * (int(len(file_list)))))
 
     # Set up figure space
     fig, axes = plt.subplots(
@@ -151,8 +151,6 @@ def compile_periodicity_metrics(
         figsize = fig_size,
         sharey = True,
         subplot_kw = {'facecolor':'none'})
-    plt.subplots_adjust(
-        bottom = 0.3)
 
     tix_5prime = ['']
     for t in range(-24,76,3):
@@ -220,10 +218,14 @@ def compile_periodicity_metrics(
         df_start.plot.bar(
             x = 'distance',
             y = 'reads',
-            title = file.rsplit('.',1)[0],
             ax = axes[ax_y, 0],
             width = 0.9)
         axes[ax_y, 0].set_xticklabels(tix_5prime)
+        axes[ax_y, 0].set_xlabel('')
+
+        title = file.rsplit('.',1)[0].replace('_metrics','')
+        axes[ax_y, 0].set_title(title, y=-1, x=0, fontsize=16)
+
 
         # Plot 3prime figure
         df_stop.plot.bar(
@@ -232,6 +234,7 @@ def compile_periodicity_metrics(
             ax = axes[ax_y, 1],
             width = 0.9)
         axes[ax_y, 1].set_xticklabels(tix_3prime)
+        axes[ax_y, 1].set_xlabel('')
 
         # Next file/plot line counter
         ax_y += 1
