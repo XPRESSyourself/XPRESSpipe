@@ -38,14 +38,13 @@ print(args[3])
 # Get p-site offsets
 annotation_dt <- create_annotation(gtfpath = GTF)
 reads_list <- bamtolist(bamfolder = BAM_LIST, annotation = annotation_dt)
-p_sites <- psite(reads_list)
-
+p_sites <- psite(reads_list) # This will fail if the input files are too small and don't have good representation across genes
 p_info <- psite_info(reads_list, p_sites)
 
 # Get list of unique elements in 'sample' column in p_sites
 # Generate tables for each sample
 for (SAMPLE in as.list(unique(p_sites$sample))) {
-  SAMPLE_NAME = vapply(strsplit(SAMPLE, "[.]"), `[`, 1, FUN.VALUE=character(1))
+  SAMPLE_NAME = vapply(strsplit(SAMPLE, "[.]"), `[`, 1, FUN.VALUE=character(1)) # Get sample name
   OUTPUT_NAME = paste(OUTPUT, SAMPLE_NAME, "_metrics.txt", sep="")
   meta_prof <- metaprofile_psite(p_info, annotation_dt, SAMPLE, cdsl = 75)
   write.table(as.data.frame(meta_prof$dt), file=OUTPUT_NAME, sep='\t', col.names=NA)
