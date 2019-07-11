@@ -30,7 +30,7 @@ from math import ceil
 from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .compile import compile_matrix_metrics
+from .compile import compile_periodicity_metrics
 from .processBAM import read_bam
 from .utils import add_directory, get_files
 
