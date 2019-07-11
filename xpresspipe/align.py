@@ -276,7 +276,7 @@ def alignment_process(
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix)
         + str(args_dict['log']))
 
-    if 'umi_location' in args_dict and args_dict['umi_location'] != None or 'umi' in args_dict:
+    if ('umi_location' in args_dict and str(args_dict['umi_location']).lower() != 'none') or 'umi' in args_dict:
         os.system(
             'umi_tools dedup'
             + ' -I ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix) # Input BAM
@@ -290,7 +290,7 @@ def alignment_process(
         # Use sorted BAM file to find any duplicate reads
         os.system(
             'samtools markdup'
-            + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_UMIremoved.bam'# Input BAM
+            + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_UMIremoved.bam' # Input BAM
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_UMImarked.bam' # Output BAM
             + ' -s' # Print some basic stats
             + str(args_dict['log']))
@@ -345,8 +345,13 @@ def remove_intermediates(
         + " ! -name '*_fixed.sort.bam'"
         + " ! -name '*_fixed.sort.bam.bai'"
         + " ! -name '*_dedupMarked.bam'"
+        + " ! -name '*_dedupMarked.bam.bai'"
         + " ! -name '*_dedupRemoved.bam'"
         + " ! -name '*_dedupRemoved.bam.bai'"
+        + " ! -name '*_UMIremoved.bam'"
+        + " ! -name '*_UMIremoved.bam.bai'"
+        + " ! -name '*_UMImarked.bam'"
+        + " ! -name '*_UMImarked.bam.bai'"
         + " ! -name '*_Log.final.out'"
         + " -maxdepth 1 -type f -delete" # Only keep files matching pattern
         + str(args_dict['log']))
