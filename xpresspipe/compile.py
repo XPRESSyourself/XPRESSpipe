@@ -224,7 +224,7 @@ def compile_periodicity_metrics(
         axes[ax_y, 0].set_xlabel('')
 
         title = file.rsplit('.',1)[0].replace('_metrics','')
-        axes[ax_y, 0].set_title(title)
+        axes[ax_y, 0].set_title(title) 
 
         # Plot 3prime figure
         df_stop.plot.bar(
