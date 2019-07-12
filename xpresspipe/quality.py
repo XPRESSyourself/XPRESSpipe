@@ -50,7 +50,7 @@ def get_indices(
         gtf = gtf.reset_index(drop=True)
 
     # Flatten GTF
-    if args_dict['gtf'].endswith('_LC.gtf') == True:
+    if args_dict['gtf'].endswith('LC.gtf') == True:
         gtf_flat = make_flatten(
             gtf,
             record_type)
