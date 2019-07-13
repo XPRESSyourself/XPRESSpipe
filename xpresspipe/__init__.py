@@ -30,7 +30,6 @@ from .complexity import *
 from .convert import *
 from .count import *
 from .geneCoverage import *
-from .gtfFlatten import *
 from .gtfModify import *
 from .gtfTruncate import *
 from .messages import *
