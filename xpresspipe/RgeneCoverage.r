@@ -37,8 +37,18 @@ if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
 } else {
   print("GenomicAlignments package already installed")
 }
-
 library(GenomicAlignments)
+
+if ("doMC" %in% rownames(installed.packages()) == FALSE) {
+  print("Installing doMC...")
+  install.packages("doMC", repos = "http://cran.us.r-project.org")
+} else {
+  print("doMC package already installed")
+}
+library(doMC)
+
+library(parallel)
+
 
 # Set globals
 chromosome <- 'chromosome'
@@ -46,6 +56,7 @@ left_coordinate <- 'left_coordinate'
 right_coordinate <- 'right_coordinate'
 strand <- 'strand'
 buffer <- 1000
+n_cores <- detectCores()
 
 # Get arguments
 # args[1] = Path to BAM files
@@ -69,10 +80,21 @@ read_bam <- function(
     if (endsWith(bam_file, '.bam')) {
 
       # Read in file to Genomic Alignments data.frame and report number of records
-      print(paste('Reading in file ', bam_file, '...', sep=''))
-      dt <- as.data.table(GenomicAlignments::readGAlignments(bam_file))
-      print(paste(nrow(dt), 'records in file', sep=''))
-      return(dt)
+      print(paste('Reading', bam_file, sep=' '))
+      bam <- as.data.table(GenomicAlignments::readGAlignments(bam_file))
+
+      print('Splitting BAM record into chunks...')
+      rows <- nrow(dt)
+      chunks <- split(
+        bam,
+        rep(1:ceiling(rows/n_cores),
+        each=n_cores,
+        length.out=rows))
+
+      print(paste('Processing', rows, 'BAM records...', sep=' '))
+      rm(dt)
+      gc()
+      return(chunks)
 
     } else {
 
@@ -90,12 +112,12 @@ fetch_index <- function(
   index_file) {
 
     # Read in gene index
-    idx <- read.table(
+    index <- read.table(
       index_file,
       header = TRUE,
       sep = '\t')
 
-    return(idx)
+    return(index)
 
   }
 
@@ -123,7 +145,7 @@ process_coverage <- function(
 
     # Get overlapping coverage in region
     # Make empty dataframe with min/max range
-    counts <- data.frame('position' = min:max, 'coverage' = 0, row.names = 'position')
+    counts <- data.frame('position' = toString(min):toString(max), 'coverage' = 0, row.names = 'position')
 
     # Loop through start and end of each read in range and add one for every nt position
     for (read in 1:nrow(bam_sub)) {
@@ -154,16 +176,19 @@ run_list <- function (
     index <- fetch_index(index_file)
 
     for (f in file_list) {
-      print(paste('Processing file', f, sep=' '))
+
       # Import BAM and get coverage
       file <- paste(file_path, f, sep='')
-      bam <- read_bam(file)
-      coverage <- process_coverage(bam, index)
+      chunks <- read_bam(file)
+
+      # Multi-process BAM chunks
+      registerDoMC()
+      coverage <- foreach(r = chunks) %dopar% process_coverage(r, index)
 
       # Write BAM coverage metrics to output file
       file_name = vapply(strsplit(f, "[.]"), `[`, 1, FUN.VALUE=character(1))
       output_file = paste(output_path, file_name, '_metrics.txt', sep='')
-      write.table(as.data.frame(coverage, file=output_file, sep='\t', col.names=NA))
+      write.table(coverage, file=output_file, sep='\t', col.names=NA)
 
       # Clean the batch
       rm(file)

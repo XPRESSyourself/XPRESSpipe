@@ -35,7 +35,7 @@ import seaborn as sns
 """IMPORT INTERNAL DEPENDENCIES"""
 from .utils import add_directory
 
-input_count = 'raw_count'
+input_count = 'coverage'
 window = 20
 
 """Compile images from a list of metrics matrices"""
@@ -224,7 +224,7 @@ def compile_periodicity_metrics(
         axes[ax_y, 0].set_xlabel('')
 
         title = file.rsplit('.',1)[0].replace('_metrics','')
-        axes[ax_y, 0].set_title(title) 
+        axes[ax_y, 0].set_title(title)
 
         # Plot 3prime figure
         df_stop.plot.bar(
@@ -379,7 +379,7 @@ def compile_coverage(
             str(path) + str(file),
             sep = '\t')
 
-        df['coverage'] = df[input_count].rolling(window = window).mean()
+        df['coverage'] = df[input_count].rolling(window = window, min_periods=1).mean()
         df['coverage'] = df['coverage'].fillna(0)
 
         if strand == '-':
@@ -404,7 +404,7 @@ def compile_coverage(
                 last = row[0]
 
         for index, row in df.iterrows():
-            if str(record_type) in row[3]:
+            if str(record_type) in row[2]:
                 axes[ax_y].axvline(index, ls='-', linewidth=2, color='black', ymin=0, ymax=1)
 
         axes[ax_y].axhline(0, ls='-', linewidth=5, color='black', xmin=0, xmax=1)
