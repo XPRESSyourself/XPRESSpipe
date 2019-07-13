@@ -33,116 +33,6 @@ from functools import partial
 from .parallel import parallelize
 from .compile import compile_matrix_metrics, compile_coverage
 from .utils import add_directory, get_files
-from .processBAM import read_bam, bam_sample
-from .quality import get_indices, get_position
-
-"""
-Func: Retrieve meta-coordinate for each read in input BAM matrix
-- Find middle coordinate of each read
-@param bam: BAM file in pandas dataframe format
-@return: Middle coordinates and respective chromosome as multi-dimensional list
-"""
-def meta_coordinates(
-        bam):
-
-    # Map middle point of each read as left-most position plus half of read length
-    bam[16] = bam[3] + (bam[9].str.len() / 2).apply(np.floor).astype('int64')
-
-    # Return as array
-    mid_coordinates = bam[[2,16]]
-    return mid_coordinates.values.tolist()
-
-"""
-Func: Search for plausible records per provided coordinate
-- Searches for a gene range where search coordinate falls within
-@param coordinate_index: Multi-dimensional array for each gene with start, stop, strand, length, and exon region information
-@param chromosome_index: Dictionary with chromosome number and ordered position in the index
-@param search_chromosome: Chromosome number of coordinate to search
-@param search_coordinate_start: Leftmost coordinate of search read
-@return: Updated record_array if search coordinate falls in gene range
-"""
-def get_coordinate_records_meta(
-        coordinate_index,
-        chromosome_index,
-        search_chromosome,
-        search_coordinate_start):
-
-    record_array = []
-    try:
-        chromosome_array = coordinate_index[chromosome_index[search_chromosome]]
-        for index, record in enumerate(chromosome_array):
-            if record[0] <= search_coordinate_start and record[1] >= search_coordinate_start:
-                record_array.append(record)
-
-        return record_array
-    except:
-        return record_array
-
-"""Get meta profile for bam file"""
-def get_meta_profile(
-        aligned_reads_index,
-        coordinate_index,
-        chromosome_index):
-
-    # Initialize profile dataframe for storage
-    metagene_profile = pd.DataFrame(
-        0,
-        index = range(101),
-        columns = ['metacount'])
-
-    # Search through each mapped read coordinate
-    for index, record in enumerate(aligned_reads_index):
-        record_array = get_coordinate_records_meta(
-                coordinate_index,
-                chromosome_index,
-                record[0],
-                record[1])
-
-        # If a record array is not None, get the exonic position from start for each record for the coordinate
-        if record_array:
-            position_count = []
-            for index, transcript_record in enumerate(record_array):
-                position = get_position(
-                    record[1],
-                    transcript_record[3],
-                    transcript_record[2])
-                if position != None:
-                    position_count.append([position, transcript_record[4]])
-
-            for x in position_count:
-                meta_position = int((x[0] / x[1]) * 100)
-                count = 1 / len(position_count)
-                metagene_profile.at[meta_position, 'metacount'] += count
-
-    return metagene_profile
-
-"""Generate metagene profiles"""
-def get_metagene(
-        args,
-        chromosome_index,
-        coordinate_index):
-
-    file, args_dict = args[0], args[1] # Parse args
-
-    # Read in indexed bam file
-    bam = read_bam(
-        str(args_dict['input']) + str(file))
-
-    bam_coordinates = meta_coordinates(bam)
-
-    bam = None # Some clean-up
-    del bam
-
-    # Get profile
-    profile_data = get_meta_profile(
-        bam_coordinates,
-        coordinate_index,
-        chromosome_index)
-    profile_data['representative transcript'] = profile_data.index
-
-    profile_data.to_csv(
-        str(args_dict['metagene']) + 'metrics/' + str(file).rsplit('.',1)[0] + '_metrics.txt',
-        sep='\t')
 
 """Manager for running metagene summary plotting"""
 def make_metagene(
@@ -165,18 +55,10 @@ def make_metagene(
         [str(args_dict['bam_suffix'])])
 
     # Get indices
-    chromosome_index, coordinate_index = get_indices(args_dict, record_type=args_dict['type'])
+
 
     # Perform metagene analysis
-    func = partial(
-        get_metagene,
-        chromosome_index = chromosome_index,
-        coordinate_index = coordinate_index)
-    parallelize(
-        func,
-        files,
-        args_dict,
-        mod_workers = True)
+
 
     # Compile metrics to plot
     files = get_files(

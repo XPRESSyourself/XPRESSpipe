@@ -26,82 +26,8 @@ import sys
 import pandas as pd
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .gtfFlatten import flatten_reference, create_chromosome_index, create_coordinate_index, make_flatten
 from .utils import add_directory, get_files
 from .parallel import parallelize
-
-"""Get meta and periodicity indices from GTF"""
-def get_indices(
-    args_dict,
-    record_type='exon',
-    gene_name=None,
-    threads=None):
-
-    # Read in GTF
-    gtf = pd.read_csv(
-        str(args_dict['gtf']),
-        sep='\t',
-        header=None,
-        comment='#',
-        low_memory=False)
-
-    if gene_name != None:
-        gtf = gtf.loc[gtf[8].str.contains(str(gene_name))]
-        gtf = gtf.reset_index(drop=True)
-
-    # Flatten GTF
-    if args_dict['gtf'].endswith('LC.gtf') == True:
-        gtf_flat = make_flatten(
-            gtf,
-            record_type)
-    else:
-        gtf_flat = flatten_reference(
-            gtf,
-            record_type,
-            threads = threads)
-
-    # Get GTF indices
-    chromosome_index = create_chromosome_index(gtf_flat)
-    coordinate_index = create_coordinate_index(gtf_flat)
-
-    return chromosome_index, coordinate_index
-
-"""Get relative position of coordinate to the start of the transcript"""
-def get_position(
-        position,
-        coordinates,
-        strand):
-
-    # Can order operations same since reference puts - strand records in reverse already
-    location = 0
-    last_coordinate = 0
-
-    for y in coordinates:
-
-        # Exit if mapped to intron
-        if strand == '+':
-            next_coordinate = min(y)
-        else: # '-'
-            next_coordinate =  max(y)
-
-        if position > last_coordinate and position < next_coordinate:
-            return None
-
-        # Map to exon position
-        if position >= min(y) and position <= max(y):
-            if strand == '+':
-                location += abs(position - min(y))
-            else: # '-'
-                location += abs(max(y)- position)
-
-            return location
-
-        else:
-            location += abs(y[1] - y[0])
-            if strand == '+':
-                next_coordinate = max(y)
-            else: # '-'
-                next_coordinate =  min(y)
 
 """Generate read distribution profiles"""
 def run_fastqc(
