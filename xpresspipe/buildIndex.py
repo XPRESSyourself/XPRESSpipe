@@ -69,7 +69,7 @@ def index_gtf(
     gene_name=None,
     canonical=True,
     threads=None,
-    return=False):
+    output=False):
 
     # Import GTF reference file
     if str(args_dict['gtf']).endswith('.gtf'):
@@ -118,7 +118,7 @@ def index_gtf(
         index = False,
         quoting = csv.QUOTE_NONE)
 
-    if return == True:
+    if output == True:
         return gtf_flat
     else:
         return
