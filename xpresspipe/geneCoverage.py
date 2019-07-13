@@ -76,6 +76,12 @@ def make_coverage(
                     break
         files = sample_list
 
+    # Generate file name string for R
+    list_string = '\"'
+    for f in files:
+        list_string = str(list_string) + str(f) + ','
+    list_string = str(list_string) + '\"'
+
     # Get indices
     print('Generating index for gene...')
     index = index_gtf(
@@ -83,7 +89,7 @@ def make_coverage(
         record_type=args_dict['type'],
         gene_name=args_dict['gene_name'],
         threads=1,
-        return=True)
+        output=True)
 
     strand = index.iloc[0]['strand']
 
@@ -97,10 +103,10 @@ def make_coverage(
         'Rscript'
         + ' ' + str(args_dict['path']) + 'RgeneCoverage.r'
         + ' ' + str(args_dict['input'])
-        + ' ' + str(files)
+        + ' ' + str(list_string)
         + ' ' + str(args_dict['output']) + str(args_dict['gene_name']) + '.idx'
-        + ' ' + str(args_dict['coverage']) + 'metrics/'
-        + str(args_dict['log']))
+        + ' ' + str(args_dict['coverage']) + 'metrics/')
+        #+ str(args_dict['log']))
 
     # Compile metrics to plot
     print('Plotting...')
