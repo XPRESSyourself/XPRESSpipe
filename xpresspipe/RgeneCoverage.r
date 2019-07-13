@@ -1,29 +1,28 @@
 #!/usr/bin/env Rscript
+license <- function() {
+  "
+  XPRESSpipe
+  An alignment and analysis pipeline for RNAseq data
+  alias: xpresspipe
 
-"""
-XPRESSpipe
-An alignment and analysis pipeline for RNAseq data
-alias: xpresspipe
+  Copyright (C) 2019  Jordan A. Berg
+  jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
-Copyright (C) 2019  Jordan A. Berg
-jordan <dot> berg <at> biochem <dot> utah <dot> edu
+  This program is free software: you can redistribute it and/or modify it under
+  the terms of the GNU General Public License as published by the Free Software
+  Foundation, either version 3 of the License, or (at your option) any later
+  version.
 
-This program is free software: you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation, either version 3 of the License, or (at your option) any later
-version.
+  This program is distributed in the hope that it will be useful, but WITHOUT ANY
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+  PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE. See the GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License along with
+  this program.  If not, see <https://www.gnu.org/licenses/>.
+  "
+  }
 
-You should have received a copy of the GNU General Public License along with
-this program.  If not, see <https://www.gnu.org/licenses/>.
-"""
-
-"""
-Import dependencies
-"""
+# Import dependencies
 if ("data.table" %in% rownames(installed.packages()) == FALSE) {
   print("Installing data.table...")
   install.packages("data.table", repos = "http://cran.us.r-project.org")
@@ -41,17 +40,13 @@ if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
 
 library(GenomicAlignments)
 
-"""
-Set globals
-"""
-chromosome = 'chromosome'
-left_coordinate = 'left_coordinate'
-right_coordinate = 'right_coordinate'
-strand = 'strand'
+# Set globals
+chromosome <- 'chromosome'
+left_coordinate <- 'left_coordinate'
+right_coordinate <- 'right_coordinate'
+strand <- 'strand'
+buffer <- 1000
 
-"""
-Get Arguments
-"""
 # Get arguments
 # args[1] = Path to BAM files
 # args[2] = List of BAM files
@@ -61,24 +56,22 @@ args = commandArgs(trailingOnly=TRUE)
 
 # Set parameters
 BAM_PATH <- args[1]
-BAM_LIST <- args[2]
+BAM_LIST <- strsplit(args[2],',')[[1]]
 INDEX <- args[3]
 OUTPUT_LOCATION <- args[4]
 
-"""
-func: Import BAM file
-@param bam_file: BAM-format file
-@return: GenomicAlignments data.frame
-"""
+# func: Import BAM file
+# @param bam_file: BAM-format file
+# @return: GenomicAlignments data.frame
 read_bam <- function(
   bam_file) {
 
     if (endsWith(bam_file, '.bam')) {
 
       # Read in file to Genomic Alignments data.frame and report number of records
-      print(c('Reading in file ', bam_file, '...'))
+      print(paste('Reading in file ', bam_file, '...', sep=''))
       dt <- as.data.table(GenomicAlignments::readGAlignments(bam_file))
-      print(c(nrow(dt), ' records in file'))
+      print(paste(nrow(dt), 'records in file', sep=''))
       return(dt)
 
     } else {
@@ -90,11 +83,9 @@ read_bam <- function(
 
   }
 
-"""
-func: Import index file
-@param index_file: XPRESSpipe-formatted index file
-@return: Index data.frame
-"""
+# func: Import index file
+# @param index_file: XPRESSpipe-formatted index file
+# @return: Index data.frame
 fetch_index <- function(
   index_file) {
 
@@ -108,18 +99,16 @@ fetch_index <- function(
 
   }
 
-"""
-func: Get appropriate range of BAM file based on index and count coverage
-@param bam: GenomicAlignments data.frame
-@param index: XPRESSpipe-formatted index data.frame object
-@return: Coverage data.frame
-"""
+# func: Get appropriate range of BAM file based on index and count coverage
+# @param bam: GenomicAlignments data.frame
+# @param index: XPRESSpipe-formatted index data.frame object
+# @return: Coverage data.frame
 process_coverage <- function(
   bam, index) {
 
     # Get BAM file within range
-    min <- min(index$left_coordinate) - 1000
-    max <- max(index$right_coordinate) + 1000
+    min <- min(index$left_coordinate) - buffer
+    max <- max(index$right_coordinate) + buffer
     gene_strand <- levels(droplevels(index$strand))[1]
     chr <- index$chromosome[1]
 
@@ -165,16 +154,16 @@ run_list <- function (
     index <- fetch_index(index_file)
 
     for (f in file_list) {
-
+      print(paste('Processing file', f, sep=' '))
       # Import BAM and get coverage
-      file <- paste(file_path, f, sep="")
+      file <- paste(file_path, f, sep='')
       bam <- read_bam(file)
       coverage <- process_coverage(bam, index)
 
       # Write BAM coverage metrics to output file
       file_name = vapply(strsplit(f, "[.]"), `[`, 1, FUN.VALUE=character(1))
-      output_file = paste(output_path, file_name, "_metrics.txt", sep="")
-      write.table(as.data.frame(coverage, file=output_file, sep='\t', col.names=NA)
+      output_file = paste(output_path, file_name, '_metrics.txt', sep='')
+      write.table(as.data.frame(coverage, file=output_file, sep='\t', col.names=NA))
 
       # Clean the batch
       rm(file)
@@ -188,12 +177,6 @@ run_list <- function (
 
   }
 
-
-"""
-MAIN
-"""
-# Parse BAM list
-bam_files <- #BAM_LIST
-
+# MAIN
 # Run files through coverage checker
 run_list(BAM_PATH, BAM_LIST, INDEX, OUTPUT_LOCATION)
