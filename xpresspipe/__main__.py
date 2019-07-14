@@ -180,14 +180,15 @@ def main(
         print('Performing metagene analysis on SAM files...')
 
         # Perform metagene analysis
-        make_metagene(args_dict)
+        print('Metagene module still in production...')
+        #make_metagene(args_dict)
 
         # Check log file for errors and exceptions
-        get_dependencies(args_dict)
-        check_process(
-            args_dict['log_file'],
-            msg_complete(),
-            'METAGENE')
+        #get_dependencies(args_dict)
+        #check_process(
+        #    args_dict['log_file'],
+        #    msg_complete(),
+        #    'METAGENE')
 
     elif args.cmd == 'geneCoverage':
         print('Performing gene coverage analysis on SAM files...')
@@ -451,7 +452,7 @@ def main(
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
-        make_metagene(args_dict)
+        #make_metagene(args_dict)
 
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
@@ -526,7 +527,7 @@ def main(
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
-        make_metagene(args_dict)
+        #make_metagene(args_dict)
 
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
@@ -611,7 +612,7 @@ def main(
 
         args_dict['input'] = args_dict['alignments_transcriptome']
         print(datetime.datetime.now())
-        make_metagene(args_dict)
+        #make_metagene(args_dict)
 
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
