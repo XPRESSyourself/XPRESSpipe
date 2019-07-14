@@ -40,6 +40,20 @@ gtf_annotation_column = 8
 gtf_transcript_search = r'transcript_id \"(.*?)\"; '
 gtf_transcript_column = 9
 
+def make_dictionary(
+    gtf):
+
+    gtf = gtf[(gtf[gtf_type_column] == 'exon')]
+    gtf[gtf_transcript_column] = gtf[gtf_annotation_column].str.extract(gtf_transcript_search)
+    gtf['length'] = gtf[gtf_rightCoordinate_column] - gtf[gtf_leftCoordinate_column] + 1
+
+    gtf = gtf[[gtf_transcript_column, 'length']]
+    gtf.columns = ['transcript', 'length']
+    gtf = gtf.groupby('transcript').sum()
+    gtf = gtf.reset_index()
+
+    return gtf
+
 """Flatten GTF dataframe"""
 def make_index(
     gtf):
@@ -62,6 +76,7 @@ def make_index(
 def index_gtf(
     args_dict,
     gene_name=None,
+    geneCov=True,
     threads=None,
     output=False):
 
@@ -82,23 +97,45 @@ def index_gtf(
         gtf = gtf.loc[gtf[gtf_annotation_column].str.contains(str(gene_name))]
         gtf = gtf.reset_index(drop=True)
     else:
-        output_file = 'metagene.idx'
+        output_file = 'metagene.dict'
 
     # Flatten GTF
     if args_dict['gtf'].endswith('LC.gtf') == True:
-        gtf_flat = make_index(
-            gtf)
+        if geneCov == True:
+            gtf_flat = make_index(
+                gtf)
+        else:
+            gtf = edit_gtf(
+                gtf,
+                longest_transcript=False,
+                protein_coding=True,
+                truncate_reference=False,
+                output=False,
+                threads=None)
+            gtf_flat = make_dictionary(
+                gtf)
 
     else:
-        gtf = edit_gtf(
-            gtf,
-            longest_transcript=True,
-            protein_coding=True,
-            truncate_reference=False,
-            output=False,
-            threads=None)
-        gtf_flat = make_index(
-            gtf)
+        if geneCov == True:
+            gtf = edit_gtf(
+                gtf,
+                longest_transcript=True,
+                protein_coding=True,
+                truncate_reference=False,
+                output=False,
+                threads=None)
+            gtf_flat = make_index(
+                gtf)
+        else:
+            gtf = edit_gtf(
+                gtf,
+                longest_transcript=False,
+                protein_coding=True,
+                truncate_reference=False,
+                output=False,
+                threads=None)
+            gtf_flat = make_dictionary(
+                gtf)
 
     # Get rid of old GTF
     gtf = None

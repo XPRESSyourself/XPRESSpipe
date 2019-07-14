@@ -35,6 +35,58 @@ from .compile import compile_matrix_metrics
 from .utils import add_directory, get_files
 from .buildIndex import index_gtf
 
+def roundup(value):
+    return int(ceil(value))
+
+def finish_metagene(args):
+
+    file, args_dict = args[0], args[1]
+
+    # Read in parsed bam
+    bam = pd.read_csv(
+        str(args_dict['metagene']) + 'metrics/' + str(file).split('.')[0] + '.metaposit',
+        sep = '\t')
+
+    # Read in transcript exon space dictionary
+    dict = pd.read_csv(
+        str(args_dict['output']) + 'metagene.dict',
+        sep = '\t')
+
+    reference = pd.Series(dict['length'].values,index=dict['transcript']).to_dict()
+    dict = None
+
+    # Map exon space to each bam record based on its transcript ID
+    bam['total_length']= bam['seqnames'].map(reference)
+    bam = bam.dropna()
+
+    # Calculate meta-position
+    bam['meta_distance'] = bam['meta_position'] / bam['total_length'] * 100
+    bam['meta_distance'] = bam['meta_distance'].apply(roundup)
+
+    # Compile meta position statistics
+    profile = pd.DataFrame()
+    profile['metacount'] = [0 for x in range(1,101)]
+    profile.index = range(1,101)
+
+    for x in range(1,101):
+        profile.loc[x] = bam[bam['meta_distance'] == x].shape[0]
+
+    # Export metrics
+    profile['representative transcript'] = profile.index
+    profile.to_csv(
+        str(args_dict['metagene']) + 'metrics/' + str(file).split('.')[0] + '_metrics.txt',
+        sep='\t')
+
+    # Clean up
+    bam = None
+    reference = None
+    dict = None
+    profile = None
+    gc.collect()
+    os.system(
+        'rm'
+        + ' ' + str(args_dict['metagene']) + 'metrics/' + str(file).split('.')[0] + '.metaposit')
+
 def run_metagene(args):
 
     file, args_dict = args[0], args[1]
@@ -52,8 +104,7 @@ def run_metagene(args):
         + ' ' + str(args_dict['path']) + 'Rmetagene.r'
         + ' ' + str(args_dict['input'])
         + ' ' + str(file)
-        + ' ' + str(args_dict['output']) + 'metagene.idx'
-        + ' ' + str(args_dict['metagene']) + 'metrics/metagene_'
+        + ' ' + str(args_dict['metagene']) + 'metrics/'
         + str(args_dict['log']))
 
 """Manager for running metagene summary plotting"""
@@ -81,6 +132,7 @@ def make_metagene(
     index_gtf(
         args_dict,
         threads=None,
+        geneCov=False,
         output=False)
 
     # Perform metagene analysis
@@ -89,11 +141,17 @@ def make_metagene(
         files,
         args_dict,
         mod_workers = True)
+    parallelize(
+        finish_metagene,
+        files,
+        args_dict,
+        mod_workers = True)
     os.system(
         'rm'
-        + ' ' + str(args_dict['output']) + 'metagene.idx')
+        + ' ' + str(args_dict['output']) + 'metagene.dict')
 
     # Compile metrics to plot
+    print('Plotting...')
     files = get_files(
         str(args_dict['metagene']) + 'metrics/',
         ['_metrics.txt'])
@@ -120,6 +178,4 @@ def make_metagene(
             args_dict['metagene'])
         z += 1
 
-    chromosome_index = None
-    coordinate_index = None
     gc.collect()
