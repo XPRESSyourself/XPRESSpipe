@@ -41,7 +41,7 @@ gtf_transcript_search = r'transcript_id \"(.*?)\"; '
 gtf_transcript_column = 9
 
 """Flatten GTF dataframe"""
-def flatten_gtf(
+def make_index(
     gtf):
 
     gtf = gtf[(gtf[gtf_type_column] == 'exon') | (gtf[gtf_type_column] == 'CDS')]
@@ -86,8 +86,9 @@ def index_gtf(
 
     # Flatten GTF
     if args_dict['gtf'].endswith('LC.gtf') == True:
-        gtf_flat = flatten_gtf(
+        gtf_flat = make_index(
             gtf)
+
     else:
         gtf = edit_gtf(
             gtf,
@@ -96,7 +97,7 @@ def index_gtf(
             truncate_reference=False,
             output=False,
             threads=None)
-        gtf_flat = flatten_gtf(
+        gtf_flat = make_index(
             gtf)
 
     # Get rid of old GTF

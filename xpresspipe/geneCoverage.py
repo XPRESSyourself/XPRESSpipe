@@ -37,7 +37,6 @@ from .buildIndex import index_gtf
 
 plots_per_page = 8
 
-
 def run_coverage(args):
 
     file, args_dict = args[0], args[1]
@@ -108,12 +107,15 @@ def make_coverage(
         threads=1,
         output=False)
 
-    # Perform metagene analysis
+    # Perform gene coverage analysis
     parallelize(
         run_coverage,
         files,
         args_dict,
         mod_workers = True)
+    os.system(
+        'rm'
+        + ' ' + str(args_dict['output']) + str(args_dict['gene_name']) + '.idx')
 
     # Compile metrics to plot
     print('Plotting...')
