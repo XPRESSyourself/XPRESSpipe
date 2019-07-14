@@ -31,7 +31,6 @@ if ("data.table" %in% rownames(installed.packages()) == FALSE) {
 }
 library(data.table)
 
-
 if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
   BiocManager::install("GenomicAlignments", dependencies=TRUE)
 } else {
@@ -39,24 +38,12 @@ if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
 }
 library(GenomicAlignments)
 
-if ("doMC" %in% rownames(installed.packages()) == FALSE) {
-  print("Installing doMC...")
-  install.packages("doMC", repos = "http://cran.us.r-project.org")
-} else {
-  print("doMC package already installed")
-}
-library(doMC)
-
-library(parallel)
-
-
 # Set globals
 chromosome <- 'chromosome'
 left_coordinate <- 'left_coordinate'
 right_coordinate <- 'right_coordinate'
 strand <- 'strand'
-buffer <- 1000
-n_cores <- detectCores()
+exon <- 'exon'
 
 # Get arguments
 # args[1] = Path to BAM files
@@ -82,19 +69,9 @@ read_bam <- function(
       # Read in file to Genomic Alignments data.frame and report number of records
       print(paste('Reading', bam_file, sep=' '))
       bam <- as.data.table(GenomicAlignments::readGAlignments(bam_file))
-
-      print('Splitting BAM record into chunks...')
-      rows <- nrow(dt)
-      chunks <- split(
-        bam,
-        rep(1:ceiling(rows/n_cores),
-        each=n_cores,
-        length.out=rows))
-
+      rows <- dim(bam)[1]
       print(paste('Processing', rows, 'BAM records...', sep=' '))
-      rm(dt)
-      gc()
-      return(chunks)
+      return(bam)
 
     } else {
 
@@ -128,48 +105,71 @@ fetch_index <- function(
 process_coverage <- function(
   bam, index) {
 
-    # Get BAM file within range
-    min <- min(index$left_coordinate) - buffer
-    max <- max(index$right_coordinate) + buffer
-    gene_strand <- levels(droplevels(index$strand))[1]
-    chr <- index$chromosome[1]
+    # Normalize coordinate positions to match BAM file, start position starts at 1
+    min_coordinate <- min(index$left_coordinate) - 1
+    index$right_coordinate <- index$right_coordinate - min_coordinate
+    index$left_coordinate <- index$left_coordinate - min_coordinate
+    index$length <- index$right_coordinate - index$left_coordinate + 1
 
-    # Get coverage regions
-    coverage_ranges <- character(0)
-    for (record in 1:nrow(index)) {
-      coverage_ranges <- c(coverage_ranges, toString(index[record,left_coordinate]):toString(index[record,right_coordinate]))
-    }
-
-    # Get relevant data
-    bam_sub <- bam[(bam$seqnames == chr) & (bam$start >= min) & (bam$end <= max) & (bam$strand == gene_strand)]
+    # Get total length of exon space
+    index_exon <- index[index$feature == exon,]
+    transcript_length <- sum(index_exon$length)
 
     # Get overlapping coverage in region
     # Make empty dataframe with min/max range
-    counts <- data.frame('position' = toString(min):toString(max), 'coverage' = 0, row.names = 'position')
+    counts <- data.frame('position' = 1:transcript_length, 'coverage' = 0, 'feature' = '', row.names = 'position', stringsAsFactors = FALSE)
 
     # Loop through start and end of each read in range and add one for every nt position
-    for (read in 1:nrow(bam_sub)) {
+    for (read in 1:nrow(bam)) {
 
-      # Add a count for each nucleotide of the read
-      counts[row.names(counts) %in% toString(bam_sub[read,start]):toString(bam_sub[read,end]),] <- (
-        counts[row.names(counts) %in% toString(bam_sub[read,start]):toString(bam_sub[read,end]),] + 1
+      # Add a count for each nucleotide of the read if part of the transcript (will allow partial mapping)
+      counts[row.names(counts) %in% toString(bam[read,start]):toString(bam[read,end]),'coverage'] <- (
+        counts[row.names(counts) %in% toString(bam[read,start]):toString(bam[read,end]),'coverage'] + 1
         )
 
       }
+
+    # Get exon start coordinates
+    for (record in 1:nrow(index_exon)) {
+      if (record == 1) {
+        index_exon[record,'exon_start'] <- 1
+      } else {
+
+        index_exon[record,'exon_start'] <- index_exon[record - 1,'length'] + index_exon[record - 1,'exon_start']
+
+      }
+
+    }
+
+    # Label exon feature starts
+    exon_number <- 1
+    for (record in 1:nrow(counts)) {
+
+      if (record %in% index_exon$exon_start) {
+
+        # Add exon label to start of each exon iteratively
+        counts[record,'feature'] <- paste('Exon', toString(exon_number), sep=' ')
+        exon_number <- exon_number + 1
+
+      }
+
+    }
 
     # Keep only nt indices that fall in an exon range from index
     # Make list of intron exon positions
     # Stay on the same gene name
     # Only keep those indices from counts
-    coverage_counts <- data.frame(
-      'position' = coverage_ranges,
-      'coverage' = counts[row.names(counts) %in% coverage_ranges,],
-      row.names = 'position')
+    #coverage_counts <- data.frame(
+    #  'position' = 1:nrow(counts),
+    #  'coverage' = counts$coverage,
+    #  'feature' = counts$feature,
+    #  row.names = 'position')
 
-    return(coverage_counts)
+    return(counts)
 
   }
 
+# Requires a STAR styled transcriptome-aligned BAM file
 run_list <- function (
   file_path, file_list, index_file, output_path) {
 
@@ -179,11 +179,23 @@ run_list <- function (
 
       # Import BAM and get coverage
       file <- paste(file_path, f, sep='')
-      chunks <- read_bam(file)
+      bam <- read_bam(file)
 
-      # Multi-process BAM chunks
-      registerDoMC()
-      coverage <- foreach(r = chunks) %dopar% process_coverage(r, index)
+      # Get transcript to analyze
+      target_transcript <- unique(levels(droplevels(index$transcript)))
+      target_bam <- bam[bam$seqnames == target_transcript]
+      if (dim(target_bam)[1] == 0) {
+
+        print(paste('No records for', toString(target_transcript), 'were found', sep=' '))
+
+      } else {
+
+        coverage <- process_coverage(target_bam, index)
+
+      }
+      rm(file)
+      rm(bam)
+      gc()
 
       # Write BAM coverage metrics to output file
       file_name = vapply(strsplit(f, "[.]"), `[`, 1, FUN.VALUE=character(1))
@@ -191,8 +203,7 @@ run_list <- function (
       write.table(coverage, file=output_file, sep='\t', col.names=NA)
 
       # Clean the batch
-      rm(file)
-      rm(bam)
+      rm(target_bam)
       rm(coverage)
       rm(file_name)
       rm(output_file)

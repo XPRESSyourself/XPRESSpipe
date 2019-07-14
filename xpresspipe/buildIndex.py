@@ -37,27 +37,23 @@ gtf_leftCoordinate_column = 3
 gtf_rightCoordinate_column = 4
 gtf_sign_column = 6
 gtf_annotation_column = 8
-gtf_gene_search = r'gene_id \"(.*?)\"; '
-gtf_gene_column = 9
 gtf_transcript_search = r'transcript_id \"(.*?)\"; '
-gtf_transcript_column = 10
+gtf_transcript_column = 9
 
 """Flatten GTF dataframe"""
 def flatten_gtf(
-    gtf,
-    record_type='exon'):
+    gtf):
 
-    gtf = gtf[gtf[gtf_type_column] == record_type]
+    gtf = gtf[(gtf[gtf_type_column] == 'exon') | (gtf[gtf_type_column] == 'CDS')]
 
     # parse out transcript id to column
-    gtf[gtf_gene_column] = gtf[gtf_annotation_column].str.extract(gtf_gene_search)
     gtf[gtf_transcript_column] = gtf[gtf_annotation_column].str.extract(gtf_transcript_search)
 
     # only take the essentials
-    gtf = gtf[[gtf_gene_column, gtf_transcript_column, gtf_chr_column, gtf_sign_column, gtf_leftCoordinate_column, gtf_rightCoordinate_column]]
+    gtf = gtf[[gtf_transcript_column, gtf_type_column, gtf_sign_column, gtf_leftCoordinate_column, gtf_rightCoordinate_column]]
 
     # finish formatting
-    gtf.columns = ['gene', 'transcript', 'chromosome', 'strand', 'left_coordinate', 'right_coordinate']
+    gtf.columns = ['transcript', 'feature', 'strand', 'left_coordinate', 'right_coordinate']
     gtf = gtf.reset_index(drop=True)
 
     return gtf
@@ -65,9 +61,7 @@ def flatten_gtf(
 """Get meta and periodicity indices from GTF"""
 def index_gtf(
     args_dict,
-    record_type='exon',
     gene_name=None,
-    canonical=True,
     threads=None,
     output=False):
 
@@ -93,20 +87,17 @@ def index_gtf(
     # Flatten GTF
     if args_dict['gtf'].endswith('LC.gtf') == True:
         gtf_flat = flatten_gtf(
-            gtf,
-            record_type)
+            gtf)
     else:
-        if canonical == True:
-            gtf = edit_gtf(
-                gtf,
-                longest_transcript=True,
-                protein_coding=True,
-                truncate_reference=False,
-                output=False,
-                threads=None)
-        gtf_flat = flatten_gtf(
+        gtf = edit_gtf(
             gtf,
-            record_type)
+            longest_transcript=True,
+            protein_coding=True,
+            truncate_reference=False,
+            output=False,
+            threads=None)
+        gtf_flat = flatten_gtf(
+            gtf)
 
     # Get rid of old GTF
     gtf = None

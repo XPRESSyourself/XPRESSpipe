@@ -344,11 +344,8 @@ def compile_coverage(
     path,
     file_list,
     gene_name,
-    record_type,
     sample_names,
-    strand,
     plot_type,
-    experiment,
     plot_output,
     plot_color='red',
     dpi=600):
@@ -381,37 +378,21 @@ def compile_coverage(
 
         df['coverage'] = df[input_count].rolling(window = window, min_periods=1).mean()
         df['coverage'] = df['coverage'].fillna(0)
-
-        if strand == '-':
-            df = df.reindex(index=df.index[::-1])
-            df = df.reset_index(drop=True)
-
-        last = 0
-        exon_count = 1
-        start = 'start'
-        for index, row in df.iterrows():
-            if start == 'start':
-                df.at[index, record_type] = str(record_type) + ' ' + str(exon_count)
-                exon_count += 1
-                last = row[0]
-                start = 'stop'
-            elif abs(row[0] - last) > 1:
-                df.at[index, record_type] = str(record_type) + ' ' + str(exon_count)
-                exon_count += 1
-                last = row[0]
-            else:
-                df.at[index,record_type] = ''
-                last = row[0]
+        df['feature'] = df['feature'].fillna('')
 
         for index, row in df.iterrows():
-            if str(record_type) in row[2]:
+            if 'Exon' in row[2]:
                 axes[ax_y].axvline(index, ls='-', linewidth=2, color='black', ymin=0, ymax=1)
+            elif index == df.index[-1]:
+                axes[ax_y].axvline(index, ls='-', linewidth=5, color='black', ymin=0, ymax=0.5)
+            else:
+                pass
 
         axes[ax_y].axhline(0, ls='-', linewidth=5, color='black', xmin=0, xmax=1)
         axes[ax_y].axvline(0, ls='-', linewidth=5, color='black', ymin=0, ymax=1)
 
         df.plot.bar(
-            x = record_type,
+            x = 'feature',
             y = 'coverage',
             ax = axes[ax_y],
             grid = None,
@@ -436,8 +417,7 @@ def compile_coverage(
 
     # Save catenated figure
     fig.suptitle(gene_name)
-    plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
     fig.savefig(
-        str(plot_output) + plot_title + '_summary.pdf',
+        str(plot_output) + str(plot_type) + '_summary.pdf',
         dpi = dpi,
         bbox_inches = 'tight')

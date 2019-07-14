@@ -1242,7 +1242,7 @@ def get_arguments(
     metagene_reqs = metagene_parser.add_argument_group('required arguments')
     metagene_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _Aligned.sort.bam)',
+        help = 'Path to input directory of transcriptome aligned BAM files (will grab files with suffix toTranscriptome.out.bam)',
         metavar = '<path>',
         type = str,
         required = True)
@@ -1273,16 +1273,9 @@ def get_arguments(
         required = False)
     metagene_opts.add_argument(
         '--bam_suffix',
-        help = 'Change from default suffix of _Aligned.sort.bam',
+        help = 'Change from default suffix of toTranscriptome.out.bam',
         metavar = '<suffix>',
-        default = '_Aligned.sort.bam',
-        type = str,
-        required = False)
-    metagene_opts.add_argument(
-        '--type',
-        help = 'Record type to map across (i.e. "exon", "CDS") (case-sensitive)',
-        metavar = '<type>',
-        default = 'exon',
+        default = 'toTranscriptome.out.bam',
         type = str,
         required = False)
     metagene_opts.add_argument(
@@ -1294,7 +1287,7 @@ def get_arguments(
         required = False)
 
 
-    """METAGENE SUBPARSER"""
+    """COVERAGE SUBPARSER"""
     coverage_parser = subparser.add_parser(
         'geneCoverage',
         description = 'Compile coverage profiles for a given gene for each sample in a directory across exons or CDS (no introns)',
@@ -1303,7 +1296,7 @@ def get_arguments(
     coverage_reqs = coverage_parser.add_argument_group('required arguments')
     coverage_reqs.add_argument(
         '-i', '--input',
-        help = 'Path to input directory of indexed BAM alignment files (will grab files with suffix _Aligned.sort.bam)',
+        help = 'Path to input directory of transcriptome-aligned BAM files (will grab files with suffix toTranscriptome.out.bam)',
         metavar = '<path>',
         type = str,
         required = True)
@@ -1339,16 +1332,9 @@ def get_arguments(
         required = False)
     coverage_opts.add_argument(
         '--bam_suffix',
-        help = 'Change from default suffix of _Aligned.sort.bam',
+        help = 'Change from default suffix of toTranscriptome.out.bam',
         metavar = '<suffix>',
-        default = '_Aligned.sort.bam',
-        type = str,
-        required = False)
-    coverage_opts.add_argument(
-        '--type',
-        help = 'Record type to map across (i.e. "exon", "CDS") (case-sensitive)',
-        metavar = '<type>',
-        default = 'exon',
+        default = 'toTranscriptome.out.bam',
         type = str,
         required = False)
     coverage_opts.add_argument(
@@ -1461,9 +1447,9 @@ def get_arguments(
         help = 'Show help message and exit')
     period_opts.add_argument(
         '--bam_suffix',
-        help = 'Change from default suffix of _Aligned.sort.bam',
+        help = 'Change from default suffix of toTranscriptome.out.bam',
         metavar = '<suffix>',
-        default = '_Aligned.sort.bam',
+        default = 'toTranscriptome.out.bam',
         type = str,
         required = False)
     period_opts.add_argument(

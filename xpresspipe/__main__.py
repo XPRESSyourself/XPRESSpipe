@@ -449,6 +449,8 @@ def main(
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
+
+        args_dict['input'] = args_dict['alignments_transcriptome']
         make_metagene(args_dict)
 
         args_dict['gene_name'] = 'GAPDH'
@@ -522,6 +524,8 @@ def main(
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
+
+        args_dict['input'] = args_dict['alignments_transcriptome']
         make_metagene(args_dict)
 
         args_dict['gene_name'] = 'GAPDH'
@@ -604,6 +608,8 @@ def main(
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         print(datetime.datetime.now())
         make_complexity(args_dict)
+
+        args_dict['input'] = args_dict['alignments_transcriptome']
         print(datetime.datetime.now())
         make_metagene(args_dict)
 
@@ -612,7 +618,6 @@ def main(
         print(datetime.datetime.now())
         make_coverage(args_dict)
 
-        args_dict['input'] = args_dict['alignments_transcriptome']
         print(datetime.datetime.now())
         make_periodicity(args_dict)
 

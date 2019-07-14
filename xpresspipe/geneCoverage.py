@@ -35,6 +35,30 @@ from .compile import compile_coverage
 from .utils import add_directory, get_files
 from .buildIndex import index_gtf
 
+plots_per_page = 8
+
+
+def run_coverage(args):
+
+    file, args_dict = args[0], args[1]
+    file = '\"' + str(file) + '\"'
+
+    print('Evaluating the geneCoverage profile for ' + str(file))
+    # Perform metagene analysis
+    # Loop through each selected BAM
+    # args[1] = Path to BAM files
+    # args[2] = List of BAM files
+    # args[3] = Index file with path
+    # args[4] = Output file path
+    os.system(
+        'Rscript'
+        + ' ' + str(args_dict['path']) + 'RgeneCoverage.r'
+        + ' ' + str(args_dict['input'])
+        + ' ' + str(file)
+        + ' ' + str(args_dict['output']) + str(args_dict['gene_name']) + '.idx'
+        + ' ' + str(args_dict['coverage']) + 'metrics/' + str(args_dict['gene_name']) + '_'
+        + str(args_dict['log']))
+
 """
 Func: Get coverage profile for a specific gene
 - Creates output directories for coverage (parent) and metrics
@@ -76,43 +100,27 @@ def make_coverage(
                     break
         files = sample_list
 
-    # Generate file name string for R
-    list_string = '\"'
-    for f in files:
-        list_string = str(list_string) + str(f) + ','
-    list_string = str(list_string) + '\"'
-
     # Get indices
     print('Generating index for gene...')
-    index = index_gtf(
+    index_gtf(
         args_dict,
-        record_type=args_dict['type'],
         gene_name=args_dict['gene_name'],
         threads=1,
-        output=True)
-
-    strand = index.iloc[0]['strand']
+        output=False)
 
     # Perform metagene analysis
-    # Loop through each selected BAM
-    # args[1] = Path to BAM files
-    # args[2] = List of BAM files
-    # args[3] = Index file with path
-    # args[4] = Output file path
-    os.system(
-        'Rscript'
-        + ' ' + str(args_dict['path']) + 'RgeneCoverage.r'
-        + ' ' + str(args_dict['input'])
-        + ' ' + str(list_string)
-        + ' ' + str(args_dict['output']) + str(args_dict['gene_name']) + '.idx'
-        + ' ' + str(args_dict['coverage']) + 'metrics/')
-        #+ str(args_dict['log']))
+    parallelize(
+        run_coverage,
+        files,
+        args_dict,
+        mod_workers = True)
 
     # Compile metrics to plot
     print('Plotting...')
     files = get_files(
         str(args_dict['coverage']) + 'metrics/',
         ['_metrics.txt'])
+    files = [f for f in files if f.startswith(str(args_dict['gene_name']))]
 
     page_number = ceil(len(files) / plots_per_page)
     file_lists = []
@@ -130,11 +138,8 @@ def make_coverage(
             str(args_dict['coverage']) + 'metrics/',
             file_list,
             args_dict['gene_name'],
-            args_dict['type'],
             args_dict['sample_names'],
-            strand,
-            'coverage' + str(z),
-            args_dict['experiment'],
+            str(args_dict['gene_name']) + '_geneCoverage' + str(z),
             args_dict['coverage'],
             args_dict['plot_color'])
 
