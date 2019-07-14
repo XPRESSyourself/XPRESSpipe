@@ -276,7 +276,10 @@ def alignment_process(
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix)
         + str(args_dict['log']))
 
-    if ('umi_location' in args_dict and str(args_dict['umi_location']).lower() != 'none') or 'umi' in args_dict:
+    if ('umi_location' in args_dict
+    and (args_dict['umi_location'] != None
+    and str(args_dict['umi_location']).lower() != 'none')
+    ) or ('umi' in args_dict and args_dict['umi'] == True):
         os.system(
             'umi_tools dedup'
             + ' -I ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix) # Input BAM
