@@ -68,7 +68,7 @@ def make_periodicity(
         # Give non riboseq samples a bad suffix so they can't be searched by riboWaltz
         if bam['read_length'].quantile(lower_quantile_bound) >= 17 \
         and bam['read_length'].quantile(upper_quantile_bound) <= 33 \
-        and f.endswith('toTranscriptome.out.bam'):
+        and f.endswith(bam_suffix):
             pass
         else:
             os.system(
