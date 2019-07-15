@@ -40,114 +40,112 @@ gtf_annotation_column = 8
 gtf_transcript_search = r'transcript_id \"(.*?)\"; '
 gtf_transcript_column = 9
 
-def make_dictionary(
-    gtf):
+"""Flatten GTF dataframe"""
+def make_index(
+    args_dict,
+    gtf_file,
+    output):
 
-    gtf = gtf[(gtf[gtf_type_column] == 'exon')]
+    os.system(
+        'Rscript'
+        + ' ' + str(args_dict['path']) + 'RbuildIndex.r'
+        + ' ' + str(gtf_file)
+        + ' ' + str(output)
+        + str(args_dict['log']))
+
+"""Make feature index for a gene"""
+def make_features(
+    gtf,
+    output):
+
+    # Pull out relevant records
+    gtf = gtf[(gtf[gtf_type_column] == 'exon') | (gtf[gtf_type_column] == 'CDS') | (gtf[gtf_type_column] == 'five_prime_utr') | (gtf[gtf_type_column] == 'three_prime_utr')]
+
+    # Parse out transcript id to column
     gtf[gtf_transcript_column] = gtf[gtf_annotation_column].str.extract(gtf_transcript_search)
     gtf['length'] = gtf[gtf_rightCoordinate_column] - gtf[gtf_leftCoordinate_column] + 1
 
-    gtf = gtf[[gtf_transcript_column, 'length']]
-    gtf.columns = ['transcript', 'length']
-    gtf = gtf.groupby('transcript').sum()
-    gtf = gtf.reset_index()
+    # Only take the essentials
+    gtf = gtf[[gtf_transcript_column, gtf_type_column, 'length']]
 
-    return gtf
-
-"""Flatten GTF dataframe"""
-def make_index(
-    gtf):
-
-    gtf = gtf[(gtf[gtf_type_column] == 'exon') | (gtf[gtf_type_column] == 'CDS')]
-
-    # parse out transcript id to column
-    gtf[gtf_transcript_column] = gtf[gtf_annotation_column].str.extract(gtf_transcript_search)
-
-    # only take the essentials
-    gtf = gtf[[gtf_transcript_column, gtf_type_column, gtf_sign_column, gtf_leftCoordinate_column, gtf_rightCoordinate_column]]
-
-    # finish formatting
-    gtf.columns = ['transcript', 'feature', 'strand', 'left_coordinate', 'right_coordinate']
+    # Finish formatting
+    gtf.columns = ['transcript', 'feature', 'length']
     gtf = gtf.reset_index(drop=True)
 
-    return gtf
+    # Output for use by modules
+    gtf.to_csv(
+        str(output),
+        sep = '\t',
+        index = False,
+        quoting = csv.QUOTE_NONE)
 
 """Get meta and periodicity indices from GTF"""
 def index_gtf(
     args_dict,
-    gene_name=None,
-    geneCov=True,
-    threads=None,
-    output=False):
+    gene_name=None):
 
-    # Import GTF reference file
+    # Check for GTF file input
     if str(args_dict['gtf']).endswith('.gtf'):
+        print('Generating index for genes...')
+    else:
+        raise Exception('Error: A GTF-formatted file or dataframe was not provided')
+
+    # Gene coverage index creation
+    if gene_name != None:
+
+        # Get file names and clean up inputs
+        gene_name = gene_name.replace(' ','')
+        gene_gtf = str(gene_name) + '.gtf'
+        output_file = str(gene_name) + '.idx'
+
+        # Import GTF and get only records for gene of interest
         gtf = pd.read_csv(
             str(args_dict['gtf']),
             sep='\t',
             header=None,
             comment='#',
             low_memory=False)
-    else:
-        raise Exception('Error: A GTF-formatted file or dataframe was not provided')
 
-    if gene_name != None:
-        gene_name = gene_name.replace(' ','')
-        output_file = str(gene_name) + '.idx'
         gtf = gtf.loc[gtf[gtf_annotation_column].str.contains(str(gene_name))]
         gtf = gtf.reset_index(drop=True)
+
+        # Get canonical, longest only GTF for the given gene
+        gtf = edit_gtf(
+            gtf,
+            longest_transcript=True,
+            protein_coding=False,
+            truncate_reference=False,
+            output=False,
+            threads=None)
+
+        # Save GTF file import by other functions
+        gtf.to_csv(
+            str(args_dict['output']) + str(gene_gtf),
+            sep = '\t',
+            header = None,
+            index = False,
+            quoting = csv.QUOTE_NONE)
+
+        # Make features index for geneCoverage plotting of exons and CDS start/stop
+        make_features(
+            gtf,
+            str(args_dict['output']) + str(gene_name) + '.fts')
+        gtf = None
+
+        # Make index for gene to calculate coverage
+        make_index(
+            args_dict,
+            str(args_dict['output']) + str(gene_gtf),
+            str(args_dict['output']) + str(gene_name) + '.idx')
+
+        # Remove intermediate GTF file
+        os.system(
+            'rm'
+            + ' ' + str(args_dict['output']) + str(gene_gtf))
+
     else:
-        output_file = 'metagene.dict'
-
-    # Flatten GTF
-    if args_dict['gtf'].endswith('LC.gtf') == True:
-        if geneCov == True:
-            gtf_flat = make_index(
-                gtf)
-        else:
-            gtf = edit_gtf(
-                gtf,
-                longest_transcript=False,
-                protein_coding=True,
-                truncate_reference=False,
-                output=False,
-                threads=None)
-            gtf_flat = make_dictionary(
-                gtf)
-
-    else:
-        if geneCov == True:
-            gtf = edit_gtf(
-                gtf,
-                longest_transcript=True,
-                protein_coding=True,
-                truncate_reference=False,
-                output=False,
-                threads=None)
-            gtf_flat = make_index(
-                gtf)
-        else:
-            gtf = edit_gtf(
-                gtf,
-                longest_transcript=False,
-                protein_coding=True,
-                truncate_reference=False,
-                output=False,
-                threads=None)
-            gtf_flat = make_dictionary(
-                gtf)
-
-    # Get rid of old GTF
-    gtf = None
-    gc.collect()
-
-    gtf_flat.to_csv(
-        str(args_dict['output']) + str(output_file),
-        sep = '\t',
-        index = False,
-        quoting = csv.QUOTE_NONE)
-
-    if output == True:
-        return gtf_flat
-    else:
-        return
+        # Make index of all transcripts
+        make_index(
+            args_dict,
+            args_dict['gtf'],
+            str(args_dict['output']) + 'transcripts.idx')

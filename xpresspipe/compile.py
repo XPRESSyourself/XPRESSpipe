@@ -344,11 +344,29 @@ def compile_coverage(
     path,
     file_list,
     gene_name,
+    feature_regions,
     sample_names,
     plot_type,
     plot_output,
     plot_color='red',
     dpi=600):
+
+    # Get feature regions data
+    exon_list = [1]
+    sum = 0
+    for length in feature_regions[feature_regions['feature'] == 'exon']['length'].tolist():
+        sum = sum + length
+        exon_list.append(sum)
+
+    if 'five_prime_utr' in feature_regions['feature'].tolist():
+        cds_start = feature_regions[feature_regions['feature'] == 'five_prime_utr']['length'].sum()
+    else:
+        cds_start = exon_list[0]
+
+    if 'three_prime_utr' in feature_regions['feature'].tolist():
+        cds_stop = cds_start + feature_regions[feature_regions['feature'] == 'CDS']['length'].sum()
+    else:
+        cds_stop = exon_list[-1] # Mark CDS until end of transcript
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
     # Auto formats figure summary size based on number of plots
@@ -376,21 +394,49 @@ def compile_coverage(
             str(path) + str(file),
             sep = '\t')
 
+        # Smoothen coverage data
         df['coverage'] = df[input_count].rolling(window = window, min_periods=1).mean()
         df['coverage'] = df['coverage'].fillna(0)
-        df['feature'] = df['feature'].fillna('')
+        df['feature'] = ''
 
+        exon_number = 1
         for index, row in df.iterrows():
-            if 'Exon' in row[2]:
-                axes[ax_y].axvline(index, ls='-', linewidth=2, color='black', ymin=0, ymax=1)
-            elif index == df.index[-1]:
-                axes[ax_y].axvline(index, ls='-', linewidth=5, color='black', ymin=0, ymax=0.5)
-            else:
-                pass
+            # If first index, call it exon 1
+            if index == 0:
+                axes[ax_y].axvline(index, ls='-', linewidth=5, color='#585555', ymin=0, ymax=0.5)
+                df.at[index, 'feature'] = 'Exon ' + str(exon_number)
+                exon_number += 1
 
-        axes[ax_y].axhline(0, ls='-', linewidth=5, color='black', xmin=0, xmax=1)
-        axes[ax_y].axvline(0, ls='-', linewidth=5, color='black', ymin=0, ymax=1)
+            # Label all other exons, but do not label end of last exon (but it will label at the beginning still)
+            if index in exon_list[1:-1]:
+                axes[ax_y].axvline(index, ls='-', linewidth=2, color='#585555', ymin=0, ymax=0.5)
 
+                # If exon is too close to CDS label, skip
+                if abs(index - cds_start) < 50 or abs(index - cds_stop) < 50:
+                    pass
+                else:
+                    df.at[index, 'feature'] = 'Exon ' + str(exon_number)
+
+                exon_number += 1
+
+            # If last nt, add closing line
+            if index == df.index[-1] - 1:
+                axes[ax_y].axvline(index, ls='-', linewidth=5, color='#585555', ymin=0, ymax=0.5)
+
+            # Label CDS start -- in this order, will overwrite previous exon label
+            if index == cds_start:
+                axes[ax_y].axvline(index, ls='-', linewidth=3, color='black', ymin=0, ymax=0.75)
+                df.at[index, 'feature'] = 'CDS Start'
+
+            # Label CDS stop -- in this order, will overwrite previous exon label
+            if index == cds_stop:
+                axes[ax_y].axvline(index, ls='-', linewidth=3, color='black', ymin=0, ymax=0.75)
+                df.at[index, 'feature'] = 'CDS Stop'
+
+        # Create x axis line
+        axes[ax_y].axhline(0, ls='-', linewidth=3, color='black', xmin=0, xmax=1)
+
+        # Plot coverage data and exon / CDS labels
         df.plot.bar(
             x = 'feature',
             y = 'coverage',
@@ -402,12 +448,14 @@ def compile_coverage(
             linewidth=0,
             edgecolor=None)
 
+        # Set sample labels
         axes[ax_y].set_xlabel('')
         if sample_names != None:
             axes[ax_y].set_ylabel(str(sample_names[ax_y]), fontsize=12)
         else:
             axes[ax_y].set_ylabel(str(file)[:-12], fontsize=12)
 
+        # Only print exon / CDS labels on last sample for the overall plot
         if ax_y == row_number - 1:
             pass
         else:

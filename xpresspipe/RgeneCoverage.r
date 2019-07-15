@@ -105,19 +105,10 @@ fetch_index <- function(
 process_coverage <- function(
   bam, index) {
 
-    # Normalize coordinate positions to match BAM file, start position starts at 1
-    min_coordinate <- min(index$left_coordinate) - 1
-    index$right_coordinate <- index$right_coordinate - min_coordinate
-    index$left_coordinate <- index$left_coordinate - min_coordinate
-    index$length <- index$right_coordinate - index$left_coordinate + 1
-
-    # Get total length of exon space
-    index_exon <- index[index$feature == exon,]
-    transcript_length <- sum(index_exon$length)
-
     # Get overlapping coverage in region
     # Make empty dataframe with min/max range
-    counts <- data.frame('position' = 1:transcript_length, 'coverage' = 0, 'feature' = '', row.names = 'position', stringsAsFactors = FALSE)
+    transcript_length <- sum(index$l_tr)
+    counts <- data.frame('position' = 1:transcript_length, 'coverage' = 0, row.names = 'position', stringsAsFactors = FALSE)
 
     # Loop through start and end of each read in range and add one for every nt position
     for (read in 1:nrow(bam)) {
@@ -128,42 +119,6 @@ process_coverage <- function(
         )
 
       }
-
-    # Get exon start coordinates
-    for (record in 1:nrow(index_exon)) {
-      if (record == 1) {
-        index_exon[record,'exon_start'] <- 1
-      } else {
-
-        index_exon[record,'exon_start'] <- index_exon[record - 1,'length'] + index_exon[record - 1,'exon_start']
-
-      }
-
-    }
-
-    # Label exon feature starts
-    exon_number <- 1
-    for (record in 1:nrow(counts)) {
-
-      if (record %in% index_exon$exon_start) {
-
-        # Add exon label to start of each exon iteratively
-        counts[record,'feature'] <- paste('Exon', toString(exon_number), sep=' ')
-        exon_number <- exon_number + 1
-
-      }
-
-    }
-
-    # Keep only nt indices that fall in an exon range from index
-    # Make list of intron exon positions
-    # Stay on the same gene name
-    # Only keep those indices from counts
-    #coverage_counts <- data.frame(
-    #  'position' = 1:nrow(counts),
-    #  'coverage' = counts$coverage,
-    #  'feature' = counts$feature,
-    #  row.names = 'position')
 
     return(counts)
 

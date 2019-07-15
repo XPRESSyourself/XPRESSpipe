@@ -57,18 +57,11 @@ def make_periodicity(
         args_dict['input'],
         ['.bam'])
 
+
     # Get files read distributions
     for f in files:
-        bam = read_bam(
-            str(args_dict['input']) + str(f))
-
-        # Get lengths of reads
-        bam['read_length'] = bam[transcriptome_alignment_read].str.len()
-
         # Give non riboseq samples a bad suffix so they can't be searched by riboWaltz
-        if bam['read_length'].quantile(lower_quantile_bound) >= 17 \
-        and bam['read_length'].quantile(upper_quantile_bound) <= 33 \
-        and f.endswith(bam_suffix):
+        if f.endswith(args_dict['bam_suffix']):
             pass
         else:
             os.system(
@@ -76,14 +69,26 @@ def make_periodicity(
                 + ' ' + str(args_dict['input']) + str(f)
                 + ' ' + str(args_dict['input']) + str(f) + '.rnaseq')
 
-    # Run dupRadar in R
+    if len(files) == 0:
+        raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
+
+    # Run riboWaltz in R
     os.system(
         'Rscript'
         + ' ' + str(args_dict['path']) + 'Rperiodicity.r'
         + ' ' + str(args_dict['input'])
-        + ' ' + str(args_dict['gtf'])
+        + ' ' + str(args_dict['output'] + 'transcripts.idx')
         + ' ' + str(args_dict['periodicity']) + 'metrics/'
         + str(args_dict['log']))
+
+    for f in files:
+        if f.endswith(bam_suffix):
+            pass
+        else:
+            os.system(
+                'mv'
+                + ' ' + str(args_dict['input']) + str(f) + '.rnaseq'
+                + ' ' + str(args_dict['input']) + str(f))
 
     # Get metrics to plot
     files = get_files(

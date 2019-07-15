@@ -483,7 +483,7 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--feature_type',
-        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: exon)',
+        help = 'Specify feature type (3rd column in GTF file) to be used if quantifying with htseq (default: exon)',
         metavar = '<feature>',
         default = 'exon',
         type = str,
@@ -662,7 +662,7 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--feature_type',
-        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: exon)',
+        help = 'Specify feature type (3rd column in GTF file) to be used if quantifying with htseq (default: exon)',
         metavar = '<feature>',
         default = 'exon',
         type = str,
@@ -839,7 +839,7 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '--feature_type',
-        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: CDS)',
+        help = 'Specify feature type (3rd column in GTF file) to be used if quantifying with htseq (default: CDS)',
         metavar = '<feature>',
         default = 'CDS',
         type = str,
@@ -1128,7 +1128,7 @@ def get_arguments(
         required = False)
     count_opts.add_argument(
         '--feature_type',
-        help = 'Specify feature type (3rd column in GFF file) to be used if quantifying with htseq (default: exon)',
+        help = 'Specify feature type (3rd column in GTF file) to be used if quantifying with htseq (default: exon)',
         metavar = '<feature>',
         default = 'exon',
         type = str,
@@ -1265,6 +1265,13 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    metagene_opts.add_argument(
+        '--feature_type',
+        help = 'Specify feature type (3rd column in GTF file) to be used in calculating metagene coverage (default: exon; alternative: CDS)',
+        metavar = '<feature>',
+        default = 'exon',
+        type = str,
+        required = False)
     metagene_opts.add_argument(
         '-e', '--experiment',
         help = 'Experiment name',

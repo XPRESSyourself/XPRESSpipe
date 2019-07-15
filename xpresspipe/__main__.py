@@ -34,6 +34,7 @@ from .messages import *
 from .arguments import get_arguments, get_dependencies
 from .trim import run_trim
 from .align import run_seRNAseq, run_peRNAseq, create_star_reference
+from .buildIndex import index_gtf
 from .count import count_reads, collect_counts
 from .normalizeMatrix import run_normalization
 from .convert import create_bed
@@ -179,7 +180,12 @@ def main(
         print('Performing metagene analysis on SAM files...')
 
         # Perform metagene analysis
+        index_gtf(args_dict)
         make_metagene(args_dict)
+
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.idx')
 
         # Check log file for errors and exceptions
         get_dependencies(args_dict)
@@ -192,7 +198,15 @@ def main(
         print('Performing gene coverage analysis on SAM files...')
 
         # Perform metagene analysis
+        index_gtf(args_dict, gene_name=args_dict['gene_name'])
         make_coverage(args_dict)
+
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.idx')
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.fts')
 
         # Check log file for errors and exceptions
         get_dependencies(args_dict)
@@ -218,7 +232,12 @@ def main(
         print('Performing periodicity analysis on most abundant read length in SAM files...')
 
         # Generate periodicity summaries
+        index_gtf(args_dict)
         make_periodicity(args_dict)
+
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.idx')
 
         # Check log file for errors and exceptions
         get_dependencies(args_dict)
@@ -450,11 +469,19 @@ def main(
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
-        make_metagene(args_dict)
-
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
+        index_gtf(args_dict, gene_name=args_dict['gene_name'])
         make_coverage(args_dict)
+
+        index_gtf(args_dict)
+        make_metagene(args_dict)
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.idx')
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.fts')
 
         check_process(
             args_dict['log_file'],
@@ -525,11 +552,20 @@ def main(
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
-        make_metagene(args_dict)
-
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
+        index_gtf(args_dict, gene_name=args_dict['gene_name'])
         make_coverage(args_dict)
+
+        index_gtf(args_dict)
+        make_metagene(args_dict)
+
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.idx')
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.fts')
 
         check_process(
             args_dict['log_file'],
@@ -602,13 +638,21 @@ def main(
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
-        make_metagene(args_dict)
-
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
+        index_gtf(args_dict, gene_name=args_dict['gene_name'])
         make_coverage(args_dict)
 
+        index_gtf(args_dict)
+        make_metagene(args_dict)
         make_periodicity(args_dict)
+
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.idx')
+        os.system(
+            'rm'
+            + ' ' + args_dict['output'] + '*.fts')
 
         check_process(
             args_dict['log_file'],

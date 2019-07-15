@@ -42,7 +42,7 @@ def run_coverage(args):
     file, args_dict = args[0], args[1]
     file = '\"' + str(file) + '\"'
 
-    print('Evaluating the geneCoverage profile for ' + str(file))
+    print('Evaluating the gene coverage of ' + str(file))
     # Perform metagene analysis
     # Loop through each selected BAM
     # args[1] = Path to BAM files
@@ -88,6 +88,8 @@ def make_coverage(
     files = get_files(
         args_dict['input'],
         [str(args_dict['bam_suffix'])])
+    if len(files) == 0:
+        raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
     # Get samples user specified
     if args_dict['samples'] != None:
@@ -99,26 +101,19 @@ def make_coverage(
                     break
         files = sample_list
 
-    # Get indices
-    print('Generating index for gene...')
-    index_gtf(
-        args_dict,
-        gene_name=args_dict['gene_name'],
-        threads=1,
-        output=False)
-
     # Perform gene coverage analysis
     parallelize(
         run_coverage,
         files,
         args_dict,
         mod_workers = True)
-    os.system(
-        'rm'
-        + ' ' + str(args_dict['output']) + str(args_dict['gene_name']) + '.idx')
 
     # Compile metrics to plot
     print('Plotting...')
+    regions = pd.read_csv(
+        str(args_dict['output']) + str(args_dict['gene_name']) + '.fts',
+        sep='\t')
+
     files = get_files(
         str(args_dict['coverage']) + 'metrics/',
         ['_metrics.txt'])
@@ -140,6 +135,7 @@ def make_coverage(
             str(args_dict['coverage']) + 'metrics/',
             file_list,
             args_dict['gene_name'],
+            regions,
             args_dict['sample_names'],
             str(args_dict['gene_name']) + '_geneCoverage' + str(z),
             args_dict['coverage'],

@@ -35,6 +35,10 @@ from .compile import compile_matrix_metrics
 from .utils import add_directory, get_files
 from .buildIndex import index_gtf
 
+length = 'l_tr'
+utr5 = 'l_utr5'
+utr3 = 'l_utr3'
+
 def roundup(value):
     return int(ceil(value))
 
@@ -49,18 +53,36 @@ def finish_metagene(args):
 
     # Read in transcript exon space dictionary
     dict = pd.read_csv(
-        str(args_dict['output']) + 'metagene.dict',
+        str(args_dict['output']) + 'transcripts.idx',
         sep = '\t')
 
-    reference = pd.Series(dict['length'].values,index=dict['transcript']).to_dict()
+    # Make transcript / length dictionary
+    reference = pd.Series(dict[length].values,index=dict['transcript']).to_dict()
     dict = None
 
     # Map exon space to each bam record based on its transcript ID
     bam['total_length']= bam['seqnames'].map(reference)
+
+    # Get UTR offset amounts and map to transcript IDs
+    if str(args_dict['feature_type']).lower() == 'cds':
+        utr5_correct = pd.Series(dict[utr5].values,index=dict['transcript']).to_dict()
+        utr3_correct = pd.Series(dict[utr3].values,index=dict['transcript']).to_dict()
+
+        bam['utr5_offset']= bam['seqnames'].map(utr5_correct)
+        bam['utr3_offset']= bam['seqnames'].map(utr3_correct)
+
     bam = bam.dropna()
 
     # Calculate meta-position
-    bam['meta_distance'] = bam['meta_position'] / bam['total_length'] * 100
+    if str(args_dict['feature_type']).lower() == 'cds':
+        # Compensate for UTRs in meta-calculations across CDS
+        # Those reads mapping outside of the CDS region will be < 1 or > 100
+        # When data is collated, will only take values between 1 and 100
+        bam['meta_distance'] = abs(bam['meta_position'] - bam['utr5_offset']) / abs(bam['total_length'] - bam['utr5_offset'] - bam['utr3_offset']) * 100
+    else:
+        bam['meta_distance'] = abs(bam['meta_position']) / abs(bam['total_length']) * 100
+
+    # Set a nice number with no remainder
     bam['meta_distance'] = bam['meta_distance'].apply(roundup)
 
     # Compile meta position statistics
@@ -69,6 +91,7 @@ def finish_metagene(args):
     profile.index = range(1,101)
 
     for x in range(1,101):
+        # Automatically filters out reads mapped outside of CDS as they will be < 0 or > 1
         profile.loc[x] = bam[bam['meta_distance'] == x].shape[0]
 
     # Export metrics
@@ -126,14 +149,8 @@ def make_metagene(
     files = get_files(
         args_dict['input'],
         [str(args_dict['bam_suffix'])])
-
-    # Get indices
-    print('Generating index for genes...')
-    index_gtf(
-        args_dict,
-        threads=None,
-        geneCov=False,
-        output=False)
+    if len(files) == 0:
+        raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
     # Perform metagene analysis
     parallelize(
@@ -146,9 +163,6 @@ def make_metagene(
         files,
         args_dict,
         mod_workers = True)
-    os.system(
-        'rm'
-        + ' ' + str(args_dict['output']) + 'metagene.dict')
 
     # Compile metrics to plot
     print('Plotting...')
