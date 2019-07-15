@@ -61,7 +61,6 @@ def main(
     args=None):
 
     # Read in arguments
-    print(datetime.datetime.now())
     args, args_dict = get_arguments(
         args,
         __version__)
@@ -545,7 +544,6 @@ def main(
 
         # Trim
         msg_trim()
-        print(datetime.datetime.now())
         args_dict = run_trim(args_dict)
         check_process(
             args_dict['log_file'],
@@ -557,7 +555,6 @@ def main(
         msg_fastqc()
         get_fastqc(args_dict) # Run FastQC on trimmed reads
         msg_align()
-        print(datetime.datetime.now())
         args_dict = run_seRNAseq(args_dict)
         # Get other formatted files
         args_dict['input'] = args_dict['alignments_coordinates']
@@ -570,7 +567,6 @@ def main(
 
         # Count reads for each alignment file
         msg_count()
-        print(datetime.datetime.now())
         args_dict = count_reads(args_dict)
 
         # Collect counts into a single table
@@ -584,7 +580,6 @@ def main(
         # Normalize
         if args_dict['quantification_method'] != 'cufflinks':
             msg_normalize()
-            print(datetime.datetime.now())
             args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_count_table.tsv'
             run_normalization(args_dict)
             check_process(
@@ -596,29 +591,23 @@ def main(
 
         # Run quality control
         msg_quality()
-        print(datetime.datetime.now())
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)
 
         args_dict['input'] = args_dict['trimmed_fastq']
-        print(datetime.datetime.now())
         make_readDistributions(args_dict)
 
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
-        print(datetime.datetime.now())
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
-        print(datetime.datetime.now())
         make_metagene(args_dict)
 
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
-        print(datetime.datetime.now())
         make_coverage(args_dict)
 
-        print(datetime.datetime.now())
         make_periodicity(args_dict)
 
         check_process(
@@ -628,7 +617,6 @@ def main(
 
         get_dependencies(args_dict)
         msg_finish()
-        print(datetime.datetime.now())
 
     else:
         raise Exception('Invalid function processing function provided.')
