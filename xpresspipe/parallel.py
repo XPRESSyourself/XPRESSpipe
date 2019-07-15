@@ -50,9 +50,9 @@ def threshold_ram(
     _max = max(file_sizes)
 
     if file[-4:] == '.bam': # Assume binary files will expand by factor of 4 for decompression and additional data storage used in process
-        factor = 2
+        factor = 1.5
     else:
-        factor = 1
+        factor = 1.5
 
     threshold_workers = int(math.floor(total / (_max * factor))) # Set threshold based on max file size in set
     if threshold_workers < 1:
@@ -147,10 +147,10 @@ def parallelize(
         mod_workers)
 
     # Check and apply RAM threshold if necessary
-    #if mod_workers == True:
-    #    args_dict['threads'], args_dict['workers'] = threshold_ram(
-    #        args_dict,
-    #        file_list)
+    if mod_workers == True:
+        args_dict['threads'], args_dict['workers'] = threshold_ram(
+            args_dict,
+            file_list)
 
     run_pools(
         func,
@@ -186,10 +186,10 @@ def parallelize_pe(
 
 
     # Check and apply RAM threshold if necessary
-    #if mod_workers == True:
-    #    args_dict['threads'], args_dict['workers'] = threshold_ram(
-    #        args_dict,
-    #        file_list)
+    if mod_workers == True:
+        args_dict['threads'], args_dict['workers'] = threshold_ram(
+            args_dict,
+            file_list)
 
     run_pools(
         func,
