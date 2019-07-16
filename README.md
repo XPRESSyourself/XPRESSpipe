@@ -58,6 +58,7 @@ docker run jordanberg/xpresspipe --help
 $ xpresspipe build
 ```
 
+
 ### Important Notes:    
 #### Basic Starting Input
 - `input` directory with raw sequence data
