@@ -54,7 +54,8 @@ def finish_metagene(args):
     # Read in transcript exon space dictionary
     dict = pd.read_csv(
         str(args_dict['output']) + 'transcripts.idx',
-        sep = '\t')
+        sep = '\t',
+        index_col=0)
 
     # Make transcript / length dictionary
     reference = pd.Series(dict[length].values,index=dict['transcript']).to_dict()
@@ -64,23 +65,23 @@ def finish_metagene(args):
     bam['total_length']= bam['seqnames'].map(reference)
 
     # Get UTR offset amounts and map to transcript IDs
-    if str(args_dict['feature_type']).lower() == 'cds':
-        utr5_correct = pd.Series(dict[utr5].values,index=dict['transcript']).to_dict()
-        utr3_correct = pd.Series(dict[utr3].values,index=dict['transcript']).to_dict()
-
-        bam['utr5_offset']= bam['seqnames'].map(utr5_correct)
-        bam['utr3_offset']= bam['seqnames'].map(utr3_correct)
+    #if str(args_dict['feature_type']).lower() == 'cds':
+    #    utr5_correct = pd.Series(dict[utr5].values,index=dict['transcript']).to_dict()
+    #    utr3_correct = pd.Series(dict[utr3].values,index=dict['transcript']).to_dict()
+    #
+    #    bam['utr5_offset'] = bam['seqnames'].map(utr5_correct)
+    #    bam['utr3_offset'] = bam['seqnames'].map(utr3_correct)
 
     bam = bam.dropna()
 
     # Calculate meta-position
-    if str(args_dict['feature_type']).lower() == 'cds':
+    #if str(args_dict['feature_type']).lower() == 'cds':
         # Compensate for UTRs in meta-calculations across CDS
         # Those reads mapping outside of the CDS region will be < 1 or > 100
         # When data is collated, will only take values between 1 and 100
-        bam['meta_distance'] = abs(bam['meta_position'] - bam['utr5_offset']) / abs(bam['total_length'] - bam['utr5_offset'] - bam['utr3_offset']) * 100
-    else:
-        bam['meta_distance'] = abs(bam['meta_position']) / abs(bam['total_length']) * 100
+    #    bam['meta_distance'] = abs(bam['meta_position'] - bam['utr5_offset']) / abs(bam['total_length'] - bam['utr5_offset'] - bam['utr3_offset']) * 100
+    #else:
+    bam['meta_distance'] = abs(bam['meta_position']) / abs(bam['total_length']) * 100
 
     # Set a nice number with no remainder
     bam['meta_distance'] = bam['meta_distance'].apply(roundup)
@@ -187,7 +188,7 @@ def make_metagene(
             file_list,
             'representative transcript',
             'metacount',
-            'metagene_' + str(z),
+            str(args_dict['feature_type']) + '_metagene_' + str(z),
             args_dict['experiment'],
             args_dict['metagene'])
         z += 1
