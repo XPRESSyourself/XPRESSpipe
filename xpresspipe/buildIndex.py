@@ -106,7 +106,7 @@ def index_gtf(
             comment='#',
             low_memory=False)
 
-        gtf = gtf.loc[gtf[gtf_annotation_column].str.contains(str(gene_name))]
+        gtf = gtf.loc[gtf[gtf_annotation_column].str.contains('\"' + str(gene_name) + '\"')]
         gtf = gtf.reset_index(drop=True)
 
         # Get canonical, longest only GTF for the given gene
