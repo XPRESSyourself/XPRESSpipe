@@ -20,6 +20,11 @@ RUN apt-get update \
 RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("Rsubread")'
 RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("dupRadar")'
 RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("DESeq2")'
+RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("GenomicFeatures")'
+RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("GenomicAlignments")'
+RUN Rscript -e 'install.packages("data.table", repos = "http://cran.us.r-project.org")'
+RUN Rscript -e 'install.packages("devtools", repos = "http://cran.us.r-project.org")'
+RUN Rscript -e 'install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = TRUE)")'
 
 RUN git clone https://github.com/XPRESSyourself/XPRESStools.git; cd XPRESStools; python setup.py install
 
