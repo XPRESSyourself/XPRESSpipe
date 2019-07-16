@@ -77,12 +77,12 @@ def make_periodicity(
         'Rscript'
         + ' ' + str(args_dict['path']) + 'Rperiodicity.r'
         + ' ' + str(args_dict['input'])
-        + ' ' + str(args_dict['output'] + 'transcripts.idx')
+        + ' ' + str(args_dict['gtf'])
         + ' ' + str(args_dict['periodicity']) + 'metrics/'
         + str(args_dict['log']))
 
     for f in files:
-        if f.endswith(bam_suffix):
+        if f.endswith(str(args_dict['bam_suffix'])):
             pass
         else:
             os.system(

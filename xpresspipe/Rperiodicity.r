@@ -51,18 +51,17 @@ args = commandArgs(trailingOnly=TRUE)
 
 # Set parameters
 BAM_LIST <- args[1] # Directory containing
-INDEX <- args[2]
+GTF <- args[2]
 OUTPUT <- args[3] # Path and filename with .txt extension
-print(args[1])
-print(args[2])
-print(args[3])
 
 # Get p-site offsets
-annotation_dt <- read.table(
-  INDEX,
-  header = TRUE,
-  sep = '\t')
-annotation_dt <- subset(annotation_dt, select = -c(gene))
+#annotation_dt <- read.table(
+#  INDEX,
+#  header = TRUE,
+#  sep = '\t')
+#annotation_dt <- subset(annotation_dt, select = c('transcript','l_tr','l_utr5','l_cds','l_utr3'))
+
+annotation_dt <- create_annotation(gtfpath=GTF)
 
 reads_list <- bamtolist(bamfolder = BAM_LIST, annotation = annotation_dt)
 p_sites <- psite(reads_list) # This will fail if the input files are too small and don't have good representation across genes

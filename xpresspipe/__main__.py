@@ -232,12 +232,12 @@ def main(
         print('Performing periodicity analysis on most abundant read length in SAM files...')
 
         # Generate periodicity summaries
-        index_gtf(args_dict)
+        #index_gtf(args_dict)
         make_periodicity(args_dict)
 
-        os.system(
-            'rm'
-            + ' ' + args_dict['output'] + '*.idx')
+        #os.system(
+        #    'rm'
+        #    + ' ' + args_dict['output'] + '*.idx')
 
         # Check log file for errors and exceptions
         get_dependencies(args_dict)
