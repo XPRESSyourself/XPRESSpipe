@@ -462,13 +462,14 @@ def main(
         get_multiqc_summary(args_dict)
 
         args_dict['input'] = args_dict['trimmed_fastq']
-        make_readDistributions(args_dict)
+        #make_readDistributions(args_dict)
 
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
+        args_dict['bam_suffix'] = 'toTranscriptome.out.bam'
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
         index_gtf(args_dict, gene_name=args_dict['gene_name'])
@@ -545,13 +546,14 @@ def main(
         get_multiqc_summary(args_dict)
 
         args_dict['input'] = args_dict['trimmed_fastq']
-        make_readDistributions(args_dict)
+        #make_readDistributions(args_dict)
 
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
+        args_dict['bam_suffix'] = 'toTranscriptome.out.bam'
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
         index_gtf(args_dict, gene_name=args_dict['gene_name'])
@@ -592,6 +594,7 @@ def main(
         get_fastqc(args_dict) # Run FastQC on trimmed reads
         msg_align()
         args_dict = run_seRNAseq(args_dict)
+
         # Get other formatted files
         args_dict['input'] = args_dict['alignments_coordinates']
         if args_dict['output_bed'] == True:
@@ -631,13 +634,14 @@ def main(
         get_multiqc_summary(args_dict)
 
         args_dict['input'] = args_dict['trimmed_fastq']
-        make_readDistributions(args_dict)
+        #make_readDistributions(args_dict)
 
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
 
         args_dict['input'] = args_dict['alignments_transcriptome']
+        args_dict['bam_suffix'] = 'toTranscriptome.out.bam'
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
         index_gtf(args_dict, gene_name=args_dict['gene_name'])
