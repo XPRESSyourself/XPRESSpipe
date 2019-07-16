@@ -11,15 +11,10 @@
 -----
 Please refer to the [documentation](https://xpresspipe.readthedocs.io/en/latest/?badge=latest) for more in depth details.
 
-### Development Notes:
-- <b><i>XPRESSpipe is still in beta production</i></b>  
-- The current release [XPRESSpipe-v0.1.4b2](https://github.com/XPRESSyourself/XPRESSpipe/releases/tag/XPRESSpipe-v0.1.4b2) is running relatively stable on MacOS and Linux (including HPCs)
-  - The meta-analysis plotting seems to work on a local MacOS, but not when running on a Linux HPC, will hopefully have kinks worked out in the next couple of weeks
-  - Yet to incorporate UMI handling, representative gene housekeeping, along with some other features in the near future
-
 ### Citation:    
 ```
-Berg, JA, et. al. (2019). XPRESSyourself: Automating and Democratizing High-Throughput Sequencing. https://github.com/XPRESSyourself.
+Berg JA, et. al. (2019). XPRESSyourself: Enhancing and Automating the Ribosome
+Profiling and RNA-Seq Analysis Toolkit. https://github.com/XPRESSyourself.
 ```
 
 ### Installation:   
@@ -50,10 +45,10 @@ docker run jordanberg/xpresspipe --help
 - Reference building   
 [![asciicast](https://asciinema.org/a/256340.svg)](https://asciinema.org/a/256340?speed=3)
 
-- Running XPRESSpipe on data   
+- Running XPRESSpipe on sequence data   
 [![asciicast](https://asciinema.org/a/256343.svg)](https://asciinema.org/a/256343?speed=3)
 
-- You can also use the XPRESSpipe command builder and executor for curation or the pipeline by running the following:
+- You can also use the XPRESSpipe command builder and executor for reference curation or running the pipeline by executing the following:
 ```
 $ xpresspipe build
 ```
