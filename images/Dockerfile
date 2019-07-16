@@ -13,7 +13,7 @@ RUN cd XPRESSpipe; python setup.py install
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-   libfftw3-dev \
+   libfftw3-dev r-base \
    gcc && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
@@ -24,7 +24,7 @@ RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("Geno
 RUN Rscript -e 'source("http://bioconductor.org/biocLite.R")' -e 'biocLite("GenomicAlignments")'
 RUN Rscript -e 'install.packages("data.table", repos = "http://cran.us.r-project.org")'
 RUN Rscript -e 'install.packages("devtools", repos = "http://cran.us.r-project.org")'
-RUN Rscript -e 'install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = TRUE)")'
+RUN Rscript -e 'library(devtools)' -e 'install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = TRUE)'
 
 RUN git clone https://github.com/XPRESSyourself/XPRESStools.git; cd XPRESStools; python setup.py install
 

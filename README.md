@@ -30,17 +30,6 @@ $ echo 'export PATH=$PATH:/path/to/xpresspipe' >> ~/.bash_profile
 If you do not have a file names `~/.bash_profile`, try looking for one called `~/.profile`
 
 
-#### Using a Docker container
-1. [Install Docker](https://docs.docker.com/v17.12/install/)
-2. Download the XPRESSpipe Docker container
-```
-$ docker pull docker push jordanberg/xpresspipe:latest
-```
-3. Run the Docker container
-```
-docker run jordanberg/xpresspipe --help
-```
-
 ### QuickStart:   
 - Reference building   
 [![asciicast](https://asciinema.org/a/256340.svg)](https://asciinema.org/a/256340?speed=3)
