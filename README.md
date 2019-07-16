@@ -7,6 +7,7 @@
 [![codecov.io](https://codecov.io/gh/XPRESSyourself/XPRESSpipe/XPRESSpipe.svg?branch=master)](https://codecov.io/gh/XPRESSyourself/XPRESSpipe)
 [![Documentation Status](https://readthedocs.org/projects/xpresspipe/badge/?version=latest)](https://xpresspipe.readthedocs.io/en/latest/?badge=latest)
 [![Docker](https://img.shields.io/static/v1.svg?label=docker&message=dowload&color=informational)](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general)
+[![DOI](https://zenodo.org/badge/170939943.svg)](https://zenodo.org/badge/latestdoi/170939943)
 
 -----
 Please refer to the [documentation](https://xpresspipe.readthedocs.io/en/latest/?badge=latest) for more in depth details.
@@ -20,7 +21,7 @@ Profiling and RNA-Seq Analysis Toolkit. https://github.com/XPRESSyourself.
 ### Installation:   
 #### Installing from source
 The following is a short tutorial showing you how to install XPRESSpipe:   
-[![asciicast](https://asciinema.org/a/256347.svg)](https://asciinema.org/a/256347?speed=3)
+[![asciicast](https://asciinema.org/a/256347.svg)](https://asciinema.org/a/256347?speed=4)
 
 - Make sure you let Anaconda set up the PATH info for you.
 - If the help menu is not displayed when testing, try adding the path where you installed XPRESSpipe to the system PATH
@@ -32,10 +33,10 @@ If you do not have a file names `~/.bash_profile`, try looking for one called `~
 
 ### QuickStart:   
 - Reference building   
-[![asciicast](https://asciinema.org/a/256340.svg)](https://asciinema.org/a/256340?speed=3)
+[![asciicast](https://asciinema.org/a/256340.svg)](https://asciinema.org/a/256340?speed=4)
 
 - Running XPRESSpipe on sequence data   
-[![asciicast](https://asciinema.org/a/256343.svg)](https://asciinema.org/a/256343?speed=3)
+[![asciicast](https://asciinema.org/a/256343.svg)](https://asciinema.org/a/256343?speed=4)
 
 - You can also use the XPRESSpipe command builder and executor for reference curation or running the pipeline by executing the following:
 ```
