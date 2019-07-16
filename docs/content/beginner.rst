@@ -21,7 +21,7 @@ Install XPRESSpipe
 | 2. Type "Terminal" into the search bar and click on the app icon
 
 | - Great! Now we are in the command line interface. As a review, anything followed by a "$" in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, **space and characters must be typed exactly and commands are case-sensitive**.
-| - First, let's make sure the required dependency is installed. If the :data:`pip` command does not work, then read `this <https://pip.pypa.io/en/stable/installing/>`_ for more information.
+| - First, let's install `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/install/>`_, a package manager that will help us download all required dependencies.
 
 .. code-block:: shell
 

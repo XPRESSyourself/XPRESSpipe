@@ -25,6 +25,8 @@ license <- function() {
 # Measure library complexity of RNA-seq sample
 
 # Install dependencies
+if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
+
 if ("devtools" %in% rownames(installed.packages()) == FALSE) {
   print("Installing devtools...")
   install.packages("devtools", repos = "http://cran.us.r-project.org")
