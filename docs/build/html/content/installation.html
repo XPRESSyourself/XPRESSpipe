@@ -95,9 +95,8 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#install-from-source-recommended">Install from Source (Recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-xpresspipe">Install XPRESSpipe</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#docker-container">Docker Container</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
@@ -178,54 +177,56 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="install-from-source-recommended">
-<h2>Install from Source (Recommended)<a class="headerlink" href="#install-from-source-recommended" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-xpresspipe">
+<h2>Install XPRESSpipe<a class="headerlink" href="#install-xpresspipe" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">The majority of installation is automated within the setup script.</div>
-<div class="line">1. Assuming you have a more recent version of Python, you should have <code class="xref py py-data docutils literal notranslate"><span class="pre">pip</span></code> installed. If not, please follow these <a class="reference external" href="https://pip.pypa.io/en/stable/installing/">instructions</a>.</div>
-<div class="line">2. Install the required <code class="xref py py-data docutils literal notranslate"><span class="pre">setuptools</span></code> package that will automate setup.</div>
+<div class="line">- Let’s enter the command line.</div>
+<div class="line">1. Click on the Finder icon the top right side of the screen on your Mac (or wherever else it might be located)</div>
+<div class="line">2. Type “Terminal” into the search bar and click on the app icon</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install setuptools
+<div class="line-block">
+<div class="line">- Great! Now we are in the command line interface. As a review, anything followed by a “$” in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, <strong>space and characters must be typed exactly and commands are case-sensitive</strong>.</div>
+<div class="line">- First, let’s install <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/">conda</a>, a package manager that will help us download all required dependencies.</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># If on a MacOS</span>
+$ curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+
+<span class="c1"># If on a LinuxOS</span>
+$ curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+$ bash ~/Miniconda3-latest-MacOSX-x86_64.sh
+
+<span class="c1"># Enter yes for all successive prompts and allow the script to install Conda into your path</span>
+<span class="c1"># After installation, the install script can be removed</span>
+rm ~/Miniconda3-latest-MacOSX-x86_64.sh
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line">3. Download XPRESSpipe and execute the XPRESSpipe installation script.</div>
+<div class="line">- Let’s get the latest version of XPRESSpipe by executing the lines of code in the code block below. Replace the URL for the version of XPRESSpipe for whatever version you want (these can be found under the <code class="xref py py-data docutils literal notranslate"><span class="pre">releases</span></code> tab on the <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe/releases">XPRESSpipe GitHub repository</a>).</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~
-$ curl -O https://github.com/XPRESSyourself/XPRESSpipe/archive/XPRESSpipe-v0.1.3b2.tar.gz
-$ tar xvzf XPRESSpipe-v0.1.3b2.tar.gz
-$ <span class="nb">cd</span> XPRESSpipe-v0.1.3b2
-$ python setup.py install
+$ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/v0.2.1b0.tar.gz
+$ tar xvzf v0.2.1b0.tar.gz
+$ <span class="nb">cd</span> XPRESSpipe-0.2.1b0
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line">If you are installing on computer without sudo privileges (i.e. an HPC), you should install by substituting the last line of the last command block with this command block:</div>
+<div class="line">- Now we can give Conda the dependency file to process for us from XPRESSpipe:</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python setup.py install --prefix ~/.local
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda env create --name xpresspipe -f requirements.yml
+<span class="c1"># conda activate xpresspipe</span>
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line">This will install XPRESSpipe as well as all required dependencies. If <a class="reference external" href="https://www.anaconda.com/distribution/">Anaconda</a> has not been installed by the user, this will take care of installation. Anaconda is a package manager and will install the other software packages XPRESSpipe relies on.</div>
+<div class="line">- This installation method will create a separate environment for XPRESSpipe and all its dependencies to live in. Each time you open the command line, you will need to type <code class="xref py py-data docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">xpresspipe</span></code> to use XPRESSpipe</div>
+<div class="line">- Let’s install XPRESSpipe and test that the installation was successful by executing the following:</div>
 </div>
-<div class="line-block">
-<div class="line">4. Test installation by executing the following in the command line:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe -h
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python setup.py install
+$ xpresspipe <span class="nb">test</span>
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line">5. If your system can’t find the <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span></code> command, try the following. At the end of the installation instructions, an installation location will be given. Add this to your $PATH:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>...
-Installing xpresspipe script to /Users/<span class="nv">$USERNAME</span>/anaconda3/bin
-
-Installed /Users/<span class="nv">$USERNAME</span>/anaconda3/lib/python3.6/site-packages/xpresspipe-0.0.1b0-py3.6.egg
-Processing dependencies <span class="k">for</span> <span class="nv">XPRESSpipe</span><span class="o">==</span><span class="m">0</span>.0.1b0
-Finished processing dependencies <span class="k">for</span> <span class="nv">XPRESSpipe</span><span class="o">==</span><span class="m">0</span>.0.1b0
-
-$ <span class="nb">echo</span> <span class="s2">&quot;export PATH=&#39;/Users/</span><span class="nv">$USERNAME</span><span class="s2">/anaconda3/bin:</span><span class="nv">$PATH</span><span class="s2">&#39; &gt;&gt; ~/.bash_profile</span>
-$<span class="s2"> echo &quot;</span><span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s1">&#39;/Users/$USERNAME/anaconda3/lib/python3.6/site-packages&#39;</span><span class="s2">&quot;</span>
-</pre></div>
+<div class="line">- If a summary menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!</div>
+<div class="line">- You can run <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">--help</span></code> to see a list of the available modules within XPRESSpipe. To see specific parameters for a module, type <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">&lt;module_name&gt;</span> <span class="pre">--help</span></code>.</div>
 </div>
 </div>
 <div class="section" id="docker-container">
@@ -249,29 +250,6 @@ $<span class="s2"> echo &quot;</span><span class="nb">export</span> <span class=
 <div class="line-block">
 <div class="line">If the help menu prints, XPRESSpipe if functioning properly and you can replace the <code class="xref py py-data docutils literal notranslate"><span class="pre">--help</span></code> option with the appropriate sub-module and arguments.</div>
 </div>
-</div>
-<div class="section" id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<p>In both installation options specified above, the installation of these packages should be handled automatically. If not, please make sure you have <a class="reference external" href="https://www.anaconda.com/distribution/">Anaconda</a> installed and try the installation again if using the Installation from Source option. If there is an issue with the Docker distribution, please submit an <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe/issues">issue</a>.
-| - fastp
-| - STAR
-| - samtools
-| - bedtools
-| - deepTools
-| - FastQC
-| - Cufflinks
-| - HTSeq
-| - pandas
-| - numpy
-| - biopython
-| - scipy
-| - plotly
-| - R
-| - dupRadar
-| - DESeq2
-| - matplotlib
-| - XPRESSplot
-| - MultiQC</p>
 </div>
 </div>
 

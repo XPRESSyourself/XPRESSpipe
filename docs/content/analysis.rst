@@ -134,7 +134,9 @@ Examples
 =================================
 Read Distribution Analysis
 =================================
-| When performing RNA-seq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all :data:`.fastq` samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library. When this is run within the pipeline, it will analyze just the post-trimming :data:`.fastq` files
+| When performing RNA-seq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all :data:`.fastq` samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library. When this is run within the pipeline, it will analyze just the post-trimming :data:`.fastq` files.
+
+| Additionally, if running one of XPRESSpipe's pipelines, you can refer to the MultiQC :data:`html` file for general summary statistics, which include read length distributions for all samples.
 
 -----------
 Arguments
@@ -175,6 +177,7 @@ Examples
 Metagene Analysis
 =================================
 | Analyze each sequencing sample to ensure equal distribution of reads across all transcripts. Can be useful in identifying 5' or 3' biases in sequence preparation.
+| Requires a transcriptome-mapped BAM files, which can be output by `STAR <https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf>`_ and are automatically output during any XPRESSpipe alignment run.
 
 .. code-block:: shell
 
@@ -187,13 +190,26 @@ Metagene Analysis
    * - Required Arguments
      - Description
    * - :data:`-i \<path\>, --input \<path\>`
-     - Path to input directory of SAM alignment files
+     - Path to input directory of transcriptome-mapped BAM files
    * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
    * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
-     - Path and file name to reference GTF
-   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
-     - Experiment name
+     - Path and file name to un-modified reference GTF
+
+ .. list-table::
+    :widths: 35 50
+    :header-rows: 1
+
+    * - Optional Arguments
+      - Description
+    * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
+      - Experiment name
+    * - :data:`--feature_type \<feature_type\>`
+      - Specify feature type (3rd column in GTF file) to be used in calculating metagene coverage (default: exon; alternative: CDS)
+    * - :data:`--bam_suffix \<suffix\>`
+      - Change from default suffix of toTranscriptome.out.bam if transcriptome-mapped files were processed outside of XPRESSpipe
+    * - :data:`-m \<processors\>, --max_processors \<processors\>`
+      - Number of max processors to use for tasks (default: No limit)
 
 -----------
 Examples
@@ -209,7 +225,7 @@ Examples
 .. image:: se_test_metagene_summary.png
   :width: 450px
 
-NOTE: As you can appreciate, there are systematic 5' biases in these library preparations. A good RNA-seq library should have even coverage across all transcripts.
+NOTE: As you can appreciate, there are systematic 5' biases in these library preparations. A good RNA-seq library should generally have even coverage across all transcripts.
 
 
 =================================
@@ -228,13 +244,13 @@ Intron-collapsed Gene Coverage Analysis
    * - Required Arguments
      - Description
    * - :data:`-i \<path\>, --input \<path\>`
-     - Path to input directory of SAM alignment files
+     - Path to input directory of transcriptome-aligned BAM files
    * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
    * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
      - Path and file name to reference GTF
    * - :data:`-n \<gene_name\>, --gene_name \<gene_name\>`
-     - Gene name
+     - Gene name (case sensitive)
 
 .. list-table::
   :widths: 35 50
@@ -245,7 +261,7 @@ Intron-collapsed Gene Coverage Analysis
   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
     - Experiment name to save output summaries as
   * - :data:`--bam_suffix \<suffix\>`
-    - Change from default suffix of _Aligned.sort.bam if using a different BAM file
+    - Change from default suffix of toTranscriptome.out.bam if using a different BAM file
   * - :data:`--type \<type>`
     - Record type to map across (i.e. "exon", "CDS") (case-sensitive)
   * - :data:`--samples \<sample_list\> [<sample_list> ...]`
@@ -278,7 +294,7 @@ Examples
 .. image:: geneCoverage_IGV_comparison.png
   :width: 750px
 
-NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In the image above, subplot A is a snapshot from IGV (https://software.broadinstitute.org/software/igv/). Green boxes show approximate same region with the same exons for comparison.
+NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In both A and B in the image above, the top plot was generated with IGV (https://software.broadinstitute.org/software/igv/) and the bottom with :data:`xpresspipe geneCoverage`. Green boxes show approximately the same region for comparison.
 
 
 
@@ -298,13 +314,24 @@ Codon Periodicity Analysis
    * - Required Arguments
      - Description
    * - :data:`-i \<path\>, --input \<path\>`
-     - Path to input directory of SAM alignment files
+     - Path to input directory of transcriptome-aligned BAM files
    * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
    * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
-     - Path and file name to reference GTF for periodicity reference generation/location
-   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
-     - Experiment name
+     - Path and file name to reference GTF
+
+.. list-table::
+  :widths: 35 50
+  :header-rows: 1
+
+  * - Optional Arguments
+    - Description
+  * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
+    - Experiment name to save output summaries as
+  * - :data:`--bam_suffix \<suffix\>`
+    - Change from default suffix of toTranscriptome.out.bam if using a different BAM file
+  * - :data:`-m \<processors\>, --max_processors \<processors\>`
+    - Number of max processors to use for tasks (default: No limit)
 
 
 -----------
@@ -317,8 +344,7 @@ Examples
 
   $ xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
 
-.. image:: se_test_periodicity_summary.png
-  :width: 250px
+
 
 ======================
 rRNA Probe
