@@ -1,5 +1,5 @@
 ############################
-Format
+Other Features
 ############################
 
 =================================
@@ -24,8 +24,8 @@ Arguments
      - Description
    * - :data:`-i \<path/filename\>, --input \<path/filename\>`
      - Path and file name to sequence dataframe
-   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`
-     - Path and file name to reference GTF
+   * - :data:`-g \</path/transcripts.gtf\>`, :data:`--gtf \</path/transcripts.gtf\>`
+     - Path and file name to GTF
 
 .. list-table::
     :widths: 35 50

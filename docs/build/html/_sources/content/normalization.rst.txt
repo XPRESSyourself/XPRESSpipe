@@ -10,14 +10,17 @@ Sample Normalize
 | Due to inherent biases in RNA-seq samples (most commonly, different amounts of total RNA per sample in a given lane), samples must be normalized to obtain an accurate representation of transcription per sample. Additional normalization can be performed to normalize for transcript length ("per kilobase million") as longer transcripts will naturally create more fragments mapping to a given gene, thus potentially making 1 transcript appear as many when quantified.
 |
 | The following equations summarize different way to normalize samples for RNA-seq:
-| - Perform **reads per million** sample normalization on RNA-seq data
-| :math:`RPM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e6}{\#\ mapped\ reads\ per\ sample}`
-| - Perform **reads per kilobase million** sample normalization on RNA-seq data
-| :math:`RPKM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e6\ x\ 1e3}{\#\ mapped\ reads\ per\ sample\ x\ gene\ length\ (bp)}`
-| - Perform **fragments per kilobase million** sample normalization on RNA-seq data
-| :math:`FPKM = \frac{\#\ number\ fragments\ per\ gene\ x\ 1e6\ x\ 1e3}{\#\ mapped\ fragments\ per\ sample\ x\ gene\ length\ (bp)}`
-| - Perform **transcripts per million** sample normalization on RNA-seq data (same as RPKM, but order of operations is different)
-| :math:`TPM = \frac{\#\ number\ reads/fragments\ per\ gene\ x\ 1e3\ x\ 1e6}{gene\ length\ (bp)\ x\ \#\ mapped\ reads\ per\ sample}`
+
+| - **Reads per Million**
+| :math:`RPM_{g} = \frac{1e6 \cdot r_{\textit{ge}}}{\sum_{g=1}^{n} r_{\textit{ge}}}`
+| - **Reads per Kilobase of Reads per Million**
+| :math:`RPKM_{g} = \frac{1e9 \cdot r_{\textit{ge}}}{(\sum_{g=1}^{n} r_{\textit{ge}}) \cdot \textit{l} _{\textit{ge}}}`
+| - **Fragments per Kilobase of Fragments per Million**
+| :math:`FPKM_{g} = \frac{1e9 \cdot f_{\textit{ge}}}{(\sum_{g=1}^{n} f_{\textit{ge}}) \cdot \textit{l} _{\textit{ge}}}`
+| - **Transcripts per Million**  (same as RPKM, but order of operations is different)
+| :math:`TPM_{g} = \frac{1e6 \cdot r_{\textit{ge}}}{(\sum_{g=1}^{n} (\frac{1e3 \cdot r_{\textit{ge}}}{l_{\textit{ge}}})) \cdot \textit{l} _{\textit{ge}}}`
+|
+| In each of the above, assume *g* is gene *n*, *ge* is cumulative exon space for gene *n*, *r* is total reads, *f* is total fragments, and *l* is length
 |
 | Assumptions:
 |   - R is installed on your machine and is in your $PATH if using the :data:`batch` argument

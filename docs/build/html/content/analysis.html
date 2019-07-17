@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quality Control and Analysis &mdash; XPRESSpipe 0.2.0-beta documentation</title>
+  <title>Analysis &mdash; XPRESSpipe 0.2.2-beta documentation</title>
   
 
   
@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Read Pre-Processing" href="trim.html" />
-    <link rel="prev" title="Ribosome Profiling Pipeline" href="riboseq.html" /> 
+    <link rel="prev" title="Quality Control" href="quality-control.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,31 +100,15 @@
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Quality Control and Analysis</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="quality-control.html">Quality Control</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Analysis</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#differential-expression-analysis">Differential Expression Analysis</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#read-distribution-analysis">Read Distribution Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Arguments</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#metagene-analysis">Metagene Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">Examples</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#intron-collapsed-gene-coverage-analysis">Intron-collapsed Gene Coverage Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id4">Examples</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#codon-periodicity-analysis">Codon Periodicity Analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id5">Examples</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="#rrna-probe">rRNA Probe</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id6">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -132,8 +116,8 @@
 <li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -180,7 +164,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Quality Control and Analysis</li>
+      <li>Analysis</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -199,13 +183,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="quality-control-and-analysis">
-<span id="analysis-link"></span><h1>Quality Control and Analysis<a class="headerlink" href="#quality-control-and-analysis" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="analysis">
+<span id="analysis-link"></span><h1>Analysis<a class="headerlink" href="#analysis" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="differential-expression-analysis">
 <h2>Differential Expression Analysis<a class="headerlink" href="#differential-expression-analysis" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">Differential Expression analysis allows one to determine significantly enriched or depleted genes between two conditions. XPESSpipe acts as a wrapper for <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/">DESeq2</a>. Please refer to its <a class="reference external" href="https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html">documentation</a> for more information.</div>
-<div class="line">NOTE: If intending to use the <code class="xref py py-data docutils literal notranslate"><span class="pre">diffxpress</span></code> sub-module, you must use <code class="xref py py-data docutils literal notranslate"><span class="pre">--quantification_method</span> <span class="pre">htseq</span></code> for the time being</div>
+<div class="line">NOTE: If intending to use the <code class="xref py py-data docutils literal notranslate"><span class="pre">diffxpress</span></code> sub-module, you need to have used <code class="xref py py-data docutils literal notranslate"><span class="pre">--quantification_method</span> <span class="pre">htseq</span></code> for during read quantification and <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/">DESeq2</a> requires integer count data.</div>
 </div>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -236,10 +220,10 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path/filename.tsv&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--input</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
 <td><p>Path and file name of expression counts matrix</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-s</span> <span class="pre">&lt;path/filename.tsv&gt;,</span> <span class="pre">--sample</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-s</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--sample</span> <span class="pre">&lt;path/filename.tsv&gt;</span></code></p></td>
 <td><p>Path and file name of sample information matrix</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--design</span> <span class="pre">&lt;formula&gt;</span></code></p></td>
@@ -334,227 +318,6 @@
 </div>
 </div>
 </div>
-<div class="section" id="read-distribution-analysis">
-<h2>Read Distribution Analysis<a class="headerlink" href="#read-distribution-analysis" title="Permalink to this headline">¶</a></h2>
-<div class="line-block">
-<div class="line">When performing RNA-seq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library. When this is run within the pipeline, it will analyze just the post-trimming <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> files.</div>
-</div>
-<div class="line-block">
-<div class="line">Additionally, if running one of XPRESSpipe’s pipelines, you can refer to the MultiQC <code class="xref py py-data docutils literal notranslate"><span class="pre">html</span></code> file for general summary statistics, which include read length distributions for all samples.</div>
-</div>
-<div class="section" id="id1">
-<h3>Arguments<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="line-block">
-<div class="line">The help menu can be accessed by calling the following from the command line:</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe readDistribution --help
-</pre></div>
-</div>
-<table class="colwidths-given docutils align-center">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Required Arguments</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to input directory of trimmed fastq (or untrimmed fastq) files</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to output directory</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&lt;experiment_name&gt;,</span> <span class="pre">--experiment</span> <span class="pre">&lt;experiment_name&gt;</span></code></p></td>
-<td><p>Experiment name</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="id2">
-<h3>Examples<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<div class="line-block">
-<div class="line"><strong>Example 1 – Analyze read distributions from ribosome profiling libraries</strong></div>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe readDistribution -i riboprof_out/trimmed_fastq -o riboprof_out -e se_test
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/se_test_fastqc_summary.png"><img alt="../_images/se_test_fastqc_summary.png" src="../_images/se_test_fastqc_summary.png" style="width: 450px;" /></a>
-</div>
-</div>
-<div class="section" id="metagene-analysis">
-<h2>Metagene Analysis<a class="headerlink" href="#metagene-analysis" title="Permalink to this headline">¶</a></h2>
-<div class="line-block">
-<div class="line">Analyze each sequencing sample to ensure equal distribution of reads across all transcripts. Can be useful in identifying 5’ or 3’ biases in sequence preparation.</div>
-<div class="line">Requires a transcriptome-mapped BAM files, which can be output by <a class="reference external" href="https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf">STAR</a> and are automatically output during any XPRESSpipe alignment run.</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe metagene --help
-</pre></div>
-</div>
-<div class="section" id="id3">
-<h3>Examples<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<div class="line-block">
-<div class="line"><strong>Example 1 – Analyze metagene profiles of sequence libraries</strong></div>
-<div class="line">- Use default transcript reference (maps to all transcripts, even if non-coding)</div>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe metagene -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/se_test_metagene_summary.png"><img alt="../_images/se_test_metagene_summary.png" src="../_images/se_test_metagene_summary.png" style="width: 450px;" /></a>
-<p>NOTE: As you can appreciate, there are systematic 5’ biases in these library preparations. A good RNA-seq library should generally have even coverage across all transcripts.</p>
-</div>
-</div>
-<div class="section" id="intron-collapsed-gene-coverage-analysis">
-<h2>Intron-collapsed Gene Coverage Analysis<a class="headerlink" href="#intron-collapsed-gene-coverage-analysis" title="Permalink to this headline">¶</a></h2>
-<div class="line-block">
-<div class="line">Plot the coverage of a given gene for a sample or set of samples with introns collapsed.</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe geneCoverage --help
-</pre></div>
-</div>
-<table class="colwidths-given docutils align-center">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Required Arguments</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to input directory of transcriptome-aligned BAM files</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to output directory</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
-<td><p>Path and file name to reference GTF</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-n</span> <span class="pre">&lt;gene_name&gt;,</span> <span class="pre">--gene_name</span> <span class="pre">&lt;gene_name&gt;</span></code></p></td>
-<td><p>Gene name (case sensitive)</p></td>
-</tr>
-</tbody>
-</table>
-<table class="colwidths-given docutils align-center">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Optional Arguments</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&lt;experiment_name&gt;,</span> <span class="pre">--experiment</span> <span class="pre">&lt;experiment_name&gt;</span></code></p></td>
-<td><p>Experiment name to save output summaries as</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--bam_suffix</span> <span class="pre">&lt;suffix&gt;</span></code></p></td>
-<td><p>Change from default suffix of toTranscriptome.out.bam if using a different BAM file</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--type</span> <span class="pre">&lt;type&gt;</span></code></p></td>
-<td><p>Record type to map across (i.e. “exon”, “CDS”) (case-sensitive)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--samples</span> <span class="pre">&lt;sample_list&gt;</span> <span class="pre">[&lt;sample_list&gt;</span> <span class="pre">...]</span></code></p></td>
-<td><p>Provide a space-separated list of sample names to include in analysis (will only include those listed, and will plot in the order listed)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sample_names</span> <span class="pre">&lt;suffix&gt;</span></code></p></td>
-<td><p>Provide a space-separated list of sample names to use for labels</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--plot_color</span> <span class="pre">&lt;color&gt;</span></code></p></td>
-<td><p>Indicate plotting color</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span> <span class="pre">&lt;processors&gt;,</span> <span class="pre">--max_processors</span> <span class="pre">&lt;processors&gt;</span></code></p></td>
-<td><p>Number of max processors to use for tasks (default: No limit)</p></td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="id4">
-<h3>Examples<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<div class="line-block">
-<div class="line"><strong>Example 1 – Analyze gene coverage profile of sequence libraries</strong></div>
-<div class="line">- Use default transcript reference (will generate a longest transcript-only reference)</div>
-<div class="line">- Analyze SLC1A1</div>
-<div class="line">- Analyze along chosen record type (default: exon, but could also use CDS if looking at ribosome profiling data)</div>
-<div class="line">- Analyzing BAM files ending in <code class="xref py py-data docutils literal notranslate"><span class="pre">sort.bam</span></code></div>
-<div class="line">- Specifying names to use in plotting – if not using <code class="xref py py-data docutils literal notranslate"><span class="pre">--samples</span></code>, these files will be plotted alphabetically, so the listed order should also be alphabetical. If using <code class="xref py py-data docutils literal notranslate"><span class="pre">--samples</span></code>, need to specify names in the same order you provided for this argument.</div>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe geneCoverage -i /path/to/bam_files -o ./ -g /path/to/reference.gtf \
-  -n SLC1A1 --type exon --bam_suffix .sort.bam \
-  --sample_names SRR1795425 SRR1795433 SRR1795435 SRR1795437
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/geneCoverage_IGV_comparison.png"><img alt="../_images/geneCoverage_IGV_comparison.png" src="../_images/geneCoverage_IGV_comparison.png" style="width: 750px;" /></a>
-<p>NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In both A and B in the image above, the top plot was generated with IGV (<a class="reference external" href="https://software.broadinstitute.org/software/igv/">https://software.broadinstitute.org/software/igv/</a>) and the bottom with <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">geneCoverage</span></code>. Green boxes show approximately the same region for comparison.</p>
-</div>
-</div>
-<div class="section" id="codon-periodicity-analysis">
-<h2>Codon Periodicity Analysis<a class="headerlink" href="#codon-periodicity-analysis" title="Permalink to this headline">¶</a></h2>
-<div class="line-block">
-<div class="line">Analyze periodicity of most abundant read length. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.</div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe periodicity --help
-</pre></div>
-</div>
-<table class="colwidths-given docutils align-center">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Required Arguments</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to input directory of transcriptome-aligned BAM files</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to output directory</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
-<td><p>Path and file name to reference GTF</p></td>
-</tr>
-</tbody>
-</table>
-<table class="colwidths-given docutils align-center">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Optional Arguments</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&lt;experiment_name&gt;,</span> <span class="pre">--experiment</span> <span class="pre">&lt;experiment_name&gt;</span></code></p></td>
-<td><p>Experiment name to save output summaries as</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--bam_suffix</span> <span class="pre">&lt;suffix&gt;</span></code></p></td>
-<td><p>Change from default suffix of toTranscriptome.out.bam if using a different BAM file</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span> <span class="pre">&lt;processors&gt;,</span> <span class="pre">--max_processors</span> <span class="pre">&lt;processors&gt;</span></code></p></td>
-<td><p>Number of max processors to use for tasks (default: No limit)</p></td>
-</tr>
-</tbody>
-</table>
-<div class="section" id="id5">
-<h3>Examples<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
-<div class="line-block">
-<div class="line"><strong>Example 1 – Analyze periodicity from ribosome profiling libraries</strong></div>
-</div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
-</pre></div>
-</div>
-<img alt="../_images/se_test_periodicity_summary.png" src="../_images/se_test_periodicity_summary.png" />
-</div>
-</div>
 <div class="section" id="rrna-probe">
 <h2>rRNA Probe<a class="headerlink" href="#rrna-probe" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
@@ -606,8 +369,8 @@
 </tr>
 </tbody>
 </table>
-<div class="section" id="id6">
-<h3>Examples<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id2">
+<h3>Examples<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
 <div class="line"><strong>Example 1 – Generate rank-ordered list of over-represented sequences</strong></div>
 </div>
@@ -635,7 +398,7 @@ ATAAATCATTTGTATACGACTTAGAC          13603
         <a href="trim.html" class="btn btn-neutral float-right" title="Read Pre-Processing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="riboseq.html" class="btn btn-neutral float-left" title="Ribosome Profiling Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quality-control.html" class="btn btn-neutral float-left" title="Quality Control" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Alignment &mdash; XPRESSpipe 0.2.0-beta documentation</title>
+  <title>Alignment &mdash; XPRESSpipe 0.2.2-beta documentation</title>
   
 
   
@@ -100,7 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quality-control.html">Quality Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Alignment</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#single-end-rnaseq-alignment">Single-End RNAseq Alignment</a><ul>
@@ -116,8 +117,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -225,7 +226,7 @@
 <td><p>Path to output directory</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-r</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--reference</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to parent organism reference directory</p></td>
+<td><p>Path to parent organism reference directory (must have a file called transcripts.gtf within)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-t</span> <span class="pre">&lt;SE</span> <span class="pre">or</span> <span class="pre">PE&gt;,</span> <span class="pre">--type</span> <span class="pre">&lt;SE</span> <span class="pre">or</span> <span class="pre">PE&gt;</span></code></p></td>
 <td><p>Sequencing type (“SE” for single-end, “PE” for paired-end)</p></td>
@@ -246,11 +247,17 @@
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--two-pass</span></code></p></td>
 <td><p>Use a two-pass STAR alignment for novel splice junction discovery</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
-<td><p>Include flag to output BED files for each aligned file</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--no_multimappers&gt;</span></code></p></td>
+<td><p>Include flag to remove multimapping reads to be output and used in downstream analyses</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bigwig</span></code></p></td>
-<td><p>Include flag to output bigwig files for each aligned file</p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--deduplicate</span></code></p></td>
+<td><p>Include flag to quantify reads with de-duplication (will search for files with suffix <code class="xref py py-data docutils literal notranslate"><span class="pre">_dedupRemoved.bam</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--vcf</span> <span class="pre">&lt;/path/to/file.vcf&gt;</span></code></p></td>
+<td><p>Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
+<td><p>Include flag to output BED files for each aligned file</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;sjdbOverhang_amount&gt;</span></code></p></td>
 <td><p>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</p></td>
@@ -262,7 +269,7 @@
 <td><p>Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">genome_size</span></code></p></td>
-<td><p>Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment</p></td>
+<td><p>Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment. Enter the size of your organism’s genome in nucleotides</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>

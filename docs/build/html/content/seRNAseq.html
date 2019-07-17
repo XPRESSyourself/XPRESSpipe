@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Single-End RNA-seq Pipeline &mdash; XPRESSpipe 0.2.0-beta documentation</title>
+  <title>Single-End RNA-seq Pipeline &mdash; XPRESSpipe 0.2.2-beta documentation</title>
   
 
   
@@ -103,12 +103,13 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quality-control.html">Quality Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -199,8 +200,8 @@
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-r</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--reference</span> <span class="pre">&lt;path&gt;</span></code></p></td>
 <td><p>Path to parent organism reference directory</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-t</span> <span class="pre">&lt;SE</span> <span class="pre">or</span> <span class="pre">PE&gt;,</span> <span class="pre">--type</span> <span class="pre">&lt;SE</span> <span class="pre">or</span> <span class="pre">PE&gt;</span></code></p></td>
-<td><p>Sequencing type (“SE” for single-end, “PE” for paired-end)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
+<td><p>Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--experiment</span></code></p></td>
 <td><p>Experiment name</p></td>
@@ -228,19 +229,37 @@
 <td><p>PHRED read quality threshold (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">28</span></code>)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--min_length</span> <span class="pre">&lt;length_value&gt;</span></code></p></td>
-<td><p>Minimum read length threshold to keep for reads (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">18</span></code>)</p></td>
+<td><p>Minimum read length threshold to keep for reads (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">17</span></code>)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--deduplicate</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--umi_location</span> <span class="pre">&lt;location&gt;</span></code></p></td>
+<td><p>Provide parameter to process UMIs – provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide ‘read1’ here; does not work with -a polyX option)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--umi_length</span> <span class="pre">&lt;length&gt;</span></code></p></td>
+<td><p>Provide parameter to process UMIs – provide UMI length (must provide the –umi_location argument); does not work with -a polyX option)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--no_multimappers&gt;</span></code></p></td>
+<td><p>Include flag to remove multimapping reads to be output and used in downstream analyses</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--deduplicate</span></code></p></td>
 <td><p>Include flag to quantify reads with de-duplication (will search for files with suffix <code class="xref py py-data docutils literal notranslate"><span class="pre">_dedupRemoved.bam</span></code>)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
 <td><p>Include flag to output BED files for each aligned file</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-c</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--quantification_method</span></code></p></td>
-<td><p>Specify quantification method (default: cufflinks; other option: htseq. If using Cufflinks, no downstream sample normalization is required)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-c</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--quantification_method</span></code></p></td>
+<td><p>Specify quantification method (default: htseq; other option: cufflinks. If using Cufflinks, no downstream sample normalization is required)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--method</span> <span class="pre">&lt;RPM,</span> <span class="pre">RPKM,</span> <span class="pre">FPKM,</span> <span class="pre">LOG&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--feature_type</span> <span class="pre">&lt;feature&gt;</span></code></p></td>
+<td><p>Specify feature type (3rd column in GTF file) to be used if quantifying with htseq (default: CDS)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--stranded</span> <span class="pre">&lt;fr-unstranded/fr-firststrand</span></code> <code class="xref py py-data docutils literal notranslate"><span class="pre">/fr-secondstrand||no/yes&gt;</span></code></p></td>
+<td><p>Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--method</span> <span class="pre">&lt;RPM,</span> <span class="pre">RPKM,</span> <span class="pre">FPKM,</span> <span class="pre">TPM&gt;</span></code></p></td>
 <td><p>Normalization method to perform (options: “RPM”, “TPM”, “RPKM”, “FPKM”) – if using either TPM, RPKM, or FPKM, a GTF reference file must be included</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--vcf</span> <span class="pre">&lt;/path/to/file.vcf&gt;</span></code></p></td>
+<td><p>Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--batch</span> <span class="pre">&lt;/path/filename.tsv&gt;</span></code></p></td>
 <td><p>Include path and filename of dataframe with batch normalization parameters</p></td>
@@ -255,7 +274,7 @@
 <td><p>Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">genome_size</span></code></p></td>
-<td><p>Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment</p></td>
+<td><p>Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment. This should be the length of the organism’s genome in nucleotides</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>
@@ -277,10 +296,10 @@
               -i se_test \
               -o se_out \
               -r se_reference \
-              --gtf transcripts_longestTranscript.gtf \
+              --gtf transcripts_LC.gtf \
               -e se_test \
               -a CTGTAGGCACCATCAAT \
-              --method RPKM \
+              --method TPM \
               --sjdbOverhang 49
 </pre></div>
 </div>

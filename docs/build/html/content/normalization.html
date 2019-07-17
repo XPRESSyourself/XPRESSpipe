@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Normalize &mdash; XPRESSpipe 0.2.0-beta documentation</title>
+  <title>Normalize &mdash; XPRESSpipe 0.2.2-beta documentation</title>
   
 
   
@@ -39,8 +39,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="FAQs" href="faqs.html" />
-    <link rel="prev" title="Format" href="formatting.html" /> 
+    <link rel="next" title="Other Features" href="other-features.html" />
+    <link rel="prev" title="Read Quantification" href="count.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,11 +100,11 @@
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quality-control.html">Quality Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Normalize</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#sample-normalize">Sample Normalize</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
@@ -113,6 +113,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -189,14 +190,18 @@
 <div class="line">Due to inherent biases in RNA-seq samples (most commonly, different amounts of total RNA per sample in a given lane), samples must be normalized to obtain an accurate representation of transcription per sample. Additional normalization can be performed to normalize for transcript length (“per kilobase million”) as longer transcripts will naturally create more fragments mapping to a given gene, thus potentially making 1 transcript appear as many when quantified.</div>
 <div class="line"><br /></div>
 <div class="line">The following equations summarize different way to normalize samples for RNA-seq:</div>
-<div class="line">- Perform <strong>reads per million</strong> sample normalization on RNA-seq data</div>
-<div class="line"><span class="math notranslate nohighlight">\(RPM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e6}{\#\ mapped\ reads\ per\ sample}\)</span></div>
-<div class="line">- Perform <strong>reads per kilobase million</strong> sample normalization on RNA-seq data</div>
-<div class="line"><span class="math notranslate nohighlight">\(RPKM = \frac{\#\ number\ reads\ per\ gene\ x\ 1e6\ x\ 1e3}{\#\ mapped\ reads\ per\ sample\ x\ gene\ length\ (bp)}\)</span></div>
-<div class="line">- Perform <strong>fragments per kilobase million</strong> sample normalization on RNA-seq data</div>
-<div class="line"><span class="math notranslate nohighlight">\(FPKM = \frac{\#\ number\ fragments\ per\ gene\ x\ 1e6\ x\ 1e3}{\#\ mapped\ fragments\ per\ sample\ x\ gene\ length\ (bp)}\)</span></div>
-<div class="line">- Perform <strong>transcripts per million</strong> sample normalization on RNA-seq data (same as RPKM, but order of operations is different)</div>
-<div class="line"><span class="math notranslate nohighlight">\(TPM = \frac{\#\ number\ reads/fragments\ per\ gene\ x\ 1e3\ x\ 1e6}{gene\ length\ (bp)\ x\ \#\ mapped\ reads\ per\ sample}\)</span></div>
+</div>
+<div class="line-block">
+<div class="line">- <strong>Reads per Million</strong></div>
+<div class="line"><span class="math notranslate nohighlight">\(RPM_{g} = \frac{1e6 \cdot r_{\textit{ge}}}{\sum_{g=1}^{n} r_{\textit{ge}}}\)</span></div>
+<div class="line">- <strong>Reads per Kilobase of Reads per Million</strong></div>
+<div class="line"><span class="math notranslate nohighlight">\(RPKM_{g} = \frac{1e9 \cdot r_{\textit{ge}}}{(\sum_{g=1}^{n} r_{\textit{ge}}) \cdot \textit{l} _{\textit{ge}}}\)</span></div>
+<div class="line">- <strong>Fragments per Kilobase of Fragments per Million</strong></div>
+<div class="line"><span class="math notranslate nohighlight">\(FPKM_{g} = \frac{1e9 \cdot f_{\textit{ge}}}{(\sum_{g=1}^{n} f_{\textit{ge}}) \cdot \textit{l} _{\textit{ge}}}\)</span></div>
+<div class="line">- <strong>Transcripts per Million</strong>  (same as RPKM, but order of operations is different)</div>
+<div class="line"><span class="math notranslate nohighlight">\(TPM_{g} = \frac{1e6 \cdot r_{\textit{ge}}}{(\sum_{g=1}^{n} (\frac{1e3 \cdot r_{\textit{ge}}}{l_{\textit{ge}}})) \cdot \textit{l} _{\textit{ge}}}\)</span></div>
+<div class="line"><br /></div>
+<div class="line">In each of the above, assume <em>g</em> is gene <em>n</em>, <em>ge</em> is cumulative exon space for gene <em>n</em>, <em>r</em> is total reads, <em>f</em> is total fragments, and <em>l</em> is length</div>
 <div class="line"><br /></div>
 <div class="line">Assumptions:</div>
 <div class="line-block">
@@ -289,10 +294,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="faqs.html" class="btn btn-neutral float-right" title="FAQs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="other-features.html" class="btn btn-neutral float-right" title="Other Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="formatting.html" class="btn btn-neutral float-left" title="Format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="count.html" class="btn btn-neutral float-left" title="Read Quantification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
