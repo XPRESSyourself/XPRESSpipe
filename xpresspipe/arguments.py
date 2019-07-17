@@ -26,6 +26,8 @@ import sys
 from urllib.request import Request, urlopen
 import argparse
 import datetime
+from math import ceil
+import numpy as np
 import multiprocessing
 from textwrap import dedent
 
@@ -224,6 +226,10 @@ def check_inputs(
 
         else:
             raise Exception('Invalid quantification method provided')
+
+    if 'genome_size' in args_dict and args_dict['genome_size'] != 14:
+        genome_size = ceil((np.log2(int(args_dict['genome_size'])) / 2) - 1)
+        args_dict['genome_size'] = min([genome_size, 14])
 
     # Determine output directory for log file
     if 'output' in args_dict \
@@ -1597,7 +1603,7 @@ def get_arguments(
         required = False)
     curate_opts.add_argument(
         '--genome_size',
-        help = 'Taken from the STAR manual: For small genomes, the parameter --genomeSAindexNbases needs to be scaled down, with a typical value of min(14, log2(GenomeLength)/2 - 1). For example, for 1 megaBase genome, this is equal to 9, for 100 kiloBase genome, this is equal to 7.',
+        help = 'For small genomes, the genome size in nucleotides should be provided',
         default = 14,
         metavar = '<value>',
         type = int,
@@ -1707,7 +1713,7 @@ def get_arguments(
         required = False)
     reference_opts.add_argument(
         '--genome_size',
-        help = 'Taken from the STAR manual: For small genomes, the parameter --genomeSAindexNbases needs to be scaled down, with a typical value of min(14, log2(GenomeLength)/2 - 1). For example, for 1 megaBase genome, this is equal to 9, for 100 kiloBase genome, this is equal to 7.',
+        help = 'For small genomes, the genome size in nucleotides should be provided',
         default = 14,
         metavar = '<value>',
         type = int,
