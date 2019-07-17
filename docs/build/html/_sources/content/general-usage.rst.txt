@@ -15,7 +15,10 @@ File Naming
 | In order for many of the XPRESSpipe functions to perform properly and for the output to be reliable after alignment (except for generation of a raw counts table), file naming conventions must be followed.
 | 1. Download your raw sequence data and place in a folder -- this folder should contain all the sequence data and nothing else.
 
-| 2. If you are working with paired-end data:
+| 2. If you are working with single-end data, the files must be a FASTQ-formatted file and end with the suffix :data:`.fastq`, :data:`.fastq.gz`, :data:`.fq`, :data:`.fq.gz`, :data:`.txt`, :data:`.txt.gz`. We recommend the :data:`.fastq` or :data:`.fastq.gz` suffix.
+
+
+| 2. If you are working with paired-end data, the rules from :data:`Step 2` apply, but must the suffix must be prefaced by the paired read group number as below:
 
 .. code-block: shell
 
@@ -36,7 +39,7 @@ or
 ===========
 Data Output
 ===========
-Running :data:`seRNAseq`, :data:`peRNAseq`, or :data:`riboseq` will output all intermediate and final data files in a tree structure as seen below:
+Running :data:`seRNAseq`, :data:`peRNAseq`, or :data:`riboseq` will output all intermediate and final data files as shown in this schematic:
 
 .. image:: xpresspipe_overview.png
    :width: 600

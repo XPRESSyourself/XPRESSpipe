@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quality Control and Analysis &mdash; XPRESSpipe 0.1.4-beta documentation</title>
+  <title>Quality Control and Analysis &mdash; XPRESSpipe 0.2.0-beta documentation</title>
   
 
   
@@ -39,8 +39,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Single-End RNA-seq Pipeline" href="seRNAseq.html" />
-    <link rel="prev" title="Normalize" href="normalization.html" /> 
+    <link rel="next" title="Read Pre-Processing" href="trim.html" />
+    <link rel="prev" title="Ribosome Profiling Pipeline" href="riboseq.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -92,16 +92,14 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference-building.html">Curating References</a></li>
-<li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
-<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quality Control and Analysis</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#differential-expression-analysis">Differential Expression Analysis</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
@@ -131,9 +129,11 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -337,7 +337,10 @@
 <div class="section" id="read-distribution-analysis">
 <h2>Read Distribution Analysis<a class="headerlink" href="#read-distribution-analysis" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">When performing RNA-seq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library. When this is run within the pipeline, it will analyze just the post-trimming <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> files</div>
+<div class="line">When performing RNA-seq, your sequencing library population is important to assess to ensure a quality sequencing run. Unexpected populations can be indicative of RNA degradation or other effects. In ribosome profiling, the expected footprint size is ~28-30 nucleotides, so you would expect a peak in this region when running your analysis. The following module will run read distribution analysis for all <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> samples within a given directory. It is recommended this analysis be performed on trimmed reads to clean up adaptors and get the true distribution of sequence reads in the library. When this is run within the pipeline, it will analyze just the post-trimming <code class="xref py py-data docutils literal notranslate"><span class="pre">fastq</span></code> files.</div>
+</div>
+<div class="line-block">
+<div class="line">Additionally, if running one of XPRESSpipe’s pipelines, you can refer to the MultiQC <code class="xref py py-data docutils literal notranslate"><span class="pre">html</span></code> file for general summary statistics, which include read length distributions for all samples.</div>
 </div>
 <div class="section" id="id1">
 <h3>Arguments<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
@@ -385,35 +388,11 @@
 <h2>Metagene Analysis<a class="headerlink" href="#metagene-analysis" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">Analyze each sequencing sample to ensure equal distribution of reads across all transcripts. Can be useful in identifying 5’ or 3’ biases in sequence preparation.</div>
+<div class="line">Requires a transcriptome-mapped BAM files, which can be output by <a class="reference external" href="https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf">STAR</a> and are automatically output during any XPRESSpipe alignment run.</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe metagene --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
-<colgroup>
-<col style="width: 41%" />
-<col style="width: 59%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Required Arguments</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to input directory of SAM alignment files</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to output directory</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
-<td><p>Path and file name to reference GTF</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&lt;experiment_name&gt;,</span> <span class="pre">--experiment</span> <span class="pre">&lt;experiment_name&gt;</span></code></p></td>
-<td><p>Experiment name</p></td>
-</tr>
-</tbody>
-</table>
 <div class="section" id="id3">
 <h3>Examples<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
@@ -424,7 +403,7 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/se_test_metagene_summary.png"><img alt="../_images/se_test_metagene_summary.png" src="../_images/se_test_metagene_summary.png" style="width: 450px;" /></a>
-<p>NOTE: As you can appreciate, there are systematic 5’ biases in these library preparations. A good RNA-seq library should have even coverage across all transcripts.</p>
+<p>NOTE: As you can appreciate, there are systematic 5’ biases in these library preparations. A good RNA-seq library should generally have even coverage across all transcripts.</p>
 </div>
 </div>
 <div class="section" id="intron-collapsed-gene-coverage-analysis">
@@ -447,7 +426,7 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to input directory of SAM alignment files</p></td>
+<td><p>Path to input directory of transcriptome-aligned BAM files</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;path&gt;</span></code></p></td>
 <td><p>Path to output directory</p></td>
@@ -456,7 +435,7 @@
 <td><p>Path and file name to reference GTF</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-n</span> <span class="pre">&lt;gene_name&gt;,</span> <span class="pre">--gene_name</span> <span class="pre">&lt;gene_name&gt;</span></code></p></td>
-<td><p>Gene name</p></td>
+<td><p>Gene name (case sensitive)</p></td>
 </tr>
 </tbody>
 </table>
@@ -475,7 +454,7 @@
 <td><p>Experiment name to save output summaries as</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--bam_suffix</span> <span class="pre">&lt;suffix&gt;</span></code></p></td>
-<td><p>Change from default suffix of _Aligned.sort.bam if using a different BAM file</p></td>
+<td><p>Change from default suffix of toTranscriptome.out.bam if using a different BAM file</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--type</span> <span class="pre">&lt;type&gt;</span></code></p></td>
 <td><p>Record type to map across (i.e. “exon”, “CDS”) (case-sensitive)</p></td>
@@ -510,7 +489,7 @@
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/geneCoverage_IGV_comparison.png"><img alt="../_images/geneCoverage_IGV_comparison.png" src="../_images/geneCoverage_IGV_comparison.png" style="width: 750px;" /></a>
-<p>NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In the image above, subplot A is a snapshot from IGV (<a class="reference external" href="https://software.broadinstitute.org/software/igv/">https://software.broadinstitute.org/software/igv/</a>). Green boxes show approximate same region with the same exons for comparison.</p>
+<p>NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In both A and B in the image above, the top plot was generated with IGV (<a class="reference external" href="https://software.broadinstitute.org/software/igv/">https://software.broadinstitute.org/software/igv/</a>) and the bottom with <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">geneCoverage</span></code>. Green boxes show approximately the same region for comparison.</p>
 </div>
 </div>
 <div class="section" id="codon-periodicity-analysis">
@@ -533,16 +512,35 @@
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path&gt;</span></code></p></td>
-<td><p>Path to input directory of SAM alignment files</p></td>
+<td><p>Path to input directory of transcriptome-aligned BAM files</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-o</span> <span class="pre">&lt;path&gt;,</span> <span class="pre">--output</span> <span class="pre">&lt;path&gt;</span></code></p></td>
 <td><p>Path to output directory</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
-<td><p>Path and file name to reference GTF for periodicity reference generation/location</p></td>
+<td><p>Path and file name to reference GTF</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&lt;experiment_name&gt;,</span> <span class="pre">--experiment</span> <span class="pre">&lt;experiment_name&gt;</span></code></p></td>
-<td><p>Experiment name</p></td>
+</tbody>
+</table>
+<table class="colwidths-given docutils align-center">
+<colgroup>
+<col style="width: 41%" />
+<col style="width: 59%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Optional Arguments</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&lt;experiment_name&gt;,</span> <span class="pre">--experiment</span> <span class="pre">&lt;experiment_name&gt;</span></code></p></td>
+<td><p>Experiment name to save output summaries as</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--bam_suffix</span> <span class="pre">&lt;suffix&gt;</span></code></p></td>
+<td><p>Change from default suffix of toTranscriptome.out.bam if using a different BAM file</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span> <span class="pre">&lt;processors&gt;,</span> <span class="pre">--max_processors</span> <span class="pre">&lt;processors&gt;</span></code></p></td>
+<td><p>Number of max processors to use for tasks (default: No limit)</p></td>
 </tr>
 </tbody>
 </table>
@@ -554,7 +552,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/se_test_periodicity_summary.png"><img alt="../_images/se_test_periodicity_summary.png" src="../_images/se_test_periodicity_summary.png" style="width: 250px;" /></a>
+<img alt="../_images/se_test_periodicity_summary.png" src="../_images/se_test_periodicity_summary.png" />
 </div>
 </div>
 <div class="section" id="rrna-probe">
@@ -634,10 +632,10 @@ ATAAATCATTTGTATACGACTTAGAC          13603
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="seRNAseq.html" class="btn btn-neutral float-right" title="Single-End RNA-seq Pipeline" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="trim.html" class="btn btn-neutral float-right" title="Read Pre-Processing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="normalization.html" class="btn btn-neutral float-left" title="Normalize" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="riboseq.html" class="btn btn-neutral float-left" title="Ribosome Profiling Pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

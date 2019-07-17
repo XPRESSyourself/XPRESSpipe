@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>XPRESSpipe &mdash; XPRESSpipe 0.1.4-beta documentation</title>
+  <title>XPRESSpipe &mdash; XPRESSpipe 0.2.0-beta documentation</title>
   
 
   
@@ -91,20 +91,20 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="content/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/reference-building.html">Curating References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/riboseq.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/align.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/count.html">Read Quantification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/normalization.html">Normalize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/analysis.html">Quality Control and Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/faqs.html">FAQs</a></li>
 </ul>
 
@@ -176,17 +176,19 @@
 <div class="section" id="about">
 <h2>About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line"><a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is a part of the <a class="reference external" href="https://github.com/XPRESSyourself/">XPRESSyourself</a> suite of sequencing tools. <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is an automated, efficient, and flexible pipeline for processing RNA-seq raw data, performing quality control analysis on the data, and preparing data for further downstream analysis.  <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is currently capable of handling single-end (SE), paired-end (PE), and ribosome profiling data. Features include the ability to trim, align, and count sequence reads.</div>
+<div class="line"><a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is a part of the <a class="reference external" href="https://github.com/XPRESSyourself/">XPRESSyourself</a> suite of sequencing tools. <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is an automated, efficient, and flexible pipeline for processing RNA-seq raw data, performing quality control analysis on the data, and preparing data for further downstream analysis.  <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> is currently capable of handling single-end (SE), paired-end (PE), and ribosome profiling data. Features include the ability to trim, align, and quantify sequence reads.</div>
 <div class="line">Other useful features include:</div>
 <div class="line">- Curate reference files for alignment</div>
 <div class="line">- Prepare transcriptome reference file to contain only protein coding transcripts, longest isoform only, and/or truncate transcripts</div>
 <div class="line">- Identify over-abundant sequences in the read data to design possible rRNA depletion probes</div>
-<div class="line">- Perform transcript meta-analysis, ribosome profiling periodicity analysis, and library complexity analysis</div>
+<div class="line">- Perform differential expression analysis for ribosome profiling and bulk RNA-Seq data</div>
+<div class="line">- Perform transcript meta-analyeis, including ribosome profiling periodicity analysis, and library complexity analysis</div>
+<div class="line">- Perform intron-agnostic read coverage analyses of genes</div>
 <div class="line">- Output aligned reads in a variety of formats for downstream applications</div>
 <div class="line"><br /></div>
 <div class="line">Other analyses can be performed by <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSplot">XPRESSplot</a>. Please read the relevant documentation for more information.</div>
 <div class="line"><br /></div>
-<div class="line"><a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> and the <a class="reference external" href="https://github.com/XPRESSyourself/">XPRESSyourself</a> suite is developed and maintained by Jordan Berg in the <a class="reference external" href="https://biochem.utah.edu/rutter/index.html">Rutter Lab</a> &#64; the <a class="reference external" href="https://www.utah.edu/">University of Utah</a>, along with other collaborators.</div>
+<div class="line"><a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe">XPRESSpipe</a> and the <a class="reference external" href="https://github.com/XPRESSyourself/">XPRESSyourself</a> suite is developed and maintained by Jordan Berg in the <a class="reference external" href="https://biochem.utah.edu/rutter/index.html">Rutter Lab</a> &#64; the <a class="reference external" href="https://www.utah.edu/">University of Utah</a>, along with other collaborators. We welcome pull requests if you would like to contribute to the project.</div>
 <div class="line"><br /></div>
 <div class="line">If you have limited or no computational experience, please see our <a class="reference internal" href="content/beginner.html#beginners-link"><span class="std std-ref">Beginner’s Guide</span></a></div>
 </div>
@@ -198,20 +200,20 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="content/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/general-usage.html">General Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/reference-building.html">Curating References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/riboseq.html">Ribosome Profiling Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/analysis.html">Quality Control and Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/align.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/count.html">Read Quantification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/normalization.html">Normalize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/analysis.html">Quality Control and Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="content/riboseq.html">Ribosome Profiling Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="content/faqs.html">FAQs</a></li>
 </ul>
 </div>
