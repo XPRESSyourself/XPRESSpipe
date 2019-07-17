@@ -34,20 +34,21 @@ Table of contents
    :maxdepth: 1
 
    content/overview
+   content/quickstart
    content/beginner
    content/installation
    content/general-usage
-   content/quickstart
    content/reference-building
+   content/seRNAseq
+   content/peRNAseq
+   content/riboseq
+   content/quality-control
+   content/analysis
    content/trim
    content/align
    content/count
    content/formatting
    content/normalization
-   content/analysis
-   content/seRNAseq
-   content/peRNAseq
-   content/riboseq
    content/faqs
 
 =======

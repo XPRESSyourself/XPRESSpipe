@@ -7,49 +7,27 @@ Beginner's Guide
 =================================
 First Steps
 =================================
-| If this is your first time doing any programming, congratulations! You are embarking upon a very rewarding path. As with learning any new natural language, there is a learning curve associated with learning a computer language. While XPRESSpipe is aimed at reducing majority of the overhead associated with processing this data, using this software will still require some effort, just as would learning any new language or laboratory technique.
+| If this is your first time doing any programming, congratulations! You are embarking upon a very rewarding path. As with learning any new spoken language, there is a learning curve associated with learning a computer language. While XPRESSpipe is aimed at reducing the majority, if not (hopefully) all of the overhead associated with processing this data, using this software will still require some effort, just as would learning any new language or laboratory technique.
 
-| XPRESSpipe is used through something called the `command line interface <https://en.wikipedia.org/wiki/Command-line_interface>`_ (or CLI), or what some people refer to as `"The Matrix" <https://www.youtube.com/watch?v=kqUR3KtWbTk>`_. This may seem daunting, but luckily, several free online courses are available to quickly catch you up to speed on some of the basics that will be required to use this software. We recommend Codecademy's CLI course, which you can find `here <https://www.codecademy.com/learn/learn-the-command-line>`_ and should take only a couple of hours (Codecademy estimates ~10 hours, but you probably don't need to finish the course to use XPRESSpipe. The purpose of this is to help you become more comfortable with the command line).
+| XPRESSpipe is run through the `command line interface <https://en.wikipedia.org/wiki/Command-line_interface>`_ (or `CLI <https://www.youtube.com/watch?v=kqUR3KtWbTk>`_). This may seem daunting, but luckily, several free online courses are available to quickly catch you up to speed on some of the basics that will be required to use this software. We recommend Codecademy's CLI course, which you can find `here <https://www.codecademy.com/learn/learn-the-command-line>`_ and should take only a couple of hours (Codecademy estimates ~10 hours, but you probably don't need to finish the course to be ready to use XPRESSpipe. The purpose of this is to help you become more comfortable with the command line). We recommend watching the walkthrough videos found on the :doc:`quickstart <./quickstart>` page.
 
-| Once, you're ready to jump into the command line, we can get rolling! For the steps below, we're going to assume we are on an Mac operating system and provide examples under this pretext, but this software is compatible with any Linux-like operating system and the syntax is largely the same (sorry Windows users!).
+| Once you're ready to jump into the command line, we can get rolling! For the steps below, we're going to assume we are on an Mac operating system and provide examples under this pretext, but this software is compatible with any Linux-like operating system and the syntax is largely the same (sorry Windows users! -- but if you have a newer version of Windows, you may be able to use a Linux-flavored environment).
 
 =================================
 Install XPRESSpipe
 =================================
-| - Let's enter the command line.
-| 1. Click on the Finder icon the top right side of the screen on your Mac (or wherever else it might be located)
-| 2. Type "Terminal" into the search bar and click on the app icon
+| - Please refer to the :doc:`installation documentation <./installation>` or the walkthrough video below:
 
-| - Great! Now we are in the command line interface. As a review, anything followed by a "$" in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, **space and characters must be typed exactly and commands are case-sensitive**.
-| - First, let's install `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/install/>`_, a package manager that will help us download all required dependencies.
+.. raw:: html
 
-.. code-block:: shell
-
-  $ pip install setuptools
-
-| - Let's get the latest version of XPRESSpipe by executing the lines of code in the code block below. Replace the URL for the version of XPRESSpipe for whatever version you want (these can be found under the :data:`releases` tab on the XPRESSpipe GitHub repository).
-
-.. code-block:: shell
-
-  $ cd ~
-  $ curl -O https://github.com/XPRESSyourself/XPRESSpipe/archive/XPRESSpipe-v0.1.3b2.tar.gz
-  $ tar xvzf XPRESSpipe-v0.1.3b2.tar.gz
-  $ cd XPRESSpipe-v0.1.3b2
-  $ python setup.py install
-
-| - Let's test that this worked by executing the following:
-
-.. code-block:: shell
-
-  $ xpresspipe -h
-
-| - If a help menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!
-
+    <embed>
+        <script id="asciicast-256347" src="https://asciinema.org/a/256347.js" async></script>
+    </embed>
 
 =================================
 Generate Reference Files
 =================================
-| - Before we can actually use XPRESSpipe to process our raw RNA-seq data, we need to create a reference directory. Directory is just programmer lingo for a folder. In this example, we will be working with human-derived RNA-seq data, so let's perform the following in the command line:
+| - Before we can process our raw RNA-seq data, we need to create a reference directory (or for a folder, in other terms). In this example, we will be working with human-derived RNA-seq data, so let's perform the following in the command line:
 
 .. code-block:: shell
 
@@ -61,44 +39,62 @@ Generate Reference Files
 | 2. The second command created a new folder in the Desktop directory called :data:`reference_folder`
 | 3. The third command created a new folder in the reference directory for intermediate reference files
 
-| - Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are a bit long, I used the "\" character to indicate I am continuing the command in the next line. You do not need this in executing the command, they just help make the code a little more readable.
+| - Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are a bit long, I used the "\" character to indicate I am continuing the command in the next line. You not include these characters when executing the command, they just help make the code more readable. We will first read the retrieval commands into a file which will additionally act as a log file for the version for the genome version we are using.
+| - You should modify the the variable calls between the :data:`#` signs. For :data:`GTF_URL`, you should change the URL currently provided to the one appropriate for your organism of interest. Make sure you are downloading the GTF file and NOT the GFF file. For :data:`FASTA_URL`, you should do the same as before with the URL to the chromosome DNA FASTA files, but you should only copy the URL up to "chromosome", but not include the chromosome identifier. For :data:`CHROMOSOMES`, type out the chromosome identifiers you want to download between the " characters with a space between each.
 
 .. code-block:: shell
 
   $ cd reference_folder/
-  $ curl ftp://ftp.ensembl.org/pub/release-95/gtf/homo_sapiens/Homo_sapiens.GRCh38.95.gtf.gz -o transcripts.gtf.gz
-  $ gzip -d *.gz
-  $ cd fasta_files/
-  $ for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y MT; \
-      do curl -O ftp://ftp.ensembl.org/pub/release-95/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.${i}.fa.gz; \
-      done
-  $ gzip -d *.gz
-  $ cd ../
 
+  ### Change these ###
+  $ echo 'GTF_URL=ftp://ftp.ensembl.org/pub/release-97/gtf/homo_sapiens/Homo_sapiens.GRCh38.97.gtf.gz' >> fetch.sh
+  $ echo 'FASTA_URL=ftp://ftp.ensembl.org/pub/release-97/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome' >> fetch.sh
+  $ echo 'CHROMOSOMES="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y MT"'
+  ####################
+
+  $ echo 'curl -O $GTF_URL' >> fetch.sh
+  $ echo 'gzip -d Homo_sapiens.GRCh38.97.gtf.gz' >> fetch.sh
+  $ echo 'mv Homo_sapiens.GRCh38.97.gtf transcripts.gtf' >> fetch.sh
+  $ echo 'cd fasta_files/' >> fetch.sh
+  $ echo 'for X in $CHROMOSOMES; ' >> fetch.sh
+  $ echo 'do curl -O ftp://ftp.ensembl.org/pub/release-97/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.${X}.fa.gz; done ' >> fetch.sh
+  $ echo 'gzip -d *.gz' >> fetch.sh
+  $ echo 'cd ../' >> fetch.sh
+  $ bash fetch.sh
+
+| - Let's discuss what we just did:
 | 1. We navigated into the reference folder, downloaded a GTF reference file and unzipped it, then navigated to the :data:`fasta_file` directory to download the raw reference data and unzipped it. Finally, we returned to the main reference directory.
-| 2. If this didn't work, we can navigate to `Ensembl <https://www.ensembl.org/>`_ to get the relevant data. We need to get the `GTF file <ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.gtf.gz>`_ and `each chromosome sequence file <ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/>`_. You can follow the links to download these files and then move them into your reference folder. The link to the chromosome sequence files actually contains more files than we need. We just need the files that start with :data:`Homo_sapiens.GRCh38.dna.chromosome`. If these files were zipped with a :data:`.zip` or :data:`.gz` extension, double click each file to unzip them.
+| 2. If this didn't work, we can navigate to `Ensembl <https://www.ensembl.org/>`_ to download the relevant data. We need to get the GTF and DNA chromosomal FASTA files for our organism of interest. The link to the chromosome sequence files actually contains more files than we need. We just need the files that start with :data:`Homo_sapiens.GRCh38.dna.chromosome`. You can download them, move them to the appropriate directories within your reference directory, and unzip the files by double-clicking on them.
 
-| - Now we need to curate these references files into something the sequencing alignment software can use. Since we are using ribosome profiling data, we want a reference that will allow us to `avoid mapping to the 5' and 3' ends of genes <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. We also don't want to align to anything but protein coding genes. Finally, we want to quantify to the longest transcript. This last bit just helps the software avoid confusion when a gene has multiple splice variants to choose from. Since this is short read sequencing, we also want to factor this into the curation of the reference (see the :data:`--sjdbOverhang` argument below).
+| - Now we need to curate these references files into something the sequencing alignment software can use. Since we are using ribosome profiling data, we want a reference that will allow us to `avoid mapping to the 5' and 3' ends of genes <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. We also don't want to align to anything but protein coding genes. Finally, we want to quantify to the longest transcript. This last bit just helps the software avoid confusion when a gene has multiple splice variants to choose from. Since this is short read sequencing (let's say we were doing 50 bp single-end sequencing), we also want to factor this into the curation of the reference (see the :data:`--sjdbOverhang` argument below).
 
 .. code-block:: shell
 
-  $ docker run jordanberg/xpresspipe curateReference --output ./ \
-                                                      --fasta fasta_files/ \
-                                                      --gtf ./transcripts.gtf \
-                                                      --longest_transcript \
-                                                      --protein_coding \
-                                                      --truncate \
-                                                      --sjdbOverhang 49
+  $ xpresspipe curateReference \
+                --output ./ \
+                --fasta fasta_files/ \
+                --gtf ./transcripts.gtf \
+                --protein_coding \
+                --truncate \
+                --sjdbOverhang 49
+
+  ### or ###
+
+  $ xpresspipe build
+
+  ### And then choose the curate option ###
+
 
 | - The truncation option is only necessary when using XPRESSpipe to process ribosome profiling samples and their associated RNA-seq samples.
 | - If interested in quantifying miRNA, etc, leave out the :data:`--protein_coding` argument.
-| - If running sequencing where the read (single-end) or mates not equal to 100 bp, you will want to change the :data:`--sjdbOverhang` argument to be the length of one of the paired-end reads - 1, so if we ran 2x100bp sequencing, we would specify :data:`--sjdbOverhang 99` (although in this case, the default of :data:`--sjdbOverhang 100` is fine).
+| - If running sequencing where the read (single-end) or mates not equal to 100 bp, you will want to change the :data:`--sjdbOverhang` argument to be the length of one of the paired-end reads - 1, so if we ran 2x100bp sequencing, we would specify :data:`--sjdbOverhang 99` (although in this case, the default of :data:`--sjdbOverhang 100` is just fine). If you changed this number, remember this for the next steps as you will need to provide it again if changed here.
 | - This may take awhile, and as we will discuss later, you may want to run these steps on a supercomputer, but this will serve as a preliminary guide for now.
+| - One final consideration -- if we are dealing with an organism with a smaller genome size, we will want to provide the :data:`--genome_size` parameter with the the number of nucleotides in the organism's genome. If you change this parameter in this step, you will need to provide the parameter and value in the :data:`align`, :data:`riboseq`, :data:`seRNAseq`, and :data:`seRNAseq` modules.
 
 =================================
 Process Raw Sequencing Files
 =================================
-| - Now let's get our raw data. Let's follow the following instructions:
+| - Now let's get our raw data::
 | 1. Make a new folder, something called :data:`raw_data` or whatever you like and place your data there.
 | 2. Make sure the files follow proper naming conventions (see naming conventions at :ref:`general_link`)
 | 3. Now let's process the data
@@ -119,17 +115,14 @@ Process Raw Sequencing Files
                       --method RPKM
                       --sjdbOverhang 49
 
+  ### or ###
+
+  $ xpresspipe build
+
+  ### And then choose the appropriate pipeline to build
+
+
 | - If you are running a lot of files, especially for human samples, this may take a lot of time. We recommend running this on some kind of server. A situation like yeast with few samples may be feasible to run on a personal computer, but will likely also take some time.
-
-======================
-Explore the Data
-======================
-| Once the data is finished processing, we can start exploring the output. Explanations each quality control analysis can be found in the :ref:`analysis_link` section of the documentation.
-| In order to get the data from a HPC to your personal computer, you can use a command like the following:
-
-.. code-block:: shell
-
-  $ scp USERNAME@kingspeak.chpc.utah.edu:/full/path/to/files/file_name.sfx ./
 
 ------------------
 Sequencing Metrics
@@ -164,40 +157,86 @@ Count Data and Downstream Analysis
 =======================
 Supercomputing
 =======================
-| Section coming soon...
+--------------------
+Install
+--------------------
+| - Much of the same commands will be performed as above, aside from a couple exceptions:
+| 1. When installing XPRESSpipe, you need to provide a location for personal storage of the software:
 
+.. code-block:: shell
+
+  $ python setup.py install --prefix ~/.local/bin
+
+
+| 2. Add this path to your :data:`$PATH`:
+
+.. code-block:: shell
+
+  $ echo 'export PATH="~/.local/bin:$PATH"' >> ~/.bash_profile
+  $ echo 'export PYTHONPATH="/uufs/chpc.utah.edu/common/home/u0690617/.local/bin/lib/python3.7/site-packages"' >> ~/.bash_profile
+
+| 3. Let's test this to make sure everything is operating properly:
+
+.. code-block:: shell
+
+  $ cd ~/
+  $ xpresspipe test
 
 ---------------
-Getting Started
+Run Data
 ---------------
+| - The commands here are the same as above, but likely the method of execution will be different. A lot of supercomputing clusters manage job submission through a system called `SLURM <https://www.youtube.com/watch?v=RpkAyFI05yY>`_. Likely, the supercomputing cluster you are running your data on will have instructions for how to use this, but briefly, here is an example batch script (should end in the suffix :data:`.sh`):
+
+.. code-block:: shell
+
+  #!/bin/bash
+  #SBATCH --time=72:00:00
+  #SBATCH --nodes=1
+  #SBATCH -o /scratch/general/lustre/$USER/slurmjob-%j
+  #SBATCH --partition=this_cluster_has_no_name
+
+  #set up the temporary directory
+  SCRDIR=/scratch/general/lustre/$USER/$SLURM_JOBID
+  mkdir -p $SCRDIR
+
+  # Provide location of raw data and parent reference directory
+  SRA=/scratch/general/lustre/$USER/files/your_favorite_experiment_goes_here
+  REF=/scratch/general/lustre/$USER/references/fantastic_creature_reference
+
+  # Send raw data to your Scratch directory
+  mkdir $SCRDIR/input
+  cp $SRA/*.fastq $SCRDIR/input/.
+
+  # Make an output directory
+  mkdir $SCRDIR/output
+  cd $SCRDIR/.
+
+  xpresspipe riboseq -i $SCRDIR/input -o $SCRDIR/output/ -r $REF --gtf $REF/transcripts_CT.gtf -e this_is_a_test -a CTGTAGGCACCATCAAT --sjdbOverhang
 
 
----------------
-Load XPRESSpipe
----------------
+| - To queue this script into the job pool, you would do the following:
 
+.. code-block:: shell
 
+  $ sbatch my_batch_script.sh
 
+| - To monitor the progress of your job, execute the following:
 
+.. code-block:: shell
 
----------------
-Load Data
----------------
+  $ watch -n1 squeue -u $USER
+
+| - After the job is finished, you can export the data as shown in the next section.
+
 
 
 ----------------
-Curate Reference
+Explore the Data
 ----------------
+| Once the data is finished processing, we can start exploring the output. Explanations each quality control analysis can be found in the :ref:`analysis_link` section of the documentation.
+| In order to get the data from a HPC to your personal computer, you can use a command like the following:
 
+.. code-block:: shell
 
-
-
----------------
-Process Data
----------------
-
-
-
---------------
-Retrieve Data
---------------
+  $ cd ~/Desktop # Or any other location where you want to store and analyze the data
+  $ scp USERNAME@this_cluster_has_no_name.chpc.university.edu:/full/path/to/files/file_name.suffix ./

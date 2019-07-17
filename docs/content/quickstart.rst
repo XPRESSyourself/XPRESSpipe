@@ -2,12 +2,43 @@
 Quickstart
 #################
 
+------------------
+Running XPRESSpipe
+------------------
+| Along with the video walkthroughs provided below, we recommend users start with the :data:`build` module after installation:
 
+.. code-block:: shell
+
+  $ xpresspipe build
+
+| This will present the user with a series of questions to help design the command that should be executed in the command line
+ to curate a reference or to run the pipeline
+
+
+-----------------------
+Video Walkthroughs
+-----------------------
 | The following is a short tutorial showing you how to install XPRESSpipe:
-[![asciicast](https://asciinema.org/a/256347.svg)](https://asciinema.org/a/256347?speed=4)
+.. raw:: html
+
+    <embed>
+        <script id="asciicast-256347" src="https://asciinema.org/a/256347.js" async></script>
+    </embed>
+
 
 | Reference building
-[![asciicast](https://asciinema.org/a/256340.svg)](https://asciinema.org/a/256340?speed=4)
+.. raw:: html
+
+    <embed>
+        <script id="asciicast-256340" src="https://asciinema.org/a/256340.js" async></script>
+    </embed>
+
 
 | Running XPRESSpipe on sequence data
-[![asciicast](https://asciinema.org/a/256343.svg)](https://asciinema.org/a/256343?speed=4)
+.. raw:: html
+
+    <embed>
+        <script id="asciicast-256343" src="https://asciinema.org/a/256343.js" async></script>
+    </embed>
+
+| If any of these are going too slow for you, check them out in the `README <https://github.com/XPRESSyourself/XPRESSpipe/blob/master/README.md>`_
