@@ -34,7 +34,7 @@ Arguments
    * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
    * - :data:`-r \<path\>, --reference \<path\>`
-     - Path to parent organism reference directory
+     - Path to parent organism reference directory (must have a file called transcripts.gtf within)
    * - :data:`-t \<SE or PE\>, --type \<SE or PE\>`
      - Sequencing type ("SE" for single-end, "PE" for paired-end)
 
@@ -46,10 +46,14 @@ Arguments
      - Description
    * - :data:`--two-pass`
      - Use a two-pass STAR alignment for novel splice junction discovery
+   * - :data:`--no_multimappers>`
+     - Include flag to remove multimapping reads to be output and used in downstream analyses
+   * - :data:`--deduplicate`
+     - Include flag to quantify reads with de-duplication (will search for files with suffix :data:`_dedupRemoved.bam`)
+   * - :data:`--vcf \</path/to/file.vcf\>`
+     - Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments
    * - :data:`--output_bed`
      - Include flag to output BED files for each aligned file
-   * - :data:`--output_bigwig`
-     - Include flag to output bigwig files for each aligned file
    * - :data:`--sjdbOverhang \<sjdbOverhang_amount\>`
      - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
    * - :data:`--mismatchRatio \<mismatchRatio\>`
@@ -57,7 +61,7 @@ Arguments
    * - :data:`--seedSearchStartLmax \<seedSearchStartLmax\>`
      - Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter
    * - :data:`genome_size`
-     - Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment
+     - Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment. Enter the size of your organism's genome in nucleotides
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 

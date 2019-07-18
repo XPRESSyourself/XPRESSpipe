@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Beginner’s Guide &mdash; XPRESSpipe 0.2.0-beta documentation</title>
+  <title>Beginner’s Guide &mdash; XPRESSpipe 0.2.2-beta documentation</title>
   
 
   
@@ -119,12 +119,13 @@
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quality-control.html">Quality Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="formatting.html">Format</a></li>
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -236,7 +237,7 @@ $ mkdir reference_folder/fasta_files
 <span class="c1">### Change these ###</span>
 $ <span class="nb">echo</span> <span class="s1">&#39;GTF_URL=ftp://ftp.ensembl.org/pub/release-97/gtf/homo_sapiens/Homo_sapiens.GRCh38.97.gtf.gz&#39;</span> &gt;&gt; fetch.sh
 $ <span class="nb">echo</span> <span class="s1">&#39;FASTA_URL=ftp://ftp.ensembl.org/pub/release-97/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome&#39;</span> &gt;&gt; fetch.sh
-$ <span class="nb">echo</span> <span class="s1">&#39;CHROMOSOMES=&quot;1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y MT&quot;&#39;</span>
+$ <span class="nb">echo</span> <span class="s1">&#39;CHROMOSOMES=&quot;1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y&quot;&#39;</span>
 <span class="c1">####################</span>
 
 $ <span class="nb">echo</span> <span class="s1">&#39;curl -O $GTF_URL&#39;</span> &gt;&gt; fetch.sh
@@ -422,7 +423,7 @@ xpresspipe riboseq -i <span class="nv">$SCRDIR</span>/input -o <span class="nv">
 <div class="section" id="explore-the-data">
 <h3>Explore the Data<a class="headerlink" href="#explore-the-data" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
-<div class="line">Once the data is finished processing, we can start exploring the output. Explanations each quality control analysis can be found in the <a class="reference internal" href="analysis.html#analysis-link"><span class="std std-ref">Quality Control and Analysis</span></a> section of the documentation.</div>
+<div class="line">Once the data is finished processing, we can start exploring the output. Explanations each quality control analysis can be found in the <a class="reference internal" href="analysis.html#analysis-link"><span class="std std-ref">Analysis</span></a> section of the documentation.</div>
 <div class="line">In order to get the data from a HPC to your personal computer, you can use a command like the following:</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~/Desktop <span class="c1"># Or any other location where you want to store and analyze the data</span>

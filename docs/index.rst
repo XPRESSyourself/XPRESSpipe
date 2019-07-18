@@ -47,8 +47,8 @@ Table of contents
    content/trim
    content/align
    content/count
-   content/formatting
    content/normalization
+   content/other-features
    content/faqs
 
 =======

@@ -27,9 +27,7 @@ Arguments
      - Path to input directory of SAM files
    * - :data:`-o \<path\>, --output \<path\>`
      - Path to output directory
-   * - :data:`-r \<path\>, --reference \<path\>`
-     - Path to parent organism reference directory
-   * - :data:`-g \</path/transcript.gtf\>, --gtf \</path/transcript.gtf\>`
+   * - :data:`-g \</path/transcripts.gtf\>`, :data:`--gtf \</path/transcripts.gtf\>`
      - Path and file name to GTF used for alignment quantification (if a modified GTF was created, this should be provided here; if using Cufflinks and you want isoform abundance estimates, important that you do not provide a longest transcript only GTF)
 
 .. list-table::
@@ -41,7 +39,11 @@ Arguments
    * - :data:`-e <experiment_name>`, :data:`--experiment <experiment_name>`
      - Experiment name
    * - :data:`-c <method>`, :data:`--quantification_method <method>`
-     - Specify quantification method (default: cufflinks; other option: htseq. If using Cufflinks, no downstream sample normalization is required)
+     - Specify quantification method (default: htseq; other option: cufflinks. If using Cufflinks, no downstream sample normalization is required)
+   * - :data:`--feature_type \<feature\>`
+     - Specify feature type (3rd column in GTF file) to be used if quantifying with htseq (default: CDS)
+   * - :data:`--stranded \<fr-unstranded/fr-firststrand` :data:`/fr-secondstrand||no/yes\>`
+     - Specify whether library preparation was stranded (Options before || correspond with Cufflinks inputs, options after correspond with htseq inputs)
    * - :data:`--deduplicate`
      - Include flag to quantify reads with de-duplication (will search for files with suffix :data:`_dedupRemoved.bam`)
    * - :data:`--bam_suffix <suffix>`

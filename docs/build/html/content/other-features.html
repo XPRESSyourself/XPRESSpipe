@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Format &mdash; XPRESSpipe 0.2.0-beta documentation</title>
+  <title>Other Features &mdash; XPRESSpipe 0.2.2-beta documentation</title>
   
 
   
@@ -39,8 +39,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Normalize" href="normalization.html" />
-    <link rel="prev" title="Read Quantification" href="count.html" /> 
+    <link rel="next" title="FAQs" href="faqs.html" />
+    <link rel="prev" title="Normalize" href="normalization.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -100,11 +100,13 @@
 <li class="toctree-l1"><a class="reference internal" href="seRNAseq.html">Single-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="peRNAseq.html">Paired-End RNA-seq Pipeline</a></li>
 <li class="toctree-l1"><a class="reference internal" href="riboseq.html">Ribosome Profiling Pipeline</a></li>
-<li class="toctree-l1"><a class="reference internal" href="analysis.html">Quality Control and Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quality-control.html">Quality Control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis.html">Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="trim.html">Read Pre-Processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="align.html">Alignment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Format</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Other Features</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#convert-counts-table-gene-names">Convert Counts Table Gene Names</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#arguments">Arguments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
@@ -112,7 +114,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
 </ul>
 
@@ -159,13 +160,13 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li>Format</li>
+      <li>Other Features</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/content/formatting.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/content/other-features.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -178,8 +179,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="format">
-<h1>Format<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="other-features">
+<h1>Other Features<a class="headerlink" href="#other-features" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="convert-counts-table-gene-names">
 <h2>Convert Counts Table Gene Names<a class="headerlink" href="#convert-counts-table-gene-names" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
@@ -207,8 +208,8 @@
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;path/filename&gt;,</span> <span class="pre">--input</span> <span class="pre">&lt;path/filename&gt;</span></code></p></td>
 <td><p>Path and file name to sequence dataframe</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;,</span> <span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
-<td><p>Path and file name to reference GTF</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
+<td><p>Path and file name to GTF</p></td>
 </tr>
 </tbody>
 </table>
@@ -261,10 +262,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="normalization.html" class="btn btn-neutral float-right" title="Normalize" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="faqs.html" class="btn btn-neutral float-right" title="FAQs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="count.html" class="btn btn-neutral float-left" title="Read Quantification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="normalization.html" class="btn btn-neutral float-left" title="Normalize" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
