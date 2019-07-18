@@ -86,7 +86,7 @@ def make_coverage(
         'metrics')
 
     # Get samples user specified
-    if args_dict['samples'] != None:
+    if 'samples' not in args_dict and args_dict['samples'] != None:
         sample_list = []
         for x in args_dict['samples']:
             for y in files:
@@ -94,6 +94,12 @@ def make_coverage(
                     sample_list.append(y)
                     break
         files = sample_list
+
+    if 'sample_names' not in args_dict:
+        args_dict['sample_names'] = None
+
+    if 'plot_color' not in args_dict:
+        args_dict['color'] = 'red'
 
     # Perform gene coverage analysis
     parallelize(
