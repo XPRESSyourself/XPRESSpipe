@@ -62,7 +62,7 @@ r_deps = [
     ]
 
 # Set default values for arguments
-DEFAULT_READ_MIN  =  18
+DEFAULT_READ_MIN  =  17
 DEFAULT_READ_QUALITY  =  28
 DEFAULT_MAX_PROCESSORS  =  None
 DEFAULT_TRUNCATE_5PRIME = 45
@@ -408,7 +408,7 @@ def get_arguments(
     se_reqs.add_argument(
         '-g', '--gtf',
         help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
-        metavar = '</path/transcript.gtf>',
+        metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
     se_reqs.add_argument(
@@ -587,7 +587,7 @@ def get_arguments(
     pe_reqs.add_argument(
         '-g', '--gtf',
         help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
-        metavar = '</path/transcript.gtf>',
+        metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
     pe_reqs.add_argument(
@@ -764,7 +764,7 @@ def get_arguments(
     rp_reqs.add_argument(
         '-g', '--gtf',
         help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
-        metavar = '</path/transcript.gtf>',
+        metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
     rp_reqs.add_argument(
@@ -1006,7 +1006,7 @@ def get_arguments(
         required = True)
     align_reqs.add_argument(
         '-r', '--reference',
-        help = 'Path to parent organism reference directory',
+        help = 'Path to parent organism reference directory (must have a file called transcripts.gtf within)',
         metavar = '<path>',
         type = str,
         required = True)
@@ -1025,6 +1025,11 @@ def get_arguments(
     align_opts.add_argument(
         '--two-pass',
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
+        action = 'store_true',
+        required = False)
+    align_opts.add_argument(
+        '--deduplicate',
+        help = 'Include flag to quantify reads with de-duplication',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
@@ -1110,7 +1115,7 @@ def get_arguments(
     count_reqs.add_argument(
         '-g', '--gtf',
         help = 'Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)',
-        metavar = '</path/transcript.gtf>',
+        metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
     # Optional arguments
