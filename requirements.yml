@@ -10,7 +10,8 @@ dependencies:
   - pandas
   - numpy
   - scipy
-  - r
+  - r-base
+  - r-devtools
   - libiconv
   - ncurses
   - fastp
