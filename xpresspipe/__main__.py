@@ -177,11 +177,18 @@ def main(
             'DIFFERENTIAL EXPRESSION')
 
     elif args.cmd == 'metagene':
-        print('Performing metagene analysis on SAM files...')
+        print('Performing metagene analysis on transcriptome-mapped files...')
+
+        # Get list of bam files from user input
+        files = get_files(
+            args_dict['input'],
+            [str(args_dict['bam_suffix'])])
+        if len(files) == 0:
+            raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
         # Perform metagene analysis
         index_gtf(args_dict)
-        make_metagene(args_dict)
+        make_metagene(args_dict, files)
 
         os.system(
             'rm'
@@ -195,7 +202,7 @@ def main(
             'METAGENE')
 
     elif args.cmd == 'geneCoverage':
-        print('Performing gene coverage analysis on SAM files...')
+        print('Performing gene coverage analysis on transcriptome-mapped files...')
 
         # Perform metagene analysis
         index_gtf(args_dict, gene_name=args_dict['gene_name'])
@@ -229,15 +236,11 @@ def main(
             'READ DISTRIBUTION')
 
     elif args.cmd == 'periodicity':
-        print('Performing periodicity analysis on most abundant read length in SAM files...')
+        print('Performing periodicity analysis on transcriptome-mapped files...')
 
         # Generate periodicity summaries
         #index_gtf(args_dict)
         make_periodicity(args_dict)
-
-        #os.system(
-        #    'rm'
-        #    + ' ' + args_dict['output'] + '*.idx')
 
         # Check log file for errors and exceptions
         get_dependencies(args_dict)
@@ -472,11 +475,19 @@ def main(
         args_dict['bam_suffix'] = 'toTranscriptome.out.bam'
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
+
+        # Get list of bam files from user input
+        files = get_files(
+            args_dict['input'],
+            [str(args_dict['bam_suffix'])])
+        if len(files) == 0:
+            raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
+
         index_gtf(args_dict, gene_name=args_dict['gene_name'])
-        make_coverage(args_dict)
+        make_coverage(args_dict, files)
 
         index_gtf(args_dict)
-        make_metagene(args_dict)
+        make_metagene(args_dict, files)
         os.system(
             'rm'
             + ' ' + args_dict['output'] + '*.idx')
@@ -556,11 +567,19 @@ def main(
         args_dict['bam_suffix'] = 'toTranscriptome.out.bam'
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
+
+        # Get list of bam files from user input
+        files = get_files(
+            args_dict['input'],
+            [str(args_dict['bam_suffix'])])
+        if len(files) == 0:
+            raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
+
         index_gtf(args_dict, gene_name=args_dict['gene_name'])
-        make_coverage(args_dict)
+        make_coverage(args_dict, files)
 
         index_gtf(args_dict)
-        make_metagene(args_dict)
+        make_metagene(args_dict, files)
 
         os.system(
             'rm'
@@ -644,11 +663,19 @@ def main(
         args_dict['bam_suffix'] = 'toTranscriptome.out.bam'
         args_dict['gene_name'] = 'GAPDH'
         args_dict['samples'] = None
+
+        # Get list of bam files from user input
+        files = get_files(
+            args_dict['input'],
+            [str(args_dict['bam_suffix'])])
+        if len(files) == 0:
+            raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
+
         index_gtf(args_dict, gene_name=args_dict['gene_name'])
-        make_coverage(args_dict)
+        make_coverage(args_dict, files)
 
         index_gtf(args_dict)
-        make_metagene(args_dict)
+        make_metagene(args_dict, files)
         make_periodicity(args_dict)
 
         os.system(

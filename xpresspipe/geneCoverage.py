@@ -70,7 +70,8 @@ Func: Get coverage profile for a specific gene
 @return: None, pipes to plotting of output metrics
 """
 def make_coverage(
-    args_dict):
+    args_dict,
+    files):
 
     # Add output directories
     print('\nGenerating gene coverage profiles...')
@@ -83,13 +84,6 @@ def make_coverage(
         args_dict,
         'coverage',
         'metrics')
-
-    # Get list of bam files from user input
-    files = get_files(
-        args_dict['input'],
-        [str(args_dict['bam_suffix'])])
-    if len(files) == 0:
-        raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
     # Get samples user specified
     if args_dict['samples'] != None:
