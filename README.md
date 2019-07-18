@@ -15,7 +15,7 @@ Please refer to the [documentation](https://xpresspipe.readthedocs.io/en/latest/
 ### Citation:    
 ```
 Berg JA, et. al. (2019). XPRESSyourself: Enhancing and Automating the Ribosome
-Profiling and RNA-Seq Analysis Toolkit. https://github.com/XPRESSyourself.
+Profiling and RNA-Seq Analysis Toolkit. bioRxiv 704320; doi: https://doi.org/10.1101/704320
 ```
 
 ### Installation:   

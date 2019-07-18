@@ -86,6 +86,15 @@ def finish_metagene(args):
     # Set a nice number with no remainder
     bam['meta_distance'] = bam['meta_distance'].apply(roundup)
 
+    # Get rid of outlier-expressors
+    bam_outliers = bam.groupby('seqnames').count() # Will count the number of members in each group, will be the new meta_distance column of this dataframe
+    del bam_outliers.index.name # This is seqnames
+
+    bam_outliers = bam_outliers[(bam_outliers['meta_distance'] > bam_outliers['meta_distance'].quantile(0.005)) & (bam_outliers['meta_distance'] < bam_outliers['meta_distance'].quantile(0.995))]
+
+    # Take list of transcripts that made the cut and only grab those out of the starting BAM dataframe
+    bam = bam[bam['seqnames'].isin(bam_outliers.index.tolist())]
+
     # Compile meta position statistics
     profile = pd.DataFrame()
     profile['metacount'] = [0 for x in range(1,101)]
@@ -93,7 +102,14 @@ def finish_metagene(args):
 
     for x in range(1,101):
         # Automatically filters out reads mapped outside of CDS as they will be < 0 or > 1
-        profile.loc[x] = bam[bam['meta_distance'] == x].groupby('seqnames').mean().shape[0]
+        # Go through each position in the meta-transcript
+        # Get number of members for each transcript at that position
+        # Take the mean of those values -- reduces noise of one transcript with 100x more reads than the next highest
+        # Outlier expressors were previously parsed out
+        profile.loc[x] = bam[bam['meta_distance'] == x].groupby('seqnames').count().mean()[0]
+
+    # Set mean to sum of meta-positions = 100
+    profile['metacount'] = profile['metacount'] / profile['metacount'].mean()
 
     # Export metrics
     profile['representative transcript'] = profile.index

@@ -25,8 +25,6 @@ license <- function() {
 # Measure library complexity of RNA-seq sample
 
 # Install dependencies
-if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
-
 if ("devtools" %in% rownames(installed.packages()) == FALSE) {
   print("Installing devtools...")
   install.packages("devtools", repos = "http://cran.us.r-project.org")
@@ -40,7 +38,7 @@ if ("riboWaltz" %in% rownames(as.data.frame(installed.packages()[,c(1,3:4)]))) {
   print("riboWaltz package already installed")
 } else {
   print("Installing riboWaltz...")
-  install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = TRUE)
+  devtools::install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = TRUE)
 }
 
 library(riboWaltz)
