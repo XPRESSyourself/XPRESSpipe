@@ -299,16 +299,16 @@ def check_inputs(
                 break
             else:
                 os.system(
-                    'echo \"WARNING: You appear to be using an outdated version of XPRESSpipe.\nThe current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\"'
+                    'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
                     + str(args_dict['log']))
-                print('\nWARNING: You appear to be using an outdated version of XPRESSpipe.\nThe current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) )
+                print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
                 found = True
                 break
     if found == False:
         os.system(
-            'echo \"WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\"'
+            'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
             + str(args_dict['log']))
-        print('\nWARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.')
+        print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
     # Print out user commands to log file
     os.system(
