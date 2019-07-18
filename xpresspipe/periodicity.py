@@ -57,7 +57,6 @@ def make_periodicity(
         args_dict['input'],
         ['.bam'])
 
-
     # Get files read distributions
     for f in files:
         # Give non riboseq samples a bad suffix so they can't be searched by riboWaltz

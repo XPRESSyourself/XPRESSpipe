@@ -16,6 +16,8 @@ About
 | - Perform intron-agnostic read coverage analyses of genes
 | - Output aligned reads in a variety of formats for downstream applications
 |
+| For all pipelines, all relevant quality control analyses are performed for that sequencing type, as well well as gene coverage analysis of a housekeeping gene.
+|
 | Other analyses can be performed by `XPRESSplot <https://github.com/XPRESSyourself/XPRESSplot>`_. Please read the relevant documentation for more information.
 |
 | `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ and the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite is developed and maintained by Jordan Berg in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators. We welcome pull requests if you would like to contribute to the project.

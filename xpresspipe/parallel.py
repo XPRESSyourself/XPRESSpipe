@@ -54,7 +54,7 @@ def threshold_ram(
     else:
         factor = 1
 
-    threshold_workers = int(math.floor(total / (_max * factor))) # Set threshold based on max file size in set
+    threshold_workers = int(math.floor((total * 1.5) / (_max * factor))) # Set threshold based on max file size in set
     if threshold_workers < 1:
         threshold_workers = 1
 

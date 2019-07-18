@@ -93,7 +93,7 @@ def finish_metagene(args):
 
     for x in range(1,101):
         # Automatically filters out reads mapped outside of CDS as they will be < 0 or > 1
-        profile.loc[x] = bam[bam['meta_distance'] == x].shape[0]
+        profile.loc[x] = bam[bam['meta_distance'] == x].groupby('seqnames').mean().shape[0]
 
     # Export metrics
     profile['representative transcript'] = profile.index
@@ -133,7 +133,8 @@ def run_metagene(args):
 
 """Manager for running metagene summary plotting"""
 def make_metagene(
-        args_dict):
+        args_dict,
+        files):
 
     print('\nGenerating metagene profiles...')
     # Add output directory to output for metagene profiles
@@ -145,13 +146,6 @@ def make_metagene(
         args_dict,
         'metagene',
         'metrics')
-
-    # Get list of bam files from user input
-    files = get_files(
-        args_dict['input'],
-        [str(args_dict['bam_suffix'])])
-    if len(files) == 0:
-        raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
     # Perform metagene analysis
     parallelize(
