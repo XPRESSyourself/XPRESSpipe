@@ -87,10 +87,12 @@ def finish_metagene(args):
     bam['meta_distance'] = bam['meta_distance'].apply(roundup)
 
     # Get rid of outlier-expressors
-    bam_outliers = bam.groupby('seqnames').count() # Will count the number of members in each group, will be the new meta_distance column of this dataframe
-    del bam_outliers.index.name # This is seqnames
+    # Will count the number of members in each group, will be the new meta_distance column of this dataframe
+    bam_outliers = bam.groupby('seqnames').count().sort_values('meta_distance')
+    del bam_outliers.index.name # This is seqnames label
 
-    bam_outliers = bam_outliers[(bam_outliers['meta_distance'] > bam_outliers['meta_distance'].quantile(0.005)) & (bam_outliers['meta_distance'] < bam_outliers['meta_distance'].quantile(0.995))]
+    removal_amount = int(ceil(bam_outliers.shape[0] * 0.005))
+    bam_outliers = bam_outliers.iloc[removal_amount:-removal_amount]
 
     # Take list of transcripts that made the cut and only grab those out of the starting BAM dataframe
     bam = bam[bam['seqnames'].isin(bam_outliers.index.tolist())]
