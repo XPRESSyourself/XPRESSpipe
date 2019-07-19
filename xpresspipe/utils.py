@@ -23,6 +23,8 @@ from __future__ import print_function
 """IMPORT DEPENDENCIES"""
 import os
 import sys
+import csv
+import pandas as pd
 
 """Check directory formatting"""
 def check_directories(
@@ -268,3 +270,29 @@ def get_fasta(
             fasta_list = ''.join(fasta)
 
         return fasta_list
+
+# Will remove trimmed fastq files and any BAM file not output by STAR
+def cleanup(
+    args_dict):
+
+    os.system(
+        "find"
+        + " " + str(args_dict['alignments_coordinates'])
+        + " -type f"
+        + " \\( -name \\*_dedupMarked.bam"
+        + " -o -name \\*_dedupMarked.bam.bai"
+        + " -o -name \\*_dedupRemoved.bam"
+        + " -o -name \\*_dedupRemoved.bam.bai"
+        + " -o -name \\*_UMIremoved.bam"
+        + " -o -name \\*_UMIremoved.bam.bai"
+        + " -o -name \\*_UMImarked.bam"
+        + " -o -name \\*_UMImarked.bam.bai"
+        + " \\) -maxdepth 1 -delete"
+        + str(args_dict['log']))
+
+    os.system(
+        "find"
+        + " " + str(args_dict['trimmed_fastq'])
+        + " -name '*.fastq'"
+        + " -maxdepth 1 -type f -delete" # Only delete files matching pattern
+        + str(args_dict['log']))

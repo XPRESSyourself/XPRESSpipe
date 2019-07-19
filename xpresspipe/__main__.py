@@ -47,7 +47,7 @@ from .periodicity import make_periodicity
 from .complexity import make_complexity
 from .parallel import get_cores
 from .gtfModify import edit_gtf
-from .utils import get_files, get_directories, unzip_files
+from .utils import get_files, get_directories, unzip_files, cleanup
 from .test import test_install
 from .buildCommand import build_command
 
@@ -483,17 +483,23 @@ def main(
         if len(files) == 0:
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
-        index_gtf(args_dict, gene_name=args_dict['gene_name'])
-        make_coverage(args_dict, files)
+        try:
+            index_gtf(args_dict, gene_name=args_dict['gene_name'])
+            make_coverage(args_dict, files)
+            os.system(
+                'rm'
+                + ' ' + args_dict['output'] + '*.fts')
+        except:
+            print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
         index_gtf(args_dict)
         make_metagene(args_dict, files)
         os.system(
             'rm'
             + ' ' + args_dict['output'] + '*.idx')
-        os.system(
-            'rm'
-            + ' ' + args_dict['output'] + '*.fts')
+
+        if 'small_output' in args_dict and args_dict['small_output'] == True:
+            cleanup(args_dict)
 
         check_process(
             args_dict['log_file'],
@@ -575,8 +581,14 @@ def main(
         if len(files) == 0:
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
-        index_gtf(args_dict, gene_name=args_dict['gene_name'])
-        make_coverage(args_dict, files)
+        try:
+            index_gtf(args_dict, gene_name=args_dict['gene_name'])
+            make_coverage(args_dict, files)
+            os.system(
+                'rm'
+                + ' ' + args_dict['output'] + '*.fts')
+        except:
+            print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
         index_gtf(args_dict)
         make_metagene(args_dict, files)
@@ -584,9 +596,9 @@ def main(
         os.system(
             'rm'
             + ' ' + args_dict['output'] + '*.idx')
-        os.system(
-            'rm'
-            + ' ' + args_dict['output'] + '*.fts')
+
+        if 'small_output' in args_dict and args_dict['small_output'] == True:
+            cleanup(args_dict)
 
         check_process(
             args_dict['log_file'],
@@ -671,8 +683,14 @@ def main(
         if len(files) == 0:
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
-        index_gtf(args_dict, gene_name=args_dict['gene_name'])
-        make_coverage(args_dict, files)
+        try:
+            index_gtf(args_dict, gene_name=args_dict['gene_name'])
+            make_coverage(args_dict, files)
+            os.system(
+                'rm'
+                + ' ' + args_dict['output'] + '*.fts')
+        except:
+            print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
         index_gtf(args_dict)
         make_metagene(args_dict, files)
@@ -681,9 +699,9 @@ def main(
         os.system(
             'rm'
             + ' ' + args_dict['output'] + '*.idx')
-        os.system(
-            'rm'
-            + ' ' + args_dict['output'] + '*.fts')
+
+        if 'small_output' in args_dict and args_dict['small_output'] == True:
+            cleanup(args_dict)
 
         check_process(
             args_dict['log_file'],
