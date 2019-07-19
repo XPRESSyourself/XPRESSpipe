@@ -71,13 +71,13 @@ install:
 script:
   # Run tests
   - coverage run tests/test_arguments.py
-  #- coverage run -a tests/test_utils.py
-  #- coverage run -a tests/test_bam.py
-  #- coverage run -a tests/test_flattenGTF.py
-  #- coverage run -a tests/test_modifyGTF.py
-  #- coverage run -a tests/test_truncateGTF.py
-  #- coverage run -a tests/test_analysis.py
-  #- coverage run -a tests/test_help.py
+  - coverage run -a tests/test_utils.py
+  - coverage run -a tests/test_bam.py
+  - coverage run -a tests/test_modifyGTF.py
+  - coverage run -a tests/test_truncateGTF.py
+  - coverage run -a tests/test_analysis.py
+  - coverage run -a tests/test_help.py
+  - coverage report
 
 after_success:
-  - codecov
+  - bash <(curl -s https://codecov.io/bash) -cF python
