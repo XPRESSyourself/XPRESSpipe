@@ -25,6 +25,7 @@ from .__main__ import *
 from .align import *
 from .arguments import *
 from .buildCommand import *
+from .buildIndex import *
 from .compile import *
 from .complexity import *
 from .convert import *
