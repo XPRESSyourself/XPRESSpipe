@@ -63,7 +63,6 @@ install:
   - source activate xpresspipe
   - conda info --envs
   - conda list
-  - pip install codecov
   - pip install .
   - python setup.py install
 
