@@ -424,6 +424,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     se_opts.add_argument(
+        '--small_output',
+        help = 'Providing this parameter will remove all intermediate files except logs, base alignment files, quantifications, and quality control metrics',
+        action = 'store_true',
+        required = False)
+    se_opts.add_argument(
         '--two-pass',
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
         action = 'store_true',
@@ -603,6 +608,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     pe_opts.add_argument(
+        '--small_output',
+        help = 'Providing this parameter will remove all intermediate files except logs, base alignment files, quantifications, and quality control metrics',
+        action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
         '--two-pass',
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
         action = 'store_true',
@@ -779,6 +789,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    rp_opts.add_argument(
+        '--small_output',
+        help = 'Providing this parameter will remove all intermediate files except logs, base alignment files, quantifications, and quality control metrics',
+        action = 'store_true',
+        required = False)
     rp_opts.add_argument(
         '--two-pass',
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
