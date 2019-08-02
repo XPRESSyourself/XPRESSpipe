@@ -1,0 +1,3 @@
+exec > "/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/alignments_coordinates/SRR2075925_ribo_DMSO_rep1_small__STARtmp/tmp.fifo.read1"
+echo FILE 0
+cat      "/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/trimmed_fastq/trimmed_SRR2075925_ribo_DMSO_rep1_small.fastq"

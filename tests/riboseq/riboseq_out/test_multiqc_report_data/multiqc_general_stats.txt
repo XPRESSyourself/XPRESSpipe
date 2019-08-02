@@ -1,0 +1,5 @@
+Sample	fastp_mqc-generalstats-fastp-pct_duplication	fastp_mqc-generalstats-fastp-after_filtering_q30_rate	fastp_mqc-generalstats-fastp-after_filtering_q30_bases	fastp_mqc-generalstats-fastp-after_filtering_gc_content	fastp_mqc-generalstats-fastp-pct_surviving	fastp_mqc-generalstats-fastp-pct_adapter	FastQC_mqc-generalstats-fastqc-percent_duplicates	FastQC_mqc-generalstats-fastqc-percent_gc	FastQC_mqc-generalstats-fastqc-avg_sequence_length	FastQC_mqc-generalstats-fastqc-percent_fails	FastQC_mqc-generalstats-fastqc-total_sequences
+SRR2075925_ribo_DMSO_rep1_small	14.596	0.988383	582823.0	0.540608	87.62	99.064					
+SRR2075930_rna_DMSO_rep1_small	8.375580000000001	0.97186	1145406.0	0.493265	96.232	0.192					
+trimmed_SRR2075925_ribo_DMSO_rep1_small							66.24058434147454	54.0	26.91956174389409	36.36363636363637	21905.0
+trimmed_SRR2075930_rna_DMSO_rep1_small							13.334441765732805	49.0	48.98873555574029	9.090909090909092	24058.0

@@ -7,7 +7,7 @@ __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
 # Read in BAM file to pandas dataframe
 from xpresspipe.processBAM import read_bam
-bam_file = str(__path__) + 'other/sample.bam'
+bam_file = str(__path__) + 'data/sample.bam'
 bam_truth = [
 ['SRR1795425.22288830', 0, '1', 924081, 255, '32M', '*', 0, 0, 'CGGCGAGCCGGTCGTGGGACTGCCCCGGGCGC', 'CCFFFFFHHGHFHIGIJJGJJJJJJJJJHEDD', 'NH:i:1', 'HI:i:1', 'NM:i:1', 'MD:Z:11G20', 'AS:i:29'],
 ['SRR1795425.47844894', 16, '1', 952473, 255, '33M', '*', 0, 0, 'GCGTGCTGGTAGGCCACACCCGGCTCCAGGGCC', 'FAIGGEGGIHGIHFDC?CGEEHHHFHFDFFFC@', 'NH:i:1', 'HI:i:1', 'NM:i:0', 'MD:Z:33', 'AS:i:32'],
