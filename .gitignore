@@ -23,3 +23,5 @@ cufflink*/
 /tests/metagene_tests
 /tests/*log
 *log
+*vcf
+tests/paired_end/pe_reference/genome
