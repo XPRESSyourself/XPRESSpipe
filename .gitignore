@@ -25,3 +25,5 @@ cufflink*/
 *log
 *vcf
 tests/paired_end/pe_reference/genome
+tests/paired_end/se_reference/genome
+tests/paired_end/rp_reference/genome
