@@ -483,13 +483,14 @@ def main(
         if len(files) == 0:
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
-        try:
-            index_gtf(args_dict, gene_name=args_dict['gene_name'])
+        success = index_gtf(args_dict, gene_name=args_dict['gene_name'])
+
+        if success != -1:
             make_coverage(args_dict, files)
             os.system(
                 'rm'
                 + ' ' + args_dict['output'] + '*.fts')
-        except:
+        else:
             print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
         index_gtf(args_dict)
@@ -581,13 +582,14 @@ def main(
         if len(files) == 0:
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
-        try:
-            index_gtf(args_dict, gene_name=args_dict['gene_name'])
+        success = index_gtf(args_dict, gene_name=args_dict['gene_name'])
+
+        if success != -1:
             make_coverage(args_dict, files)
             os.system(
                 'rm'
                 + ' ' + args_dict['output'] + '*.fts')
-        except:
+        else:
             print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
         index_gtf(args_dict)
@@ -683,13 +685,14 @@ def main(
         if len(files) == 0:
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
-        try:
-            index_gtf(args_dict, gene_name=args_dict['gene_name'])
+        success = index_gtf(args_dict, gene_name=args_dict['gene_name'])
+
+        if success != -1:
             make_coverage(args_dict, files)
             os.system(
                 'rm'
                 + ' ' + args_dict['output'] + '*.fts')
-        except:
+        else:
             print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
         index_gtf(args_dict)
