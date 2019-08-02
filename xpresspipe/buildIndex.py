@@ -113,8 +113,7 @@ def index_gtf(
                 gtf = gtf.loc[gtf[gtf_annotation_column].str.contains('\"' + str(x) + '\"')]
                 if len(gtf[gtf_type_column].tolist()) > 0:
                     break
-                else:
-                    continue
+
         else:
             gtf = gtf.loc[gtf[gtf_annotation_column].str.contains('\"' + str(gene_name) + '\"')]
         gtf = gtf.reset_index(drop=True)
@@ -122,8 +121,6 @@ def index_gtf(
         # Do a fail-safe check to make sure doesn't get tripped up later
         if len(gtf[gtf_type_column].tolist()) < 1:
             return -1
-        else:
-            continue
 
         # Get canonical, longest only GTF for the given gene
         gtf = edit_gtf(
