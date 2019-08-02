@@ -25,7 +25,7 @@ import os
 import sys
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .utils import get_files, add_directory, get_fasta, check_directories
+from .utils import get_files, add_directory, get_fasta, check_directories #, clean_vcf
 from .parallel import parallelize, parallelize_pe
 
 """Create STAR reference genome"""
@@ -122,6 +122,8 @@ def second_pass_star(
     args_dict):
 
     if 'vcf' in args_dict and args_dict['vcf'] != None:
+        #clean_vcf(args_dict)
+        #args_dict['vcf'] = str(args_dict['reference']) + 'xpressyourself.vcf'
         attr_cols = ' --outSAMattributes NH HI NM MD AS XS vG vA'
         vcf_line = ' --varVCFfile ' + str(args_dict['vcf'])
     else:
@@ -166,6 +168,8 @@ def guided_star(
     args_dict):
 
     if 'vcf' in args_dict and args_dict['vcf'] != None:
+        #clean_vcf(args_dict)
+        #args_dict['vcf'] = str(args_dict['reference']) + 'xpressyourself.vcf'
         attr_cols = ' --outSAMattributes NH HI NM MD AS XS vG vA'
         vcf_line = ' --varVCFfile ' + str(args_dict['vcf'])
     else:
@@ -434,6 +438,11 @@ def align(
     # Clean up the output
     remove_intermediates(
         args_dict)
+
+    #if 'vcf' in args_dict and args_dict['vcf'] != None:
+    #    os.system(
+    #        'rm'
+    #        + ' ' + str(args_dict['reference']) + 'xpressyourself.vcf')
 
     args_dict['threads'] = thread_count
 

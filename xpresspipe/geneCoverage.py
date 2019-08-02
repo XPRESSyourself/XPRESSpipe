@@ -128,6 +128,11 @@ def make_coverage(
         y += plots_per_page
 
     z = 1
+
+    # Default this parameter to red if nothing available
+    if 'plot_color' not in args_dict:
+        args_dict['plot_color'] = 'red'
+
     for file_list in file_lists:
 
         # Plot metrics for each file

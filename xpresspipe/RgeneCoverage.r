@@ -100,10 +100,10 @@ fetch_index <- function(
 
   }
 
-# func: Get appropriate range of BAM file based on index and count coverage
+# func: Get appropriate range of BAM file based on index and count genecoverage
 # @param bam: GenomicAlignments data.frame
 # @param index: XPRESSpipe-formatted index data.frame object
-# @return: Coverage data.frame
+# @return: geneCoverage data.frame
 process_coverage <- function(
   bam, index) {
 
@@ -147,7 +147,7 @@ run_list <- function (
 
       } else {
 
-        coverage <- process_coverage(target_bam, index)
+        genecoverage <- process_coverage(target_bam, index)
 
       }
       rm(file)
@@ -157,11 +157,11 @@ run_list <- function (
       # Write BAM coverage metrics to output file
       file_name = vapply(strsplit(f, "[.]"), `[`, 1, FUN.VALUE=character(1))
       output_file = paste(output_path, file_name, '_metrics.txt', sep='')
-      write.table(coverage, file=output_file, sep='\t', col.names=NA)
+      write.table(genecoverage, file=output_file, sep='\t', col.names=NA)
 
       # Clean the batch
       rm(target_bam)
-      rm(coverage)
+      rm(genecoverage)
       rm(file_name)
       rm(output_file)
       gc()

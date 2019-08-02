@@ -106,8 +106,21 @@ def index_gtf(
             comment='#',
             low_memory=False)
 
-        gtf = gtf.loc[gtf[gtf_annotation_column].str.contains('\"' + str(gene_name) + '\"')]
+        # Do a forgiving search for GAPDH
+        if gene_name == 'GAPDH':
+            gene_aliases = ['GAPDH', 'gapdH', 'Gapdh', 'gapdh', 'TDH1']
+            for x in gene_aliases:
+                gtf = gtf.loc[gtf[gtf_annotation_column].str.contains('\"' + str(x) + '\"')]
+                if len(gtf[gtf_type_column].tolist()) > 0:
+                    break
+
+        else:
+            gtf = gtf.loc[gtf[gtf_annotation_column].str.contains('\"' + str(gene_name) + '\"')]
         gtf = gtf.reset_index(drop=True)
+
+        # Do a fail-safe check to make sure doesn't get tripped up later
+        if len(gtf[gtf_type_column].tolist()) < 1:
+            return -1
 
         # Get canonical, longest only GTF for the given gene
         gtf = edit_gtf(
@@ -143,9 +156,13 @@ def index_gtf(
             'rm'
             + ' ' + str(args_dict['output']) + str(gene_gtf))
 
+        return 0
+
     else:
         # Make index of all transcripts
         make_index(
             args_dict,
             args_dict['gtf'],
             str(args_dict['output']) + 'transcripts.idx')
+
+        return 0
