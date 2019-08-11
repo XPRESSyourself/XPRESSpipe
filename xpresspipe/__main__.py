@@ -205,8 +205,22 @@ def main(
         print('Performing gene coverage analysis on transcriptome-mapped files...')
 
         # Perform metagene analysis
-        index_gtf(args_dict, gene_name=args_dict['gene_name'])
-        make_coverage(args_dict)
+        # Get list of bam files from user input
+        files = get_files(
+            args_dict['input'],
+            [str(args_dict['bam_suffix'])])
+        if len(files) == 0:
+            raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
+
+        success = index_gtf(args_dict, gene_name=args_dict['gene_name'])
+
+        if success != -1:
+            make_coverage(args_dict, files)
+            os.system(
+                'rm'
+                + ' ' + args_dict['output'] + '*.fts')
+        else:
+            print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
         os.system(
             'rm'
