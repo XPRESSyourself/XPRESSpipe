@@ -11,7 +11,7 @@ __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 
 # Input file will test chunking to make sure GTF structure is conserved
 gtf = pd.read_csv(
-    str(__path__) + 'other/gtf_test.gtf',
+    str(__path__) + 'references/other/gtf_test.gtf',
     sep = '\t',
     header = None,
     comment = '#',
@@ -44,7 +44,7 @@ assert chunks[0].shape == (28,9) and chunks[1].shape == (36,9), 'get_chunks() fa
 ### Functional tests
 from xpresspipe.gtfModify import longest_transcripts, protein_gtf, edit_gtf
 gtf = pd.read_csv(
-    str(__path__) + 'other/gtf_test_large.gtf',
+    str(__path__) + 'references/other/gtf_test_large.gtf',
     sep = '\t',
     header = None,
     comment = '#',

@@ -35,12 +35,12 @@ except:
 
 
 # Get FASTA files
-fasta_path = str(__path__) + 'fasta_test/'
+fasta_path = str(__path__) + 'references/fasta_test/'
 fasta_files = get_fasta(fasta_path)
 fasta_truth = str(fasta_path) + 'genome_fasta/fast1.fasta ' + str(fasta_path) + 'genome_fasta/fast2.fasta ' + str(fasta_path) + 'genome_fasta/fast3.fasta'
 assert fasta_files == fasta_truth, 'get_fasta() failed to recurse through children directories to find fasta files'
 
-fasta_path2 = str(__path__) + 'fasta_test2/'
+fasta_path2 = str(__path__) + 'references/fasta_test2/'
 fasta_files2 = get_fasta(fasta_path2)
 fasta_truth2 = str(fasta_path2) + 'fast1.fasta ' + str(fasta_path2) + 'fast2.fasta ' + str(fasta_path2) + 'fast3.fasta'
 assert fasta_files2 == fasta_truth2, 'get_fasta() failed to recurse through children directories to find fasta files'
