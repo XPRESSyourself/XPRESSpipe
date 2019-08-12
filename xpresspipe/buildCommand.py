@@ -306,13 +306,13 @@ def build_pipeline():
         twopass = ''
 
     quality_value = input('Would you like to choose a minimum quality score other than 28? If no, press RETURN: ')
-    if quality_value == '':
+    if quality_value == '' or quality_value.lower() == 'no':
         quality = ''
     else:
         quality = ' -q ' + str(quality_value)
 
     length_value = input('Would you like to choose a minimum read length other than 18? If no, press RETURN: ')
-    if length_value == '':
+    if length_value == '' or length_value.lower() == 'no':
         length = ''
     else:
         length = ' -l ' + str(length_value)
