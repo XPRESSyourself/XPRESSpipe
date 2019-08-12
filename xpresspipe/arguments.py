@@ -188,7 +188,7 @@ def check_inputs(
                 if any(char.isdigit() for char in x):
                     raise Exception('Adaptors must not contain numerics')
 
-                if x == 'NONE' or x == None:
+                if x == 'NONE' or x == None or x.lower() == 'polyx':
                     pass
                 elif any(char not in ['A','a','T','t','G','g','C','c','N','n'] for char in x):
                     raise Exception('Adaptors sequence contains an invalid character')
