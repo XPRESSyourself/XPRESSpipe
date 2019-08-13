@@ -6,20 +6,6 @@ import scipy.stats as stats
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 #__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
 
-# Get source files
-def get_source(path):
-
-    #os.system(
-    #    'curl ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.gtf.gz -o ' + str(path) + 'transcripts_all.gtf.gz')
-    #os.system(
-    #    'curl ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.19.fa.gz -o ' + str(path) + 'chr19.fa.gz')
-    os.system(
-        'gzip -d ' + str(path) + '*')
-    os.system(
-        """awk -F $'\t' '$1 == "19"' """ + str(path) + 'transcripts_all.gtf > ' + str(path) + 'transcripts.gtf')
-    os.system(
-        'rm ' + str(path) + 'transcripts_all.gtf')
-
 # Check outputs produced a file
 def check_file(file, type, size=1000000):
 
@@ -34,12 +20,7 @@ def check_file(file, type, size=1000000):
 # Curate references
 print('Creating riboseq reference for testing...')
 rp_reference = str(__path__) + 'riboseq/rp_reference/'
-#if os.path.exists(rp_reference):
-#    os.system(
-#        'rm -rf ' + str(rp_reference))
 
-#os.makedirs(rp_reference)
-get_source(rp_reference)
 os.system(
     'xpresspipe curateReference'
     + ' -o ' + str(rp_reference)
@@ -109,12 +90,7 @@ print('riboseq tests complete')
 # Paired-end tests
 print('\n\nCreating paired-end reference for testing...')
 pe_reference = str(__path__) + 'paired_end/pe_reference/'
-#if os.path.exists(pe_reference):
-#    os.system(
-#        'rm -rf ' + str(pe_reference))
 
-#os.makedirs(pe_reference)
-get_source(pe_reference)
 os.system(
     'xpresspipe curateReference'
     + ' -o ' + str(pe_reference)

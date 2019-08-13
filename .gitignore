@@ -15,8 +15,7 @@ tests/riboprof_out/**
 **reference/transcripts_**
 tests/riboseq/rp_reference
 tests/riboseq/riboseq_out
-tests/paired_end/pe_reference
-tests/paired_end/pe_out
+tests/paired_end
 cufflink*/
 tests/metagene_tests
 tests/*log
