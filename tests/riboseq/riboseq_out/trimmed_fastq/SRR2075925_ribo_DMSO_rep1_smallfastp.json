@@ -31,7 +31,7 @@
 	"duplication": {
 		"rate": 0.14596,
 		"histogram": [5311,250,80,35,22,10,4,9,3,5,2,1,0,1,1,1,1,1,1,0,0,0,1,0,0,0,1,0,0,0,0],
-		"mean_gc": [0.404627,0.334667,0.313578,0.332885,0.396257,0.309804,0.25,0.366449,0.305882,0.383529,0.419608,0,0,0,0,0,0.4,0,0.4,0,0,0,0.478431,0,0,0,0.541176,0,0,0,0]
+		"mean_gc": [0.404593,0.328973,0.307843,0.332885,0.396257,0.309804,0.25,0.299782,0.305882,0.275294,0.419608,0,0,0,0,0,0.4,0,0.4,0,0,0,0.478431,0,0,0,0.541176,0,0,0,0]
 	},
 	"adapter_cutting": {
 		"adapter_trimmed_reads": 24766,
@@ -219,5 +219,5 @@
 		"overrepresented_sequences": {
 		}
 	},
-	"command": "fastp -f 1 --thread 12 -i /Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_test/SRR2075925_ribo_DMSO_rep1_small.fastq -o /Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/trimmed_fastq/trimmed_SRR2075925_ribo_DMSO_rep1_small.fastq -a CTGTAGGCACCATCAAT -l 17 -q 28 -j /Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/trimmed_fastq/SRR2075925_ribo_DMSO_rep1_smallfastp.json -h /Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/trimmed_fastq/SRR2075925_ribo_DMSO_rep1_smallfastp.html "
+	"command": "fastp -f 1 --thread 12 -i /Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq/riboseq_test/SRR2075925_ribo_DMSO_rep1_small.fastq -o /Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq/riboseq_out/trimmed_fastq/trimmed_SRR2075925_ribo_DMSO_rep1_small.fastq -a CTGTAGGCACCATCAAT -l 17 -q 28 -j /Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq/riboseq_out/trimmed_fastq/SRR2075925_ribo_DMSO_rep1_smallfastp.json -h /Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq/riboseq_out/trimmed_fastq/SRR2075925_ribo_DMSO_rep1_smallfastp.html "
 }
