@@ -21,15 +21,26 @@ Profiling and RNA-Seq Analysis Toolkit. bioRxiv 704320; doi: https://doi.org/10.
 ### Installation:   
 #### Installing from source
 The following is a short tutorial showing you how to install XPRESSpipe:   
-[![asciicast](https://asciinema.org/a/256347.svg)](https://asciinema.org/a/256347?speed=4)
+[![asciicast](https://asciinema.org/a/256347.svg)](https://asciinema.org/a/262192?speed=4)
 
 - Make sure you let Anaconda set up the PATH info for you.
 - If the help menu is not displayed when testing, try adding the path where you installed XPRESSpipe to the system PATH
 ```
 $ echo 'export PATH=$PATH:/path/to/xpresspipe' >> ~/.bash_profile
 ```
-If you do not have a file names `~/.bash_profile`, try looking for one called `~/.profile`
-
+- If you do not have a file names `~/.bash_profile`, try looking for one called `~/.profile`
+- The commands used in the video above are summarized here:
+```
+$ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/v0.2.3b0.zip
+$ unzip v0.2.3b0.zip
+$ cd XPRESSpipe-0.2.3b0/
+$ conda env create -f requirements.yml
+$ conda activate xpresspipe
+$ python setup.py install
+$ xpresspipe -h
+$ xpresspipe test 
+```
+- Be sure to specify the correct release version in the first URL
 
 ### QuickStart:   
 - Reference building   
