@@ -56,6 +56,8 @@ def run_complexity(
 """Manager for running complexity summary plotting"""
 def make_complexity(args_dict):
 
+    print('\nRunning complexity analysis of sequence libraries...')
+
     args_dict = add_directory(
         args_dict,
         'output',
