@@ -84,7 +84,6 @@ def polyx_trim(
 
     os.system(
         'fastp'
-        + ' -f 1'
         + ' --thread ' + str(args_dict['threads'])
         + ' -i ' + str(args_dict['input']) + file
         + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
