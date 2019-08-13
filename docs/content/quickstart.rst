@@ -22,7 +22,7 @@ Video Walkthroughs
 .. raw:: html
 
     <embed>
-        <script id="asciicast-256347" src="https://asciinema.org/a/262192.js" async></script>
+        <script id="asciicast-262192" src="https://asciinema.org/a/262192.js" async></script>
     </embed>
 
 
