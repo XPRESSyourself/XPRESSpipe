@@ -44,12 +44,12 @@ script:
   # Get references for riboseq test
   - mkdir tests/riboseq/rp_reference
   - curl ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.gtf.gz -o tests/riboseq/rp_reference/transcripts_all.gtf.gz
-  - curl curl ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.19.fa.gz -o tests/riboseq/rp_reference/chr19.fa.gz
+  - curl ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.19.fa.gz -o tests/riboseq/rp_reference/chr19.fa.gz
 
   # Get references for paired-end test
   - mkdir tests/paired_end/pe_reference
   - curl ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.gtf.gz -o tests/paired_end/pe_reference/transcripts_all.gtf.gz
-  - curl curl ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.19.fa.gz -o tests/paired_end/pe_reference/chr19.fa.gz
+  - curl ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.19.fa.gz -o tests/paired_end/pe_reference/chr19.fa.gz
 
   # Run tests
   - coverage run tests/test_pipelines.py
