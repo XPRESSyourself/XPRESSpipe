@@ -9,34 +9,6 @@ dist: xenial
 env:
   - OS="linux"
 
-# Set macos environments
-#matrix:
-#  include:
-#    - os: osx
-#      language: shell
-#      env:
-#        - PYTHON_VERSION=3.7
-#        - TRAVIS_PYTHON_VERSION=3.7
-#        - OS="macos"
-#    - os: osx
-#      language: shell
-#      env:
-#        - PYTHON_VERSION=3.6
-#        - TRAVIS_PYTHON_VERSION=3.6
-#        - OS="macos"
-#    - os: osx
-#      language: shell
-#      env:
-#        - PYTHON_VERSION=3.5
-#        - TRAVIS_PYTHON_VERSION=3.5
-#        - OS="macos"
-#    - os: osx
-#      language: shell
-#      env:
-#        - PYTHON_VERSION=2.7
-#        - TRAVIS_PYTHON_VERSION=2.7
-#        - OS="macos"
-
 #Install Conda
 before_install:
   - if [[ ("$TRAVIS_PYTHON_VERSION" == "2.7") && ("$OS" == "linux") ]]; then
@@ -68,9 +40,20 @@ install:
 
 # Run tests
 script:
+
+  # Get references for riboseq test
+  - mkdir tests/riboseq/rp_reference
+  - curl ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.gtf.gz -o tests/riboseq/rp_reference/transcripts_all.gtf.gz
+  - curl curl ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.19.fa.gz -o tests/riboseq/rp_reference/chr19.fa.gz
+
+  # Get references for paired-end test
+  - mkdir tests/paired_end/pe_reference
+  - curl ftp://ftp.ensembl.org/pub/release-96/gtf/homo_sapiens/Homo_sapiens.GRCh38.96.gtf.gz -o tests/paired_end/pe_reference/transcripts_all.gtf.gz
+  - curl curl ftp://ftp.ensembl.org/pub/release-96/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.19.fa.gz -o tests/paired_end/pe_reference/chr19.fa.gz
+
   # Run tests
-  - coverage run tests/test_arguments.py
-  - coverage run -a tests/test_pipelines.py
+  - coverage run tests/test_pipelines.py
+  - coverage run -a tests/test_arguments.py
   - coverage run -a tests/test_utils.py
   - coverage run -a tests/test_bam.py
   - coverage run -a tests/test_modifyGTF.py
