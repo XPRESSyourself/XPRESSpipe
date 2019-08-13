@@ -41,6 +41,7 @@ install:
 # Run tests
 script:
 
+  - source activate xpresspipe
   # Get references for riboseq test
   - mkdir tests/riboseq/rp_reference
   - curl -L https://sourceforge.net/projects/XPRESSpipe/files/transcripts.gtf/download -o tests/riboseq/rp_reference/transcripts.gtf
