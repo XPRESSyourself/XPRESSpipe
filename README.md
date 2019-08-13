@@ -94,3 +94,19 @@ ExperimentName_b_exType_1.fastq(.qz)
 ExperimentName_b_exType_2.fastq(.qz)
 ExperimentName_b_exType_2.fastq(.qz)
 ```
+
+
+### Running a test dataset:
+- We can run a test dataset as in the [associated manuscript](https://www.biorxiv.org/content/10.1101/704320v1) by downloading the FASTQ files from [GSE65778](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE65778) using the [SRAtoolkit](https://www.biostars.org/p/111040/).
+- We can curate the reference like so:
+```
+$ xpresspipe curateReference -o /path/to/reference -f /path/to/reference/genome_fastas -g /path/to/reference/transcripts.gtf -p -t --sjdbOverhang 49
+```
+- And we can process the dataset like so:
+```
+xpresspipe riboseq -i /path/to/input -o /path/to/output -r /path/to/reference/ --gtf /path/to/reference//transcripts_CT.gtf -e isrib_test_study -a CTGTAGGCACCATCAAT --sjdbOverhang 49
+```
+- The above steps will be very computationally intensive, so we recommend running this on a supercomputing cluster
+- Scripts used to analyze this data can be found [here](https://github.com/XPRESSyourself/xpressyourself_manuscript/blob/master/isrib_analysis/isrib_analysis.py) and [here](https://github.com/XPRESSyourself/xpressyourself_manuscript/blob/master/isrib_analysis/isrib_de/run_de.sh) and [here](https://github.com/XPRESSyourself/xpressyourself_manuscript/blob/master/isrib_analysis/isrib_de/isrib_de_analysis.py)
+
+- Alternatively, smaller test datasets can be found within the XPRESSpipe `tests` folder and an outline of commands to run can be found [here](https://github.com/XPRESSyourself/XPRESSpipe/blob/master/tests/test_pipelines.py)
