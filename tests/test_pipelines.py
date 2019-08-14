@@ -6,11 +6,22 @@ import scipy.stats as stats
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 #__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
 
+def list_files(startpath):
+    for root, dirs, files in os.walk(startpath):
+        level = root.replace(startpath, '').count(os.sep)
+        indent = ' ' * 4 * (level)
+        print('{}{}/'.format(indent, os.path.basename(root)))
+        subindent = ' ' * 4 * (level + 1)
+        for f in files:
+            print('{}{}'.format(subindent, f))
+
 # Check outputs produced a file
 def check_file(file, type, size=1000000):
 
     if os.path.isfile(file) == False:
-        os.system('tree ' + str(__path__))
+        print('Expected file:', file)
+        list_files(__path__)
+        print(os.system('tree ' + str(__path__)))
         raise Exception(str(type) + ' file cannot be found')
     else:
         if os.path.getsize(file) < size:
