@@ -38,6 +38,13 @@ install:
   - pip install .
   - python setup.py install
 
+  # Install R dependencies
+  - Rscript -e 'install.packages("BiocManager", repos = "http://cran.us.r-project.org")'
+  - Rscript -e 'install.packages("data.table", repos = "http://cran.us.r-project.org")'
+  - Rscript -e 'BiocManager::install("dupRadar", dependencies=TRUE)'
+  - Rscript -e 'BiocManager::install("GenomicFeatures", dependencies=TRUE)'
+  - Rscript -e 'BiocManager::install("GenomicAlignments", dependencies=TRUE)'
+
 # Run tests
 script:
 
@@ -62,14 +69,6 @@ script:
 
   # Get other test files
   #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/gtf_test_large.gtf/download -o tests/references/other/gtf_test_large.gtf
-
-  # Install R dependencies
-  - Rscript -e 'install.packages("BiocManager", repos = "http://cran.us.r-project.org")'
-  - Rscript -e 'BiocManager::install("DESeq2", dependencies=TRUE)'
-  - Rscript -e 'BiocManager::install("Rsubread", dependencies=TRUE)'
-  - Rscript -e 'BiocManager::install("dupRadar", dependencies=TRUE)'
-  - Rscript -e 'BiocManager::install("GenomicFeatures", dependencies=TRUE)'
-  - Rscript -e 'BiocManager::install("GenomicAlignments", dependencies=TRUE)'
 
   # Run tests
   - coverage run tests/test_pipelines.py
