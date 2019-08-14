@@ -81,17 +81,17 @@ check_file(trans_align, 'Transcriptome Aligned BAM', size = 100000)
 count_table = rp_output + 'counts/riboseq_test_count_table_rpmNormalized.tsv'
 check_file(count_table, 'Normalized count table', size = 10000)
 
-complexity = rp_output + 'complexity/riboseq_test_library_complexity_1_summary.pdf'
-check_file(complexity, 'Complexity summary', size = 10000)
+#complexity = rp_output + 'complexity/riboseq_test_library_complexity_1_summary.pdf'
+#check_file(complexity, 'Complexity summary', size = 10000)
 
-metagene = rp_output + 'metagene/riboseq_test_CDS_metagene_1_summary.pdf'
-check_file(metagene, 'Complexity summary', size = 10000)
+#metagene = rp_output + 'metagene/riboseq_test_CDS_metagene_1_summary.pdf'
+#check_file(metagene, 'Complexity summary', size = 10000)
 
 multiqc = rp_output + 'riboseq_test_multiqc_report.html'
 check_file(multiqc, 'Multiqc summary', size = 10000)
 
-if os.path.isdir(rp_output + 'periodicity') == False:
-    raise Exception('Periodicity directory cannot be found')
+#if os.path.isdir(rp_output + 'periodicity') == False:
+#    raise Exception('Periodicity directory cannot be found')
 
 log = rp_output + 'riboseq_test.log'
 check_file(log, 'Log', size = 10000)
@@ -155,11 +155,11 @@ check_file(trans_align, 'Transcriptome Aligned BAM', size = 100000)
 count_table = pe_output + 'counts/pe_test_count_table_rpmNormalized.tsv'
 check_file(count_table, 'Normalized count table', size = 10000)
 
-complexity = pe_output + 'complexity/pe_test_library_complexity_1_summary.pdf'
-check_file(complexity, 'Complexity summary', size = 10000)
+#complexity = pe_output + 'complexity/pe_test_library_complexity_1_summary.pdf'
+#check_file(complexity, 'Complexity summary', size = 10000)
 
-metagene = pe_output + 'metagene/pe_test_exon_metagene_1_summary.pdf'
-check_file(metagene, 'Complexity summary', size = 10000)
+#metagene = pe_output + 'metagene/pe_test_exon_metagene_1_summary.pdf'
+#check_file(metagene, 'Complexity summary', size = 10000)
 
 multiqc = pe_output + 'pe_test_multiqc_report.html'
 check_file(multiqc, 'Multiqc summary', size = 10000)
