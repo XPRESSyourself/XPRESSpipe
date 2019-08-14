@@ -25,7 +25,9 @@ license <- function() {
 # Measure library complexity of RNA-seq sample
 
 # Install dependencies
-if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager", repos = "http://cran.us.r-project.org")
+}
 
 if ("Rsubread" %in% rownames(installed.packages()) == FALSE) {
   BiocManager::install("Rsubread", dependencies=TRUE)

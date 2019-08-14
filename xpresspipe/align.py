@@ -358,6 +358,7 @@ def remove_intermediates(
     os.system(
         "find"
         + " " + str(args_dict['alignments_coordinates'])
+        + " -maxdepth 1 -type f -delete" # Only keep files matching pattern
         + " ! -name '*_Aligned.sort.bam'"
         + " ! -name '*_Aligned.sort.bam.bai'"
         + " ! -name '*_fixed.sort.bam'"
@@ -371,7 +372,6 @@ def remove_intermediates(
         + " ! -name '*_UMImarked.bam'"
         + " ! -name '*_UMImarked.bam.bai'"
         + " ! -name '*_Log.final.out'"
-        + " -maxdepth 1 -type f -delete" # Only keep files matching pattern
         + str(args_dict['log']))
 
 def clean_reference_directory(
