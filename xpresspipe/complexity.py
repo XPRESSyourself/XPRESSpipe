@@ -30,6 +30,8 @@ from .parallel import parallelize
 from .compile import compile_complexity_metrics
 from .utils import add_directory, get_files
 
+__path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
+
 """Measure library complexity"""
 def run_complexity(
         args):
@@ -45,7 +47,7 @@ def run_complexity(
     # Run dupRadar in R
     os.system(
         'Rscript'
-        + ' ' + str(args_dict['path']) + 'Rcomplexity.r'
+        + ' ' + str(__path__) + 'Rcomplexity.r'
         + ' ' + str(args_dict['input']) + str(file)
         + ' ' + str(args_dict['gtf'])
         + ' ' + str(paired)
