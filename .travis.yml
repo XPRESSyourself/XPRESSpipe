@@ -65,6 +65,7 @@ script:
 
   # Run tests
   - coverage run tests/test_pipelines.py
+  - cat tests/riboseq/rp_out/riboseq_test.log
   - coverage run -a tests/test_arguments.py
   - coverage run -a tests/test_utils.py
   - coverage run -a tests/test_bam.py
