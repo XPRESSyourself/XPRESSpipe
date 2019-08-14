@@ -30,12 +30,12 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 }
 
 if ("Rsubread" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("Rsubread", dependencies=TRUE)
+  BiocManager::install("Rsubread", dependencies=c("Depends", "Imports", "LinkingTo"))
 } else {
   print("Rsubread package already installed")
 }
 if ("dupRadar" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("dupRadar", dependencies=TRUE)
+  BiocManager::install("dupRadar", dependencies=c("Depends", "Imports", "LinkingTo"))
 } else {
   print("dupRadar package already installed")
 }
