@@ -10,6 +10,7 @@ __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
 def check_file(file, type, size=1000000):
 
     if os.path.isfile(file) == False:
+        os.system('tree ' + str(__path__))
         raise Exception(str(type) + ' file cannot be found')
     else:
         if os.path.getsize(file) < size:
