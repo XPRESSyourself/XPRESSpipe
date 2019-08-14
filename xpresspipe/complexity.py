@@ -45,6 +45,17 @@ def run_complexity(
         paired = 'False'
 
     # Run dupRadar in R
+    print('==========================================================')
+    print(
+        'Rscript'
+        + ' ' + str(__path__) + 'Rcomplexity.r'
+        + ' ' + str(args_dict['input']) + str(file)
+        + ' ' + str(args_dict['gtf'])
+        + ' ' + str(paired)
+        + ' ' + str(args_dict['threads'])
+        + ' ' + str(args_dict['complexity']) + 'metrics/' + str(file).rsplit('.',1)[0] + '_metrics.txt'
+        + str(args_dict['log']))
+    print('==========================================================')
     os.system(
         'Rscript'
         + ' ' + str(__path__) + 'Rcomplexity.r'
