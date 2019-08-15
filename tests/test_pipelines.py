@@ -94,7 +94,7 @@ check_file(multiqc, 'Multiqc summary', size = 10000)
 #    raise Exception('Periodicity directory cannot be found')
 
 log = rp_output + 'riboseq_test.log'
-check_file(log, 'Log', size = 10000)
+check_file(log, 'Log', size = 1000)
 
 print('riboseq tests complete')
 
@@ -168,6 +168,6 @@ if os.path.isdir(pe_output + 'periodicity') == True:
     raise Exception('Periodicity directory should not be created during paired-end processing')
 
 log = pe_output + 'pe_test.log'
-check_file(log, 'Log', size = 10000)
+check_file(log, 'Log', size = 1000)
 
 print('paired-end tests complete')
