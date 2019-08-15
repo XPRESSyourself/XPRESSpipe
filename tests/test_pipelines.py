@@ -99,7 +99,8 @@ check_file(log, 'Log', size = 1000)
 print('riboseq tests complete')
 
 
-# Paired-end tests
+# Paired-end tests -- hiding for now until R dep load time can be faster
+"""
 print('\n\nCreating paired-end reference for testing...')
 pe_reference = str(__path__) + 'paired_end/pe_reference/'
 
@@ -171,3 +172,4 @@ log = pe_output + 'pe_test.log'
 check_file(log, 'Log', size = 1000)
 
 print('paired-end tests complete')
+"""
