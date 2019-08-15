@@ -231,6 +231,7 @@ def alignment_process(
         os.system(
         'samtools sort'
         + ' -n'
+        + ' --threads ' + str(args_dict['threads'])
         + ' -o ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.namesort.bam'
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.out.bam')
 
@@ -238,12 +239,14 @@ def alignment_process(
         os.system(
         'samtools fixmate'
         + ' -m'
+        + ' --threads ' + str(args_dict['threads'])
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.namesort.bam'
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_fixed.namesort.bam')
 
         # Convert back to coordinate sorted because markdup doesn't accept name sorted files
         os.system(
         'samtools sort'
+        + ' --threads ' + str(args_dict['threads'])
         + ' -o ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.sort.bam'
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_fixed.namesort.bam')
 
@@ -277,6 +280,7 @@ def alignment_process(
     # Index BAM file
     os.system(
         'samtools index'
+        + ' -@ ' + str(args_dict['threads'])
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix)
         + str(args_dict['log']))
 
@@ -291,36 +295,42 @@ def alignment_process(
             + str(args_dict['log']))
         os.system(
             'samtools index'
+            + ' -@ ' + str(args_dict['threads'])
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_UMIremoved.bam'
             + str(args_dict['log']))
 
         # Use sorted BAM file to find any duplicate reads
         os.system(
             'samtools markdup'
+            + ' --threads ' + str(args_dict['threads'])
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_UMIremoved.bam' # Input BAM
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_UMImarked.bam' # Output BAM
             + ' -s' # Print some basic stats
             + str(args_dict['log']))
         os.system(
             'samtools index'
+            + ' -@ ' + str(args_dict['threads'])
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_UMImarked.bam'
             + str(args_dict['log']))
     else:
         # Use sorted BAM file to find any duplicate reads
         os.system(
             'samtools markdup'
+            + ' --threads ' + str(args_dict['threads'])
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix) # Input BAM
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_dedupMarked.bam' # Output BAM
             + ' -s' # Print some basic stats
             + str(args_dict['log']))
         os.system(
             'samtools index'
+            + ' -@ ' + str(args_dict['threads'])
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_dedupMarked.bam'
             + str(args_dict['log']))
 
         # Create sorted BAM file with duplicates removed
         os.system(
             'samtools markdup'
+            + ' --threads ' + str(args_dict['threads'])
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix) # Input BAM
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_dedupRemoved.bam' # Output BAM
             + ' -s' # Print some basic stats to STDOUT
@@ -328,6 +338,7 @@ def alignment_process(
             + str(args_dict['log']))
         os.system(
             'samtools index'
+            + ' -@ ' + str(args_dict['threads'])
             + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_dedupRemoved.bam'
             + str(args_dict['log']))
 
@@ -347,6 +358,7 @@ def remove_intermediates(
     os.system(
         "find"
         + " " + str(args_dict['alignments_coordinates'])
+        + " -maxdepth 1 -type f" # Only keep files matching pattern
         + " ! -name '*_Aligned.sort.bam'"
         + " ! -name '*_Aligned.sort.bam.bai'"
         + " ! -name '*_fixed.sort.bam'"
@@ -360,7 +372,7 @@ def remove_intermediates(
         + " ! -name '*_UMImarked.bam'"
         + " ! -name '*_UMImarked.bam.bai'"
         + " ! -name '*_Log.final.out'"
-        + " -maxdepth 1 -type f -delete" # Only keep files matching pattern
+        + " -delete"
         + str(args_dict['log']))
 
 def clean_reference_directory(
@@ -463,8 +475,8 @@ def pe_align(
     file1, file2, args_dict = args[0], args[1], args[2]
 
     # STAR first pass
-    output = str(file).rsplit('.',1)[0].replace('trimmed_','').replace('read1','').replace('read2','').replace('r1','').replace('r2','')
     file = str(args_dict['input']) + str(file1) + ' ' + str(args_dict['input']) + str(file2)
+    output = str(file1).rsplit('.',1)[0].replace('trimmed_','').replace('read1','').replace('read2','').replace('r1','').replace('r2','')
 
     align(args_dict, output, file, paired=True)
 

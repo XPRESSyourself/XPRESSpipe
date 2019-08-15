@@ -25,15 +25,17 @@ license <- function() {
 # Measure library complexity of RNA-seq sample
 
 # Install dependencies
-if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager", repos = "http://cran.us.r-project.org")
+}
 
 if ("Rsubread" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("Rsubread", dependencies=TRUE)
+  BiocManager::install("Rsubread", dependencies=c("Depends", "Imports", "LinkingTo"))
 } else {
   print("Rsubread package already installed")
 }
 if ("dupRadar" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("dupRadar", dependencies=TRUE)
+  BiocManager::install("dupRadar", dependencies=c("Depends", "Imports", "LinkingTo"))
 } else {
   print("dupRadar package already installed")
 }

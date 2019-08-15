@@ -34,7 +34,7 @@ if ("data.table" %in% rownames(installed.packages()) == FALSE) {
 library(data.table)
 
 if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("GenomicAlignments", dependencies=TRUE)
+  BiocManager::install("GenomicAlignments", dependencies=c("Depends", "Imports", "LinkingTo"))
 } else {
   print("GenomicAlignments package already installed")
 }

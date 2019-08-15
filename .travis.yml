@@ -9,34 +9,6 @@ dist: xenial
 env:
   - OS="linux"
 
-# Set macos environments
-#matrix:
-#  include:
-#    - os: osx
-#      language: shell
-#      env:
-#        - PYTHON_VERSION=3.7
-#        - TRAVIS_PYTHON_VERSION=3.7
-#        - OS="macos"
-#    - os: osx
-#      language: shell
-#      env:
-#        - PYTHON_VERSION=3.6
-#        - TRAVIS_PYTHON_VERSION=3.6
-#        - OS="macos"
-#    - os: osx
-#      language: shell
-#      env:
-#        - PYTHON_VERSION=3.5
-#        - TRAVIS_PYTHON_VERSION=3.5
-#        - OS="macos"
-#    - os: osx
-#      language: shell
-#      env:
-#        - PYTHON_VERSION=2.7
-#        - TRAVIS_PYTHON_VERSION=2.7
-#        - OS="macos"
-
 #Install Conda
 before_install:
   - if [[ ("$TRAVIS_PYTHON_VERSION" == "2.7") && ("$OS" == "linux") ]]; then
@@ -66,10 +38,43 @@ install:
   - pip install .
   - python setup.py install
 
+  # Removing for now as they are slooooww and timing out Travis/plus not checking anyways
+  # Install R dependencies
+  #- Rscript -e 'install.packages("BiocManager", repos = "http://cran.us.r-project.org")'
+  #- Rscript -e 'install.packages("data.table", repos = "http://cran.us.r-project.org")'
+  #- Rscript -e 'BiocManager::install("dupRadar", dependencies=TRUE)'
+  #- Rscript -e 'BiocManager::install("GenomicFeatures", dependencies=TRUE)'
+  #- Rscript -e 'BiocManager::install("GenomicAlignments", dependencies=TRUE)'
+
 # Run tests
 script:
+
+  - source activate xpresspipe
+  # Get references for riboseq test
+  - mkdir tests/riboseq/rp_reference
+  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/transcripts.gtf/download -o tests/riboseq/rp_reference/transcripts.gtf
+  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/chr19.fa/download -o tests/riboseq/rp_reference/chr19.fa
+
+  # Get references for paired-end test
+  - mkdir tests/paired_end
+  - mkdir tests/paired_end/pe_reference
+  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/transcripts.gtf/download -o tests/paired_end/pe_reference/transcripts.gtf
+  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/chr19.fa/download -o tests/paired_end/pe_reference/chr19.fa
+
+  # Get paired-end test files
+  - mkdir tests/paired_end/pe_test
+  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq/download -o tests/paired_end/pe_test/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq
+  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq/download -o tests/paired_end/pe_test/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
+  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq/download -o tests/paired_end/pe_test/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq
+  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq/download -o tests/paired_end/pe_test/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
+
+  # Get other test files
+  #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/gtf_test_large.gtf/download -o tests/references/other/gtf_test_large.gtf
+
   # Run tests
-  - coverage run tests/test_arguments.py
+  - coverage run tests/test_pipelines.py
+  - cat tests/riboseq/riboseq_out/riboseq_test.log
+  - coverage run -a tests/test_arguments.py
   - coverage run -a tests/test_utils.py
   - coverage run -a tests/test_bam.py
   - coverage run -a tests/test_modifyGTF.py

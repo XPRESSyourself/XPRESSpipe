@@ -38,7 +38,7 @@ if ("riboWaltz" %in% rownames(as.data.frame(installed.packages()[,c(1,3:4)]))) {
   print("riboWaltz package already installed")
 } else {
   print("Installing riboWaltz...")
-  devtools::install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = TRUE)
+  devtools::install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = c("Depends", "Imports", "LinkingTo"))
 }
 
 library(riboWaltz)

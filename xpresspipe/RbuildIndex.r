@@ -56,7 +56,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocMan
 
 if ("GenomicFeatures" %in% rownames(installed.packages()) == FALSE) {
   print("Installing GenomicFeatures...")
-  BiocManager::install("GenomicFeatures", dependencies=TRUE)
+  BiocManager::install("GenomicFeatures", dependencies=c("Depends", "Imports", "LinkingTo"))
 } else {
   print("GenomicFeatures package already installed")
 }

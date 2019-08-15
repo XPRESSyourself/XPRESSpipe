@@ -21,12 +21,12 @@ license <- function() {
   this program.  If not, see <https://www.gnu.org/licenses/>.
   "
   }
-  
+
 # Control batch effects for prep, chips, etc
 if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
 
 if ("DESeq2" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("DESeq2", dependencies=TRUE)
+  BiocManager::install("DESeq2", dependencies=c("Depends", "Imports", "LinkingTo"))
 } else {
   print("DESeq2 package already installed")
 }

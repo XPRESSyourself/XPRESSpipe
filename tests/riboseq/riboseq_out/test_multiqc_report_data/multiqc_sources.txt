@@ -1,5 +1,0 @@
-Module	Section	Sample Name	Source
-fastp	all_sections	SRR2075925_ribo_DMSO_rep1_small	/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/trimmed_fastq/SRR2075925_ribo_DMSO_rep1_smallfastp.json
-fastp	all_sections	SRR2075930_rna_DMSO_rep1_small	/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/trimmed_fastq/SRR2075930_rna_DMSO_rep1_smallfastp.json
-FastQC	all_sections	trimmed_SRR2075930_rna_DMSO_rep1_small	/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/fastqc/trimmed_SRR2075930_rna_DMSO_rep1_small_fastqc.zip
-FastQC	all_sections	trimmed_SRR2075925_ribo_DMSO_rep1_small	/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/riboseq_out/fastqc/trimmed_SRR2075925_ribo_DMSO_rep1_small_fastqc.zip
