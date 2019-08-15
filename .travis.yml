@@ -38,12 +38,13 @@ install:
   - pip install .
   - python setup.py install
 
+  # Removing for now as they are slooooww and timing out Travis/plus not checking anyways
   # Install R dependencies
-  - Rscript -e 'install.packages("BiocManager", repos = "http://cran.us.r-project.org")'
-  - Rscript -e 'install.packages("data.table", repos = "http://cran.us.r-project.org")'
-  - Rscript -e 'BiocManager::install("dupRadar", dependencies=TRUE)'
-  - Rscript -e 'BiocManager::install("GenomicFeatures", dependencies=TRUE)'
-  - Rscript -e 'BiocManager::install("GenomicAlignments", dependencies=TRUE)'
+  #- Rscript -e 'install.packages("BiocManager", repos = "http://cran.us.r-project.org")'
+  #- Rscript -e 'install.packages("data.table", repos = "http://cran.us.r-project.org")'
+  #- Rscript -e 'BiocManager::install("dupRadar", dependencies=TRUE)'
+  #- Rscript -e 'BiocManager::install("GenomicFeatures", dependencies=TRUE)'
+  #- Rscript -e 'BiocManager::install("GenomicAlignments", dependencies=TRUE)'
 
 # Run tests
 script:
