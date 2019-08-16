@@ -28,8 +28,8 @@ Ribosome Profiling Pipeline
      - Description
    * - :data:`--two-pass`
      - Use a two-pass STAR alignment for novel splice junction discovery
-   * - :data:`-a \<adaptor1 ...\> [\<adaptor1 ...\> ...]`, :data:`--adaptor \<adaptor1 ...\> [\<adaptor1 ...\> ...]`
-     - Specify adaptor(s) in list of strings -- for single-end, only provide one adaptor -- if :data:`None` are provided, software will attempt to auto-detect adaptors -- if "POLYX" is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide :data:`None` twice
+   * - :data:`-a \<adapter1 ...\> [\<adapter1 ...\> ...]`, :data:`--adapter \<adapter1 ...\> [\<adapter1 ...\> ...]`
+     - Specify adapter(s) in list of strings -- for single-end, only provide one adapter -- if :data:`None` are provided, software will attempt to auto-detect adapters -- if "POLYX" is provided as a single string in the list, polyX adapters will be trimmed. If you want to auto-detect adapters in for paired-end reads, provide :data:`None` twice
    * - :data:`-q \<PHRED_value\>, --quality \<PHRED_value\>`
      - PHRED read quality threshold (default: :data:`28`)
    * - :data:`--min_length \<length_value\>`

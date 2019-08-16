@@ -84,7 +84,7 @@ description_table  =  """\
         |    riboseq            |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
         |                       |   raw data                                                                            |
         |-----------------------|---------------------------------------------------------------------------------------|
-        |    trim               |   Trim RNAseq reads of adaptors and for quality                                       |
+        |    trim               |   Trim RNAseq reads of adapters and for quality                                       |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    align              |   Align RNAseq reads to reference genome (memory intensive)                           |
         |-----------------------|---------------------------------------------------------------------------------------|
@@ -175,35 +175,35 @@ def check_inputs(
                 + 'Setting cores to maximum available')
             args_dict['max_processors'] = multiprocessing.cpu_count()
 
-    # Check number of adaptors provided
-    if 'adaptors' in args_dict:
+    # Check number of adapters provided
+    if 'adapters' in args_dict:
 
-        if isinstance(args_dict['adaptors'], list) == True:
-            args_dict['adaptors'] = [a.upper() if a != None else None for a in args_dict['adaptors'] ]
+        if isinstance(args_dict['adapters'], list) == True:
+            args_dict['adapters'] = [a.upper() if a != None else None for a in args_dict['adapters'] ]
 
-            for x in args_dict['adaptors']:
+            for x in args_dict['adapters']:
                 if type(x) != str:
-                    raise Exception('Adaptors must be provided as a list of strings')
+                    raise Exception('adapters must be provided as a list of strings')
 
                 if any(char.isdigit() for char in x):
-                    raise Exception('Adaptors must not contain numerics')
+                    raise Exception('adapters must not contain numerics')
 
                 if x == 'NONE' or x == None or x.lower() == 'polyx':
                     pass
                 elif any(char not in ['A','a','T','t','G','g','C','c','N','n'] for char in x):
-                    raise Exception('Adaptors sequence contains an invalid character')
+                    raise Exception('adapters sequence contains an invalid character')
                 else:
                     pass
 
-            if len(args_dict['adaptors']) > 2:
-                raise Exception('A maximum of 2 adaptors may be provided')
+            if len(args_dict['adapters']) > 2:
+                raise Exception('A maximum of 2 adapters may be provided')
 
-        elif args_dict['adaptors'] == None:
+        elif args_dict['adapters'] == None:
             pass
 
         else:
-            raise Exception('Something went wrong with the adaptor input formatting. Expected a list, but got ' \
-            + str(type(args_dict['adaptors'])))
+            raise Exception('Something went wrong with the adapter input formatting. Expected a list, but got ' \
+            + str(type(args_dict['adapters'])))
 
     if 'quantification_method' in args_dict and 'stranded' in args_dict:
         if str(args_dict['quantification_method']).lower() == 'htseq':
@@ -434,10 +434,10 @@ def get_arguments(
         action = 'store_true',
         required = False)
     se_opts.add_argument(
-        '-a', '--adaptors',
-        help = 'Specify adaptor as string (only one allowed) -- if \"None\" is provided, software will attempt to auto-detect adaptors -- \
-        if \"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
-        metavar = '<adaptor1>',
+        '-a', '--adapters',
+        help = 'Specify adapter as string (only one allowed) -- if \"None\" is provided, software will attempt to auto-detect adapters -- \
+        if \"POLYX\" is provided as a single string in the list, polyX adapters will be trimmed',
+        metavar = '<adapter1>',
         type = str,
         nargs = '+',
         default = None,
@@ -618,10 +618,10 @@ def get_arguments(
         action = 'store_true',
         required = False)
     pe_opts.add_argument(
-        '-a', '--adaptors',
-        help = 'Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if"None None\" is \
-        provided, software will attempt to auto-detect adaptors',
-        metavar = '<adaptor1 adaptor2>',
+        '-a', '--adapters',
+        help = 'Specify adapters in space separated list of strings -- for paired-end, two adapters are expected -- if"None None\" is \
+        provided, software will attempt to auto-detect adapters',
+        metavar = '<adapter1 adapter2>',
         type = str,
         nargs = '+',
         default = None,
@@ -800,10 +800,10 @@ def get_arguments(
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
-        '-a', '--adaptors',
-        help = 'Specify adaptor as string (only one allowed) -- if"None\" is provided, software will attempt to auto-detect adaptors -- \
-        if"POLYX\" is provided as a single string in the list, polyX adaptors will be trimmed',
-        metavar = '<adaptor1>',
+        '-a', '--adapters',
+        help = 'Specify adapter as string (only one allowed) -- if"None\" is provided, software will attempt to auto-detect adapters -- \
+        if"POLYX\" is provided as a single string in the list, polyX adapters will be trimmed',
+        metavar = '<adapter1>',
         type = str,
         nargs = '+',
         default = None,
@@ -933,7 +933,7 @@ def get_arguments(
     """TRIM SUBPARSER"""
     trim_parser = subparser.add_parser(
         'trim',
-        description = 'Trim RNAseq reads of adaptors and for quality',
+        description = 'Trim RNAseq reads of adapters and for quality',
         add_help = False)
     # Required arguments
     trim_reqs = trim_parser.add_argument_group('required arguments')
@@ -956,10 +956,10 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     trim_opts.add_argument(
-        '-a', '--adaptors',
-        help = 'Specify adaptors in space separated list of strings -- for paired-end, two adaptors are expected -- if"None None\" is \
-        provided, software will attempt to auto-detect adaptors',
-        metavar = '<adaptor1 ...>',
+        '-a', '--adapters',
+        help = 'Specify adapters in space separated list of strings -- for paired-end, two adapters are expected -- if"None None\" is \
+        provided, software will attempt to auto-detect adapters',
+        metavar = '<adapter1 ...>',
         type = str,
         nargs = '+',
         default = None,

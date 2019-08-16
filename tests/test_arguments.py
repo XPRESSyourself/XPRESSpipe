@@ -80,13 +80,13 @@ assert truth_dict['output'] == t['output'], 'check_inputs() failed at directory 
 assert truth_dict['reference'] == t['reference'], 'check_inputs() failed at directory formatting'
 
 """
-check_inputs() -- Adaptor input tests
+check_inputs() -- adapter input tests
 """
 # Test 0
 adap1 = 'CTGTAGGCACCATCAAT'
 
 test_dict = {
-    'adaptors': adap1,
+    'adapters': adap1,
     'cmd': 'riboseq'}
 
 try:
@@ -99,7 +99,7 @@ else:
 # Test 1
 adap2 = 'CTGTAGGCACCATCAAT CTGTAGGCACCATCAAG'
 test_dict = {
-    'adaptors': adap2,
+    'adapters': adap2,
     'cmd': 'riboseq'}
 try:
     t = xp.check_inputs(test_dict)
@@ -111,66 +111,66 @@ else:
 # Test 2
 adap3 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG']
 test_dict = {
-    'adaptors': adap3,
+    'adapters': adap3,
     'cmd': 'riboseq'} # Check that expected case works
 t = xp.check_inputs(test_dict)
-assert t['adaptors'] == adap3
+assert t['adapters'] == adap3
 
 # Test 3
 adap4 = ['None']
 test_dict = {
-    'adaptors': adap4,
+    'adapters': adap4,
     'cmd': 'riboseq'} # Check the None input works
 t = xp.check_inputs(test_dict)
-assert t['adaptors'] == ['NONE']
+assert t['adapters'] == ['NONE']
 
 # Test 4
 adap5 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG', 'ACCATCAAG']
 test_dict = {
-    'adaptors': adap5,
+    'adapters': adap5,
     'cmd': 'riboseq'}
 try:
     t = xp.check_inputs(test_dict)
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to catch input list with greater than two adaptors')
+    raise Error('check_inputs() failed to catch input list with greater than two adapters')
 
 # Test 5
 adap6 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCA262343CCATCAaAG']
 test_dict = {
-    'adaptors': adap6,
+    'adapters': adap6,
     'cmd': 'riboseq'}
 try:
     t = xp.check_inputs(test_dict)
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to make sure input adaptors only contain valid characters')
+    raise Error('check_inputs() failed to make sure input adapters only contain valid characters')
 
 # Test 6
 adap7 = ['GCTCGCGCHATC']
 test_dict = {
-    'adaptors': adap7,
+    'adapters': adap7,
     'cmd': 'riboseq'}
 try:
     t = xp.check_inputs(test_dict)
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to make sure input adaptors only contain valid characters')
+    raise Error('check_inputs() failed to make sure input adapters only contain valid characters')
 
 # Test 7
 adap8 = False
 test_dict = {
-    'adaptors': adap8,
+    'adapters': adap8,
     'cmd': 'riboseq'}
 try:
     t = xp.check_inputs(test_dict)
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to make sure input adaptors only contain valid characters')
+    raise Error('check_inputs() failed to make sure input adapters only contain valid characters')
 
 """
 check_inputs() -- Log file formatting tests

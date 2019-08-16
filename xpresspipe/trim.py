@@ -29,35 +29,35 @@ from multiprocessing import cpu_count
 from .utils import get_files, add_directory
 from .parallel import parallelize, parallelize_pe
 
-"""Determine sequencing type based on adaptor list"""
+"""Determine sequencing type based on adapter list"""
 def determine_type(
-    adaptor_list):
+    adapter_list):
 
     try:
-        if adaptor_list == None:
+        if adapter_list == None:
             return 'AUTOSE'
         else:
             # Convert case
-            adaptor_list = [x.upper() for x in adaptor_list]
-            if len(adaptor_list) == 1:
-                if 'NONE' in adaptor_list or adaptor_list == 'NONE':
+            adapter_list = [x.upper() for x in adapter_list]
+            if len(adapter_list) == 1:
+                if 'NONE' in adapter_list or adapter_list == 'NONE':
                     return 'AUTOSE'
-                elif 'POLYX' in adaptor_list or adaptor_list == 'POLYX':
+                elif 'POLYX' in adapter_list or adapter_list == 'POLYX':
                     return 'POLYX'
                 else:
                     return 'SE'
-            elif len(adaptor_list) == 2:
-                if 'NONE' in adaptor_list or adaptor_list[0] == 'NONE':
+            elif len(adapter_list) == 2:
+                if 'NONE' in adapter_list or adapter_list[0] == 'NONE':
                     return 'AUTOPE'
                 else:
                     return 'PE'
             else:
-                raise Exception('Invalid number of adaptor options')
+                raise Exception('Invalid number of adapter options')
 
     except:
-        raise Exception('Could not determine sequencing type from adaptor list during read trimming')
+        raise Exception('Could not determine sequencing type from adapter list during read trimming')
 
-"""Trim adaptors via auto-detect"""
+"""Trim adapters via auto-detect"""
 def auto_trim(
     args):
 
@@ -76,7 +76,7 @@ def auto_trim(
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
-"""Trim polyX adaptors"""
+"""Trim polyX adapters"""
 def polyx_trim(
     args):
 
@@ -94,7 +94,7 @@ def polyx_trim(
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
-"""Trim SE adaptors"""
+"""Trim SE adapters"""
 def se_trim(
     args):
 
@@ -106,7 +106,7 @@ def se_trim(
     + ' --thread ' + str(args_dict['threads'])
     + ' -i ' + str(args_dict['input']) + str(file)
     + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
-    + ' -a ' + str(args_dict['adaptors'][0])
+    + ' -a ' + str(args_dict['adapters'][0])
     + ' -l ' + str(args_dict['min_length'])
     + ' -q ' + str(args_dict['quality'])
     + str(args_dict['umi'])
@@ -114,7 +114,7 @@ def se_trim(
     + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
     + str(args_dict['log']))
 
-"""Auto-detect and trim PE adaptors"""
+"""Auto-detect and trim PE adapters"""
 def auto_pe_trim(
     args):
 
@@ -135,7 +135,7 @@ def auto_pe_trim(
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
-"""Trim PE adaptors"""
+"""Trim PE adapters"""
 def pe_trim(
     args):
 
@@ -149,7 +149,7 @@ def pe_trim(
         + ' -I ' + str(args_dict['input']) + str(file2)
         + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file1)
         + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file2)
-        + ' -a ' + str(args_dict['adaptors'][0]) + ' --adapter_sequence_r2 ' + str(args_dict['adaptors'][1])
+        + ' -a ' + str(args_dict['adapters'][0]) + ' --adapter_sequence_r2 ' + str(args_dict['adapters'][1])
         + ' -l ' + str(args_dict['min_length'])
         + ' -q ' + str(args_dict['quality'])
         + str(args_dict['umi'])
@@ -157,7 +157,7 @@ def pe_trim(
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
-"""Trim RNAseq reads of adaptors and for quality"""
+"""Trim RNAseq reads of adapters and for quality"""
 def run_trim(
     args_dict):
 
@@ -172,9 +172,9 @@ def run_trim(
         args_dict['input'],
         ['.fastq','.fq','.txt'])
 
-    # Determine sequencing type based on args_dict['adaptors']
+    # Determine sequencing type based on args_dict['adapters']
     type = determine_type(
-        args_dict['adaptors'])
+        args_dict['adapters'])
 
     # Get UMI info
     args_dict['umi'] = ''
@@ -192,7 +192,7 @@ def run_trim(
     else:
         workers = False
 
-    # Auto-detect and trim adaptors
+    # Auto-detect and trim adapters
     if type == 'AUTOSE':
         parallelize(
             auto_trim,
@@ -200,7 +200,7 @@ def run_trim(
             args_dict,
             mod_workers=workers)
 
-    # Trim polyX adaptors, assumes single-end RNAseq reads
+    # Trim polyX adapters, assumes single-end RNAseq reads
     if type == 'POLYX':
         parallelize(
             polyx_trim,
@@ -216,7 +216,7 @@ def run_trim(
             args_dict,
             mod_workers=workers)
 
-    # Auto-detect adaptors for paired-end reads
+    # Auto-detect adapters for paired-end reads
     if type == 'AUTOPE':
         if len(files) % 2 != 0:
             raise Exception('An uneven number of paired-end files were specified in the input directory')
