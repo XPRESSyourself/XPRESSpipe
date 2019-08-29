@@ -47,7 +47,7 @@ OUTPUT <- args[3] # Path and filename with .txt extension
 EQUATION <- args[4]
 
 # Import counts_data
-count_table <- read.table(DATAFRAME, sep = '\t', header = TRUE, row.names = 1)
+count_table <- read.table(DATAFRAME, sep = '\t', header = TRUE, row.names = 1, check.names=F)
 
 # Create conditions dataframe
 sample_table <- read.table(text = readLines(INFO, warn = FALSE), header = TRUE, sep = '\t')
