@@ -1228,7 +1228,7 @@ def get_arguments(
     """DIFFXPRESS SUBPARSER"""
     diffx_parser = subparser.add_parser(
         'diffxpress',
-        description = 'Perform DESeq2 differential expression analysis on counts matrix',
+        description = 'Perform DESeq2 differential expression analysis on counts matrix (IMPORTANT: Order of samples must match in count table and metadata table!)',
         add_help = False)
     # Required arguments
     diffx_reqs = diffx_parser.add_argument_group('required arguments')
