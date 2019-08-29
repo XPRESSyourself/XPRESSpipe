@@ -53,6 +53,25 @@ count_table <- read.table(DATAFRAME, sep = '\t', header = TRUE, row.names = 1, c
 sample_table <- read.table(text = readLines(INFO, warn = FALSE), header = TRUE, sep = '\t')
 names(sample_table) <- tolower(names(sample_table))
 
+# Convert conditions in design to factor levels
+items <- strsplit(gsub("[^[:alnum:] ]", "", tolower(toString(EQUATION))), " +")[[1]]
+uniq_items <- unique(items)
+
+for ( i in uniq_items) {
+  print(i)
+  sample_table[[i]] <- factor(
+    sample_table[[i]], levels = sort(
+      unique(
+        unlist(
+          lapply(
+            sample_table[[i]], toString
+          )
+        )
+      )
+    )
+  )
+}
+
 # Run DESeq2 analysis on data
 dds <- DESeqDataSetFromMatrix(
   countData = count_table,
