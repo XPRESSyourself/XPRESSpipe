@@ -110,3 +110,7 @@ xpresspipe riboseq -i /path/to/input -o /path/to/output -r /path/to/reference/ -
 - Scripts used to analyze this data can be found [here](https://github.com/XPRESSyourself/xpressyourself_manuscript/blob/master/isrib_analysis/isrib_analysis.py) and [here](https://github.com/XPRESSyourself/xpressyourself_manuscript/blob/master/isrib_analysis/isrib_de/run_de.sh) and [here](https://github.com/XPRESSyourself/xpressyourself_manuscript/blob/master/isrib_analysis/isrib_de/isrib_de_analysis.py)
 
 - Alternatively, smaller test datasets can be found within the XPRESSpipe `tests` folder and an outline of commands to run can be found [here](https://github.com/XPRESSyourself/XPRESSpipe/blob/master/tests/test_pipelines.py)
+
+
+### Updates
+Information on updates to the software can be found [here](https://github.com/XPRESSyourself/XPRESSpipe/releases).

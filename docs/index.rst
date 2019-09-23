@@ -52,6 +52,7 @@ Table of contents
    content/normalization
    content/other-features
    content/faqs
+   content/updates
 
 =======
 License
