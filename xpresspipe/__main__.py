@@ -160,6 +160,12 @@ def main(
         if str(args_dict['design']).startswith('~'):
             raise Exception('Tilde should not be included in design formula, script will automatically add this syntax.')
 
+        if 'shrink' in args_dict \
+        and args_dict['shrink'] == True:
+            shrinkage = 'TRUE'
+        else:
+            shrinkage = 'FALSE'
+
         # Run deseq2 in R
         os.system('rscript' \
             + ' ' + str(args_dict['path']) + 'Rdiffxpress.r' \
@@ -167,6 +173,7 @@ def main(
             + ' ' + str(args_dict['sample']) \
             + ' ' + str(output_file) \
             + ' ' + str(args_dict['design'])
+            + ' ' + str(shrinkage)
             + str(args_dict['log']))
 
         # Check log file for errors and exceptions

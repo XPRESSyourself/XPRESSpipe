@@ -1257,6 +1257,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    diffx_opts.add_argument(
+        '--shrink',
+        help = 'Provide argument to perform shrinkage of effect size on log fold changes. Useful for visualization and ranking of hits',
+        action = 'store_true',
+        required = False)
 
 
     """METAGENE SUBPARSER"""

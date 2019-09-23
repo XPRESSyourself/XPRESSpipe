@@ -31,7 +31,14 @@ if ("DESeq2" %in% rownames(installed.packages()) == FALSE) {
   print("DESeq2 package already installed")
 }
 
+if ("apeglm" %in% rownames(installed.packages()) == FALSE) {
+  BiocManager::install("apeglm", dependencies=c("Depends", "Imports", "LinkingTo"))
+} else {
+  print("apeglm package already installed")
+}
+
 library(DESeq2)
+library(apeglm)
 
 # Get arguments
 # args[1] = dataframe
@@ -45,6 +52,7 @@ DATAFRAME <- args[1] # Directory containing
 INFO <- args[2]
 OUTPUT <- args[3] # Path and filename with .txt extension
 EQUATION <- args[4]
+SHRINKAGE <- args[5]
 
 # Import counts_data
 count_table <- read.table(DATAFRAME, sep = '\t', header = TRUE, row.names = 1, check.names=F)
@@ -54,22 +62,21 @@ sample_table <- read.table(text = readLines(INFO, warn = FALSE), header = TRUE, 
 names(sample_table) <- tolower(names(sample_table))
 
 # Convert conditions in design to factor levels
-items <- strsplit(gsub("[^[:alnum:] ]", "", tolower(toString(EQUATION))), " +")[[1]]
+items <- strsplit(gsub("[^[:alnum:] ]", " ", tolower(toString(EQUATION))), " +")[[1]]
 uniq_items <- unique(items)
 
 for ( i in uniq_items) {
-  print(i)
-  sample_table[[i]] <- factor(
-    sample_table[[i]], levels = sort(
-      unique(
-        unlist(
-          lapply(
-            sample_table[[i]], toString
+    sample_table[[i]] <- factor(
+      sample_table[[i]], levels = sort(
+        unique(
+          unlist(
+            lapply(
+              sample_table[[i]], toString
+            )
           )
         )
       )
     )
-  )
 }
 
 # Run DESeq2 analysis on data
@@ -78,8 +85,19 @@ dds <- DESeqDataSetFromMatrix(
   colData = sample_table,
   design = as.formula(paste('~', tolower(toString(EQUATION)))))
 dds <- DESeq(dds)
-res <- results(dds)
-resOrdered <- res[order(res$padj),]
+
+if (SHRINKAGE == TRUE) {
+  shrinkage_var <- tail(resultsNames(dds), n=1)
+  print(paste('Using factor ', shrinkage_var, ' as log fold change shrinkage coefficient...', sep=''))
+  res <- lfcShrink(
+    dds,
+    coef=toString(shrinkage_var),
+    type="apeglm")
+  resOrdered <- res[order(res$padj),]
+} else {
+  res <- results(dds)
+  resOrdered <- res[order(res$padj),]
+}
 
 # Write output to new file
 write.table(as.data.frame(resOrdered), file = OUTPUT, sep = '\t', col.names = T, row.names = T)
