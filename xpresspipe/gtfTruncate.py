@@ -42,6 +42,7 @@ def scan_forward(
     trim_type,
     _5prime,
     _3prime,
+    #recursive_counter,
     penalty=0):
 
     sign = gtf.at[start_index, gtf_sign_column]
@@ -60,7 +61,7 @@ def scan_forward(
             penalty += 1 # Make sure penalty keeps up with current position steps
         else:
             if sign == '+':
-                gtf, bad_exons = plus_5prime(
+                gtf, bad_exons = plus_5prime( # add recursive_counter to outputs
                     gtf,
                     bad_exons,
                     n,
@@ -70,12 +71,13 @@ def scan_forward(
                     _5prime,
                     _3prime,
                     penalty)
+                    #recursive_counter)
 
-                return gtf, bad_exons
+                return gtf, bad_exons #, recursive_counter
 
             # Exon 1 will be last exon
             elif sign == '-':
-                gtf, bad_exons = minus_5prime(
+                gtf, bad_exons = minus_5prime( # add recursive_counter to outputs
                     gtf,
                     bad_exons,
                     n,
@@ -85,8 +87,9 @@ def scan_forward(
                     _5prime,
                     _3prime,
                     penalty)
+                    #recursive_counter)
 
-                return gtf, bad_exons
+                return gtf, bad_exons #, recursive_counter
 
             # Exon 1 does not have a strandedness annotation
             else:
@@ -103,6 +106,7 @@ def plus_5prime(
     _5prime,
     _3prime,
     penalty):
+    #recursive_counter):
 
     # Edit location and exit the recursive loop
     if gtf.at[current_position, gtf_leftCoordinate_column] + _5prime \
@@ -112,14 +116,18 @@ def plus_5prime(
             = gtf.at[current_position, gtf_leftCoordinate_column] \
             + _5prime
 
-        return gtf, bad_exons
+        return gtf, bad_exons #, recursive_counter
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
+
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _5prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
-            - gtf.at[current_position, gtf_leftCoordinate_column])
+            - gtf.at[current_position, gtf_leftCoordinate_column]) \
+            - 1
+
+        #recursive_counter += 1
 
         # Recursive scan to next exon until no remainder
         return scan_forward(
@@ -130,6 +138,7 @@ def plus_5prime(
             trim_type,
             remainder,
             _3prime,
+            #recursive_counter,
             penalty + 1) # Penalty takes current position plus one for next round
 
 """Truncate 5' amount from the first listed minus stranded exon"""
@@ -143,6 +152,7 @@ def minus_5prime(
     _5prime,
     _3prime,
     penalty):
+    #recursive_counter):
 
     # Edit location and exit the recursive loop
     if gtf.at[current_position, gtf_rightCoordinate_column] - _5prime \
@@ -152,14 +162,18 @@ def minus_5prime(
             = gtf.at[current_position, gtf_rightCoordinate_column] \
             - _5prime
 
-        return gtf, bad_exons
+        return gtf, bad_exons #, recursive_counter
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
+
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _5prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
-            - gtf.at[current_position, gtf_leftCoordinate_column])
+            - gtf.at[current_position, gtf_leftCoordinate_column]) \
+            - 1
+
+        #recursive_counter += 1
 
         # Recursive scan to next exon until no remainder
         return scan_forward(
@@ -170,6 +184,7 @@ def minus_5prime(
             trim_type,
             remainder,
             _3prime,
+            #recursive_counter,
             penalty + 1)
 
 """Scan first exons recursively by chromosome position and truncate"""
@@ -181,6 +196,7 @@ def scan_backward(
     trim_type,
     _5prime,
     _3prime,
+    #recursive_counter,
     penalty=0):
 
     sign = gtf.at[start_index, gtf_sign_column]
@@ -200,7 +216,7 @@ def scan_backward(
 
         else:
             if sign == '+':
-                gtf, bad_exons = plus_3prime(
+                gtf, bad_exons = plus_3prime( # add recursive_counter to outputs
                     gtf,
                     bad_exons,
                     n,
@@ -210,12 +226,13 @@ def scan_backward(
                     _5prime,
                     _3prime,
                     penalty)
+                    #recursive_counter)
 
-                return gtf, bad_exons
+                return gtf, bad_exons #, recursive_counter
 
             # Exon 1 will be last exon
             elif sign == '-':
-                gtf, bad_exons = minus_3prime(
+                gtf, bad_exons = minus_3prime( # add recursive_counter to outputs
                     gtf,
                     bad_exons,
                     n,
@@ -225,14 +242,15 @@ def scan_backward(
                     _5prime,
                     _3prime,
                     penalty)
+                    #recursive_counter)
 
-                return gtf, bad_exons
+                return gtf, bad_exons #, recursive_counter
 
             # Exon 1 does not have a strandedness annotation
             else:
                 raise Exception('Unstranded transcript record present')
     else:
-        return gtf, bad_exons # Provide exit mechanism if start hit outside while loop
+        return gtf, bad_exons #, recursive_counter # Provide exit mechanism if start hit outside while loop
 
 """Truncate 3' amount from the first listed positive stranded exon"""
 def plus_3prime(
@@ -245,6 +263,7 @@ def plus_3prime(
     _5prime,
     _3prime,
     penalty):
+    #recursive_counter):
 
     # Edit location and exit the recursive loop
     if gtf.at[current_position, gtf_rightCoordinate_column] - _3prime \
@@ -254,14 +273,16 @@ def plus_3prime(
             = gtf.at[current_position, gtf_rightCoordinate_column] \
             - _3prime
 
-        return gtf, bad_exons
+        return gtf, bad_exons #, recursive_counter
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
+
         bad_exons.append(current_position)
         remainder = _3prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
-            - gtf.at[current_position, gtf_leftCoordinate_column])
+            - gtf.at[current_position, gtf_leftCoordinate_column]) \
+            - 1
 
         return scan_backward( # Recursive scan to next exon until no remainder
             gtf,
@@ -271,6 +292,7 @@ def plus_3prime(
             trim_type,
             _5prime,
             remainder,
+            #recursive_counter,
             penalty + 1) # Penalty takes current position plus one for next round
 
 """Truncate 3' amount from the first listed minus stranded exon"""
@@ -284,6 +306,7 @@ def minus_3prime(
     _5prime,
     _3prime,
     penalty):
+    #recursive_counter):
 
     # Edit location and exit the recursive loop
     if gtf.at[current_position, gtf_leftCoordinate_column] + _3prime \
@@ -293,14 +316,16 @@ def minus_3prime(
             = gtf.at[current_position, gtf_leftCoordinate_column] \
             + _3prime
 
-        return gtf, bad_exons
+        return gtf, bad_exons #, recursive_counter
 
     # Add current exon to list of exons too short, take remainder, and enter recursive loop
     else:
+
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _3prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
-            - gtf.at[current_position, gtf_leftCoordinate_column])
+            - gtf.at[current_position, gtf_leftCoordinate_column]) \
+            - 1
 
         # Recursive scan to next exon until no remainder
         return scan_backward(
@@ -311,6 +336,7 @@ def minus_3prime(
             trim_type,
             _5prime,
             remainder,
+            #recursive_counter,
             penalty + 1) # Penalty takes current position plus one for next round
 
 """Run MAIN function for GTF truncation"""
@@ -326,6 +352,7 @@ def truncate_gtf(
     bad_transcript = []
     bad_exons = []
     limit = _5prime + _3prime
+    #recursive_counter = 0
 
     """Step 1"""
     # Remove transcripts with exon space smaller than truncation sum
@@ -372,7 +399,7 @@ def truncate_gtf(
                 """STEP 2"""
                 # Run truncator
                 # Recursively scan forward in the transcript to truncate n nucleotides
-                gtf_c, bad_exons = scan_forward(
+                gtf_c, bad_exons = scan_forward( # add recursive_counter to outputs
                     gtf_c,
                     bad_exons,
                     index,
@@ -380,9 +407,10 @@ def truncate_gtf(
                     trim_type,
                     _5prime,
                     _3prime)
+                    #recursive_counter)
 
                 # Forward scan for next transcript, then backtrack to last exon record for transcript
-                gtf_c, bad_exons = scan_backward(
+                gtf_c, bad_exons = scan_backward( # add recursive_counter to outputs
                     gtf_c,
                     bad_exons,
                     index,
@@ -390,6 +418,7 @@ def truncate_gtf(
                     trim_type,
                     _5prime,
                     _3prime)
+                    #recursive_counter)
 
     """STEP 3"""
     # Do final check that no column 3 value is greater or equal to column 4
@@ -405,6 +434,7 @@ def truncate_gtf(
     remove_indices = list(set(bad_exons + bad_transcript + remaining_bad))
 
     print(str(len(remove_indices)) + ' records removed from reference chunk for being too short.')
+    #print(str(recursive_counter) + ' transcripts requiring recursive truncation.')
     gtf_c = gtf_c.drop(remove_indices)
     gtf_c = gtf_c.reset_index(drop=True)
 
