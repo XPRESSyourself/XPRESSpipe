@@ -75,4 +75,16 @@ truncate_truth = [
 [1,	'ensembl_havana',	'three_prime_utr',	450703,	450739]]
 truncate_truth = pd.DataFrame(truncate_truth)
 assert gtf_edit_truncated.iloc[:14,:5].equals(truncate_truth), 'edit_gtf() failed during truncation'
-assert gtf_edit_truncated.shape == (10608, 9), 'Something went wrong during the functional test running through all GTF modifications'
+assert gtf_edit_truncated.shape == (10611, 9), 'Something went wrong during the functional test running through all GTF modifications'
+
+
+
+
+
+
+
+
+
+
+
+gtf_edit_truncated.shape
