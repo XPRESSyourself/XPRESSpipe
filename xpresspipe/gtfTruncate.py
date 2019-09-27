@@ -109,8 +109,16 @@ def plus_5prime(
     #recursive_counter):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, gtf_leftCoordinate_column] + _5prime \
-    < gtf.at[current_position, gtf_rightCoordinate_column]:
+    if _5prime \
+    - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
+    - gtf.at[current_position, gtf_leftCoordinate_column]
+    + 1) == 0:
+
+        bad_exons.append(current_position) # Remove short exon from record
+        return gtf, bad_exons #, recursive_counter
+
+    elif gtf.at[current_position, gtf_leftCoordinate_column] + _5prime \
+    <= gtf.at[current_position, gtf_rightCoordinate_column]:
 
         gtf.at[current_position, gtf_leftCoordinate_column] \
             = gtf.at[current_position, gtf_leftCoordinate_column] \
@@ -124,8 +132,8 @@ def plus_5prime(
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _5prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
-            - gtf.at[current_position, gtf_leftCoordinate_column]) \
-            - 1
+            - gtf.at[current_position, gtf_leftCoordinate_column]
+            + 1)
 
         #recursive_counter += 1
 
@@ -155,8 +163,16 @@ def minus_5prime(
     #recursive_counter):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, gtf_rightCoordinate_column] - _5prime \
-    > gtf.at[current_position, gtf_leftCoordinate_column]:
+    if _5prime \
+    - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
+    - gtf.at[current_position, gtf_leftCoordinate_column] \
+    + 1) == 0:
+
+        bad_exons.append(current_position) # Remove short exon from record
+        return gtf, bad_exons #, recursive_counter
+
+    elif gtf.at[current_position, gtf_rightCoordinate_column] - _5prime \
+    >= gtf.at[current_position, gtf_leftCoordinate_column]:
 
         gtf.at[current_position, gtf_rightCoordinate_column] \
             = gtf.at[current_position, gtf_rightCoordinate_column] \
@@ -170,8 +186,8 @@ def minus_5prime(
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _5prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
-            - gtf.at[current_position, gtf_leftCoordinate_column]) \
-            - 1
+            - gtf.at[current_position, gtf_leftCoordinate_column] \
+            + 1)
 
         #recursive_counter += 1
 
@@ -266,8 +282,16 @@ def plus_3prime(
     #recursive_counter):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, gtf_rightCoordinate_column] - _3prime \
-    > gtf.at[current_position, gtf_leftCoordinate_column]:
+    if _3prime \
+    - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
+    - gtf.at[current_position, gtf_leftCoordinate_column] \
+    + 1) == 0:
+
+        bad_exons.append(current_position)
+        return gtf, bad_exons #, recursive_counter
+
+    elif gtf.at[current_position, gtf_rightCoordinate_column] - _3prime \
+    >= gtf.at[current_position, gtf_leftCoordinate_column]:
 
         gtf.at[current_position, gtf_rightCoordinate_column] \
             = gtf.at[current_position, gtf_rightCoordinate_column] \
@@ -281,8 +305,8 @@ def plus_3prime(
         bad_exons.append(current_position)
         remainder = _3prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
-            - gtf.at[current_position, gtf_leftCoordinate_column]) \
-            - 1
+            - gtf.at[current_position, gtf_leftCoordinate_column] \
+            + 1)
 
         return scan_backward( # Recursive scan to next exon until no remainder
             gtf,
@@ -309,8 +333,16 @@ def minus_3prime(
     #recursive_counter):
 
     # Edit location and exit the recursive loop
-    if gtf.at[current_position, gtf_leftCoordinate_column] + _3prime \
-    < gtf.at[current_position, gtf_rightCoordinate_column]:
+    if _3prime \
+    - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
+    - gtf.at[current_position, gtf_leftCoordinate_column] \
+    + 1) == 0:
+
+        bad_exons.append(current_position) # Remove short exon from record
+        return gtf, bad_exons #, recursive_counter
+
+    elif gtf.at[current_position, gtf_leftCoordinate_column] + _3prime \
+    <= gtf.at[current_position, gtf_rightCoordinate_column]:
 
         gtf.at[current_position, gtf_leftCoordinate_column] \
             = gtf.at[current_position, gtf_leftCoordinate_column] \
@@ -324,8 +356,8 @@ def minus_3prime(
         bad_exons.append(current_position) # Remove short exon from record
         remainder = _3prime \
             - abs(gtf.at[current_position, gtf_rightCoordinate_column] \
-            - gtf.at[current_position, gtf_leftCoordinate_column]) \
-            - 1
+            - gtf.at[current_position, gtf_leftCoordinate_column] \
+            + 1)
 
         # Recursive scan to next exon until no remainder
         return scan_backward(
@@ -363,7 +395,7 @@ def truncate_gtf(
 
             # Get transcript ID
             transcript_id = gtf.at[index, gtf_annotation_column][(gtf.at[index, gtf_annotation_column].find(parse_type) + 15):].split('\";')[0]
-
+    
             # Find range for this transcript and parse out
             n = 0
             parse_id = transcript_id
@@ -386,7 +418,8 @@ def truncate_gtf(
 
             # Create exon length array for each exon labeled record for the transcript
             exon_lengths = gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_rightCoordinate_column] \
-                - gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_leftCoordinate_column]
+                - gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_leftCoordinate_column] \
+                + 1
 
             # Check exons for this record and check
             if exon_lengths.sum() <= limit:
@@ -425,7 +458,7 @@ def truncate_gtf(
     # If the case, append to list and drop
     remaining_bad = []
     for index, row in gtf_c.iterrows():
-        if row[gtf_leftCoordinate_column] >= row[gtf_rightCoordinate_column] \
+        if row[gtf_leftCoordinate_column] > row[gtf_rightCoordinate_column] \
         and row[gtf_type_column] == trim_type:
             remaining_bad.append(index)
 
