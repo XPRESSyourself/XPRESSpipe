@@ -54,9 +54,9 @@ def get_distribution(
             dist_list[length] += 1
 
     # Clean up variables
-    f1.close()
+    f1 = None
     if file2 != None:
-        f2.close()
+        f2 = None
 
     # Compile length statistics
     distribution_profile = pd.DataFrame(dist_list, index=[0]).T
