@@ -170,16 +170,14 @@ def build_curation():
         add3 = input('Are you performing ribosome profiling or would other like to truncate each transcripts CDS records for quantification? (yes/no): ')
         if add3.lower() == 'yes':
             mod_value = mod_value + ' -t'
-    else:
-        mod_value = ''
 
-    if add3.lower() == 'yes':
-        five_prime = input('Would you like to use a value for 5\' truncation other than the default of 45 nucleotides? (yes/no): ')
-        if five_prime.lower() == 'yes':
-            five_prime = input('Please enter the value you would like to use (must be an int): ')
-            five_prime = ' --truncate_5prime ' + str(five_prime)
-        else:
-            five_prime = ''
+        if add3.lower() == 'yes':
+            five_prime = input('Would you like to use a value for 5\' truncation other than the default of 45 nucleotides? (yes/no): ')
+            if five_prime.lower() == 'yes':
+                five_prime = input('Please enter the value you would like to use (must be an int): ')
+                five_prime = ' --truncate_5prime ' + str(five_prime)
+            else:
+                five_prime = ''
 
         three_prime = input('Would you like to use a value for 3\' truncation other than the default of 15 nucleotides? (yes/no): ')
         if three_prime.lower() == 'yes':
@@ -189,6 +187,7 @@ def build_curation():
             three_prime = ''
 
     else:
+        mod_value = ''
         five_prime = ''
         three_prime = ''
 
