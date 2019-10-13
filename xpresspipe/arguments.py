@@ -156,8 +156,12 @@ def check_inputs(
         raise Exception('Invalid reference_type value provided. Could not find a file ending with .gtf')
 
     if 'quantification_method' in args_dict:
-        if str(args_dict['quantification_method']).lower() == 'cufflinks' or str(args_dict['quantification_method']).lower() == 'htseq':
+
+        args_dict['quantification_method'] = args_dict['quantification_method'].lower()
+
+        if str(args_dict['quantification_method']) == 'cufflinks' or str(args_dict['quantification_method']) == 'htseq' or str(args_dict['quantification_method']) == 'both':
             pass
+
         else:
             raise Exception('Invalid quantification method provided: must be \"cufflinks\" or \"htseq\"')
 
@@ -206,7 +210,28 @@ def check_inputs(
             + str(type(args_dict['adaptors'])))
 
     if 'quantification_method' in args_dict and 'stranded' in args_dict:
-        if str(args_dict['quantification_method']).lower() == 'htseq':
+
+        if str(args_dict['quantification_method']).lower() == 'both':
+
+            if str(args_dict['stranded']).lower() == 'fr-firststrand':
+                args_dict['htseq_stranded'] = 'yes'
+                args_dict['cufflinks_stranded'] = 'fr-firststrand'
+
+            elif str(args_dict['stranded']).lower() == 'fr-secondstrand':
+                args_dict['htseq_stranded'] = 'yes'
+                args_dict['cufflinks_stranded'] = 'fr-secondstrand'
+
+            elif str(args_dict['stranded']).lower() == 'no' or str(args_dict['stranded']).lower() == 'fr-unstranded':
+                args_dict['htseq_stranded'] = 'no'
+                args_dict['cufflinks_stranded'] = 'fr-unstranded'
+
+            elif str(args_dict['stranded']).lower() == 'yes':
+                raise Exception('When using a stranded protocol with Cufflinks and HTSeq together, \
+                    please provide either \"fr-firststrand\" or \"fr-secondstrand\" for the --stranded argument.')
+            else:
+                raise Exception('Invalid strandedness option for using Cufflinks and HTSeq together')
+
+        elif str(args_dict['quantification_method']).lower() == 'htseq':
             if str(args_dict['stranded']).lower() == 'no' \
             or str(args_dict['stranded']).lower() == 'yes':
                 pass
@@ -214,6 +239,7 @@ def check_inputs(
                 args_dict['stranded'] = 'no'
             else:
                 raise Exception('Invalid strandedness option for HTSeq-count')
+
         elif str(args_dict['quantification_method']).lower() == 'cufflinks':
             if str(args_dict['stranded']).lower() == 'fr-unstranded' \
             or str(args_dict['stranded']).lower() == 'fr-firststrand' \
@@ -487,7 +513,7 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks or both). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
         default = 'htseq',
         type = str,
@@ -671,7 +697,7 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks or both). If using cufflinks, no sample normalization is needed',
         metavar = '<method>',
         default = 'htseq',
         type = str,
@@ -853,7 +879,7 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: htseq; other option: cufflinks). HTSeq is recommended for ribosome profiling data as it allows quantification across the CDS',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks or both). HTSeq is recommended for ribosome profiling data as it allows quantification across the CDS',
         metavar = '<method>',
         default = 'htseq',
         type = str,
@@ -1147,7 +1173,7 @@ def get_arguments(
         required = False)
     count_opts.add_argument(
         '-c', '--quantification_method',
-        help = 'Specify quantification method (default: htseq; other option: cufflinks). If using cufflinks, no sample normalization is needed. HTSeq is recommended for ribosome profiling data as it allows quantification across the CDS.',
+        help = 'Specify quantification method (default: htseq; other option: cufflinks or both). If using cufflinks, no sample normalization is needed. HTSeq is recommended for ribosome profiling data as it allows quantification across the CDS.',
         metavar = '<method>',
         default = 'htseq',
         type = str,
