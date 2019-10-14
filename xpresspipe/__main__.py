@@ -71,15 +71,17 @@ def run_quantify(
 
     elif args_dict['quantification_method'] == 'both':
 
-        args_dict['quantification_method'] == 'htseq'
+        args_dict['quantification_method'] = 'htseq'
         args_dict['stranded'] = args_dict['htseq_stranded']
         args_dict = count_reads(args_dict)
 
         # Collect counts into a single table
+        revert_input = args_dict['input']
         args_dict['input'] = args_dict['counts']
         collect_counts(args_dict)
 
-        args_dict['quantification_method'] == 'cufflinks'
+        args_dict['input'] = revert_input
+        args_dict['quantification_method'] = 'cufflinks'
         args_dict['stranded'] = args_dict['cufflinks_stranded']
         args_dict = count_reads(args_dict)
 
