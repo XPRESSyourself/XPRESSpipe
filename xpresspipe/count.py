@@ -1,5 +1,4 @@
-"""
-XPRESSpipe
+"""XPRESSpipe
 An alignment and analysis pipeline for RNAseq data
 alias: xpresspipe
 
@@ -20,24 +19,27 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
 
-"""IMPORT DEPENDENCIES"""
+"""IMPORT DEPENDENCIES
+"""
 import os
 import sys
 import datetime
 import pandas as pd
 from xpressplot import count_table
 
-"""IMPORT INTERNAL DEPENDENCIES"""
+"""IMPORT INTERNAL DEPENDENCIES
+"""
 from .utils import get_files, get_directories, add_directory
 from .parallel import parallelize
 
 __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
 
-"""Parse cufflinks table for FPKM info"""
+"""Parse cufflinks table for FPKM info
+"""
 def parse_table(
-    directory,
-    output,
-    file):
+        directory,
+        output,
+        file):
 
     # file will be at str(directory) + str(file)
     # output will be to str(output) as directory_name.tsv from second to last /
@@ -63,7 +65,7 @@ def parse_table(
 
 """Create counts tables from HTseq"""
 def count_file_htseq(
-    args):
+        args):
 
     file, args_dict = args[0], args[1] # Parse args
 
@@ -95,14 +97,14 @@ def count_file_cufflinks(
 
     args_dict = add_directory(
         args_dict,
-        'counts',
+        'abundances',
         str(dir_name))
 
     # Count
     os.system(
         str(__path__) + 'cufflinks'
         + ' ' + str(args_dict['input']) + str(file)
-        + ' --output-dir ' + str(args_dict['counts']) + str(dir_name)
+        + ' --output-dir ' + str(args_dict['abundances']) + str(dir_name)
         + ' --GTF ' + str(args_dict['gtf'])
         + ' --library-type ' + str(args_dict['stranded']).lower()
         + ' --num-threads 1'
@@ -112,12 +114,6 @@ def count_file_cufflinks(
 def count_reads(
     args_dict,
     suffix='_Aligned.sort.bam'):
-
-    # Add output directories
-    args_dict = add_directory(
-        args_dict,
-        'output',
-        'counts')
 
     if 'deduplicate' in args_dict and args_dict['deduplicate'] == True:
         suffix = '_dedupRemoved.bam'
@@ -135,12 +131,27 @@ def count_reads(
 
     # Count aligned RNAseq reads
     if args_dict['quantification_method'] == 'cufflinks':
+
+        # Add output directories
+        args_dict = add_directory(
+            args_dict,
+            'output',
+            'abundances')
+
         parallelize(
         count_file_cufflinks,
         files,
         args_dict,
         mod_workers = True)
+
     else:
+
+        # Add output directories
+        args_dict = add_directory(
+            args_dict,
+            'output',
+            'counts')
+
         parallelize(
         count_file_htseq,
         files,
@@ -153,13 +164,6 @@ def count_reads(
 def collect_counts(
     args_dict):
 
-    # Add output directories
-    if 'counts' not in args_dict:
-        args_dict = add_directory(
-            args_dict,
-            'output',
-            'counts')
-
     # Get list of files to count based on acceptable file types
     if args_dict['quantification_method'] == 'cufflinks':
 
@@ -171,13 +175,14 @@ def collect_counts(
             parse_table(
                 dir,
                 args_dict['input'],
-                'genes.fpkm_tracking')
+                'isoforms.fpkm_tracking')
 
         files = get_files(
             args_dict['input'],
             ['fpkm_counts.tsv'])
 
     else:
+
         files = get_files(
             args_dict['input'],
             ['.tsv'])
@@ -193,16 +198,19 @@ def collect_counts(
     # Output data
     if args_dict['quantification_method'] == 'cufflinks':
         count_suffix = '_cufflinks_FPKM_table.tsv'
+        location = 'abundances'
+
     else:
         count_suffix = '_count_table.tsv'
+        location = 'counts'
 
     if 'experiment' in args_dict and args_dict['experiment'] != None:
         counts.to_csv(
-            str(args_dict['counts']) + str(args_dict['experiment']) + str(count_suffix),
+            str(args_dict[location]) + str(args_dict['experiment']) + str(count_suffix),
             sep = '\t')
     else:
         cdt = datetime.datetime.now()
         counts.to_csv(
-            str(args_dict['counts']) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) \
+            str(args_dict[location]) + str(cdt.year) + '_' + str(cdt.month) + '_' + str(cdt.day) \
             + '_' + str(cdt.hour) + 'h_' + str(cdt.minute) + 'm_' + str(cdt.second) + 's' + str(count_suffix),
             sep = '\t')

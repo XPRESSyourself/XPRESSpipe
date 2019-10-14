@@ -55,6 +55,69 @@ from .buildCommand import build_command
 
 ASSUMPTIONS: Proper arguments are provided where some user renaming of files may be required
 """
+
+"""Wrapper for quantification utilities
+"""
+def run_quantify(
+        args_dict):
+
+    if args_dict['quantification_method'] == 'cufflinks':
+
+        args_dict = count_reads(args_dict)
+
+        # Collect counts into a single table
+        args_dict['input'] = args_dict['abundances']
+        collect_counts(args_dict)
+
+    elif args_dict['quantification_method'] == 'both':
+
+        args_dict['quantification_method'] = 'htseq'
+        args_dict['stranded'] = args_dict['htseq_stranded']
+        args_dict = count_reads(args_dict)
+
+        # Collect counts into a single table
+        revert_input = args_dict['input']
+        args_dict['input'] = args_dict['counts']
+        collect_counts(args_dict)
+
+        args_dict['input'] = revert_input
+        args_dict['quantification_method'] = 'cufflinks'
+        args_dict['stranded'] = args_dict['cufflinks_stranded']
+        args_dict = count_reads(args_dict)
+
+        # Collect counts into a single table
+        args_dict['input'] = args_dict['abundances']
+        collect_counts(args_dict)
+
+    else:
+
+        args_dict = count_reads(args_dict)
+
+        # Collect counts into a single table
+        args_dict['input'] = args_dict['counts']
+        collect_counts(args_dict)
+
+    check_process(
+        args_dict['log_file'],
+        msg_complete(),
+        'COUNT') # Check log file for errors and exceptions
+
+    # Normalize
+    if args_dict['quantification_method'] == 'htseq':
+
+        msg_normalize()
+        args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_count_table.tsv'
+        run_normalization(args_dict)
+        check_process(
+            args_dict['log_file'],
+            msg_complete(),
+            'NORMALIZE') # Check log file for errors and exceptions
+
+    else:
+        pass
+
+    return args_dict
+
 # For eventual GUI integration
 # from gooey import Gooey
 # @Gooey
@@ -126,12 +189,8 @@ def main(
         print('Counting alignments...')
 
         # Count reads for each alignment file
-        args_dict = count_reads(args_dict)
-
-        # Collect counts into a single table
-        print('Collecting and collating counts...')
-        args_dict['input'] = args_dict['counts']
-        collect_counts(args_dict)
+        msg_count()
+        args_dict = run_quantify(args_dict)
 
         print('Generating multiqc summary...')
         get_multiqc_summary(args_dict)
@@ -460,28 +519,11 @@ def main(
 
         # Count reads for each alignment file
         msg_count()
-        args_dict = count_reads(args_dict)
-
-        # Collect counts into a single table
-        args_dict['input'] = args_dict['counts']
-        collect_counts(args_dict)
-        check_process(
-            args_dict['log_file'],
-            msg_complete(),
-            'COUNT') # Check log file for errors and exceptions
-
-        # Normalize
-        msg_normalize()
-        if args_dict['quantification_method'] != 'cufflinks':
-            args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_count_table.tsv'
-            run_normalization(args_dict)
-            check_process(
-                args_dict['log_file'],
-                msg_complete(),
-                'NORMALIZE') # Check log file for errors and exceptions
+        args_dict = run_quantify(args_dict)
 
         # Run quality control
         msg_quality()
+
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)
 
@@ -548,6 +590,7 @@ def main(
         get_fastqc(args_dict) # Run FastQC on trimmed reads
         msg_align()
         args_dict = run_peRNAseq(args_dict)
+
         # Get other formatted files
         args_dict['input'] = args_dict['alignments_coordinates']
         if args_dict['output_bed'] == True:
@@ -559,25 +602,7 @@ def main(
 
         # Count reads for each alignment file
         msg_count()
-        args_dict = count_reads(args_dict)
-
-        # Collect counts into a single table
-        args_dict['input'] = args_dict['counts']
-        collect_counts(args_dict)
-        check_process(
-            args_dict['log_file'],
-            msg_complete(),
-            'COUNT') # Check log file for errors and exceptions
-
-        # Normalize
-        msg_normalize()
-        if args_dict['quantification_method'] != 'cufflinks':
-            args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_count_table.tsv'
-            run_normalization(args_dict)
-            check_process(
-                args_dict['log_file'],
-                msg_complete(),
-                'NORMALIZE') # Check log file for errors and exceptions
+        args_dict = run_quantify(args_dict)
 
         # Run quality control
         msg_quality()
@@ -660,30 +685,11 @@ def main(
 
         # Count reads for each alignment file
         msg_count()
-        args_dict = count_reads(args_dict)
-
-        # Collect counts into a single table
-        args_dict['input'] = args_dict['counts']
-        collect_counts(args_dict)
-        check_process(
-            args_dict['log_file'],
-            msg_complete(),
-            'COUNT') # Check log file for errors and exceptions
-
-        # Normalize
-        if args_dict['quantification_method'] != 'cufflinks':
-            msg_normalize()
-            args_dict['input'] = str(args_dict['input']) + str(args_dict['experiment']) + '_count_table.tsv'
-            run_normalization(args_dict)
-            check_process(
-                args_dict['log_file'],
-                msg_complete(),
-                'NORMALIZE') # Check log file for errors and exceptions
-        else:
-            pass
+        args_dict = run_quantify(args_dict)
 
         # Run quality control
         msg_quality()
+
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)
 
