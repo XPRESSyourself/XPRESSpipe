@@ -175,7 +175,7 @@ def collect_counts(
             parse_table(
                 dir,
                 args_dict['input'],
-                'genes.fpkm_tracking')
+                'isoforms.fpkm_tracking')
 
         files = get_files(
             args_dict['input'],
