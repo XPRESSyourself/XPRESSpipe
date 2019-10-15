@@ -23,7 +23,12 @@ from __future__ import print_function
 """IMPORT DEPENDENCIES"""
 import os
 import sys
-from urllib.request import Request, urlopen
+
+try:
+    from urllib.request import Request, urlopen
+except ImportError:
+    from urllib2 import Request, urlopen
+
 import argparse
 import datetime
 from math import ceil
