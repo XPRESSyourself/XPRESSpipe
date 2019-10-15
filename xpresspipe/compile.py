@@ -28,6 +28,7 @@ import numpy as np
 from math import ceil
 from scipy.stats import gaussian_kde
 import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
 import seaborn as sns

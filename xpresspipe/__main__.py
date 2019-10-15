@@ -226,7 +226,7 @@ def main(
             shrinkage = 'FALSE'
 
         # Run deseq2 in R
-        os.system('rscript' \
+        os.system('Rscript' \
             + ' ' + str(args_dict['path']) + 'Rdiffxpress.r' \
             + ' ' + str(args_dict['input']) \
             + ' ' + str(args_dict['sample']) \
