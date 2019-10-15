@@ -220,7 +220,7 @@ def main(
             raise Exception('Tilde should not be included in design formula, script will automatically add this syntax.')
 
         # Run deseq2 in R
-        os.system('rscript' \
+        os.system('Rscript' \
             + ' ' + str(args_dict['path']) + 'Rdiffxpress.r' \
             + ' ' + str(args_dict['input']) \
             + ' ' + str(args_dict['sample']) \
