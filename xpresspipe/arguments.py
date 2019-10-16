@@ -140,12 +140,15 @@ def check_inputs(
 
     # Check user-provided directory formatting
     for key, value in args_dict.items():
-        if key == 'cmd':
+
+        if key == 'cmd' or key == 'experiment':
             pass
+
         elif os.path.isdir(str(value)) == True:
             args_dict[key] = check_directories(
                 args_dict[key],
                 key)
+
         else:
             pass
 
