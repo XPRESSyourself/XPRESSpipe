@@ -41,6 +41,8 @@ def threshold_ram(
     args_dict,
     file_list):
 
+
+
     total = psutil.virtual_memory()[1] # Get available memory
 
     file_sizes = [] # Get max file size
@@ -52,6 +54,10 @@ def threshold_ram(
     #if file[-6:] == '.fastq': # Assume binary files will expand by factor of 4 for decompression and additional data storage used in process
     #    factor = 2
     #el
+
+    if file[-6:] == '.fastq':
+        return cpu_count(), cpu_count()
+
     if file[-4:] == '.bam' or file[-4:] == '.sam':
         factor = 2
     else:
