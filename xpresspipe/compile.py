@@ -28,7 +28,6 @@ import numpy as np
 from math import ceil
 from scipy.stats import gaussian_kde
 import matplotlib
-matplotlib.use('agg')
 import matplotlib.pyplot as plt
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
 import seaborn as sns
@@ -74,13 +73,44 @@ def compile_matrix_metrics(
 
     for file in file_list:
         x = 0
-        df = pd.read_csv(
-            str(path) + str(file),
-            sep = '\t',
-            index_col = 0) # Initialize dataframe for relevant data
+
+        if 'read_distribution' in plot_type:
+            df = pd.read_csv(
+                str(path) + str(file),
+                sep = '\t') # Initialize dataframe for relevant data
+            df.index = df[str(lab_x)]
+            del df.index.name
+
+        else:
+            df = pd.read_csv(
+                str(path) + str(file),
+                sep = '\t',
+                index_col = 0) # Initialize dataframe for relevant data
+
         df = df.dropna(
             axis = 0,
             subset = [str(lab_x), str(lab_y)]) # Remove rows where pertinent information is missing
+        df = df.sort_index()
+
+        # Fill in missing index info
+        last_index = None
+
+        for index in df.index.tolist():
+
+            if last_index == None:
+                last_index = index
+
+            elif abs(index - last_index) != 1:
+
+                for x in range(last_index + 1, index):
+
+                    df.loc[x] = 0
+
+            else:
+                pass
+
+            last_index = index
+
         df = df.sort_index()
 
         # Prepare subplots
