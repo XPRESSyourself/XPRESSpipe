@@ -36,42 +36,46 @@ from .utils import add_directory, get_files
 """Get distributions matrix for SE or PE files"""
 def get_distribution(
     args_dict,
+    output,
     file1,
     file2=None):
 
-    # Get files
-    f1 = open(str(args_dict['input']) + str(file1), 'r').readlines()
-    if file2 != None:
-        f2 = open(str(args_dict['input']) + str(file1), 'r').readlines()
+    print('Evaluating the read distribution profile for ' + str(file1))
+    # Perform metagene analysis
+    # Loop through each selected BAM
+    # args[1] = Path to BAM files
+    # args[2] = List of BAM files
+    # args[3] = Index file with path
+    # args[4] = Output file path
+    os.system(
+        'julia'
+        + ' ' + str(args_dict['path']) + 'readDistribution.jl'
+        + ' ' + str(file1)
+        + ' ' + str(file2)
+        + ' ' + str(output)
+        + str(args_dict['log']))
 
-    # Get lengths of reads
-    dist_list = Counter()
-    for i, line in enumerate(f1[1:], 1):
-        if (i - 1) % 4 == 0:
-            length = len(line)
-            if file2 != None:
-                length += len(f2[i])
-            dist_list[length] += 1
+"""Format output file name
+"""
+def format_name(
+        file):
 
-    # Clean up variables
-    f1 = None
-    if file2 != None:
-        f2 = None
+    if file[-3:] == '.fq':
+        file = file[:-3]
 
-    # Compile length statistics
-    distribution_profile = pd.DataFrame(dist_list, index=[0]).T
-    distribution_profile.columns = ['count']
-    index_dist = distribution_profile.index.tolist()
-    for i in range(min(index_dist), max(index_dist) + 1):
-        if i not in index_dist:
-            distribution_profile.loc[i] = 0
-    distribution_profile = distribution_profile.sort_index()
+    elif file[-6:] == '.fastq':
+        file = file[:-6]
 
-    # Export metrics
-    distribution_profile['read size (bp)'] = distribution_profile.index
-    distribution_profile.to_csv(
-        str(args_dict['read_distributions']) + 'metrics/' + str(file1).rsplit('.',1)[0] + '_metrics.txt',
-        sep='\t')
+    else:
+        pass
+
+    if file[:8] == 'trimmed_':
+        file = file[8:]
+
+    else:
+        pass
+
+    return file
 
 """Single-end RNA-seq pipeline"""
 def se_dist(
@@ -79,9 +83,13 @@ def se_dist(
 
     file, args_dict = args[0], args[1]
 
-    output = str(file[8:-6]) # Get output file name before adding path to file name(s)
+    file_input = str(args_dict['input']) + str(file)
 
-    get_distribution(args_dict, file)
+    # Get output file name before adding path to file name(s)
+    file_output = format_name(file)
+    output = str(args_dict['read_distributions']) + 'metrics/' + str(file_output) + '_metrics.txt'
+
+    get_distribution(args_dict, output, file_input)
 
 """Paired-end RNA-seq pipeline"""
 def pe_dist(
@@ -89,10 +97,14 @@ def pe_dist(
 
     file1, file2, args_dict = args[0], args[1], args[2]
 
-    # STAR first pass
-    output = str(file1[8:-7]) # Get output file name before adding path to file name(s)
+    file1_input = str(args_dict['input']) + str(file1)
+    file2_input = str(args_dict['input']) + str(file2)
 
-    get_distribution(args_dict, file1, file2)
+    # Get output file name before adding path to file name(s)
+    file_output = format_name(file1)
+    output = str(args_dict['read_distributions']) + 'metrics/' + str(file_output) + '_metrics.txt'
+
+    get_distribution(args_dict, output, file1_input, file2_input)
 
 
 """Manager for running read distribution summary plotting"""
