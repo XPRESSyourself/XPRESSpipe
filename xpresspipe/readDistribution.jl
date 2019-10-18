@@ -141,7 +141,7 @@ function main(args)
     output = args[3]
 
     if fastq2 == "None"
-        seq_dict = readFastq(fastq2)
+        seq_dict = readFastq(fastq1)
     else
         seq_dict = readFastqPE(fastq1, fastq2)
     end
