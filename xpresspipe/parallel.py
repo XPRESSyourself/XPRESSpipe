@@ -51,10 +51,12 @@ def threshold_ram(
 
     _max = max(file_sizes)
 
-    if file[-6:] == '.fastq': # Assume binary files will expand by factor of 4 for decompression and additional data storage used in process
-        factor = 0.2
+    if file[-6:] == '.fastq':
+        return cpu_count(), cpu_count() # records are read line by line without storage, low memory footprint
+
     elif file[-4:] == '.bam' or file[-4:] == '.sam':
-        factor = 2
+        factor = 0.5 # Experimental factor
+
     else:
         factor = 1
 
