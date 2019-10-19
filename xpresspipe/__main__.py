@@ -253,6 +253,7 @@ def main(
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
         # Perform metagene analysis
+        args_dict['gene_name'] = None
         index_gtf(args_dict)
         make_metagene(args_dict, files)
 
@@ -319,7 +320,6 @@ def main(
         print('Performing periodicity analysis on transcriptome-mapped files...')
 
         # Generate periodicity summaries
-        #index_gtf(args_dict)
         make_periodicity(args_dict)
 
         # Check log file for errors and exceptions
@@ -556,6 +556,7 @@ def main(
         else:
             print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
+        args_dict['gene_name'] = None
         index_gtf(args_dict)
         make_metagene(args_dict, files)
         os.system(
@@ -638,6 +639,7 @@ def main(
         else:
             print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
+        args_dict['gene_name'] = None
         index_gtf(args_dict)
         make_metagene(args_dict, files)
 
@@ -722,6 +724,7 @@ def main(
         else:
             print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
 
+        args_dict['gene_name'] = None
         index_gtf(args_dict)
         make_metagene(args_dict, files)
         make_periodicity(args_dict)

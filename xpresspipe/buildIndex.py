@@ -96,7 +96,6 @@ def index_gtf(
         # Get file names and clean up inputs
         gene_name = gene_name.replace(' ','')
         gene_gtf = str(gene_name) + '.gtf'
-        output_file = str(gene_name) + '.idx'
 
         # Import GTF and get only records for gene of interest
         gtf = pd.read_csv(

@@ -140,6 +140,9 @@ def compile_matrix_metrics(
                 ax = axes[ax_y, ax_x],
                 grid = None)
 
+            if plot_type[:3].upper() == 'CDS':
+                axes[ax_y, ax_x].set_xlabel("Representative CDS")
+
         axes[ax_y, ax_x].axhline(
             0,
             xmin = 0,

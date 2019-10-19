@@ -35,9 +35,9 @@ from .compile import compile_matrix_metrics
 from .utils import add_directory, get_files
 from .buildIndex import index_gtf
 
-length = 'l_tr'
-utr5 = 'l_utr5'
-utr3 = 'l_utr3'
+transcript_length = 'l_tr'
+utr5_length = 'l_utr5'
+utr3_length = 'l_utr3'
 
 def roundup(value):
     return int(ceil(value))
@@ -58,30 +58,30 @@ def finish_metagene(args):
         index_col=0)
 
     # Make transcript / length dictionary
-    reference = pd.Series(dict[length].values,index=dict['transcript']).to_dict()
-    dict = None
+    reference = pd.Series(dict[transcript_length].values, index=dict['transcript']).to_dict()
 
     # Map exon space to each bam record based on its transcript ID
     bam['total_length']= bam['seqnames'].map(reference)
 
     # Get UTR offset amounts and map to transcript IDs
-    #if str(args_dict['feature_type']).lower() == 'cds':
-    #    utr5_correct = pd.Series(dict[utr5].values,index=dict['transcript']).to_dict()
-    #    utr3_correct = pd.Series(dict[utr3].values,index=dict['transcript']).to_dict()
-    #
-    #    bam['utr5_offset'] = bam['seqnames'].map(utr5_correct)
-    #    bam['utr3_offset'] = bam['seqnames'].map(utr3_correct)
+    if str(args_dict['feature_type']).lower() == 'cds':
+        utr5_correct = pd.Series(dict[utr5_length].values, index=dict['transcript']).to_dict()
+        utr3_correct = pd.Series(dict[utr3_length].values, index=dict['transcript']).to_dict()
 
+        bam['utr5_offset'] = bam['seqnames'].map(utr5_correct)
+        bam['utr3_offset'] = bam['seqnames'].map(utr3_correct)
+
+    dict = None
     bam = bam.dropna()
 
     # Calculate meta-position
-    #if str(args_dict['feature_type']).lower() == 'cds':
+    if str(args_dict['feature_type']).lower() == 'cds':
         # Compensate for UTRs in meta-calculations across CDS
         # Those reads mapping outside of the CDS region will be < 1 or > 100
         # When data is collated, will only take values between 1 and 100
-    #    bam['meta_distance'] = abs(bam['meta_position'] - bam['utr5_offset']) / abs(bam['total_length'] - bam['utr5_offset'] - bam['utr3_offset']) * 100
-    #else:
-    bam['meta_distance'] = abs(bam['meta_position']) / abs(bam['total_length']) * 100
+        bam['meta_distance'] = abs(bam['meta_position'] - bam['utr5_offset']) / abs(bam['total_length'] - bam['utr5_offset'] - bam['utr3_offset']) * 100
+    else:
+        bam['meta_distance'] = abs(bam['meta_position']) / abs(bam['total_length']) * 100
 
     # Set a nice number with no remainder
     bam['meta_distance'] = bam['meta_distance'].apply(roundup)
