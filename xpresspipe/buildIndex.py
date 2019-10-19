@@ -115,6 +115,7 @@ def index_gtf(
 
         else:
             gtf = gtf.loc[gtf[gtf_annotation_column].str.contains('\"' + str(gene_name) + '\"')]
+            
         gtf = gtf.reset_index(drop=True)
 
         # Do a fail-safe check to make sure doesn't get tripped up later

@@ -65,7 +65,11 @@ r_deps = [
     'dupradar',
     'riboWaltz',
     ]
-
+argument_directories = [
+    'input',
+    'output',
+    'reference'
+]
 # Set default values for arguments
 DEFAULT_READ_MIN  =  17
 DEFAULT_READ_QUALITY  =  28
@@ -146,10 +150,7 @@ def check_inputs(
     # Check user-provided directory formatting
     for key, value in args_dict.items():
 
-        if key == 'cmd' or key == 'experiment':
-            pass
-
-        elif os.path.isdir(str(value)) == True:
+        if os.path.isdir(str(value)) == True and value in argument_directories:
             args_dict[key] = check_directories(
                 args_dict[key],
                 key)

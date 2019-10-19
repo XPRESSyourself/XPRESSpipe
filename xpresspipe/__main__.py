@@ -287,7 +287,7 @@ def main(
                 'rm'
                 + ' ' + args_dict['output'] + '*.fts')
         else:
-            print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known housekeeping gene for your organism.')
+            print('Could not find ' + str(args_dict['gene_name']) + ' in reference. Please try running the geneCoverage module with another known gene for your organism.')
 
         os.system(
             'rm'
