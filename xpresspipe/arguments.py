@@ -153,8 +153,7 @@ def check_inputs(
 
         if os.path.isdir(str(value)) == True and key in argument_directories:
             args_dict[key] = check_directories(
-                args_dict[key],
-                key)
+                args_dict[key])
 
         else:
             pass
