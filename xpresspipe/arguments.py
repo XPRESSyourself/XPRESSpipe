@@ -150,7 +150,7 @@ def check_inputs(
     # Check user-provided directory formatting
     for key, value in args_dict.items():
 
-        if os.path.isdir(str(value)) == True and value in argument_directories:
+        if os.path.isdir(str(value)) == True and key in argument_directories:
             args_dict[key] = check_directories(
                 args_dict[key],
                 key)
