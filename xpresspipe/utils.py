@@ -28,8 +28,7 @@ import pandas as pd
 
 """Check directory formatting"""
 def check_directories(
-    input,
-    type=None):
+    input):
 
     # Check that a file wasn't passed in
     if os.path.isdir(input) != True:
@@ -73,6 +72,8 @@ def get_files(
     directory,
     suffix,
     omit=[]):
+
+    directory = check_directories(directory)
 
     # Initialize blank file list to fill
     file_list = []
