@@ -28,18 +28,11 @@ import numpy as np
 from math import ceil
 from scipy.stats import gaussian_kde
 import matplotlib
-try:
-    import matplotlib
-    matplotlib.use('agg')
-    import matplotlib.pyplot as plt
-except:
-    import matplotlib
+if str(matplotlib.get_backend()).lower() != 'agg':
     import matplotlib.pyplot as plt
     plt.switch_backend('agg')
 else:
-    import matplotlib
     import matplotlib.pyplot as plt
-
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
 import seaborn as sns
 
