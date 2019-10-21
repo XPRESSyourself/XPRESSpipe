@@ -34,6 +34,7 @@ import datetime
 from math import ceil
 import numpy as np
 import multiprocessing
+from multiprocessing import cpu_count
 from textwrap import dedent
 
 """IMPORT INTERNAL DEPENDENCIES"""
@@ -157,6 +158,9 @@ def check_inputs(
 
         else:
             pass
+
+    if 'max_processors' in args_dict and (args_dict['max_processors'] == None or args_dict['max_processors'] == 'None'):
+        args_dict['max_processors'] = cpu_count()
 
     if 'gtf' in args_dict:
         args_dict['gtf'] = os.path.abspath(args_dict['gtf'])
