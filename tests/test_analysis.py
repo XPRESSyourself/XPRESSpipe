@@ -7,7 +7,7 @@ import os
 import pandas as pd
 from xpresspipe.metagene import run_metagene
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
-__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
+#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
 
 args_dict = {
     'input': __path__ + 'data/',
