@@ -437,13 +437,27 @@ def compile_coverage(
         df['coverage'] = df['coverage'].fillna(0)
         df['feature'] = ''
 
+        stop_written = False
+        start_written = False
         exon_number = 1
         for index, row in df.iterrows():
+
+            # If first exon is also CDS start, call it so
+            if cds_start == exon_list[0] and start_written == False:
+                axes[ax_y].axvline(index, ls='-', linewidth=3, color='black', ymin=0, ymax=0.75)
+                df.at[index, 'feature'] = 'CDS Start'
+                exon_number += 1
+                start_written = True
+
             # If first index, call it exon 1
-            if index == 0:
+            elif index == 0 and start_written == False:
                 axes[ax_y].axvline(index, ls='-', linewidth=5, color='#585555', ymin=0, ymax=0.5)
                 df.at[index, 'feature'] = 'Exon ' + str(exon_number)
                 exon_number += 1
+                start_written = True
+
+            else:
+                pass
 
             # Label all other exons, but do not label end of last exon (but it will label at the beginning still)
             if index in exon_list[1:-1]:
@@ -457,19 +471,27 @@ def compile_coverage(
 
                 exon_number += 1
 
-            # If last nt, add closing line
-            if index == df.index[-1] - 1:
-                axes[ax_y].axvline(index, ls='-', linewidth=5, color='#585555', ymin=0, ymax=0.5)
-
             # Label CDS start -- in this order, will overwrite previous exon label
-            if index == cds_start:
+            if index == cds_start and start_written == False:
                 axes[ax_y].axvline(index, ls='-', linewidth=3, color='black', ymin=0, ymax=0.75)
                 df.at[index, 'feature'] = 'CDS Start'
+                start_written = True
 
             # Label CDS stop -- in this order, will overwrite previous exon label
-            if index == cds_stop:
+            if index == cds_stop and stop_written == False:
                 axes[ax_y].axvline(index, ls='-', linewidth=3, color='black', ymin=0, ymax=0.75)
                 df.at[index, 'feature'] = 'CDS Stop'
+                stop_written = True
+
+        if stop_written == False:
+            axes[ax_y].axvline(index, ls='-', linewidth=3, color='black', ymin=0, ymax=0.75)
+            df.at[df.index[-1] - 1, 'feature'] = 'CDS Stop'
+            stop_written = True
+        # If last nt, add closing line
+        elif index == df.index[-1] - 1:
+            axes[ax_y].axvline(index, ls='-', linewidth=5, color='#585555', ymin=0, ymax=0.5)
+        else:
+            pass
 
         # Create x axis line
         axes[ax_y].axhline(0, ls='-', linewidth=3, color='black', xmin=0, xmax=1)

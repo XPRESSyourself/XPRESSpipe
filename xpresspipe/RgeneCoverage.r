@@ -104,6 +104,8 @@ fetch_index <- function(
 # @param bam: GenomicAlignments data.frame
 # @param index: XPRESSpipe-formatted index data.frame object
 # @return: geneCoverage data.frame
+# Note: STAR transcriptome-aligned BAM files only give alignments that are within processed mRNA space, so introns are not included by default, therefore coordinates fall within UTRs or CDSs
+# https://www.biorxiv.org/content/biorxiv/early/2018/10/16/444620.full.pdf
 process_coverage <- function(
   bam, index) {
 
