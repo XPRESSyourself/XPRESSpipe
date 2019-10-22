@@ -422,6 +422,7 @@ def main(
         # check_process(args_dict['log_file'], msg_complete(), 'TRUNCATE')
 
     elif args.cmd == 'rrnaProbe':
+
         # Get files to probe
         probe_list = get_directories(
             args_dict['input'],

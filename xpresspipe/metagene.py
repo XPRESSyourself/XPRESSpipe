@@ -38,11 +38,14 @@ from .buildIndex import index_gtf
 transcript_length = 'l_tr'
 utr5_length = 'l_utr5'
 utr3_length = 'l_utr3'
+cds_length = 'l_cds'
 
 def roundup(value):
     return int(ceil(value))
 
-def finish_metagene(args):
+def finish_metagene(
+        args,
+        remove_outliers=True):
 
     file, args_dict = args[0], args[1]
 
@@ -67,35 +70,44 @@ def finish_metagene(args):
     if str(args_dict['feature_type']).lower() == 'cds':
         utr5_correct = pd.Series(dict[utr5_length].values, index=dict['transcript']).to_dict()
         utr3_correct = pd.Series(dict[utr3_length].values, index=dict['transcript']).to_dict()
+        cds_correct = pd.Series(dict[cds_length].values, index=dict['transcript']).to_dict()
 
         bam['utr5_offset'] = bam['seqnames'].map(utr5_correct)
         bam['utr3_offset'] = bam['seqnames'].map(utr3_correct)
+        bam['cds_offset'] = bam['seqnames'].map(cds_correct)
 
     dict = None
     bam = bam.dropna()
 
     # Calculate meta-position
     if str(args_dict['feature_type']).lower() == 'cds':
+        # Remove records where meta_position is before CDS start
+        bam = bam.loc[(bam['meta_position'] - bam['utr5_offset']) >= 0]
+
+        # Remove records where meta_position is after CDS stop
+        bam = bam.loc[(bam['meta_position'] - bam['utr5_offset'] - bam['cds_offset']) < 0]
+
         # Compensate for UTRs in meta-calculations across CDS
         # Those reads mapping outside of the CDS region will be < 1 or > 100
         # When data is collated, will only take values between 1 and 100
-        bam['meta_distance'] = abs(bam['meta_position'] - bam['utr5_offset']) / abs(bam['total_length'] - bam['utr5_offset'] - bam['utr3_offset']) * 100
+        bam['meta_distance'] = (bam['meta_position'] - bam['utr5_offset']) / (bam['cds_offset']) * 100
     else:
-        bam['meta_distance'] = abs(bam['meta_position']) / abs(bam['total_length']) * 100
+        bam['meta_distance'] = (bam['meta_position']) / (bam['total_length']) * 100
 
     # Set a nice number with no remainder
     bam['meta_distance'] = bam['meta_distance'].apply(roundup)
 
     # Get rid of outlier-expressors
-    # Will count the number of members in each group, will be the new meta_distance column of this dataframe
-    bam_outliers = bam.groupby('seqnames').count().sort_values('meta_distance')
-    del bam_outliers.index.name # This is seqnames label
+    if remove_outliers == True:
+        # Will count the number of members in each group, will be the new meta_distance column of this dataframe
+        bam_outliers = bam.groupby('seqnames').count().sort_values('meta_distance')
+        del bam_outliers.index.name # This is seqnames label
 
-    removal_amount = int(ceil(bam_outliers.shape[0] * 0.005))
-    bam_outliers = bam_outliers.iloc[removal_amount:-removal_amount]
+        removal_amount = int(ceil(bam_outliers.shape[0] * 0.005))
+        bam_outliers = bam_outliers.iloc[removal_amount:-removal_amount]
 
-    # Take list of transcripts that made the cut and only grab those out of the starting BAM dataframe
-    bam = bam[bam['seqnames'].isin(bam_outliers.index.tolist())]
+        # Take list of transcripts that made the cut and only grab those out of the starting BAM dataframe
+        bam = bam[bam['seqnames'].isin(bam_outliers.index.tolist())]
 
     # Compile meta position statistics
     profile = pd.DataFrame()

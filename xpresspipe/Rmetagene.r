@@ -46,7 +46,7 @@ left_coordinate <- 'left_coordinate'
 right_coordinate <- 'right_coordinate'
 strand <- 'strand'
 exon <- 'exon'
-sample_factor <- 0.1
+sample_factor <- 1
 
 # Get arguments
 # args[1] = Path to BAM files
@@ -76,7 +76,7 @@ read_bam <- function(
       sample_amount <- ceiling(rows * sample_factor)
       bam <- bam[sample(nrow(bam), sample_amount), ]
 
-      print(paste('Processing', toString(sample_amount), 'BAM records', toString(sample_factor), '(percent of total reads)...', sep=' '))
+      print(paste('Processing', toString(sample_amount), 'BAM records (', toString(sample_factor * 100), 'percent of total reads)...', sep=' '))
       return(bam)
 
     } else {
@@ -87,6 +87,8 @@ read_bam <- function(
   }
 
 # Requires a STAR styled transcriptome-aligned BAM file
+# Note: STAR transcriptome-aligned BAM files only give alignments that are within processed mRNA space, so introns are not included by default, therefore coordinates fall within UTRs or CDSs
+# https://www.biorxiv.org/content/biorxiv/early/2018/10/16/444620.full.pdf
 run_list <- function (
   file_path, file_list, output_path) {
 
