@@ -18,7 +18,7 @@ File Naming
 | 2. If you are working with single-end data, the files must be a FASTQ-formatted file and end with the suffix :data:`.fastq`, :data:`.fastq.gz`, :data:`.fq`, :data:`.fq.gz`, :data:`.txt`, :data:`.txt.gz`. We recommend the :data:`.fastq` or :data:`.fastq.gz` suffix.
 
 
-| 2. If you are working with paired-end data, the rules from :data:`Step 2` apply, but must the suffix must be prefaced by the paired read group number as below:
+| 3. If you are working with paired-end data, the rules from :data:`Step 2` apply, but must the suffix must be prefaced by the paired read group number as below:
 
 .. code-block: shell
 

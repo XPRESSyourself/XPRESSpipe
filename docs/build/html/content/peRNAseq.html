@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Paired-End RNA-seq Pipeline &mdash; XPRESSpipe 0.2.2-beta documentation</title>
+  <title>Paired-End RNA-seq Pipeline &mdash; XPRESSpipe 0.2.4-beta documentation</title>
   
 
   
@@ -111,6 +111,7 @@
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="updates.html">Updates</a></li>
 </ul>
 
             
@@ -222,8 +223,8 @@
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--two-pass</span></code></p></td>
 <td><p>Use a two-pass STAR alignment for novel splice junction discovery</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-a</span> <span class="pre">&lt;adaptor1</span> <span class="pre">...&gt;</span> <span class="pre">[&lt;adaptor1</span> <span class="pre">...&gt;</span> <span class="pre">...]</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptor</span> <span class="pre">&lt;adaptor1</span> <span class="pre">...&gt;</span> <span class="pre">[&lt;adaptor1</span> <span class="pre">...&gt;</span> <span class="pre">...]</span></code></p></td>
-<td><p>Specify adaptor(s) in list of strings – for single-end, only provide one adaptor – if <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> are provided, software will attempt to auto-detect adaptors – if “POLYX” is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> twice</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-a</span> <span class="pre">&lt;adapter1</span> <span class="pre">...&gt;</span> <span class="pre">[&lt;adapter1</span> <span class="pre">...&gt;</span> <span class="pre">...]</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--adapter</span> <span class="pre">&lt;adapter1</span> <span class="pre">...&gt;</span> <span class="pre">[&lt;adapter1</span> <span class="pre">...&gt;</span> <span class="pre">...]</span></code></p></td>
+<td><p>Specify adapter(s) in list of strings – for single-end, only provide one adapter – if <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> are provided, software will attempt to auto-detect adapters – if “POLYX” is provided as a single string in the list, polyX adapters will be trimmed. If you want to auto-detect adapters in for paired-end reads, provide <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> twice</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-q</span> <span class="pre">&lt;PHRED_value&gt;,</span> <span class="pre">--quality</span> <span class="pre">&lt;PHRED_value&gt;</span></code></p></td>
 <td><p>PHRED read quality threshold (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">28</span></code>)</p></td>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Read Pre-Processing &mdash; XPRESSpipe 0.2.2-beta documentation</title>
+  <title>Read Pre-Processing &mdash; XPRESSpipe 0.2.4-beta documentation</title>
   
 
   
@@ -115,6 +115,7 @@
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="updates.html">Updates</a></li>
 </ul>
 
             
@@ -185,7 +186,7 @@
 <h2>Read Trimming<a class="headerlink" href="#read-trimming" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">Trimming is a necessary part of RNAseq data processing due to the technological limitations described below:</div>
-<div class="line">- Inherent in RNA-seq library creation, RNA is fragmented and adaptor sequences are ligated to the sequence. These adaptors include information such as sample batch and act as a primer for the sequencer to recognize the fragment as something to analyze. However, these adaptors, once sequenced, prevent alignment to a reference as large chunks of the fragment are synthetic sequence not found in the actual organism’s genome/transcriptome.</div>
+<div class="line">- Inherent in RNA-seq library creation, RNA is fragmented and adapter sequences are ligated to the sequence. These adapters include information such as sample batch and act as a primer for the sequencer to recognize the fragment as something to analyze. However, these adapters, once sequenced, prevent alignment to a reference as large chunks of the fragment are synthetic sequence not found in the actual organism’s genome/transcriptome.</div>
 <div class="line">- A sequencer’s job is to read a fragment base by base and determine the nucleotide species each step of the way. While the technology has greatly improved over the years, a probability of error remains. Mis-called bases can prevent proper alignment of the sequenced fragment to the reference. Therefore, it is important for low confidence base calls to be trimmed from each read.</div>
 <div class="line"><br /></div>
 <div class="line">Trimming is performed by <a class="reference external" href="https://github.com/OpenGene/fastp">fastp</a></div>
@@ -228,8 +229,8 @@
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-a</span> <span class="pre">&lt;adaptor1</span> <span class="pre">...&gt;</span> <span class="pre">[&lt;adaptor1</span> <span class="pre">...&gt;</span> <span class="pre">...]</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptor</span> <span class="pre">&lt;adaptor1</span> <span class="pre">...&gt;</span> <span class="pre">[&lt;adaptor1</span> <span class="pre">...&gt;</span> <span class="pre">...]</span></code></p></td>
-<td><p>Specify adaptor(s) in list of strings – for single-end, only provide one adaptor – if <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> are provided, software will attempt to auto-detect adaptors – if “POLYX” is provided as a single string in the list, polyX adaptors will be trimmed. If you want to auto-detect adaptors in for paired-end reads, provide <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> twice</p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-a</span> <span class="pre">&lt;adapter1</span> <span class="pre">...&gt;</span> <span class="pre">[&lt;adapter1</span> <span class="pre">...&gt;</span> <span class="pre">...]</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--adapter</span> <span class="pre">&lt;adapter1</span> <span class="pre">...&gt;</span> <span class="pre">[&lt;adapter1</span> <span class="pre">...&gt;</span> <span class="pre">...]</span></code></p></td>
+<td><p>Specify adapter(s) in list of strings – for single-end, only provide one adapter – if <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> are provided, software will attempt to auto-detect adapters – if “POLYX” is provided as a single string in the list, polyX adapters will be trimmed. If you want to auto-detect adapters in for paired-end reads, provide <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code> twice</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-q</span> <span class="pre">&lt;PHRED_value&gt;,</span> <span class="pre">--quality</span> <span class="pre">&lt;PHRED_value&gt;</span></code></p></td>
 <td><p>PHRED read quality threshold (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">28</span></code>)</p></td>
@@ -261,40 +262,40 @@
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Example 2 – Predict adaptor and trim ribosome profiling (or single-end) sequence data:</strong></div>
+<div class="line"><strong>Example 2 – Predict adapter and trim ribosome profiling (or single-end) sequence data:</strong></div>
 <div class="line">- A minimum read length of 22 nucleotides after trimming is required in order to keep the read</div>
 <div class="line">- A maximum or 6 processors can be used for the task</div>
-<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span></code> argument was not passed, so an attempt to discover adaptor sequences will be made (this is not always the most efficient or thorough method of trimming and providing the adaptor sequences is recommended)</div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adapters</span></code> argument was not passed, so an attempt to discover adapter sequences will be made (this is not always the most efficient or thorough method of trimming and providing the adapter sequences is recommended)</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i riboprof_test/ -o riboprof_out/ --min_length <span class="m">22</span> -m <span class="m">6</span>
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Example 3 – Pass explicit adaptor trim ribosome profiling (or single-end) sequence data:</strong></div>
+<div class="line"><strong>Example 3 – Pass explicit adapter trim ribosome profiling (or single-end) sequence data:</strong></div>
 <div class="line">- The default minimum read length threshold will be used</div>
 <div class="line">- The maximum number of processors will be used by default</div>
-<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span></code> argument was passed, so adaptor sequences will trimmed explicitly</div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adapters</span></code> argument was passed, so adapter sequences will trimmed explicitly</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i riboprof_test/ -o riboprof_out/ -a CTGTAGGCACCATCAAT
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Example 4 – Predict adaptor and trim paired-end sequence data:</strong></div>
-<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span></code> argument was passed as <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span> <span class="pre">None</span></code>, so an attempt to discover adaptor sequences will be made for paired-end reads. The <code class="xref py py-data docutils literal notranslate"><span class="pre">-a</span> <span class="pre">None</span> <span class="pre">None</span></code> syntax is essential for <code class="xref py py-data docutils literal notranslate"><span class="pre">trim</span></code> to recognize the reads as paired-end</div>
+<div class="line"><strong>Example 4 – Predict adapter and trim paired-end sequence data:</strong></div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adapters</span></code> argument was passed as <code class="xref py py-data docutils literal notranslate"><span class="pre">None</span> <span class="pre">None</span></code>, so an attempt to discover adapter sequences will be made for paired-end reads. The <code class="xref py py-data docutils literal notranslate"><span class="pre">-a</span> <span class="pre">None</span> <span class="pre">None</span></code> syntax is essential for <code class="xref py py-data docutils literal notranslate"><span class="pre">trim</span></code> to recognize the reads as paired-end</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i pe_test/ -o pe_out/ -a None None
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Example 5 – Pass explicit adaptor and trim paired-end sequence data:</strong></div>
-<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span></code> argument was passed, so adaptor sequences will trimmed explicitly</div>
+<div class="line"><strong>Example 5 – Pass explicit adapter and trim paired-end sequence data:</strong></div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adapters</span></code> argument was passed, so adapter sequences will trimmed explicitly</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i pe_test/ -o pe_out/ -a ACACTCTTTCCCTACACGACGCTCTTCCGATC GATCGGAAGAGCGGTTCAGCAGGAATGCCGAG
 </pre></div>
 </div>
 <div class="line-block">
-<div class="line"><strong>Example 6 – Trim single-end sequence data of polyX adaptors:</strong></div>
-<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adaptors</span> <span class="pre">POLYX</span></code> argument was passed, so adaptor sequences will trimmed of polyX sequences</div>
+<div class="line"><strong>Example 6 – Trim single-end sequence data of polyX adapters:</strong></div>
+<div class="line">- The <code class="xref py py-data docutils literal notranslate"><span class="pre">--adapters</span> <span class="pre">POLYX</span></code> argument was passed, so adapter sequences will trimmed of polyX sequences</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe trim -i se_test/ -o se_out/ -a POLYX
 </pre></div>

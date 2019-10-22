@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Alignment &mdash; XPRESSpipe 0.2.2-beta documentation</title>
+  <title>Alignment &mdash; XPRESSpipe 0.2.4-beta documentation</title>
   
 
   
@@ -120,6 +120,7 @@
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faqs.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="updates.html">Updates</a></li>
 </ul>
 
             
@@ -191,6 +192,7 @@
 <div class="line">- Performance: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/">performance and accuracy is superior to the majority of other splice aware aligners currently available</a></div>
 <div class="line">- Splice Junction Aware: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.</div>
 <div class="line">- Standard: The foundation of the pipeline used in XPRESSpipe is based in the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> standards for RNAseq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated.</div>
+<div class="line">- Variant Aware: The user can provide a VCF, such as those provided by <a class="reference external" href="ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/">ClinVar</a> and <a class="reference external" href="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/">dbSNP</a>. These files are useful in integrating information about common or disease nucleotide variants into the RNA-Seq alignment stage. The files you use should match the build of the genome you are using (i.e., if using Homo Sapiens GRCh38, these builds should match between curated reference files and VCF file).</div>
 </div>
 <div class="section" id="single-end-rnaseq-alignment">
 <h2>Single-End RNAseq Alignment<a class="headerlink" href="#single-end-rnaseq-alignment" title="Permalink to this headline">¶</a></h2>

@@ -99,7 +99,7 @@ Process Raw Sequencing Files
 | 2. Make sure the files follow proper naming conventions (see naming conventions at :ref:`general_link`)
 | 3. Now let's process the data
 | 4. Let's also create a folder called something like :data:`output`
-| 5. Also, make sure you have the 3' adaptor sequence handy used when generating your sequencing library
+| 5. Also, make sure you have the 3' adapter sequence handy used when generating your sequencing library
 | 6. We'll feed the program the new GTF file that contains only longest transcript, protein coding, truncated references generating in the reference curation step
 | 7. We'll give the experiment a name and also specify what `method of sample normalization <https://www.rna-seqblog.com/rpkm-fpkm-and-tpm-clearly-explained/>`_ we want performed on the count data
 | 8. We also need to specify the :data:`--sjdbOverhang` amount we fed into the reference curation step, so in this case we will use :data:`--sjdbOverhang 49`
@@ -111,7 +111,7 @@ Process Raw Sequencing Files
                       --reference reference_folder/ \
                       --gtf reference_folder/transcripts_LCT.gtf
                       --experiment riboseq_test
-                      --adaptor CTGTAGGCACCATCAAT
+                      --adapter CTGTAGGCACCATCAAT
                       --method RPKM
                       --sjdbOverhang 49
 
