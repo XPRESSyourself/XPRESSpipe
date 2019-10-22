@@ -86,12 +86,14 @@ def index_gtf(
 
     # Check for GTF file input
     if str(args_dict['gtf']).endswith('.gtf'):
-        print('Generating index for genes...')
+        pass
     else:
         raise Exception('Error: A GTF-formatted file or dataframe was not provided')
 
     # Gene coverage index creation
     if gene_name != None:
+
+        print('Generating index for ' + str(gene_name) + '...')
 
         # Get file names and clean up inputs
         gene_name = gene_name.replace(' ','')
@@ -115,7 +117,7 @@ def index_gtf(
 
         else:
             gtf = gtf.loc[gtf[gtf_annotation_column].str.contains('\"' + str(gene_name) + '\"')]
-            
+
         gtf = gtf.reset_index(drop=True)
 
         # Do a fail-safe check to make sure doesn't get tripped up later
@@ -159,6 +161,9 @@ def index_gtf(
         return 0
 
     else:
+
+        print('Generating index for genes...')
+
         # Make index of all transcripts
         make_index(
             args_dict,

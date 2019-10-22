@@ -178,11 +178,14 @@ def make_metagene(
         'metrics')
 
     # Perform metagene analysis
+    print('\nGetting positions of reads...')
     parallelize(
         run_metagene,
         files,
         args_dict,
         mod_workers = True)
+
+    print('\nConverting positions to metapositions...')
     parallelize(
         finish_metagene,
         files,
@@ -190,7 +193,7 @@ def make_metagene(
         mod_workers = True)
 
     # Compile metrics to plot
-    print('Plotting...')
+    print('\nPlotting...')
     files = get_files(
         str(args_dict['metagene']) + 'metrics/',
         ['_metrics.txt'])
