@@ -1,34 +1,55 @@
+{% set version = "0.3.0" %}
+
 package:
   name: xpresspipe
-  version: 0.1.4b
+  version: {{ version }}
 
 source:
-  fn: XPRESSpipe-v0.1.4b2.tar.gz
-  url: https://github.com/XPRESSyourself/XPRESSpipe/archive/XPRESSpipe-v0.1.4b2.tar.gz
+  url: https://github.com/XPRESSyourself/XPRESSpipe/archive/XPRESSpipe-v{{ version }}.tar.gz
+  sha256:
 
 build:
+  noarch: python
   number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv
 
 requirements:
   build:
     - python
-    - setuptools
+    - pip
   run:
+    - python
+    - julia
     - pandas
-    - matplotlib
     - numpy
-    - plotly
     - scipy
-    - r
+    - r-base
+    - r-devtools
     - libiconv
     - ncurses
     - fastp
+    - umi_tools
     - STAR
     - samtools
     - bedtools
+    - htseq
     - fastqc
     - biopython
+    - scikit-learn
+    - matplotlib
+    - seaborn
     - multiqc
-    - xpressplot
     - numpydoc
     - psutil
+    - pip
+    - xpressplot
+
+test:
+  imports:
+    - xpresspipe
+
+about:
+  home: https://github.com/XPRESSyourself/XPRESSpipe
+  license: GPL-3.0
+  license_file: LICENSE
+  summary: 'An alignment and analysis pipeline for ribosome profiling data.'
