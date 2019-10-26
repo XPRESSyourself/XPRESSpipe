@@ -703,10 +703,18 @@ def main(
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
         make_complexity(args_dict)
 
+        print('1')
+        print(args_dict)
+        print('===')
+
         args_dict['input'] = args_dict['alignments_transcriptome']
         args_dict['bam_suffix'] = 'toTranscriptome.out.bam'
-        args_dict['gene_name'] = 'GAPDH'
+        args_dict['gene_name'] = 'PLPP2'
         args_dict['samples'] = None
+
+        print('2')
+        print(args_dict)
+        print('===')
 
         # Get list of bam files from user input
         files = get_files(
@@ -715,10 +723,24 @@ def main(
         if len(files) == 0:
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
+        print('3')
+        print(files)
+        print('===')
+
         success = index_gtf(args_dict, gene_name=args_dict['gene_name'])
 
+
+
         if success != -1:
+
+            print('4')
+            print(args_dict)
+            print('===')
             make_coverage(args_dict, files)
+
+            print('5')
+            print(args_dict)
+            print('===')
             os.system(
                 'rm'
                 + ' ' + args_dict['output'] + '*.fts')

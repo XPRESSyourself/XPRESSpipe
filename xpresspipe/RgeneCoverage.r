@@ -132,6 +132,7 @@ process_coverage <- function(
 run_list <- function (
   file_path, file_list, index_file, output_path) {
 
+    print("Hello")
     index <- fetch_index(index_file)
 
     for (f in file_list) {
@@ -159,6 +160,9 @@ run_list <- function (
       # Write BAM coverage metrics to output file
       file_name = vapply(strsplit(f, "[.]"), `[`, 1, FUN.VALUE=character(1))
       output_file = paste(output_path, file_name, '_metrics.txt', sep='')
+      print(output_file)
+      print(genecoverage)
+      print('====')
       write.table(genecoverage, file=output_file, sep='\t', col.names=NA)
 
       # Clean the batch
