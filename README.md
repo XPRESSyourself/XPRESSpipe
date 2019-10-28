@@ -4,7 +4,7 @@
 ### An alignment and analysis pipeline for RNAseq data
 
 [![Build Status](https://travis-ci.org/XPRESSyourself/XPRESSpipe.svg?branch=master)](https://travis-ci.org/XPRESSyourself/XPRESSpipe)
-[![codecov.io](https://codecov.io/gh/XPRESSyourself/XPRESSpipe/XPRESSpipe.svg?branch=master)](https://codecov.io/gh/XPRESSyourself/XPRESSpipe)
+<!--[![codecov.io](https://codecov.io/gh/XPRESSyourself/XPRESSpipe/XPRESSpipe.svg?branch=master)](https://codecov.io/gh/XPRESSyourself/XPRESSpipe)-->
 [![Documentation Status](https://readthedocs.org/projects/xpresspipe/badge/?version=latest)](https://xpresspipe.readthedocs.io/en/latest/?badge=latest)
 [![DOI](https://zenodo.org/badge/170939943.svg)](https://zenodo.org/badge/latestdoi/170939943)
 <!--[![Docker](https://img.shields.io/static/v1.svg?label=docker&message=dowload&color=informational)](https://cloud.docker.com/repository/docker/jordanberg/xpresspipe/general)-->

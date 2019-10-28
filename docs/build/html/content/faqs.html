@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>FAQs &mdash; XPRESSpipe 0.2.4-beta documentation</title>
+  <title>FAQs &mdash; XPRESSpipe 0.3.0 documentation</title>
   
 
   
@@ -107,7 +107,11 @@
 <li class="toctree-l1"><a class="reference internal" href="count.html">Read Quantification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="normalization.html">Normalize</a></li>
 <li class="toctree-l1"><a class="reference internal" href="other-features.html">Other Features</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FAQs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FAQs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-step-of-the-pipeline-is-erroring-for-no-apparent-reason">A step of the pipeline is erroring for no apparent reason?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-pipeline-breaks-because-of-a-segmentation-fault-during-alignment">The pipeline breaks because of a segmentation fault during alignment.</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="updates.html">Updates</a></li>
 </ul>
 
@@ -180,6 +184,42 @@
 </div>
 <div class="line-block">
 <div class="line">As this software is used more, we will compile some of the most commonly asked questions here…</div>
+</div>
+<div class="section" id="a-step-of-the-pipeline-is-erroring-for-no-apparent-reason">
+<h2>A step of the pipeline is erroring for no apparent reason?<a class="headerlink" href="#a-step-of-the-pipeline-is-erroring-for-no-apparent-reason" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">First, please check the output in your terminal, along with in the log file. If the step that the pipeline breaks on does not output any useful information, check that the required dependencies were installed correctly. For example, when we were testing the the <code class="xref py py-data docutils literal notranslate"><span class="pre">geneCoverage</span></code> module on a supercomputing cluster, the pipeline responded saying it couldn’t find the appropriate index file. It turned out the R package, GenomicFeatures was not downloaded due to issues with the rtracklayers package. For this situation, we fixed it by uninstalling Anaconda and reinstalling the dependencies, as below:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run each of these steps. If a command doesn&#39;t work, skip to the next one</span>
+$ conda install anaconda-clean
+$ anaconda-clean --yes
+$ rm -rf ~/miniconda
+$ rm ~/.condarc
+$ rm -r ~/.conda/
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> ~
+$ curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+$ bash ~/Miniconda3-latest-Linux-x86_64.sh
+$ conda env base --file XPRESSpipe/requirements.yml
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">During Anaconda installation, reply <code class="xref py py-data docutils literal notranslate"><span class="pre">yes</span></code> to all prompts. If you wish to install the XPRESSpipe dependencies to their own environment, replace <code class="xref py py-data docutils literal notranslate"><span class="pre">base</span></code> with <code class="xref py py-data docutils literal notranslate"><span class="pre">your_environment_name_here</span></code> in the last step. If XPRESSpipe continues to malfunction after completion of these steps, please reach out to us on the <a class="reference external" href="https://github.com/XPRESSyourself/XPRESSpipe/issues">XPRESSpipe issues forum</a>.</div>
+</div>
+</div>
+<div class="section" id="the-pipeline-breaks-because-of-a-segmentation-fault-during-alignment">
+<h2>The pipeline breaks because of a segmentation fault during alignment.<a class="headerlink" href="#the-pipeline-breaks-because-of-a-segmentation-fault-during-alignment" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Occasionally, depending on allocation of CPUs, 32 virtual CPUs may be available, but only 16 are configured. This may lead to memory overloads by trying to use more than configured, as the large index files will be temporarily copied to each processing core. If this is the case, provide the <code class="xref py py-data docutils literal notranslate"><span class="pre">max_processors</span></code> with the number in the log file stated as available. For a computing node with 64 GB of RAM available, we generally see that 20 CPUs is stable. See log example below:</div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sh: line <span class="m">1</span>: <span class="m">70311</span> Segmentation fault      STAR --runThreadN <span class="m">30</span> ...
+
+or
+
+WARNING: fastp uses up to <span class="m">16</span> threads although you specified <span class="m">32</span>
+</pre></div>
+</div>
 </div>
 </div>
 

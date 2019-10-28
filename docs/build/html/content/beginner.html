@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Beginner’s Guide &mdash; XPRESSpipe 0.2.4-beta documentation</title>
+  <title>Beginner’s Guide &mdash; XPRESSpipe 0.3.0 documentation</title>
   
 
   
@@ -378,7 +378,7 @@ $ xpresspipe <span class="nb">test</span>
 <div class="section" id="run-data">
 <h3>Run Data<a class="headerlink" href="#run-data" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
-<div class="line">- The commands here are the same as above, but likely the method of execution will be different. A lot of supercomputing clusters manage job submission through a system called <a class="reference external" href="https://www.youtube.com/watch?v=RpkAyFI05yY">SLURM</a>. Likely, the supercomputing cluster you are running your data on will have instructions for how to use this, but briefly, here is an example batch script (should end in the suffix <code class="xref py py-data docutils literal notranslate"><span class="pre">sh</span></code>):</div>
+<div class="line">- The commands here are the same as above, but likely the method of execution will be different. A lot of supercomputing clusters manage job submission through a system called <a class="reference external" href="https://www.youtube.com/watch?v=RpkAyFI05yY">SLURM</a>. Each supercomputing cluster should have individualized and tailored instructions for proper usage. We will briefly provide an example of how one would submit a job to a SLURM batch system:</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
 <span class="c1">#SBATCH --time=72:00:00</span>

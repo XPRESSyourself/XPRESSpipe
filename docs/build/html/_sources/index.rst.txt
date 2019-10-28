@@ -1,7 +1,7 @@
 ##############
 XPRESSpipe
 ##############
-|build-status| |docs| |Docker|
+|build-status| |docs|
 
 =================
 About

@@ -185,7 +185,7 @@ Install
 ---------------
 Run Data
 ---------------
-| - The commands here are the same as above, but likely the method of execution will be different. A lot of supercomputing clusters manage job submission through a system called `SLURM <https://www.youtube.com/watch?v=RpkAyFI05yY>`_. Likely, the supercomputing cluster you are running your data on will have instructions for how to use this, but briefly, here is an example batch script (should end in the suffix :data:`.sh`):
+| - The commands here are the same as above, but likely the method of execution will be different. A lot of supercomputing clusters manage job submission through a system called `SLURM <https://www.youtube.com/watch?v=RpkAyFI05yY>`_. Each supercomputing cluster should have individualized and tailored instructions for proper usage. We will briefly provide an example of how one would submit a job to a SLURM batch system:
 
 .. code-block:: shell
 
