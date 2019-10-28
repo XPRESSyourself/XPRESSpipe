@@ -454,7 +454,6 @@ def compile_coverage(
                 axes[ax_y].axvline(index, ls='-', linewidth=5, color='#585555', ymin=0, ymax=0.5)
                 df.at[index, 'feature'] = 'Exon ' + str(exon_number)
                 exon_number += 1
-                start_written = True
 
             else:
                 pass
@@ -487,6 +486,7 @@ def compile_coverage(
             axes[ax_y].axvline(index, ls='-', linewidth=3, color='black', ymin=0, ymax=0.75)
             df.at[df.index[-1] - 1, 'feature'] = 'CDS Stop'
             stop_written = True
+            
         # If last nt, add closing line
         elif index == df.index[-1] - 1:
             axes[ax_y].axvline(index, ls='-', linewidth=5, color='#585555', ymin=0, ymax=0.5)
