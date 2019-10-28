@@ -13,6 +13,13 @@ dependencies:
   - scipy
   - r-base
   - r-devtools
+  - r-data.table
+  - bioconductor-genomicfeatures
+  - bioconductor-rsubread
+  - bioconductor-dupradar
+  - bioconductor-deseq2
+  - bioconductor-apeglm
+  - bioconductor-genomicalignments
   - libiconv
   - ncurses
   - fastp
@@ -28,8 +35,6 @@ dependencies:
   - multiqc
   - numpydoc
   - psutil
-  - pip
-  - pip:
-    - XPRESSplot
-    - scikit-learn
-    - seaborn
+  - scikit-learn
+  - seaborn
+  - xpressplot

@@ -49,16 +49,6 @@ def run_coverage(args):
     # args[2] = List of BAM files
     # args[3] = Index file with path
     # args[4] = Output file path
-    print(
-    'Rscript'
-    + ' ' + str(args_dict['path']) + 'RgeneCoverage.r'
-    + ' ' + str(args_dict['input'])
-    + ' ' + str(file)
-    + ' ' + str(args_dict['output']) + str(args_dict['gene_name']) + '.idx'
-    + ' ' + str(args_dict['coverage']) + 'metrics/' + str(args_dict['gene_name']) + '_'
-    + str(args_dict['log'])
-    )
-
 
     os.system(
         'Rscript'
