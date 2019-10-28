@@ -595,6 +595,13 @@ def get_arguments(
         type = int,
         required = False)
     se_opts.add_argument(
+        '-n', '--gene_name',
+        help = 'Gene name to plot coverage (case-sensitive)',
+        metavar = '<gene name>',
+        default = 'GAPDH',
+        type = str,
+        required = False)
+    se_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -775,6 +782,13 @@ def get_arguments(
         default = 14,
         metavar = '<value>',
         type = int,
+        required = False)
+    pe_opts.add_argument(
+        '-n', '--gene_name',
+        help = 'Gene name to plot coverage (case-sensitive)',
+        metavar = '<gene name>',
+        default = 'GAPDH',
+        type = str,
         required = False)
     pe_opts.add_argument(
         '-m', '--max_processors',
@@ -959,6 +973,13 @@ def get_arguments(
         default = 14,
         metavar = '<value>',
         type = int,
+        required = False)
+    rp_opts.add_argument(
+        '-n', '--gene_name',
+        help = 'Gene name to plot coverage (case-sensitive)',
+        metavar = '<gene name>',
+        default = 'GAPDH',
+        type = str,
         required = False)
     rp_opts.add_argument(
         '-m', '--max_processors',

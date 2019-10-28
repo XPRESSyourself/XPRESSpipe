@@ -59,6 +59,7 @@ os.system(
     + ' -g ' + str(rp_gtf) \
     + ' -e riboseq_test' \
     + ' -a CTGTAGGCACCATCAAT' \
+    + ' -n RPS19' \
     + ' --method RPM' \
     + ' --sjdbOverhang 49')
 
