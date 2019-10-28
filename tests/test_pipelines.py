@@ -33,6 +33,8 @@ def check_file(file, type, size=1000000):
 print('Creating riboseq reference for testing...')
 rp_reference = str(__path__) + 'riboseq/rp_reference/'
 
+os.system('mkdir -p ' + str(rp_reference))
+
 os.system(
     'xpresspipe curateReference'
     + ' -o ' + str(rp_reference)
