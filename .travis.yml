@@ -56,17 +56,17 @@ script:
   - curl -L https://sourceforge.net/projects/XPRESSpipe/files/chr19.fa/download -o tests/riboseq/rp_reference/chr19.fa
 
   # Get references for paired-end test
-  - mkdir tests/paired_end
-  - mkdir tests/paired_end/pe_reference
-  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/transcripts.gtf/download -o tests/paired_end/pe_reference/transcripts.gtf
-  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/chr19.fa/download -o tests/paired_end/pe_reference/chr19.fa
+  #- mkdir tests/paired_end
+  #- mkdir tests/paired_end/pe_reference
+  #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/transcripts.gtf/download -o tests/paired_end/pe_reference/transcripts.gtf
+  #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/chr19.fa/download -o tests/paired_end/pe_reference/chr19.fa
 
   # Get paired-end test files
-  - mkdir tests/paired_end/pe_test
-  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq/download -o tests/paired_end/pe_test/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq
-  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq/download -o tests/paired_end/pe_test/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
-  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq/download -o tests/paired_end/pe_test/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq
-  - curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq/download -o tests/paired_end/pe_test/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
+  #- mkdir tests/paired_end/pe_test
+  #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq/download -o tests/paired_end/pe_test/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq
+  #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq/download -o tests/paired_end/pe_test/UHR_Rep1_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
+  #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq/download -o tests/paired_end/pe_test/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read1.fastq
+  #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq/download -o tests/paired_end/pe_test/UHR_Rep2_ERCC-Mix1_Build37-ErccTranscripts-chr22.read2.fastq
 
   # Get other test files
   #- curl -L https://sourceforge.net/projects/XPRESSpipe/files/gtf_test_large.gtf/download -o tests/references/other/gtf_test_large.gtf
