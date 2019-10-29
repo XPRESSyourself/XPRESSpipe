@@ -156,6 +156,13 @@ def parallelize(
             args_dict,
             file_list)
 
+    # Use all cores at once for processes that can not be multiprocessed themselves
+    elif mod_workers == 'all':
+        args_dict['threads'], args_dict['workers'] = cpu_count(), cpu_count()
+
+    else:
+        pass
+
     run_pools(
         func,
         args_iter,

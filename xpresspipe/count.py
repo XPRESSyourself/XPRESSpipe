@@ -142,7 +142,7 @@ def count_reads(
         count_file_cufflinks,
         files,
         args_dict,
-        mod_workers = True)
+        mod_workers == 'all')
 
     else:
 
@@ -156,7 +156,7 @@ def count_reads(
         count_file_htseq,
         files,
         args_dict,
-        mod_workers = True)
+        mod_workers == 'all')
 
     return args_dict
 
