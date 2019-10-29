@@ -141,8 +141,7 @@ def count_reads(
         parallelize(
         count_file_cufflinks,
         files,
-        args_dict,
-        mod_workers = True)
+        args_dict)
 
     else:
 
@@ -155,8 +154,7 @@ def count_reads(
         parallelize(
         count_file_htseq,
         files,
-        args_dict,
-        mod_workers = True)
+        args_dict)
 
     return args_dict
 
