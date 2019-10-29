@@ -130,13 +130,13 @@ def make_readDistributions(
             pe_dist,
             files,
             args_dict,
-            mod_workers == 'all')
+            mod_workers = 'all')
     else:
         parallelize(
             se_dist,
             files,
             args_dict,
-            mod_workers == 'all')
+            mod_workers = 'all')
 
     # Get metrics to plot
     files = get_files(
