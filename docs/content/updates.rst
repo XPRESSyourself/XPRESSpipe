@@ -3,6 +3,13 @@ Updates
 ###############
 
 ============
+v0.3.1
+============
+- Fix BAM file threshold for metagene and geneCoverage to avoid OOM errors 
+- Turn off BAM file threshold for counting (low memory footprint, so can use all cores available)
+- Import openssl library manually in Rperiodicity -- occasionally had trouble finding the library on its own and would error
+
+============
 v0.3.0
 ============
 | - Transfers R dependency installs to Anaconda environment load
