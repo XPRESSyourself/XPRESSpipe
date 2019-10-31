@@ -25,6 +25,8 @@ license <- function() {
 # Measure library complexity of RNA-seq sample
 
 # Install dependencies
+library(openssl)
+
 if ("devtools" %in% rownames(installed.packages()) == FALSE) {
   print("Installing devtools...")
   install.packages("devtools", repos = "http://cran.us.r-project.org")
