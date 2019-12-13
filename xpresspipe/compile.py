@@ -42,7 +42,6 @@ from .utils import add_directory
 input_count = 'coverage'
 window = 20
 
-"""Compile images from a list of metrics matrices"""
 def compile_matrix_metrics(
         path,
         file_list,
@@ -52,6 +51,8 @@ def compile_matrix_metrics(
         experiment,
         plot_output,
         dpi=600):
+    """Compile images from a list of metrics matrices"""
+
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
     # Auto formats figure summary size based on number of plots
@@ -486,7 +487,7 @@ def compile_coverage(
             axes[ax_y].axvline(index, ls='-', linewidth=3, color='black', ymin=0, ymax=0.75)
             df.at[df.index[-1] - 1, 'feature'] = 'CDS Stop'
             stop_written = True
-            
+
         # If last nt, add closing line
         elif index == df.index[-1] - 1:
             axes[ax_y].axvline(index, ls='-', linewidth=5, color='#585555', ymin=0, ymax=0.5)

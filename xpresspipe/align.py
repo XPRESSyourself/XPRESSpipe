@@ -23,10 +23,49 @@ from __future__ import print_function
 """IMPORT DEPENDENCIES"""
 import os
 import sys
+import re
+import gc
+import csv
+import pandas as pd
 
 """IMPORT INTERNAL DEPENDENCIES"""
-from .utils import get_files, add_directory, get_fasta, check_directories #, clean_vcf
+from .utils import get_files, add_directory, get_fasta, check_directories
+#from .utils import clean_vcf
+from .gtfModify import edit_gtf
+from .rrna_depletion import genomic_depletion
 from .parallel import parallelize, parallelize_pe
+
+gtf_annotation_column = 8
+parse_type = 'rrna'
+
+def curate_depletion_gtf(args_dict):
+
+    gtf = str(args_dict['reference']) + 'transcripts.gtf'
+
+    gtf = pd.read_csv(
+        str(gtf),
+        sep = '\t',
+        header = None,
+        comment = '#',
+        low_memory = False)
+
+    # Remove records that map to rRNA
+    gtf_depl = gtf[~gtf[gtf_annotation_column].str.contains(
+        parse_type, flags=re.IGNORECASE
+        )]
+
+    gtf_depl.to_csv(
+        str(args_dict['reference']) + 'transcripts_depl.gtf',
+        sep = '\t',
+        header = None,
+        index = False,
+        quoting = csv.QUOTE_NONE)
+
+    gtf = None # Garbage management
+    gtf_depl = None
+    gc.collect()
+
+    return 'transcripts_depl.gtf'
 
 """Create STAR reference genome"""
 def create_star_reference(
@@ -130,12 +169,17 @@ def second_pass_star(
         attr_cols = ' --outSAMattributes NH HI NM MD AS XS'
         vcf_line = ''
 
+    if args_dict['remove_rrna'] == True:
+        gtf_name = curate_depletion_gtf(args_dict)
+    else:
+        gtf_name = 'transcripts.gtf'
+
     os.system(
         'STAR'
         + ' --runThreadN ' + str(args_dict['threads'])
         + ' --genomeDir ' + str(args_dict['intermediate_references']) + str(output)
         + ' --readFilesIn ' + str(file)
-        + ' --sjdbGTFfile ' + str(args_dict['reference']) + 'transcripts.gtf'
+        + ' --sjdbGTFfile ' + str(args_dict['reference']) + str(gtf_name)
         + ' --outFileNamePrefix ' + str(args_dict['alignments_coordinates']) + str(output) + '_'
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])
@@ -176,12 +220,17 @@ def guided_star(
         attr_cols = ' --outSAMattributes NH HI NM MD AS XS'
         vcf_line = ''
 
+    if args_dict['remove_rrna'] == True:
+        gtf_name = curate_depletion_gtf(args_dict)
+    else:
+        gtf_name = 'transcripts.gtf'
+
     os.system(
         'STAR'
         + ' --runThreadN ' + str(args_dict['threads']) # Argument to specify number of threads to use for processing
         + ' --genomeDir ' + str(args_dict['reference']) + 'genome' # Argument for specifying STAR reference directory
         + ' --readFilesIn ' + str(file) # Argument to dictate directory where pre-processed read files are located
-        + ' --sjdbGTFfile ' + str(args_dict['reference']) + 'transcripts.gtf'
+        + ' --sjdbGTFfile ' + str(args_dict['reference']) + str(gtf_name)
         + ' --outFileNamePrefix ' + str(args_dict['alignments_coordinates']) + str(output) + '_'
         + ' --outFilterMismatchNoverLmax ' + str(args_dict['mismatchRatio']) # Mismatch ratio to mapped read length
         + ' --seedSearchStartLmax ' + str(args_dict['seedSearchStartLmax'])
@@ -276,6 +325,12 @@ def alignment_process(
         file_suffix = '_Aligned.sort.bam'
     else:
         file_suffix = '_Aligned.sort.bam'
+
+    # Remove reads that mapped to rRNA coordinates
+    if args_dict['remove_rrna'] == True:
+        genomic_depletion(
+                args_dict,
+                suffix=file_suffix)
 
     # Index BAM file
     os.system(

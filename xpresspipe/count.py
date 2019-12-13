@@ -139,10 +139,10 @@ def count_reads(
             'abundances')
 
         parallelize(
-        count_file_cufflinks,
-        files,
-        args_dict,
-        mod_workers = 'all')
+            count_file_cufflinks,
+            files,
+            args_dict,
+            mod_workers = 'all')
 
     else:
 
@@ -153,10 +153,10 @@ def count_reads(
             'counts')
 
         parallelize(
-        count_file_htseq,
-        files,
-        args_dict,
-        mod_workers = 'all')
+            count_file_htseq,
+            files,
+            args_dict,
+            mod_workers = 'all')
 
     return args_dict
 

@@ -495,6 +495,11 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     se_opts.add_argument(
+        '--remove_rrna',
+        help = 'Include option to remove rRNA alignments during alignment step',
+        action = 'store_true',
+        required = False)
+    se_opts.add_argument(
         '--umi_location',
         help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
@@ -686,6 +691,11 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     pe_opts.add_argument(
+        '--remove_rrna',
+        help = 'Include option to remove rRNA alignments during alignment step',
+        action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
         '--umi_location',
         help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
@@ -873,6 +883,11 @@ def get_arguments(
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_READ_MIN,
+        required = False)
+    rp_opts.add_argument(
+        '--remove_rrna',
+        help = 'Include option to remove rRNA alignments during alignment step',
+        action = 'store_true',
         required = False)
     rp_opts.add_argument(
         '--umi_location',
@@ -1099,6 +1114,11 @@ def get_arguments(
     align_opts.add_argument(
         '--two-pass',
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
+        action = 'store_true',
+        required = False)
+    align_opts.add_argument(
+        '--remove_rrna',
+        help = 'Include option to remove rRNA alignments during alignment step',
         action = 'store_true',
         required = False)
     align_opts.add_argument(
