@@ -7,6 +7,9 @@ Alignment
 | - Standard: The foundation of the pipeline used in XPRESSpipe is based in the `TCGA <https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/>`_ standards for RNAseq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated.
 | - Variant Aware: The user can provide a VCF, such as those provided by `ClinVar <ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/>`_ and `dbSNP <ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/>`_. These files are useful in integrating information about common or disease nucleotide variants into the RNA-Seq alignment stage. The files you use should match the build of the genome you are using (i.e., if using Homo Sapiens GRCh38, these builds should match between curated reference files and VCF file).
 
+.. note::
+  rRNA depletion using the :data:`--remove_rrna` option removes rRNA alignments from BAM files. This works by generating a BED file behind the scenes for rRNA transcripts, and removing them from the genome-aligned BAM file using :data:`bedtools intersect`. For transcriptome-aligned BAM files, a modified GTF file is generated for this step only with rRNA records removed in order to prevent their transcript mapping during this step. 
+
 ============================
 Single-End RNAseq Alignment
 ============================
@@ -47,6 +50,8 @@ Arguments
      - Description
    * - :data:`--two-pass`
      - Use a two-pass STAR alignment for novel splice junction discovery
+   * - :data:`--remove_rrna`
+     - Provide flag to remove rRNA records from alignment files (BAM files)
    * - :data:`--no_multimappers>`
      - Include flag to remove multimapping reads to be output and used in downstream analyses
    * - :data:`--deduplicate`

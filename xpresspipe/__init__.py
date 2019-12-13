@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License along with
 this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-__version__ = '0.3.1'
+__version__ = '0.4.0'
 
 from .__main__ import *
 from .align import *

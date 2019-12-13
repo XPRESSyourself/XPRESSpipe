@@ -2,10 +2,17 @@
 Updates
 ###############
 
+========================
+v0.4.0 (in progress)
+========================
+- Introduced rRNA depletion during alignment step (previously could only do so during the quantification step)
+- Expanded periodicity analysis to report codon usage stats, etc. (in progress)
+
+
 ============
 v0.3.1
 ============
-- Fix BAM file threshold for metagene and geneCoverage to avoid OOM errors 
+- Fix BAM file threshold for metagene and geneCoverage to avoid OOM errors
 - Turn off BAM file threshold for counting (low memory footprint, so can use all cores available)
 - Import openssl library manually in Rperiodicity -- occasionally had trouble finding the library on its own and would error
 

@@ -1,7 +1,7 @@
 ############################
 Ribosome Profiling Pipeline
 ############################
-| The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in other sections of this documentation. For more detailed information concerning these steps, please refer to the appropriate chapter for the step you are interested in.
+| The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in other sections of this documentation. For more detailed information concerning these steps, please refer to the Align chapter for the step you are interested in.
 
 .. list-table::
    :widths: 35 50
@@ -34,6 +34,8 @@ Ribosome Profiling Pipeline
      - PHRED read quality threshold (default: :data:`28`)
    * - :data:`--min_length \<length_value\>`
      - Minimum read length threshold to keep for reads (default: :data:`17`)
+   * - :data:`--remove_rrna`
+     - Provide flag to remove rRNA records from alignment files (BAM files)
    * - :data:`--umi_location \<location\>`
      - Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide 'read1' here; does not work with -a polyX option)
    * - :data:`--umi_length \<length\>`

@@ -32,9 +32,9 @@ from .utils import add_directory, get_files
 
 __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
 
-"""Measure library complexity"""
 def run_complexity(
         args):
+    """Measure library complexity"""
 
     file, args_dict = args[0], args[1]
 
@@ -55,8 +55,9 @@ def run_complexity(
         + ' ' + str(args_dict['complexity']) + 'metrics/' + str(file).rsplit('.',1)[0] + '_metrics.txt'
         + str(args_dict['log']))
 
-"""Manager for running complexity summary plotting"""
+
 def make_complexity(args_dict):
+    """Manager for running complexity summary plotting"""
 
     print('\nRunning complexity analysis of sequence libraries...')
 

@@ -1,7 +1,7 @@
 ############################
 Single-End RNA-seq Pipeline
 ############################
-| The following pipeline will pre-process, align, and quality check single-end RNA-seq samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the appropriate chapter.
+| The following pipeline will pre-process, align, and quality check single-end RNA-seq samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the Align chapter.
 
 .. list-table::
    :widths: 35 50
@@ -34,6 +34,8 @@ Single-End RNA-seq Pipeline
      - PHRED read quality threshold (default: :data:`28`)
    * - :data:`--min_length \<length_value\>`
      - Minimum read length threshold to keep for reads (default: :data:`17`)
+   * - :data:`--remove_rrna`
+     - Provide flag to remove rRNA records from alignment files (BAM files)
    * - :data:`--umi_location \<location\>`
      - Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide 'read1' here; does not work with -a polyX option)
    * - :data:`--umi_length \<length\>`
