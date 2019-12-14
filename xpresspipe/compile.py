@@ -263,6 +263,8 @@ def prep_codon(
     df_corrected = df_corrected.loc[df_corrected['psite_corrected'] >= 0]
     df_corrected = df_corrected['sequence'].value_counts().drop('None')
 
+    #### Need to fix this to remove those mapping to utr3
+
     return df_corrected[::-1]
 
 def prep_periodicity_5prime(
