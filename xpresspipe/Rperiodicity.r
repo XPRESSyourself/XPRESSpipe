@@ -83,15 +83,16 @@ write.table(
     "annotation.txt",
     sep=""),
   sep='\t',
-  col.names=NA
+  col.names=NA)
 
 # Get list of unique elements in 'sample' column in p_sites
 # Generate tables for each sample
 for (SAMPLE in as.list(unique(p_sites$sample))) {
   SAMPLE_NAME = vapply(strsplit(SAMPLE, "[.]"), `[`, 1, FUN.VALUE=character(1)) # Get sample name
+  
   OUTPUT_NAME = paste(OUTPUT_P_SITES, SAMPLE_NAME, "_metrics.txt", sep="")
 
   write.table(as.data.frame(
-    p_sites$SAMPLE[,c("transcript","psite","length")]
+    p_info[[SAMPLE]][,c("transcript","psite","length")]
   ), file=OUTPUT_NAME, sep='\t', col.names=NA)
 }

@@ -36,6 +36,9 @@ else:
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
 import seaborn as sns
 
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 """IMPORT INTERNAL DEPENDENCIES"""
 from .utils import add_directory
 
@@ -257,10 +260,11 @@ def correct_psites(
     return data
 
 def prep_codon(
-        df_corrected):
+        df_corrected,
+        col_name='psite_corrected'):
     """"""
 
-    df_corrected = df_corrected.loc[df_corrected['psite_corrected'] >= 0]
+    df_corrected = df_corrected.loc[df_corrected[col_name] >= 0]
     df_corrected = df_corrected['sequence'].value_counts().drop('None')
 
     #### Need to fix this to remove those mapping to utr3
@@ -270,7 +274,7 @@ def prep_codon(
 def prep_periodicity_5prime(
         df_corrected,
         left_range=-20,
-        right_range=90)):
+        right_range=90):
     """"""
 
     df_corrected = df_corrected.loc[df_corrected['sequence'] != "None"]
@@ -323,8 +327,8 @@ def set_lines(
         data,
         prime5=True):
 
-    min_value = data.index.min())
-    max_value = data.index.max())
+    min_value = data.index.min()
+    max_value = data.index.max()
 
     ax.axvline(x=0, c='red')
 
@@ -412,16 +416,17 @@ def compile_p_site_qc_metrics(
 
         # Plot codon
         df_codon = prep_codon(
-            df_corrected
+            df_corrected,
+            col_name='psite_corrected_5prime'
         )
 
         colors = prep_bar_colors(
             df_codon
         )
-
+        
         axes_codon[ax_y, 0] = df_codon.plot.bar(width=0.9, color=colors)
         plot_position = 0
-        for p in axes_codon[ax_y, 0].patches:
+        for p in df_codon[ax_y, 0].patches:
             codon = df_codon.keys()[plot_position]
             ax.annotate(
                 conversion_table[codon],

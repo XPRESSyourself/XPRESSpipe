@@ -145,7 +145,7 @@ def make_periodicity(
     anno = pd.read_csv(
         str(args_dict['p_site_qc']) + 'metrics/annotation.txt',
         sep='\t',
-        index_col=0))
+        index_col=0)
     anno_dict_5prime = pd.Series(
         anno.l_utr5.values,
         index=anno.transcript).to_dict()
@@ -153,7 +153,7 @@ def make_periodicity(
         anno.l_utr3.values,
         index=anno.transcript).to_dict()
     anno_dict_length = pd.Series(
-        anno.length.values,
+        anno.l_tr.values,
         index=anno.transcript).to_dict()
 
     anno_dict = {

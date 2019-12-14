@@ -840,7 +840,7 @@ def get_arguments(
         type = str,
         required = True)
     rp_reqs.add_argument(
-        '-c', '--cdna_fasta',
+        '--cdna_fasta',
         help = 'Path and file name to reference cDNA FASTA file for periodicity reference generation/location',
         metavar = '</path/cdna_fasta.fa>',
         type = str,
@@ -1563,7 +1563,7 @@ def get_arguments(
         type = str,
         required = True)
     period_reqs.add_argument(
-        '-c', '--cdna_fasta',
+        '--cdna_fasta',
         help = 'Path and file name to reference cDNA FASTA file for periodicity reference generation/location',
         metavar = '</path/cdna_fasta.fa>',
         type = str,
