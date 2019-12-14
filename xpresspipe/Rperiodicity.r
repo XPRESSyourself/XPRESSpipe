@@ -54,7 +54,8 @@ args = commandArgs(trailingOnly=TRUE)
 # Set parameters
 BAM_LIST <- args[1] # Directory containing
 GTF <- args[2]
-OUTPUT <- args[3] # Path and filename with .txt extension
+OUTPUT_P_SITES <- args[3] # Path and filename with .txt extension
+
 
 # Get p-site offsets
 #annotation_dt <- read.table(
@@ -66,14 +67,31 @@ OUTPUT <- args[3] # Path and filename with .txt extension
 annotation_dt <- create_annotation(gtfpath=GTF)
 
 reads_list <- bamtolist(bamfolder = BAM_LIST, annotation = annotation_dt)
-p_sites <- psite(reads_list) # This will fail if the input files are too small and don't have good representation across genes
+p_sites <- psite(reads_list, extremity="5end") # This will fail if the input files are too small and don't have good representation across genes
 p_info <- psite_info(reads_list, p_sites)
+
+###
+#provide GTF and cdna fasta for codon and periodicity
+#option to select range of read length for plotting and analysis
+###
+
+# Get data for codon usage -- output to both directories
+write.table(
+  as.data.frame(annotation_dt),
+  file=paste(
+    OUTPUT_P_SITES,
+    "annotation.txt",
+    sep=""),
+  sep='\t',
+  col.names=NA
 
 # Get list of unique elements in 'sample' column in p_sites
 # Generate tables for each sample
 for (SAMPLE in as.list(unique(p_sites$sample))) {
   SAMPLE_NAME = vapply(strsplit(SAMPLE, "[.]"), `[`, 1, FUN.VALUE=character(1)) # Get sample name
-  OUTPUT_NAME = paste(OUTPUT, SAMPLE_NAME, "_metrics.txt", sep="")
-  meta_prof <- metaprofile_psite(p_info, annotation_dt, SAMPLE, cdsl = 75)
-  write.table(as.data.frame(meta_prof$dt), file=OUTPUT_NAME, sep='\t', col.names=NA)
+  OUTPUT_NAME = paste(OUTPUT_P_SITES, SAMPLE_NAME, "_metrics.txt", sep="")
+
+  write.table(as.data.frame(
+    p_sites$SAMPLE[,c("transcript","psite","length")]
+  ), file=OUTPUT_NAME, sep='\t', col.names=NA)
 }
