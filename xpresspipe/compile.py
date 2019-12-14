@@ -423,12 +423,12 @@ def compile_p_site_qc_metrics(
         colors = prep_bar_colors(
             df_codon
         )
-        
-        axes_codon[ax_y, 0] = df_codon.plot.bar(width=0.9, color=colors)
+
+        axes_codon[ax_y] = df_codon.plot.bar(width=0.9, color=colors)
         plot_position = 0
-        for p in df_codon[ax_y, 0].patches:
+        for p in axes_codon[ax_y].patches:
             codon = df_codon.keys()[plot_position]
-            ax.annotate(
+            axes_codon[ax_y].annotate(
                 conversion_table[codon],
                 (p.get_x() + 0.22, p.get_height() + 13000))
             plot_position += 1
@@ -452,8 +452,8 @@ def compile_p_site_qc_metrics(
             # Add the legend manually to the current Axes.
             ax = plt.gca().add_artist(first_legend)
 
-        axes_codon[ax_y, 0].set_ylabel('# P-Sites', size=25)
-        axes_codon[ax_y, 0].set_xlabel('Codon', size=25)
+        axes_codon[ax_y].set_ylabel('# P-Sites', size=25)
+        axes_codon[ax_y].set_xlabel('Codon', size=25)
 
         # Plot periodicity
         df_periodicity_5prime = prep_periodicity_5prime(
