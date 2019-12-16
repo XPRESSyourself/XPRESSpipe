@@ -35,8 +35,46 @@ from .gtfModify import edit_gtf
 from .rrna_depletion import genomic_depletion
 from .parallel import parallelize, parallelize_pe
 
+gtf_type_column = 2
 gtf_annotation_column = 8
+search_type = 'transcript'
 parse_type = 'rrna'
+
+def generate_bed(
+        gtf_file):
+    """Generate a BED file of rRNA sequences for depletion from genome-aligned
+    BAM file.
+    """
+
+    # Set up BED generation command
+    gtf = pd.read_csv(
+        str(gtf_file),
+        sep = '\t',
+        header = None,
+        comment = '#',
+        low_memory = False)
+
+    # Remove records that map to rRNA
+    gtf_rrna = gtf[gtf[gtf_annotation_column].str.contains(
+        parse_type, flags=re.IGNORECASE
+        )]
+    gtf_rrna = gtf_rrna.loc[gtf_rrna[gtf_type_column] == search_type]
+    gtf_rrna = gtf_rrna[[0,3,4]]
+
+    bed_file = gtf_file[:-4] + '_rrna.bed'
+
+    gtf_rrna.to_csv(
+        str(bed_file),
+        sep = '\t',
+        header = None,
+        index = False,
+        quoting = csv.QUOTE_NONE)
+
+    gtf = None # Garbage management
+    gtf_rrna = None
+    gc.collect()
+
+    return bed_file
 
 def curate_depletion_gtf(args_dict):
 
@@ -292,6 +330,22 @@ def alignment_process(
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_Aligned.namesort.bam'
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_fixed.namesort.bam')
 
+        # Remove rRNA
+        if args_dict['remove_rrna'] == True:
+            os.system(
+                'bedtools intersect -abam'
+                + ' ' + str(args_dict['alignments_coordinates'])
+                + str(output) + '_fixed.namesort.bam'
+                + ' -b ' + args_dict['bed_file']
+                + ' -v > ' + str(args_dict['alignments_coordinates'])
+                + str(output) + '_fixed.rrna_depl.bam')
+            os.system(
+                'mv'
+                + ' ' + str(args_dict['alignments_coordinates'])
+                + str(output) + '_fixed.rrna_depl.bam'
+                + ' ' + str(args_dict['alignments_coordinates'])
+                + str(output) + '_fixed.namesort.bam')
+
         # Convert back to coordinate sorted because markdup doesn't accept name sorted files
         os.system(
         'samtools sort'
@@ -300,6 +354,22 @@ def alignment_process(
         + ' ' + str(args_dict['alignments_coordinates']) + str(output) + '_fixed.namesort.bam')
 
     else:
+        # Remove rRNA
+        if args_dict['remove_rrna'] == True:
+            os.system(
+                'bedtools intersect -abam'
+                + ' ' + str(args_dict['alignments_coordinates'])
+                + str(output) + '_Aligned.out.bam'
+                + ' -b ' + args_dict['bed_file']
+                + ' -v > ' + str(args_dict['alignments_coordinates'])
+                + str(output) + '_Aligned.rrna_depl.bam')
+            os.system(
+                'mv'
+                + ' ' + str(args_dict['alignments_coordinates'])
+                + str(output) + '_Aligned.rrna_depl.bam'
+                + ' ' + str(args_dict['alignments_coordinates'])
+                + str(output) + '_Aligned.out.bam')
+
         # Sort SAM file
         os.system(
             'samtools sort'
@@ -325,12 +395,6 @@ def alignment_process(
         file_suffix = '_Aligned.sort.bam'
     else:
         file_suffix = '_Aligned.sort.bam'
-
-    # Remove reads that mapped to rRNA coordinates
-    if args_dict['remove_rrna'] == True:
-        genomic_depletion(
-                args_dict,
-                suffix=file_suffix)
 
     # Index BAM file
     os.system(
@@ -549,6 +613,11 @@ def run_seRNAseq(
         'output',
         'alignments_transcriptome')
 
+    if args_dict['remove_rrna'] == True:
+        gtf_file = str(args_dict['reference']) + 'transcripts.gtf'
+        args_dict['bed_file'] = generate_bed(
+            gtf_file=gtf_file)
+
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
         args_dict = add_directory(
             args_dict,
@@ -583,6 +652,11 @@ def run_peRNAseq(
         args_dict,
         'output',
         'alignments_transcriptome')
+
+    if args_dict['remove_rrna'] == True:
+        gtf_file = str(args_dict['reference']) + 'transcripts.gtf'
+        args_dict['bed_file'] = generate_bed(
+            gtf_file=gtf_file)
 
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
         args_dict = add_directory(
