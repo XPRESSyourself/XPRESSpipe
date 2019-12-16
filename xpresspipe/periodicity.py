@@ -81,7 +81,8 @@ def make_fasta_dictionary(fasta_file):
 def make_periodicity(
         args_dict):
 
-    print('\nGenerating periodicity profiles...')
+    print('\nGenerating P-site meta profiles...')
+
     args_dict = add_directory(
         args_dict,
         'output',
@@ -180,6 +181,7 @@ def make_periodicity(
 
         # Plot metrics for each file
         compile_p_site_qc_metrics(
+            args_dict,
             str(args_dict['p_site_qc']) + 'metrics/',
             file_list,
             fasta,

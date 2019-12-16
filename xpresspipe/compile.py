@@ -199,6 +199,9 @@ def correct_psites(
         length_max=None,):
     """"""
 
+    if length_max == 0:
+        length_max = 1000000000000
+
     if length_min != None and length_max != None:
         data = data.loc[data['length'].between(length_min, length_max)]
     elif length_min != None:
@@ -281,7 +284,7 @@ def prep_periodicity_5prime(
     df_corrected = df_corrected.loc[(
         df_corrected['psite_corrected_5prime'] >= left_range)
         & (df_corrected['psite_corrected_5prime'] <= right_range)]
-    df_corrected = df_corrected['psite_corrected_5prime'].value_counts().sort_index()
+    df_corrected = df_corrected['psite_corrected_5prime'].value_counts().sort_index().dropna()
 
     return df_corrected
 
@@ -295,7 +298,7 @@ def prep_periodicity_3prime(
     df_corrected = df_corrected.loc[(
         df_corrected['psite_corrected_3prime'] >= left_range)
         & (df_corrected['psite_corrected_3prime'] <= right_range)]
-    df_corrected = df_corrected['psite_corrected_3prime'].value_counts().sort_index()
+    df_corrected = df_corrected['psite_corrected_3prime'].value_counts().sort_index().dropna()
 
     return df_corrected
 
@@ -361,6 +364,7 @@ def set_lines(
 """
 """
 def compile_p_site_qc_metrics(
+        args_dict,
         path,
         file_list,
         fasta,
@@ -396,7 +400,8 @@ def compile_p_site_qc_metrics(
         figsize = fig_size,
         sharey = True,
         sharex = False,
-        subplot_kw = {'facecolor':'none'})
+        subplot_kw = {'facecolor':'none'},
+        gridspec_kw = {'width_ratios': [2, 1]})
 
     # Initialize file and axis counters for formatting summary figure
     ax_y = 0
@@ -412,7 +417,9 @@ def compile_p_site_qc_metrics(
         df_corrected = correct_psites(
             df,
             fasta,
-            anno_dict)
+            anno_dict,
+            length_min=args_dict['min_length'],
+            length_max=args_dict['max_length'])
 
         # Plot codon
         df_codon = prep_codon(
@@ -424,7 +431,10 @@ def compile_p_site_qc_metrics(
             df_codon
         )
 
-        axes_codon[ax_y] = df_codon.plot.bar(width=0.9, color=colors)
+        df_codon.plot.bar(width=0.9, color=colors, ax=axes_codon[ax_y])
+        axes_codon[ax_y].set_ylabel('# P-Sites', size=25)
+        axes_codon[ax_y].set_xlabel('Codon', size=25)
+
         plot_position = 0
         for p in axes_codon[ax_y].patches:
             codon = df_codon.keys()[plot_position]
@@ -441,7 +451,7 @@ def compile_p_site_qc_metrics(
                 markersize=10,
                 ls="none")[0]
             handles = [f("s", list(legend_colors.values())[i]) for i in range(len(list(legend_colors.values())))]
-            first_legend = plt.legend(
+            axes_codon[ax_y].legend(
                 handles,
                 list(legend_colors.keys()),
                 bbox_to_anchor=(0.02, 0.95),
@@ -450,10 +460,7 @@ def compile_p_site_qc_metrics(
                 borderaxespad=0.)
 
             # Add the legend manually to the current Axes.
-            ax = plt.gca().add_artist(first_legend)
-
-        axes_codon[ax_y].set_ylabel('# P-Sites', size=25)
-        axes_codon[ax_y].set_xlabel('Codon', size=25)
+            #axes_codon[ax_y].add_artist(first_legend)
 
         # Plot periodicity
         df_periodicity_5prime = prep_periodicity_5prime(
@@ -464,8 +471,17 @@ def compile_p_site_qc_metrics(
         )
 
         # 5' and 3'
-        axes_period[ax_y, 0] = df_periodicity_5prime.plot.line()
-        axes_period[ax_y, 1] = df_periodicity_3prime.plot.line()
+        df_periodicity_5prime.plot.line(ax=axes_period[ax_y, 0])
+        df_periodicity_3prime.plot.line(ax=axes_period[ax_y, 1])
+
+        axes_period[ax_y, 0].set_ylabel('# P-Sites', size=25)
+        axes_period[ax_y, 0].set_xlabel('5\'-end', size=25)
+        axes_period[ax_y, 1].set_xlabel('3\'-end', size=25)
+
+        axes_period[ax_y, 0].spines['bottom'].set_color('black')
+        axes_period[ax_y, 0].spines['left'].set_color('black')
+        axes_period[ax_y, 1].spines['bottom'].set_color('black')
+        axes_period[ax_y, 1].spines['left'].set_color('black')
 
         steps_5prime = prep_periodicity_steps(df_periodicity_5prime)
         steps_3prime = prep_periodicity_steps(df_periodicity_3prime)
@@ -495,6 +511,7 @@ def compile_p_site_qc_metrics(
         dpi = dpi,
         bbox_inches = 'tight')
 
+
     fig_period.savefig(
         (
             str(periodicity_output)
@@ -503,6 +520,7 @@ def compile_p_site_qc_metrics(
             + '_summary.pdf'),
         dpi = dpi,
         bbox_inches = 'tight')
+
 
 """"""
 def compile_complexity_metrics(

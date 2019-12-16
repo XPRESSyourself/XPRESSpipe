@@ -316,10 +316,10 @@ def main(
             msg_complete(),
             'READ DISTRIBUTION')
 
-    elif args.cmd == 'periodicity':
-        print('Performing periodicity analysis on transcriptome-mapped files...')
+    elif args.cmd == 'p_sites':
+        print('Performing P-site analysis on transcriptome-mapped files...')
 
-        # Generate periodicity summaries
+        # Generate P-site summaries
         make_periodicity(args_dict)
 
         # Check log file for errors and exceptions

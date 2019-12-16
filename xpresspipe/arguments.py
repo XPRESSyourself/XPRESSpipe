@@ -73,6 +73,7 @@ argument_directories = [
 ]
 # Set default values for arguments
 DEFAULT_READ_MIN  =  17
+DEFAULT_READ_MAX  =  0
 DEFAULT_READ_QUALITY  =  28
 DEFAULT_MAX_PROCESSORS  =  None
 DEFAULT_TRUNCATE_5PRIME = 45
@@ -111,7 +112,7 @@ description_table  =  """\
         |-----------------------|---------------------------------------------------------------------------------------|
         |    readDistribution   |   Compile summarized distributions for each sample in a directory                     |
         |-----------------------|---------------------------------------------------------------------------------------|
-        |    periodicity        |   Calculate periodicity of transcripts using the most abundant transcript length      |
+        |    p_sites        |   Calculate P-site statistics of transcripts using the most abundant transcript length      |
         |                       |   for alignments to map per sample                                                    |
         |-----------------------|---------------------------------------------------------------------------------------|
         |    complexity         |   Generate summary of library complexity                                              |
@@ -220,6 +221,18 @@ def check_inputs(
         else:
             raise Exception('Something went wrong with the adapter input formatting. Expected a list, but got ' \
             + str(type(args_dict['adapters'])))
+
+    if 'min_length' in args_dict and 'max_length' in args_dict:
+        if args_dict['max_length'] == 0:
+            pass
+
+        elif args_dict['max_length'] < args_dict['min_length']:
+            print('Minimum length:', args_dict['min_length'])
+            print('Maximum length:', args_dict['max_length'])
+            raise Exception('Maximum length must be equal to or greater than minimum length.')
+
+        else:
+            pass
 
     if 'quantification_method' in args_dict and 'stranded' in args_dict:
 
@@ -495,6 +508,13 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     se_opts.add_argument(
+        '--max_length',
+        help = 'Maximum read length threshold to keep for reads (default: %s). Setting argument to 0 will result in no upper length limit.' % DEFAULT_READ_MAX,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_READ_MAX,
+        required = False)
+    se_opts.add_argument(
         '--remove_rrna',
         help = 'Include option to remove rRNA alignments during alignment step',
         action = 'store_true',
@@ -691,6 +711,13 @@ def get_arguments(
         default = DEFAULT_READ_MIN,
         required = False)
     pe_opts.add_argument(
+        '--max_length',
+        help = 'Maximum read length threshold to keep for reads (default: %s). Setting argument to 0 will result in no upper length limit.' % DEFAULT_READ_MAX,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_READ_MAX,
+        required = False)
+    pe_opts.add_argument(
         '--remove_rrna',
         help = 'Include option to remove rRNA alignments during alignment step',
         action = 'store_true',
@@ -841,7 +868,7 @@ def get_arguments(
         required = True)
     rp_reqs.add_argument(
         '--cdna_fasta',
-        help = 'Path and file name to reference cDNA FASTA file for periodicity reference generation/location',
+        help = 'Path and file name to reference cDNA FASTA file for P-site reference generation/location',
         metavar = '</path/cdna_fasta.fa>',
         type = str,
         required = True)
@@ -889,6 +916,13 @@ def get_arguments(
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_READ_MIN,
+        required = False)
+    rp_opts.add_argument(
+        '--max_length',
+        help = 'Maximum read length threshold to keep for reads (default: %s). Setting argument to 0 will result in no upper length limit.' % DEFAULT_READ_MAX,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_READ_MAX,
         required = False)
     rp_opts.add_argument(
         '--remove_rrna',
@@ -1057,6 +1091,13 @@ def get_arguments(
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_READ_MIN,
+        required = False)
+    trim_opts.add_argument(
+        '--max_length',
+        help = 'Maximum read length threshold to keep for reads (default: %s). Setting argument to 0 will result in no upper length limit.' % DEFAULT_READ_MAX,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_READ_MAX,
         required = False)
     trim_opts.add_argument(
         '--umi_location',
@@ -1537,10 +1578,10 @@ def get_arguments(
         default = DEFAULT_MAX_PROCESSORS,
         required = False)
 
-    """PERIODICITY SUBPARSER"""
+    """P-SITE SUBPARSER"""
     period_parser = subparser.add_parser(
-        'periodicity',
-        description = 'Calculate periodicity of transcripts using the most abundant transcript length for alignments to map per sample',
+        'p_sites',
+        description = 'Calculate P-site stats of transcripts using the most abundant transcript length for alignments to map per sample',
         add_help = False)
     # Required arguments
     period_reqs = period_parser.add_argument_group('required arguments')
@@ -1558,13 +1599,13 @@ def get_arguments(
         required = True)
     period_reqs.add_argument(
         '-g', '--gtf',
-        help = 'Path and file name to reference GTF for periodicity reference generation/location',
+        help = 'Path and file name to reference GTF for P-site reference generation/location',
         metavar = '</path/transcripts.gtf>',
         type = str,
         required = True)
     period_reqs.add_argument(
         '--cdna_fasta',
-        help = 'Path and file name to reference cDNA FASTA file for periodicity reference generation/location',
+        help = 'Path and file name to reference cDNA FASTA file for P-site reference generation/location',
         metavar = '</path/cdna_fasta.fa>',
         type = str,
         required = True)
@@ -1574,6 +1615,20 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    period_opts.add_argument(
+        '--min_length',
+        help = 'Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_READ_MIN,
+        required = False)
+    period_opts.add_argument(
+        '--max_length',
+        help = 'Maximum read length threshold to keep for reads (default: %s). Setting argument to 0 will result in no upper length limit.' % DEFAULT_READ_MAX,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_READ_MAX,
+        required = False)
     period_opts.add_argument(
         '--bam_suffix',
         help = 'Change from default suffix of toTranscriptome.out.bam',

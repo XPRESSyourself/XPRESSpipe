@@ -182,13 +182,13 @@ NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothe
 
 
 =================================
-Codon Periodicity Analysis
+P-site Analysis
 =================================
-| Analyze periodicity of most abundant read length. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.
+| Analyze P-Sites. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.
 
 .. code-block:: shell
 
-  $ xpresspipe periodicity --help
+  $ xpresspipe p_sites --help
 
 .. list-table::
    :widths: 35 50
@@ -209,6 +209,10 @@ Codon Periodicity Analysis
 
   * - Optional Arguments
     - Description
+  * - :data:`--min_length \<length_value\>`
+    - Minimum read length threshold to keep for reads (default: :data:`17`)
+  * - :data:`--max_length \<length_value\>`
+    - Maximum read length threshold to keep for reads (default: :data:`0`). Setting this argument to 0 will result in no upper length limit.
   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
     - Experiment name to save output summaries as
   * - :data:`--bam_suffix \<suffix\>`
@@ -220,9 +224,9 @@ Codon Periodicity Analysis
 -----------
 Examples
 -----------
-| **Example 1 -- Analyze periodicity from ribosome profiling libraries**
+| **Example 1 -- Analyze P-sites from ribosome profiling libraries**
 
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
+  $ xpresspipe p_sites -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test

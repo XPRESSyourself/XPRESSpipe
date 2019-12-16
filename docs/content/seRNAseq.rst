@@ -34,6 +34,8 @@ Single-End RNA-seq Pipeline
      - PHRED read quality threshold (default: :data:`28`)
    * - :data:`--min_length \<length_value\>`
      - Minimum read length threshold to keep for reads (default: :data:`17`)
+   * - :data:`--max_length \<length_value\>`
+     - Maximum read length threshold to keep for reads (default: :data:`0`). Setting this argument to 0 will result in no upper length limit.
    * - :data:`--remove_rrna`
      - Provide flag to remove rRNA records from alignment files (BAM files)
    * - :data:`--umi_location \<location\>`
