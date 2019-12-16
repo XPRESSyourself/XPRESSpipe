@@ -32,7 +32,6 @@ import pandas as pd
 from .utils import get_files, add_directory, get_fasta, check_directories
 #from .utils import clean_vcf
 from .gtfModify import edit_gtf
-from .rrna_depletion import genomic_depletion
 from .parallel import parallelize, parallelize_pe
 
 gtf_type_column = 2
