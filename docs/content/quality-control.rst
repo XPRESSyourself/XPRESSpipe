@@ -202,6 +202,8 @@ P-site Analysis
      - Path to output directory
    * - :data:`-g \</path/transcripts.gtf\>`, :data:`--gtf \</path/transcripts.gtf\>`
      - Path and file name to reference GTF
+   * - :data:`-cdna_fasta \</path/cdna_fasta.fa\>`
+     - Path and file name to reference cDNA FASTA file for P-site reference generation/location
 
 .. list-table::
   :widths: 35 50

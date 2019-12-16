@@ -55,7 +55,8 @@ def generate_bed(
     gtf_rrna = gtf[gtf[gtf_annotation_column].str.contains(
         parse_type, flags=re.IGNORECASE
         )]
-    gtf_rrna = gtf.loc[gtf[gtf_type_column] == search_type]
+    gtf_rrna = gtf_rrna.loc[gtf_rrna[gtf_type_column] == search_type]
+    gtf_rrna = gtf_rrna[[0,3,4]]
 
     bed_file = gtf_file[:-4] + '_rrna.bed'
 
@@ -87,7 +88,7 @@ def run_intersect(
     cmd = (
         'bedtools intersect -abam ' + dir + bam_file
         + ' -b ' + bed_file
-        + ' -v > ' + dir + bam_file + '.depl'
+        + ' -v > ' + dir + bam_file + '.depl.bam'
     )
 
     # Run
@@ -95,7 +96,7 @@ def run_intersect(
 
     os.system(
         'mv '
-        + dir + bam_file + '.depl'
+        + dir + bam_file + '.depl.bam'
         + ' ' + dir + bam_file
     )
 
