@@ -44,6 +44,8 @@ Arguments
      - PHRED read quality threshold (default: :data:`28`)
    * - :data:`--min_length \<length_value\>`
      - Minimum read length threshold to keep for reads (default: :data:`17`)
+   * - :data:`--max_length \<length_value\>`
+     - Maximum read length threshold to keep for reads (default: :data:`0`). Setting this argument to 0 will result in no upper length limit.
    * - :data:`--umi_location \<location\>`
      - Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide 'read1' here; does not work with -a polyX option)
    * - :data:`--umi_length \<length\>`

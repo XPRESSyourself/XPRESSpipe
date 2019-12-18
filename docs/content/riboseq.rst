@@ -17,6 +17,8 @@ Ribosome Profiling Pipeline
      - Path to parent organism reference directory
    * - :data:`-g \</path/transcripts.gtf\>`, :data:`--gtf \</path/transcripts.gtf\>`
      - Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)
+   * - :data:`-cdna_fasta \</path/cdna_fasta.fa\>`
+     - Path and file name to reference cDNA FASTA file for P-site reference generation/location
    * - :data:`-e <experiment_name>`, :data:`--experiment <experiment_name>`
      - Experiment name
 
@@ -34,6 +36,8 @@ Ribosome Profiling Pipeline
      - PHRED read quality threshold (default: :data:`28`)
    * - :data:`--min_length \<length_value\>`
      - Minimum read length threshold to keep for reads (default: :data:`17`)
+   * - :data:`--max_length \<length_value\>`
+     - Maximum read length threshold to keep for reads (default: :data:`0`). Setting this argument to 0 will result in no upper length limit.
    * - :data:`--remove_rrna`
      - Provide flag to remove rRNA records from alignment files (BAM files)
    * - :data:`--umi_location \<location\>`

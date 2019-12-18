@@ -70,6 +70,7 @@ def auto_trim(
         + ' -i ' + str(args_dict['input']) + str(file)
         + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
         + ' -l ' + str(args_dict['min_length'])
+        + ' --length_limit ' + str(args_dict['max_length'])
         + ' -q ' + str(args_dict['quality'])
         + str(args_dict['umi'])
         + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
@@ -89,6 +90,7 @@ def polyx_trim(
         + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
         + ' --trim_poly_x'
         + ' -l ' + str(args_dict['min_length'])
+        + ' --length_limit ' + str(args_dict['max_length'])
         + ' -q ' + str(args_dict['quality'])
         + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
@@ -108,6 +110,7 @@ def se_trim(
     + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
     + ' -a ' + str(args_dict['adapters'][0])
     + ' -l ' + str(args_dict['min_length'])
+    + ' --length_limit ' + str(args_dict['max_length'])
     + ' -q ' + str(args_dict['quality'])
     + str(args_dict['umi'])
     + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
@@ -129,6 +132,7 @@ def auto_pe_trim(
         + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file1)
         + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file2)
         + ' -l ' + str(args_dict['min_length'])
+        + ' --length_limit ' + str(args_dict['max_length'])
         + ' -q ' + str(args_dict['quality'])
         + str(args_dict['umi'])
         + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.json'
@@ -151,6 +155,7 @@ def pe_trim(
         + ' -O ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file2)
         + ' -a ' + str(args_dict['adapters'][0]) + ' --adapter_sequence_r2 ' + str(args_dict['adapters'][1])
         + ' -l ' + str(args_dict['min_length'])
+        + ' --length_limit ' + str(args_dict['max_length'])
         + ' -q ' + str(args_dict['quality'])
         + str(args_dict['umi'])
         + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.json'

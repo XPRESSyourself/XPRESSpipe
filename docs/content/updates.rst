@@ -6,8 +6,9 @@ Updates
 v0.4.0 (in progress)
 ========================
 - Introduced rRNA depletion during alignment step (previously could only do so during the quantification step)
-- Expanded periodicity analysis to report codon usage stats, etc. (in progress)
-
+- Expanded periodicity analysis to cover more holistic P-site analysis (report codon usage stats). The submodule previously called :data:`periodicity` is now called by :data:`p_sites`
+- Allow for setting upper limit threshold for read length during pre-processing reads and P-site analysis (previously only a lower limit was available)
+- All documentation associated with this changes has been updated.
 
 ============
 v0.3.1

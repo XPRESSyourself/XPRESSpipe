@@ -36,11 +36,37 @@ else:
 matplotlib.rcParams['font.sans-serif'] = 'Arial'
 import seaborn as sns
 
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 """IMPORT INTERNAL DEPENDENCIES"""
 from .utils import add_directory
 
 input_count = 'coverage'
 window = 20
+conversion_table = {
+    'AUA':'I', 'AUC':'I', 'AUU':'I', 'AUG':'M',
+    'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACU':'T',
+    'AAC':'N', 'AAU':'N', 'AAA':'K', 'AAG':'K',
+    'AGC':'S', 'AGU':'S', 'AGA':'R', 'AGG':'R',
+    'CUA':'L', 'CUC':'L', 'CUG':'L', 'CUU':'L',
+    'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCU':'P',
+    'CAC':'H', 'CAU':'H', 'CAA':'Q', 'CAG':'Q',
+    'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGU':'R',
+    'GUA':'V', 'GUC':'V', 'GUG':'V', 'GUU':'V',
+    'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCU':'A',
+    'GAC':'D', 'GAU':'D', 'GAA':'E', 'GAG':'E',
+    'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGU':'G',
+    'UCA':'S', 'UCC':'S', 'UCG':'S', 'UCU':'S',
+    'UUC':'F', 'UUU':'F', 'UUA':'L', 'UUG':'L',
+    'UAC':'Y', 'UAU':'Y', 'UAA':'*', 'UAG':'*',
+    'UGC':'C', 'UGU':'C', 'UGA':'*', 'UGG':'W',
+}
+#Format legends
+legend_colors = {
+    'Start Codon': '#1b9e77',
+    'Stop Codon': '#d95f02',
+}
 
 def compile_matrix_metrics(
         path,
@@ -164,14 +190,190 @@ def compile_matrix_metrics(
         bbox_inches = 'tight')
 
 
+# Correct P-sites
+def correct_psites(
+        data,
+        fasta,
+        anno_dict,
+        length_min=None,
+        length_max=None,):
+    """"""
+
+    if length_max == 0:
+        length_max = 1000000000000
+
+    if length_min != None and length_max != None:
+        data = data.loc[data['length'].between(length_min, length_max)]
+    elif length_min != None:
+        data = data.loc[data['length'] >= int(length_min)]
+    elif length_max != None:
+        data = data.loc[data['length'] <= int(length_max)]
+    else:
+        pass
+
+    # Map codon sequence to P-sites
+    seq_failed = []
+    def map_sequence(name, position):
+
+        # Convert nucleotide sequence (i.e. position 1)
+        # to Python (array position 0)
+        try:
+            convert_position = position - 1
+
+            codon_seq = fasta[name][convert_position:convert_position + 3]
+
+            if len(codon_seq) != 3:
+                pass
+            else:
+                return codon_seq.replace('T','U')
+
+        except:
+            try:
+                seq_failed.append(name)
+            except:
+                seq_failed = []
+
+    data['sequence'] = np.vectorize(map_sequence)(
+        data['transcript'],
+        data['psite'])
+
+    # Correct P-site position in regard to CDS start and stop
+    def correct_to_cds_start(transcript, psite):
+
+        return (psite - anno_dict['l_utr5'][transcript] - 1)
+
+    data['psite_corrected_5prime'] = np.vectorize(correct_to_cds_start)(
+        data['transcript'],
+        data['psite'])
+
+    def correct_to_cds_stop(transcript, psite):
+
+        return (
+            correct_to_cds_start(transcript, psite)
+            - (
+            anno_dict['length'][transcript]
+            - anno_dict['l_utr3'][transcript]
+            )
+        )
+
+    data['psite_corrected_3prime'] = np.vectorize(correct_to_cds_stop)(
+        data['transcript'],
+        data['psite'])
+
+    return data
+
+def prep_codon(
+        df_corrected,
+        col_name='psite_corrected'):
+    """"""
+
+    df_corrected = df_corrected.loc[df_corrected[col_name] >= 0]
+    df_corrected = df_corrected['sequence'].value_counts().drop('None')
+
+    #### Need to fix this to remove those mapping to utr3
+
+    return df_corrected[::-1]
+
+def prep_periodicity_5prime(
+        df_corrected,
+        left_range=-20,
+        right_range=90):
+    """"""
+
+    df_corrected = df_corrected.loc[df_corrected['sequence'] != "None"]
+    df_corrected = df_corrected.loc[(
+        df_corrected['psite_corrected_5prime'] >= left_range)
+        & (df_corrected['psite_corrected_5prime'] <= right_range)]
+    df_corrected = df_corrected['psite_corrected_5prime'].value_counts().sort_index().dropna()
+
+    return df_corrected
+
+def prep_periodicity_3prime(
+        df_corrected,
+        left_range=-40,
+        right_range=20):
+    """"""
+
+    df_corrected = df_corrected.loc[df_corrected['sequence'] != "None"]
+    df_corrected = df_corrected.loc[(
+        df_corrected['psite_corrected_3prime'] >= left_range)
+        & (df_corrected['psite_corrected_3prime'] <= right_range)]
+    df_corrected = df_corrected['psite_corrected_3prime'].value_counts().sort_index().dropna()
+
+    return df_corrected
+
+def prep_bar_colors(
+        df_codon):
+
+        colors = []
+        for value in df_codon.index.tolist(): # keys are the names of the boys
+            if value == 'UAG' or value == 'UAA' or value == 'UGA':
+                colors.append('#d95f02')
+            elif value == 'AUG':
+                colors.append('#1b9e77')
+            else:
+                colors.append('#c2c5cc')
+
+        return colors
+
+def prep_periodicity_steps(
+        data,
+        number_of_steps = 10):
+
+    min_value = data.index.min()
+    max_value = data.index.max()
+
+    return np.arange(min_value, max_value+1, number_of_steps)
+
+def set_lines(
+        ax,
+        data,
+        prime5=True):
+
+    min_value = data.index.min()
+    max_value = data.index.max()
+
+    ax.axvline(x=0, c='red')
+
+    if prime5 == True:
+
+        x_value = 0
+        while x_value < max_value:
+            x_value += 3
+            ax.axvline(x=x_value, c='pink')
+
+        x_value = 0
+        while x_value > min_value:
+            x_value -= 3
+            ax.axvline(x=x_value, c='lightblue')
+
+    else:
+
+        x_value = 0
+        while x_value < max_value:
+            x_value += 3
+            ax.axvline(x=x_value, c='lightblue')
+
+        x_value = 0
+        while x_value > min_value:
+            x_value -= 3
+            ax.axvline(x=x_value, c='pink')
+
+    return ax
+
 """
 """
-def compile_periodicity_metrics(
+def compile_p_site_qc_metrics(
+        args_dict,
         path,
         file_list,
-        plot_type,
+        fasta,
+        anno_dict,
+        plot_periodicity,
+        plot_codon,
         experiment,
-        plot_output,
+        periodicity_output,
+        codon_output,
         dpi=600):
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
@@ -184,39 +386,22 @@ def compile_periodicity_metrics(
         fig_size = (15, (6 * (int(len(file_list)))))
 
     # Set up figure space
-    fig, axes = plt.subplots(
+    fig_codon, axes_codon = plt.subplots(
+        nrows = plot_rows,
+        ncols = 1,
+        figsize = fig_size,
+        sharey = True,
+        sharex = False,
+        subplot_kw = {'facecolor':'none'})
+
+    fig_period, axes_period = plt.subplots(
         nrows = plot_rows,
         ncols = 2,
         figsize = fig_size,
         sharey = True,
-        subplot_kw = {'facecolor':'none'})
-
-    tix_5prime = ['']
-    for t in range(-24,76,3):
-        if t == 0:
-            tix_5prime.append('START')
-            tix_5prime.append('')
-            tix_5prime.append('')
-        elif t == 75:
-            tix_5prime.append(str(t))
-        else:
-            tix_5prime.append(str(t))
-            tix_5prime.append('')
-            tix_5prime.append('')
-
-    tix_3prime = []
-    for t in range(-75,26,3):
-        if t == 0:
-            tix_3prime.append('STOP')
-            tix_3prime.append('')
-            tix_3prime.append('')
-        elif t == 24:
-            tix_3prime.append(str(t))
-            tix_3prime.append('')
-        else:
-            tix_3prime.append(str(t))
-            tix_3prime.append('')
-            tix_3prime.append('')
+        sharex = False,
+        subplot_kw = {'facecolor':'none'},
+        gridspec_kw = {'width_ratios': [2, 1]})
 
     # Initialize file and axis counters for formatting summary figure
     ax_y = 0
@@ -228,61 +413,114 @@ def compile_periodicity_metrics(
             str(path) + str(file),
             sep = '\t',
             index_col = 0) # Initialize dataframe for relevant data
-        df = df.dropna(axis = 0)
-        df['distance'] = df['distance'].astype(int)
 
-        # Get start data and fill missing points
-        df_start = df[df['reg'].str.contains('start')]
-        counter = max(df_start.index.tolist())
-        indexer = df_start['distance'].tolist()
-        for i in range(-25, 76):
-            if i not in indexer:
-                counter += 1
-                df_start.loc[counter] = [i,0.2,'start']
-        df_start = df_start.sort_values('distance')
-        df_start = df_start.reset_index(drop=True)
+        df_corrected = correct_psites(
+            df,
+            fasta,
+            anno_dict,
+            length_min=args_dict['min_length'],
+            length_max=args_dict['max_length'])
 
-        # Get stop data and fill missing points
-        df_stop = df[df['reg'].str.contains('stop')]
-        counter = max(df_stop.index.tolist())
-        indexer = df_stop['distance'].tolist()
-        for i in range(-75, 26):
-            if i not in indexer:
-                counter += 1
-                df_stop.loc[counter] = [i,0.2,'stop']
-        df_stop = df_stop.sort_values('distance')
-        df_stop = df_stop.reset_index(drop=True)
+        # Plot codon
+        df_codon = prep_codon(
+            df_corrected,
+            col_name='psite_corrected_5prime'
+        )
 
-        # Plot 5prime figure
-        df_start.plot.bar(
-            x = 'distance',
-            y = 'reads',
-            ax = axes[ax_y, 0],
-            width = 0.9)
-        axes[ax_y, 0].set_xticklabels(tix_5prime)
-        axes[ax_y, 0].set_xlabel('')
+        colors = prep_bar_colors(
+            df_codon
+        )
 
-        title = file.rsplit('.',1)[0].replace('_metrics','')
-        axes[ax_y, 0].set_title(title)
+        df_codon.plot.bar(width=0.9, color=colors, ax=axes_codon[ax_y])
+        axes_codon[ax_y].set_ylabel('# P-Sites', size=25)
+        axes_codon[ax_y].set_xlabel('Codon', size=25)
 
-        # Plot 3prime figure
-        df_stop.plot.bar(
-            x = 'distance',
-            y = 'reads',
-            ax = axes[ax_y, 1],
-            width = 0.9)
-        axes[ax_y, 1].set_xticklabels(tix_3prime)
-        axes[ax_y, 1].set_xlabel('')
+        plot_position = 0
+        for p in axes_codon[ax_y].patches:
+            codon = df_codon.keys()[plot_position]
+            axes_codon[ax_y].annotate(
+                conversion_table[codon],
+                (p.get_x() + 0.22, p.get_height() + 13000))
+            plot_position += 1
+
+        if ax_y == 0:
+            f = lambda m,c: plt.plot(
+                [],[],
+                marker='o',
+                color=c,
+                markersize=10,
+                ls="none")[0]
+            handles = [f("s", list(legend_colors.values())[i]) for i in range(len(list(legend_colors.values())))]
+            axes_codon[ax_y].legend(
+                handles,
+                list(legend_colors.keys()),
+                bbox_to_anchor=(0.02, 0.95),
+                loc=2,
+                prop={'size': 15},
+                borderaxespad=0.)
+
+            # Add the legend manually to the current Axes.
+            #axes_codon[ax_y].add_artist(first_legend)
+
+        # Plot periodicity
+        df_periodicity_5prime = prep_periodicity_5prime(
+            df_corrected
+        )
+        df_periodicity_3prime = prep_periodicity_3prime(
+            df_corrected
+        )
+
+        # 5' and 3'
+        df_periodicity_5prime.plot.line(ax=axes_period[ax_y, 0])
+        df_periodicity_3prime.plot.line(ax=axes_period[ax_y, 1])
+
+        axes_period[ax_y, 0].set_ylabel('# P-Sites', size=25)
+        axes_period[ax_y, 0].set_xlabel('5\'-end', size=25)
+        axes_period[ax_y, 1].set_xlabel('3\'-end', size=25)
+
+        axes_period[ax_y, 0].spines['bottom'].set_color('black')
+        axes_period[ax_y, 0].spines['left'].set_color('black')
+        axes_period[ax_y, 1].spines['bottom'].set_color('black')
+        axes_period[ax_y, 1].spines['left'].set_color('black')
+
+        steps_5prime = prep_periodicity_steps(df_periodicity_5prime)
+        steps_3prime = prep_periodicity_steps(df_periodicity_3prime)
+
+        axes_period[ax_y, 0].set(xticks=steps_5prime, xticklabels=steps_5prime)
+        axes_period[ax_y, 1].set(xticks=steps_3prime, xticklabels=steps_3prime)
+
+        axes_period[ax_y, 0] = set_lines(
+            axes_period[ax_y, 0],
+            df_periodicity_5prime,
+            prime5=True)
+        axes_period[ax_y, 1] = set_lines(
+            axes_period[ax_y, 1],
+            df_periodicity_3prime,
+            prime5=False)
 
         # Next file/plot line counter
         ax_y += 1
 
-    # Save catenated figure
-    plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type
-    fig.savefig(
-        str(plot_output) + plot_title + '_summary.pdf',
+    # Save catenated figures
+    fig_codon.savefig(
+        (
+            str(codon_output)
+            + str(experiment)
+            + '_' + plot_codon
+            + '_summary.pdf'),
         dpi = dpi,
         bbox_inches = 'tight')
+
+
+    fig_period.savefig(
+        (
+            str(periodicity_output)
+            + str(experiment)
+            + '_' + plot_periodicity
+            + '_summary.pdf'),
+        dpi = dpi,
+        bbox_inches = 'tight')
+
 
 """"""
 def compile_complexity_metrics(

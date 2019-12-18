@@ -53,12 +53,15 @@ if os.path.exists(rp_output):
 
 os.makedirs(rp_output)
 rp_gtf = str(__path__) + 'riboseq/rp_reference/transcripts_CT.gtf'
+rp_fa = str(__path__) + 'riboseq/rp_reference/test.cdna.all.fa'
+
 os.system(
     'xpresspipe riboseq' \
     + ' -i ' + str(rp_input) \
     + ' -o ' + str(rp_output) \
     + ' -r ' + str(rp_reference) \
     + ' -g ' + str(rp_gtf) \
+    + ' --cdna_fasta ' + str(rp_fa) \
     + ' -e riboseq_test' \
     + ' -a CTGTAGGCACCATCAAT' \
     + ' -n RPS19' \
