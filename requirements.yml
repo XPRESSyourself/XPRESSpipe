@@ -9,7 +9,7 @@ channels:
 dependencies:
   - julia
   - pandas
-  - numpy
+  - numpy<=1.17.5 #float error with new version of numpy, will remove if fixed
   - scipy
   - r-base
   - r-devtools
