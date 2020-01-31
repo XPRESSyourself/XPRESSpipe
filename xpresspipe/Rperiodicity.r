@@ -66,15 +66,6 @@ OUTPUT_P_SITES <- args[3] # Path and filename with .txt extension
 
 annotation_dt <- create_annotation(gtfpath=GTF)
 
-reads_list <- bamtolist(bamfolder = BAM_LIST, annotation = annotation_dt)
-p_sites <- psite(reads_list, extremity="5end") # This will fail if the input files are too small and don't have good representation across genes
-p_info <- psite_info(reads_list, p_sites)
-
-###
-#provide GTF and cdna fasta for codon and periodicity
-#option to select range of read length for plotting and analysis
-###
-
 # Get data for codon usage -- output to both directories
 write.table(
   as.data.frame(annotation_dt),
@@ -85,11 +76,27 @@ write.table(
   sep='\t',
   col.names=NA)
 
+# Get p-sites
+reads_list <- bamtolist(bamfolder = BAM_LIST, annotation = annotation_dt)
+p_sites <- psite(reads_list, extremity="5end") # This will fail if the input files are too small and don't have good representation across genes
+p_info <- psite_info(reads_list, p_sites)
+
+###
+#provide GTF and cdna fasta for codon and periodicity
+#option to select range of read length for plotting and analysis
+###
+
+"""
+Rscript /uufs/chpc.utah.edu/common/home/u0690617/XPRESSpipe/xpresspipe/Rperiodicity.r /scratch/general/lustre/u0690617/7719195/output/rrna_depl/alignments_transcriptome/ /scratch/general/lustre/u0690617/references/human_reference_se_v98/transcripts.gtf /scratch/general/lustre/u0690617/7719195/output/rrna_depl/p_site_qc/metrics/
+"""
+
+
+
 # Get list of unique elements in 'sample' column in p_sites
 # Generate tables for each sample
 for (SAMPLE in as.list(unique(p_sites$sample))) {
   SAMPLE_NAME = vapply(strsplit(SAMPLE, "[.]"), `[`, 1, FUN.VALUE=character(1)) # Get sample name
-  
+
   OUTPUT_NAME = paste(OUTPUT_P_SITES, SAMPLE_NAME, "_metrics.txt", sep="")
 
   write.table(as.data.frame(
