@@ -7,6 +7,7 @@ channels:
   - conda-forge
 
 dependencies:
+  - python>=3.0.0
   - julia
   - pandas
   - numpy<=1.17.5 #float error with new version of numpy, will remove if fixed
