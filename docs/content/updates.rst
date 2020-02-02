@@ -3,6 +3,12 @@ Updates
 ###############
 
 ========================
+v0.4.1
+========================
+- Introduced some restrictions to dependency versions. Some newer versions of dependencies were acting problematic. Will try to figure out how to allow for current versions of these dependencies to be used
+- Fixed plotting issue with periodicity plots 
+
+========================
 v0.4.0
 ========================
 - Introduced rRNA depletion during alignment step (previously could only do so during the quantification step)
