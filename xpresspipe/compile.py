@@ -378,7 +378,7 @@ def compile_p_site_qc_metrics(
 
     # Keep axes happy to avoid 'IndexError: too many indices for array' error
     # Auto formats figure summary size based on number of plots
-    if (len(file_list) / 2) < 2:
+    if len(file_list) < 2:
         plot_rows = 2
         fig_size = (15, 12)
     else:
@@ -394,6 +394,13 @@ def compile_p_site_qc_metrics(
         sharex = False,
         subplot_kw = {'facecolor':'none'})
 
+    if len(file_list) <= 2:
+        plot_rows = 3
+        fig_size = (15, 18)
+    else:
+        plot_rows = len(file_list) + 1
+        fig_size = (15, (6 * (int(len(file_list)))) + 6)
+
     fig_period, axes_period = plt.subplots(
         nrows = plot_rows,
         ncols = 2,
@@ -408,6 +415,8 @@ def compile_p_site_qc_metrics(
 
     for file in file_list:
 
+        print('Plotting ' + str(path) + str(file))
+        name = file[:-12]
         # Get data
         df = pd.read_csv(
             str(path) + str(file),
@@ -432,7 +441,7 @@ def compile_p_site_qc_metrics(
         )
 
         df_codon.plot.bar(width=0.9, color=colors, ax=axes_codon[ax_y])
-        axes_codon[ax_y].set_ylabel('# P-Sites', size=25)
+        axes_codon[ax_y].set_ylabel(name, size=25)
         axes_codon[ax_y].set_xlabel('Codon', size=25)
 
         plot_position = 0
@@ -471,10 +480,14 @@ def compile_p_site_qc_metrics(
         )
 
         # 5' and 3'
-        df_periodicity_5prime.plot.line(ax=axes_period[ax_y, 0])
-        df_periodicity_3prime.plot.line(ax=axes_period[ax_y, 1])
+        pd.DataFrame(df_periodicity_5prime).plot.line(
+            legend=False,
+            ax=axes_period[ax_y, 0])
+        pd.DataFrame(df_periodicity_3prime).plot.line(
+            legend=False,
+            ax=axes_period[ax_y, 1])
 
-        axes_period[ax_y, 0].set_ylabel('# P-Sites', size=25)
+        axes_period[ax_y, 0].set_ylabel(name, size=25)
         axes_period[ax_y, 0].set_xlabel('5\'-end', size=25)
         axes_period[ax_y, 1].set_xlabel('3\'-end', size=25)
 
