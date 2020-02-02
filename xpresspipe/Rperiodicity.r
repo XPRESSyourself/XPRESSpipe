@@ -56,14 +56,7 @@ BAM_LIST <- args[1] # Directory containing
 GTF <- args[2]
 OUTPUT_P_SITES <- args[3] # Path and filename with .txt extension
 
-
 # Get p-site offsets
-#annotation_dt <- read.table(
-#  INDEX,
-#  header = TRUE,
-#  sep = '\t')
-#annotation_dt <- subset(annotation_dt, select = c('transcript','l_tr','l_utr5','l_cds','l_utr3'))
-
 annotation_dt <- create_annotation(gtfpath=GTF)
 
 # Get data for codon usage -- output to both directories
@@ -80,17 +73,6 @@ write.table(
 reads_list <- bamtolist(bamfolder = BAM_LIST, annotation = annotation_dt)
 p_sites <- psite(reads_list, extremity="5end") # This will fail if the input files are too small and don't have good representation across genes
 p_info <- psite_info(reads_list, p_sites)
-
-###
-#provide GTF and cdna fasta for codon and periodicity
-#option to select range of read length for plotting and analysis
-###
-
-"""
-Rscript /uufs/chpc.utah.edu/common/home/u0690617/XPRESSpipe/xpresspipe/Rperiodicity.r /scratch/general/lustre/u0690617/7719195/output/rrna_depl/alignments_transcriptome/ /scratch/general/lustre/u0690617/references/human_reference_se_v98/transcripts.gtf /scratch/general/lustre/u0690617/7719195/output/rrna_depl/p_site_qc/metrics/
-"""
-
-
 
 # Get list of unique elements in 'sample' column in p_sites
 # Generate tables for each sample

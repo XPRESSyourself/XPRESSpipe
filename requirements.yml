@@ -9,10 +9,10 @@ channels:
 dependencies:
   - python>=3.0.0
   - julia
-  - pandas
+  - pandas<=0.25.3
   - numpy<=1.17.5 #float error with new version of numpy, will remove if fixed
   - scipy
-  - r-base
+  - r-base<=3.5.1
   - r-devtools
   - r-data.table
   - bioconductor-genomicfeatures
@@ -25,7 +25,7 @@ dependencies:
   - ncurses
   - fastp
   - umi_tools
-  - STAR
+  - STAR>=2.5.1
   - samtools
   - bedtools
   - htseq
