@@ -15,7 +15,9 @@ Please refer to the [documentation](https://xpresspipe.readthedocs.io/en/latest/
 
 ### Citation:    
 ```
-Berg JA, et. al. (2020). Enhancing, standardizing, and automating ribosome profiling computational analyses yields improved insight into data. PLoS Comp Biol; doi: https://doi.org/10.1371/journal.pcbi.1007625
+Berg JA, et. al. (2020). XPRESSyourself: Enhancing, standardizing, and
+automating ribosome profiling computational analyses yields improved insight
+into data. PLoS Comp Biol. doi: https://doi.org/10.1371/journal.pcbi.1007625
 ```
 
 ### Installation:   
