@@ -13,6 +13,17 @@
 -----
 Please refer to the [documentation](https://xpresspipe.readthedocs.io/en/latest/?badge=latest) for more in depth details.
 
+### Announcement:
+Currently, R is struggling to auto-install riboWaltz for p-site QC. If you run into issues in the time-being, please open an R session in your environment and run the following commands:
+```
+install.packages("devtools", repos = "http://cran.us.r-project.org")
+devtools::install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = c("Depends", "Imports", "LinkingTo"))
+
+# And then run the following to test installation:
+library(riboWaltz)
+```
+
+
 ### Citation:    
 ```
 Berg JA, et. al. (2020). XPRESSyourself: Enhancing, standardizing, and
