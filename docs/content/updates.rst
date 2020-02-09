@@ -5,28 +5,28 @@ Updates
 ========================
 v0.4.2
 ========================
-- Fixed `convert_names` xpressplot call
+| - Fixed `convert_names` xpressplot call
 
 ========================
 v0.4.1
 ========================
-- Introduced some restrictions to dependency versions. Some newer versions of dependencies were acting problematic. Will try to figure out how to allow for current versions of these dependencies to be used
-- Fixed plotting issue with periodicity plots
+| - Introduced some restrictions to dependency versions. Some newer versions of dependencies were acting problematic. Will try to figure out how to allow for current versions of these dependencies to be used
+| - Fixed plotting issue with periodicity plots
 
 ========================
 v0.4.0
 ========================
-- Introduced rRNA depletion during alignment step (previously could only do so during the quantification step)
-- Expanded periodicity analysis to cover more holistic P-site analysis (report codon usage stats). The submodule previously called :data:`periodicity` is now called by :data:`p_sites`
-- Allow for setting upper limit threshold for read length during pre-processing reads and P-site analysis (previously only a lower limit was available)
-- All documentation associated with this changes has been updated.
+| - Introduced rRNA depletion during alignment step (previously could only do so during the quantification step)
+| - Expanded periodicity analysis to cover more holistic P-site analysis (report codon usage stats). The submodule previously called :data:`periodicity` is now called by :data:`p_sites`
+| - Allow for setting upper limit threshold for read length during pre-processing reads and P-site analysis (previously only a lower limit was available)
+| - All documentation associated with this changes has been updated.
 
 ============
 v0.3.1
 ============
-- Fix BAM file threshold for metagene and geneCoverage to avoid OOM errors
-- Turn off BAM file threshold for counting (low memory footprint, so can use all cores available)
-- Import openssl library manually in Rperiodicity -- occasionally had trouble finding the library on its own and would error
+| - Fix BAM file threshold for metagene and geneCoverage to avoid OOM errors
+| - Turn off BAM file threshold for counting (low memory footprint, so can use all cores available)
+| - Import openssl library manually in Rperiodicity -- occasionally had trouble finding the library on its own and would error
 
 ============
 v0.3.0
