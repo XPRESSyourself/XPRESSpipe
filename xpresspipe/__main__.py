@@ -458,7 +458,7 @@ def main(
             suf = '.tsv'
 
         data = pd.read_csv(str(args_dict['input']), sep=delim)
-        data = convert_names_gtf(
+        data = convert_names(
             data,
             args_dict['gtf'],
             orig_name_label = args_dict['orig_name_label'],
@@ -470,8 +470,7 @@ def main(
 
         data.to_csv(
             str(args_dict['input'])[:-4] + '_renamed' + str(suf),
-            sep = delim,
-            index = False)
+            sep = delim)
 
         # Check log file for errors and exceptions
         get_dependencies(args_dict)

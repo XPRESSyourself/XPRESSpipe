@@ -350,16 +350,16 @@ def check_inputs(
                 break
             else:
                 os.system(
-                    'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
+                    'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
                     + str(args_dict['log']))
-                print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
+                print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
                 found = True
                 break
     if found == False:
         os.system(
-            'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
+            'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
             + str(args_dict['log']))
-        print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
     # Print out user commands to log file
     os.system(
@@ -1963,8 +1963,8 @@ def get_arguments(
         help = 'Show help message and exit')
     convert_opts.add_argument(
         '--orig_name_label',
-        help = 'Label of original name (usually"gene_id")',
-        default = 'gene_id"',
+        help = 'Label of original name (usually "gene_id")',
+        default = 'gene_id',
         metavar = '<label>',
         type = str,
         required = False)
@@ -1978,8 +1978,8 @@ def get_arguments(
         required = False)
     convert_opts.add_argument(
         '--new_name_label',
-        help = 'Label of original name (usually"gene_name")',
-        default = 'gene_name"',
+        help = 'Label of original name (usually "gene_name")',
+        default = 'gene_name',
         metavar = '<label>',
         type = str,
         required = False)
