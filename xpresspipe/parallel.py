@@ -53,7 +53,7 @@ def threshold_ram(
         return cpu_count(), cpu_count() # records are read line by line without storage, low memory footprint
 
     elif file[-4:] == '.bam' or file[-4:] == '.sam':
-        factor = 4 # Experimental factor
+        factor = 6 # Experimental factor
 
     else:
         factor = 1
