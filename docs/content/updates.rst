@@ -3,6 +3,11 @@ Updates
 ###############
 
 ========================
+v0.4.3
+========================
+| - Fixed issue with `metagene` where parallelization overloaded memory and resulted in OOM errors. Fixed by making memory thresholding slightly more strict. 
+
+========================
 v0.4.2
 ========================
 | - Fixed `convert_names` xpressplot call
