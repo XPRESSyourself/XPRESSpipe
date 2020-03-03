@@ -243,15 +243,4 @@ def run_trim(
                 args_dict,
                 mod_workers=workers)
 
-    if args_dict['umi'] != '':
-        files = get_files(
-            args_dict['trimmed_fastq'],
-            ['.fastq','.fq','.txt'])
-
-        parallelize(
-            umi_deduplicate,
-            files,
-            args_dict,
-            mod_workers=workers)
-
     return args_dict
