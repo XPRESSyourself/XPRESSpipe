@@ -3,9 +3,14 @@ Updates
 ###############
 
 ========================
+v0.4.4
+========================
+| - Fixed issue with string catenation during UMI fastp call where UMI length was not properly forced to a string
+
+========================
 v0.4.3
 ========================
-| - Fixed issue with `metagene` where parallelization overloaded memory and resulted in OOM errors. Fixed by making memory thresholding slightly more strict. 
+| - Fixed issue with `metagene` where parallelization overloaded memory and resulted in OOM errors. Fixed by making memory thresholding slightly more strict.
 
 ========================
 v0.4.2
