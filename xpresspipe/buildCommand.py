@@ -23,7 +23,7 @@ from __future__ import print_function
 import os
 import sys
 import numpy as np
-from math import ceil
+from math import ceil, floor
 
 # ASCII art from David Palmer https://www.asciiart.eu/people/faces
 def welcome():
@@ -197,7 +197,7 @@ def build_curation():
     genome = input('Does your organism have a relatively small genome (as compared to Homo sapiens)? (yes/no): ')
     if genome.lower() == 'yes':
         genome_size = input('Approximately how many bases long is the genome? Input an integer value: ')
-        genome_size = ceil((np.log2(int(genome_size)) / 2) - 1)
+        genome_size = floor((np.log2(int(genome_size)) / 2) - 1)
         genome_value = ' --genome_size ' + str(min([genome_size, 14]))
     else:
         genome_value = ''

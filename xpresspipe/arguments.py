@@ -31,7 +31,7 @@ except ImportError:
 
 import argparse
 import datetime
-from math import ceil
+from math import ceil, floor
 import numpy as np
 import multiprocessing
 from multiprocessing import cpu_count
@@ -279,7 +279,7 @@ def check_inputs(
             raise Exception('Invalid quantification method provided')
 
     if 'genome_size' in args_dict and args_dict['genome_size'] != 14:
-        genome_size = ceil((np.log2(int(args_dict['genome_size'])) / 2) - 1)
+        genome_size = floor((np.log2(int(args_dict['genome_size'])) / 2) - 1)
         args_dict['genome_size'] = min([genome_size, 14])
 
     # Determine output directory for log file
