@@ -3,6 +3,11 @@ Updates
 ###############
 
 ========================
+In Progress
+========================
+- Fixed issue where genome size calculation would round up and miscalculate genome_size parameter for STAR.
+
+========================
 v0.4.4
 ========================
 | - Fixed issue with string catenation during UMI fastp call where UMI length was not properly forced to a string
