@@ -81,9 +81,13 @@ def auto_trim(
         os.system(
             str(__path__) + 'fastp_lite'
             + ' -i ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
-            + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
             + str(args_dict['lite_umi'])
             + str(args_dict['log']))
+        os.system(
+            'mv'
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
 
 
 """Trim SE adapters"""
@@ -114,6 +118,10 @@ def se_trim(
             + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
             + str(args_dict['lite_umi'])
             + str(args_dict['log']))
+        os.system(
+            'mv'
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
 
 """Trim polyX adapters"""
 def polyx_trim(
@@ -163,6 +171,10 @@ def auto_pe_trim(
             + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
             + str(args_dict['lite_umi'])
             + str(args_dict['log']))
+        os.system(
+            'mv'
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
 
 """Trim PE adapters"""
 def pe_trim(
@@ -194,6 +206,10 @@ def pe_trim(
             + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
             + str(args_dict['lite_umi'])
             + str(args_dict['log']))
+        os.system(
+            'mv'
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
 
 """Trim RNAseq reads of adapters and for quality"""
 def run_trim(
@@ -230,11 +246,9 @@ def run_trim(
         if str(args_dict['umi_length']).lower() != 'none':
             args_dict['umi'] = str(args_dict['umi']) \
                 + ' --umi_len ' + str(args_dict['umi_length'])
-
         if int(args_dict['spacer_length']) != 0:
             args_dict['umi'] = str(args_dict['umi']) \
                 + ' --umi_skip ' + str(args_dict['spacer_length'])
-
     else:
         args_dict['umi'] = ''
         args_dict['lite_umi'] = ''
