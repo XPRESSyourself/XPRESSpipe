@@ -54,6 +54,16 @@ def get_cufflinks():
         + 'echo "Cufflinks installed"; '),
         shell = True)
 
+def move_fastp_lite():
+
+    # Check fastp_lite exec is there first
+    
+
+    subprocess.call(
+        'mv ' + str(__path__) + 'fastp_lite/fastp_lite ' + str(__path__) + 'xpresspipe; '
+        + 'echo "fastp_lite installed"; '),
+        shell = True)
+
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:
     version = re.search(r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
@@ -61,6 +71,7 @@ with open('xpresspipe/__init__.py', 'r') as fd:
 
 """Setup arguments"""
 get_cufflinks()
+move_fastp_lite()
 setup(
     name = 'XPRESSpipe',
     version = version,

@@ -77,24 +77,14 @@ def auto_trim(
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
-"""Trim polyX adapters"""
-def polyx_trim(
-    args):
+    if args_dict['lite_umi'] != '':
+        os.system(
+            str(__path__) + 'fastp_lite'
+            + ' -i ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + str(args_dict['lite_umi'])
+            + str(args_dict['log']))
 
-    file, args_dict = args[0], args[1] # Parse args
-
-    os.system(
-        'fastp'
-        + ' --thread ' + str(args_dict['threads'])
-        + ' -i ' + str(args_dict['input']) + file
-        + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
-        + ' --trim_poly_x'
-        + ' -l ' + str(args_dict['min_length'])
-        + ' --length_limit ' + str(args_dict['max_length'])
-        + ' -q ' + str(args_dict['quality'])
-        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
-        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
-        + str(args_dict['log']))
 
 """Trim SE adapters"""
 def se_trim(
@@ -117,6 +107,33 @@ def se_trim(
     + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
     + str(args_dict['log']))
 
+    if args_dict['lite_umi'] != '':
+        os.system(
+            str(__path__) + 'fastp_lite'
+            + ' -i ' + str(args_dict['trimmed_fastq']) + str(file)
+            + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
+            + str(args_dict['lite_umi'])
+            + str(args_dict['log']))
+
+"""Trim polyX adapters"""
+def polyx_trim(
+    args):
+
+    file, args_dict = args[0], args[1] # Parse args
+
+    os.system(
+        'fastp'
+        + ' --thread ' + str(args_dict['threads'])
+        + ' -i ' + str(args_dict['input']) + file
+        + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+        + ' --trim_poly_x'
+        + ' -l ' + str(args_dict['min_length'])
+        + ' --length_limit ' + str(args_dict['max_length'])
+        + ' -q ' + str(args_dict['quality'])
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
+        + str(args_dict['log']))
+
 """Auto-detect and trim PE adapters"""
 def auto_pe_trim(
     args):
@@ -138,6 +155,14 @@ def auto_pe_trim(
         + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.json'
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
+
+    if args_dict['lite_umi'] != '':
+        os.system(
+            str(__path__) + 'fastp_lite'
+            + ' -i ' + str(args_dict['trimmed_fastq']) + str(file)
+            + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
+            + str(args_dict['lite_umi'])
+            + str(args_dict['log']))
 
 """Trim PE adapters"""
 def pe_trim(
@@ -162,6 +187,14 @@ def pe_trim(
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
+    if args_dict['lite_umi'] != '':
+        os.system(
+            str(__path__) + 'fastp_lite'
+            + ' -i ' + str(args_dict['trimmed_fastq']) + str(file)
+            + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
+            + str(args_dict['lite_umi'])
+            + str(args_dict['log']))
+
 """Trim RNAseq reads of adapters and for quality"""
 def run_trim(
     args_dict):
@@ -183,12 +216,28 @@ def run_trim(
 
     # Get UMI info
     args_dict['umi'] = ''
-    if str(args_dict['umi_location']).lower() != 'none':
-        args_dict['umi'] = str(args_dict['umi']) + ' -U --umi_prefix UMI --umi_loc ' + str(args_dict['umi_location'])
+    if str(args_dict['umi_location']).lower() == '3prime':
+        args_dict['umi'] = ''
+        args_dict['lite_umi'] = ''
+        args_dict['lite_umi'] = ' -l ' + str(args_dict['umi_length']) \
+            + ' -s ' + str(args_dict['spacer_length']) \
+            + ' -m ' + str(args_dict['min_length'])
+
+    elif str(args_dict['umi_location']).lower() != 'none':
+        args_dict['lite_umi'] = ''
+        args_dict['umi'] = str(args_dict['umi']) \
+            + ' -U --umi_loc ' + str(args_dict['umi_location'])
         if str(args_dict['umi_length']).lower() != 'none':
-            args_dict['umi'] = str(args_dict['umi']) + ' --umi_len ' + str(args_dict['umi_length'])
+            args_dict['umi'] = str(args_dict['umi']) \
+                + ' --umi_len ' + str(args_dict['umi_length'])
+
+        if int(args_dict['spacer_length']) != 0:
+            args_dict['umi'] = str(args_dict['umi']) \
+                + ' --umi_skip ' + str(args_dict['spacer_length'])
+
     else:
         args_dict['umi'] = ''
+        args_dict['lite_umi'] = ''
 
     # Mod workers if threads > 16 as fastp maxes at 16 per task
     if (isinstance(args_dict['max_processors'], int) and args_dict['max_processors'] > 16) \

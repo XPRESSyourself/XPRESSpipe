@@ -79,6 +79,8 @@ DEFAULT_MAX_PROCESSORS  =  None
 DEFAULT_TRUNCATE_5PRIME = 45
 DEFAULT_TRUNCATE_3PRIME = 15
 DEFAULT_FRONT_TRIM = 1
+DEFAULT_UMI_LENGTH = 0
+DEFAULT_SPACER_LENGTH = 0
 
 description_table  =  """\
     The XPRESSpipe sub-modules can be accessed by executing:
@@ -335,6 +337,28 @@ def check_inputs(
             + 'm_' + str(cdt.second)
             + 's.log')
 
+    if 'front_trim' in args_dict and int(args_dict['front_trim']) < 0:
+        raise Exception('Front trim length cannot be less than 0')
+
+    if 'umi_length' in args_dict and int(args_dict['umi_length']) < 0:
+        raise Exception('UMI length cannot be less than 0')
+
+    if 'spacer_length' in args_dict and int(args_dict['spacer_length']) < 0:
+        raise Exception('Spacer length cannot be less than 0')
+
+    umi_loc_list = [
+        'none',
+        '3prime',
+        'index1',
+        'index2',
+        'read1',
+        'read2',
+        'per_index',
+        'per_read']
+    if 'umi_location' in args_dict \
+    and str(args_dict['umi_location']) not in umi_loc_list:
+        raise Exception('Invalid UMI location input')
+
     # Check program version
     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     webpage = urlopen(req).read()
@@ -521,13 +545,6 @@ def get_arguments(
         action = 'store_true',
         required = False)
     se_opts.add_argument(
-        '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
-        metavar = '<location>',
-        type = str,
-        default = None,
-        required = False)
-    se_opts.add_argument(
         '--front_trim',
         help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
         metavar = '<length_value>',
@@ -535,11 +552,25 @@ def get_arguments(
         default = DEFAULT_FRONT_TRIM,
         required = False)
     se_opts.add_argument(
+        '--umi_location',
+        help = 'Provide parameter to process UMIs -- provide location (if working with internal UMIs that need to be processed after adapter trimming, provide "3prime"; else see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
+        metavar = '<location>',
+        type = str,
+        default = None,
+        required = False)
+    se_opts.add_argument(
         '--umi_length',
-        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option) (default: %s)' % DEFAULT_UMI_LENGTH,
         metavar = '<length>',
         type = int,
-        default = None,
+        default = DEFAULT_UMI_LENGTH,
+        required = False)
+    se_opts.add_argument(
+        '--spacer_length',
+        help = 'Provide UMI spacer length, if exists. ) (default: %s)' % DEFAULT_SPACER_LENGTH,
+        metavar = '<length>',
+        type = int,
+        default = DEFAULT_SPACER_LENGTH,
         required = False)
     se_opts.add_argument(
         '--no_multimappers',
@@ -739,17 +770,24 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
+        help = 'Provide parameter to process UMIs -- provide location (if working with internal UMIs that need to be processed after adapter trimming, provide "3prime"; else see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
         type = str,
         default = None,
         required = False)
     pe_opts.add_argument(
         '--umi_length',
-        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option) (default: %s)' % DEFAULT_UMI_LENGTH,
         metavar = '<length>',
         type = int,
-        default = None,
+        default = DEFAULT_UMI_LENGTH,
+        required = False)
+    pe_opts.add_argument(
+        '--spacer_length',
+        help = 'Provide UMI spacer length, if exists. ) (default: %s)' % DEFAULT_SPACER_LENGTH,
+        metavar = '<length>',
+        type = int,
+        default = DEFAULT_SPACER_LENGTH,
         required = False)
     pe_opts.add_argument(
         '--no_multimappers',
@@ -946,24 +984,31 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '--front_trim',
-        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
+        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming) (default: %s)' % DEFAULT_FRONT_TRIM,
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_FRONT_TRIM,
         required = False)
     rp_opts.add_argument(
         '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
+        help = 'Provide parameter to process UMIs -- provide location (if working with internal UMIs that need to be processed after adapter trimming, provide "3prime"; else see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
         type = str,
         default = None,
         required = False)
     rp_opts.add_argument(
         '--umi_length',
-        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option) (default: %s)' % DEFAULT_UMI_LENGTH,
         metavar = '<length>',
         type = int,
-        default = None,
+        default = DEFAULT_UMI_LENGTH,
+        required = False)
+    rp_opts.add_argument(
+        '--spacer_length',
+        help = 'Provide UMI spacer length, if exists. ) (default: %s)' % DEFAULT_SPACER_LENGTH,
+        metavar = '<length>',
+        type = int,
+        default = DEFAULT_SPACER_LENGTH,
         required = False)
     rp_opts.add_argument(
         '--no_multimappers',
@@ -1130,17 +1175,24 @@ def get_arguments(
         required = False)
     trim_opts.add_argument(
         '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
+        help = 'Provide parameter to process UMIs -- provide location (if working with internal UMIs that need to be processed after adapter trimming, provide "3prime"; else see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
         type = str,
         default = None,
         required = False)
     trim_opts.add_argument(
         '--umi_length',
-        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
+        help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option) (default: %s)' % DEFAULT_UMI_LENGTH,
         metavar = '<length>',
         type = int,
-        default = None,
+        default = DEFAULT_UMI_LENGTH,
+        required = False)
+    trim_opts.add_argument(
+        '--spacer_length',
+        help = 'Provide UMI spacer length, if exists. ) (default: %s)' % DEFAULT_SPACER_LENGTH,
+        metavar = '<length>',
+        type = int,
+        default = DEFAULT_SPACER_LENGTH,
         required = False)
     trim_opts.add_argument(
         '-m', '--max_processors',

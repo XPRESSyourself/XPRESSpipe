@@ -111,7 +111,7 @@ void Read::resize(int len) {
     mSeq.mStr.resize(len);
     mQuality.resize(len);
 }
-   
+
 void Read::trimBack(int len){
     len = min(length()-1, len);
     mSeq.mStr = mSeq.mStr.substr(0, mSeq.mStr.length() - len);
@@ -167,7 +167,7 @@ string Read::toStringWithTag(string tag) {
 }
 
 void Read::addUmiTag(string umi){
-    
+
     string tag;
     tag = ":" + umi;
 
