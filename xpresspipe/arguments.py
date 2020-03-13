@@ -546,7 +546,7 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--front_trim',
-        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
+        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming) (default: %s)' % DEFAULT_FRONT_TRIM,
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_FRONT_TRIM,
@@ -763,7 +763,7 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--front_trim',
-        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
+        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming) (default: %s)' % DEFAULT_FRONT_TRIM,
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_FRONT_TRIM,
@@ -1168,7 +1168,7 @@ def get_arguments(
         required = False)
     trim_opts.add_argument(
         '--front_trim',
-        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
+        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming) (default: %s)' % DEFAULT_FRONT_TRIM,
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_FRONT_TRIM,

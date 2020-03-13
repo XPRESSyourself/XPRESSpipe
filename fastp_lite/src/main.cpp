@@ -82,6 +82,28 @@ int main(int argc, char* argv[]) {
     int _min_length;
     _min_length = cmd.get<int>("min-length");
 
+    // Print user inputs
+    cout
+        << "\nfastp_lite v"
+        << FASTP_LITE_VER << endl << endl;
+    cout
+        << "Provided input file name:                             "
+        << file << endl;
+    cout
+        << "Provided output file name:                            "
+        << out_file << endl;
+    cout
+        << "Selected 3' UMI length:                               "
+        << _3prime_umi_len << endl;
+    cout
+        << "Selected 3' UMI spacer length:                        "
+        << _3prime_umi_spacer << endl;
+    cout
+        << "Minimum allowable read length after UMI processing:   "
+        << _min_length << endl << endl;
+    cout
+        << "Processing 3' internal UMIs from reads...\n" << endl;
+
     // Check the inputs and exit if one doesn't work
     if (file == out_file) {
         cout
@@ -119,28 +141,6 @@ int main(int argc, char* argv[]) {
             << endl;
         return 1;
       }
-
-    // Print user inputs
-    cout
-        << "\nfastp_lite v"
-        << FASTP_LITE_VER << endl << endl;
-    cout
-        << "Provided input file name:                             "
-        << file << endl;
-    cout
-        << "Provided output file name:                            "
-        << out_file << endl;
-    cout
-        << "Selected 3' UMI length:                               "
-        << _3prime_umi_len << endl;
-    cout
-        << "Selected 3' UMI spacer length:                        "
-        << _3prime_umi_spacer << endl;
-    cout
-        << "Minimum allowable read length after UMI processing:   "
-        << _min_length << endl << endl;
-    cout
-        << "Processing 3' internal UMIs from reads...\n" << endl;
 
     // Process file
     start(); // start elapsed time

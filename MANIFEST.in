@@ -1,1 +1,2 @@
 include xpresspipe/cufflinks
+include xpresspipe/fastp_lite

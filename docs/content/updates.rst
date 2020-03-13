@@ -6,6 +6,10 @@ Updates
 In Progress
 ========================
 - Fixed issue where genome size calculation would round up and miscalculate genome_size parameter for STAR.
+- Added fastp_lite for removal of 3' internal UMIs
+  - For example:
+    5'-read-spacer-UMI-adapter-3'
+  - Integrating this addition into options and trimming
 
 ========================
 v0.4.4

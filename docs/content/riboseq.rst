@@ -40,10 +40,14 @@ Ribosome Profiling Pipeline
      - Maximum read length threshold to keep for reads (default: :data:`0`). Setting this argument to 0 will result in no upper length limit.
    * - :data:`--remove_rrna`
      - Provide flag to remove rRNA records from alignment files (BAM files)
+   * - :data:`--front_trim \<length\>`
+     -  Number of base pairs to trim from the 5' ends of reads (not available for polyX trimming) (default: 1)
    * - :data:`--umi_location \<location\>`
-     - Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide 'read1' here; does not work with -a polyX option)
+     - Provide parameter to process UMIs -- provide location (if working with internal UMIs that need to be processed after adapter trimming, provide "3prime"; else see fastp documentation for more details, generally for single-end sequencing, you would provide 'read1' here; does not work with  -a polyX option)
    * - :data:`--umi_length \<length\>`
      - Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)
+   * - :data:`--spacer_length \<length\>`
+     - Provide UMI spacer length, if exists. (default: 0)
    * - :data:`--no_multimappers>`
      - Include flag to remove multimapping reads to be output and used in downstream analyses
    * - :data:`--deduplicate`

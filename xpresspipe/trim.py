@@ -29,6 +29,8 @@ from multiprocessing import cpu_count
 from .utils import get_files, add_directory
 from .parallel import parallelize, parallelize_pe
 
+__path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
+
 """Determine sequencing type based on adapter list"""
 def determine_type(
     adapter_list):
@@ -87,8 +89,7 @@ def auto_trim(
         os.system(
             'mv'
             + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
-            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
-
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file))
 
 """Trim SE adapters"""
 def se_trim(
@@ -114,14 +115,14 @@ def se_trim(
     if args_dict['lite_umi'] != '':
         os.system(
             str(__path__) + 'fastp_lite'
-            + ' -i ' + str(args_dict['trimmed_fastq']) + str(file)
-            + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
+            + ' -i ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
             + str(args_dict['lite_umi'])
             + str(args_dict['log']))
         os.system(
             'mv'
             + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
-            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file))
 
 """Trim polyX adapters"""
 def polyx_trim(
@@ -167,14 +168,14 @@ def auto_pe_trim(
     if args_dict['lite_umi'] != '':
         os.system(
             str(__path__) + 'fastp_lite'
-            + ' -i ' + str(args_dict['trimmed_fastq']) + str(file)
-            + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
+            + ' -i ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
             + str(args_dict['lite_umi'])
             + str(args_dict['log']))
         os.system(
             'mv'
             + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
-            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file))
 
 """Trim PE adapters"""
 def pe_trim(
@@ -202,14 +203,14 @@ def pe_trim(
     if args_dict['lite_umi'] != '':
         os.system(
             str(__path__) + 'fastp_lite'
-            + ' -i ' + str(args_dict['trimmed_fastq']) + str(file)
-            + ' -o ' + str(args_dict['trimmed_fastq']) + str(file)
+            + ' -i ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
             + str(args_dict['lite_umi'])
             + str(args_dict['log']))
         os.system(
             'mv'
             + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
-            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file))
 
 """Trim RNAseq reads of adapters and for quality"""
 def run_trim(
