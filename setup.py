@@ -57,11 +57,11 @@ def get_cufflinks():
 def move_fastp_lite():
 
     # Check fastp_lite exec is there first
-    
 
     subprocess.call(
-        'mv ' + str(__path__) + 'fastp_lite/fastp_lite ' + str(__path__) + 'xpresspipe; '
-        + 'echo "fastp_lite installed"; '),
+        'cp ' + str(__path__) + 'fastp_lite/fastp_lite ' \
+        + str(__path__) + 'xpresspipe; ' \
+        + 'echo "fastp_lite installed";',
         shell = True)
 
 """Get version"""

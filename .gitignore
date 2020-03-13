@@ -24,3 +24,5 @@ tests/*log
 build
 dist
 Log.out
+xpresspipe/cufflinks
+xpresspipe/fastp_lite
