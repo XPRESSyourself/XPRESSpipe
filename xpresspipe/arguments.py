@@ -78,6 +78,7 @@ DEFAULT_READ_QUALITY  =  28
 DEFAULT_MAX_PROCESSORS  =  None
 DEFAULT_TRUNCATE_5PRIME = 45
 DEFAULT_TRUNCATE_3PRIME = 15
+DEFAULT_FRONT_TRIM = 1
 
 description_table  =  """\
     The XPRESSpipe sub-modules can be accessed by executing:
@@ -527,6 +528,13 @@ def get_arguments(
         default = None,
         required = False)
     se_opts.add_argument(
+        '--front_trim',
+        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_FRONT_TRIM,
+        required = False)
+    se_opts.add_argument(
         '--umi_length',
         help = 'Provide parameter to process UMIs -- provide UMI length (must provide the --umi_location argument); does not work with -a polyX option)',
         metavar = '<length>',
@@ -721,6 +729,13 @@ def get_arguments(
         '--remove_rrna',
         help = 'Include option to remove rRNA alignments during alignment step',
         action = 'store_true',
+        required = False)
+    pe_opts.add_argument(
+        '--front_trim',
+        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_FRONT_TRIM,
         required = False)
     pe_opts.add_argument(
         '--umi_location',
@@ -930,6 +945,13 @@ def get_arguments(
         action = 'store_true',
         required = False)
     rp_opts.add_argument(
+        '--front_trim',
+        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_FRONT_TRIM,
+        required = False)
+    rp_opts.add_argument(
         '--umi_location',
         help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
@@ -1098,6 +1120,13 @@ def get_arguments(
         metavar = '<length_value>',
         type = int,
         default = DEFAULT_READ_MAX,
+        required = False)
+    trim_opts.add_argument(
+        '--front_trim',
+        help = 'Number of base pairs to trim from the 5\' ends of reads (not available for polyX trimming)' % DEFAULT_FRONT_TRIM,
+        metavar = '<length_value>',
+        type = int,
+        default = DEFAULT_FRONT_TRIM,
         required = False)
     trim_opts.add_argument(
         '--umi_location',

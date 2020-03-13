@@ -104,7 +104,7 @@ def se_trim(
 
     os.system(
     'fastp'
-    + ' -f 1'
+    + ' -f ' + str(args_dict['front_trim'])
     + ' --thread ' + str(args_dict['threads'])
     + ' -i ' + str(args_dict['input']) + str(file)
     + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
@@ -125,7 +125,7 @@ def auto_pe_trim(
 
     os.system(
         'fastp'
-        + ' -f 1'
+        + ' -f ' + str(args_dict['front_trim'])
         + ' --thread ' + str(args_dict['threads'])
         + ' -i ' + str(args_dict['input']) + str(file1)
         + ' -I ' + str(args_dict['input']) + str(file2)
@@ -147,7 +147,7 @@ def pe_trim(
 
     os.system(
         'fastp'
-        + ' -f 1'
+        + ' -f ' + str(args_dict['front_trim'])
         + ' --thread ' + str(args_dict['threads'])
         + ' -i ' + str(args_dict['input']) + str(file1)
         + ' -I ' + str(args_dict['input']) + str(file2)
