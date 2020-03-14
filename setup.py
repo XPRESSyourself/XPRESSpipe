@@ -57,12 +57,30 @@ def get_cufflinks():
 def move_fastp_lite():
 
     # Check fastp_lite exec is there first
+    if 'darwin' in sys.platform:
+        subprocess.call(
+            'make -f ' + str(__path__) + 'fastp_lite/Makefile_macOS; ' \
+            + 'echo "fastp_lite built";',
+            shell = True)
+        build_name = 'fastp_lite_macOS'
 
-    subprocess.call(
-        'cp ' + str(__path__) + 'fastp_lite/fastp_lite ' \
-        + str(__path__) + 'xpresspipe; ' \
-        + 'echo "fastp_lite installed";',
-        shell = True)
+    elif 'linux' in sys.platform:
+        subprocess.call(
+            'make -f ' + str(__path__) + 'fastp_lite/Makefile_Linux; ' \
+            + 'echo "fastp_lite built";',
+            shell = True)
+        build_name = 'fastp_lite_linux'
+
+    else:
+        build_name = ''
+        raise Exception('Cannot recognize operating system. Expected \"darwin\" or \"linux\", got ' + str(sys.platform))
+
+    if build_name != '':
+        subprocess.call(
+            'cp ' + str(__path__) + 'fastp_lite/' + build_name + ' ' \
+            + str(__path__) + 'xpresspipe; ' \
+            + 'echo "fastp_lite installed";',
+            shell = True)
 
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:

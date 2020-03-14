@@ -11,7 +11,7 @@ CXX = c++
 SRCS =  src/main.cpp src/fastqreader.cpp src/read.cpp src/sequence.cpp
 OBJS = ${SRCS:.cpp=.o}
 
-MAIN = fastp_lite 
+MAIN = fastp_lite_macOS
 
 all: ${MAIN} clean
 	@echo fastp_lite compiled successfully
