@@ -1,6 +1,8 @@
-DIR_INC := ./inc
-DIR_SRC := ./src
-DIR_OBJ := ./obj
+ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
+DIR_INC := ${ROOT_DIR}/inc
+DIR_SRC := ${ROOT_DIR}/src
+DIR_OBJ := ${ROOT_DIR}/obj
 
 PREFIX ?= /usr/local
 BINDIR ?= $(PREFIX)/bin

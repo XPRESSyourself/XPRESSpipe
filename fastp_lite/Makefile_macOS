@@ -1,17 +1,19 @@
 #
-#  makefile
+#  makefile (macOS)
 #  fastp_lite
 #
 #  Created by Jordan Berg on 3/12/20.
 #  Copyright © 2020 Jordan Berg. All rights reserved.
 #
 
+ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 CXX = c++
 
-SRCS =  src/main.cpp src/fastqreader.cpp src/read.cpp src/sequence.cpp
+SRCS = ${ROOT_DIR}/src/main.cpp ${ROOT_DIR}/src/fastqreader.cpp ${ROOT_DIR}/src/read.cpp ${ROOT_DIR}/src/sequence.cpp
 OBJS = ${SRCS:.cpp=.o}
 
-MAIN = fastp_lite_macOS
+MAIN = ${ROOT_DIR}/fastp_lite_macOS
 
 all: ${MAIN} clean
 	@echo fastp_lite compiled successfully
@@ -23,4 +25,4 @@ ${MAIN}: ${OBJS}
 	${CXX} ${CXXFLAGS} -c $< -o $@
 
 clean:
-	rm src/*.o
+	rm ${ROOT_DIR}/src/*.o
