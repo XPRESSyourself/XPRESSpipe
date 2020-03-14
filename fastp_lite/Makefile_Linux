@@ -30,15 +30,15 @@ ${DIR_OBJ}/%.o:${DIR_SRC}/%.cpp make_obj_dir
 
 .PHONY:clean
 clean:
-  rm obj/*.o
-  rm $(TARGET)
+	rm obj/*.o
+	rm $(TARGET)
 
 make_obj_dir:
-  @if test ! -d $(DIR_OBJ) ; \
-  then \
-    mkdir $(DIR_OBJ) ; \
-  fi
+	@if test ! -d $(DIR_OBJ) ; \
+  	then \
+    		mkdir $(DIR_OBJ) ; \
+  	fi
 
 install:
-  install $(TARGET) $(BINDIR)/$(TARGET)
-  @echo "Installed."
+	install $(TARGET) $(BINDIR)/$(TARGET)
+	@echo "Installed."

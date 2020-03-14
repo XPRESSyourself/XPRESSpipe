@@ -26,4 +26,5 @@ dist
 Log.out
 xpresspipe/cufflinks
 xpresspipe/fastp_lite*
-fastp_lite/fastp_lite_macOS
+fastp_lite/fastp_lite_*
+fastp_lite_*
