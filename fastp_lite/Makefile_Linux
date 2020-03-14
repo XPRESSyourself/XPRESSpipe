@@ -23,10 +23,10 @@ LD_FLAGS := $(foreach librarydir,$(LIBRARY_DIRS),-L$(librarydir)) $(LIBS) $(LD_F
 
 
 ${BIN_TARGET}:${OBJ}
-  $(CXX) $(OBJ) -o $@ $(LD_FLAGS)
+	$(CXX) $(OBJ) -o $@ $(LD_FLAGS)
 
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.cpp make_obj_dir
-  $(CXX) -c $< -o $@ $(CXXFLAGS)
+	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
 .PHONY:clean
 clean:
