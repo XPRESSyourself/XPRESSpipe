@@ -78,7 +78,7 @@ def move_fastp_lite():
     if build_name != '':
         subprocess.call(
             'cp ' + str(__path__) + 'fastp_lite/' + build_name + ' ' \
-            + str(__path__) + 'xpresspipe; ' \
+            + str(__path__) + 'xpresspipe/fastp_lite; ' \
             + 'echo "fastp_lite installed";',
             shell = True)
 

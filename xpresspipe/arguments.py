@@ -770,7 +770,7 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--umi_location',
-        help = 'Provide parameter to process UMIs -- provide location (if working with internal UMIs that need to be processed after adapter trimming, provide "3prime"; else see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
+        help = 'Provide parameter to process UMIs -- provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide \'read1\' here; does not work with -a polyX option)',
         metavar = '<location>',
         type = str,
         default = None,

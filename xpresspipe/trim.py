@@ -165,18 +165,6 @@ def auto_pe_trim(
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
-    if args_dict['lite_umi'] != '':
-        os.system(
-            str(__path__) + 'fastp_lite'
-            + ' -i ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
-            + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
-            + str(args_dict['lite_umi'])
-            + str(args_dict['log']))
-        os.system(
-            'mv'
-            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
-            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file))
-
 """Trim PE adapters"""
 def pe_trim(
     args):
@@ -200,18 +188,6 @@ def pe_trim(
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
 
-    if args_dict['lite_umi'] != '':
-        os.system(
-            str(__path__) + 'fastp_lite'
-            + ' -i ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
-            + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
-            + str(args_dict['lite_umi'])
-            + str(args_dict['log']))
-        os.system(
-            'mv'
-            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed2_' + str(file)
-            + ' ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file))
-
 """Trim RNAseq reads of adapters and for quality"""
 def run_trim(
     args_dict):
@@ -232,7 +208,6 @@ def run_trim(
         args_dict['adapters'])
 
     # Get UMI info
-    args_dict['umi'] = ''
     if str(args_dict['umi_location']).lower() == '3prime':
         args_dict['umi'] = ''
         args_dict['lite_umi'] = ''
