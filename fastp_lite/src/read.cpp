@@ -169,7 +169,7 @@ string Read::toStringWithTag(string tag) {
 void Read::addUmiTag(string umi){
 
     string tag;
-    tag = ":" + umi;
+    tag = ":UMI_" + umi;
 
     int spacePos = -1;
     for(int i=0; i<mName.length(); i++) {
