@@ -3,10 +3,10 @@ Updates
 ###############
 
 ========================
-In Progress
+v0.5.0
 ========================
 - Fixed issue where genome size calculation would round up and miscalculate genome_size parameter for STAR.
-- Added fastp_lite for removal of 3' internal UMIs
+- Added fastp_lite for removal of 3' internal UMIs (generally takes ~1 min per RNA-seq sample with about 30 million reads)
   - For example:
     5'-read-spacer-UMI-adapter-3'
   - Integrating this addition into options and trimming
