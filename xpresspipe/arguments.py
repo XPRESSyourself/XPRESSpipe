@@ -348,6 +348,8 @@ def check_inputs(
 
     umi_loc_list = [
         'none',
+        'None',
+        None,
         '3prime',
         'index1',
         'index2',
