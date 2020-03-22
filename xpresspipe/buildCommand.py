@@ -159,28 +159,28 @@ def build_curation():
     gtf = input('Please provide the path and filename of the GTF will use: ')
 
     mod = input('Would you like to modify your GTF for use in quantification during the pipeline? (yes/no): ')
-    if mod.lower() == 'yes':
+    if mod.lower().replace(' ','') == 'yes':
         mod_value = ''
         add1 = input('Would you like to only quantify to Ensembl canonical transcripts (longest transcript only, not generally necessary)? (yes/no): ')
-        if add1.lower() == 'yes':
+        if add1.lower().replace(' ','') == 'yes':
             mod_value = mod_value + ' -l'
         add2 = input('Would you like to only quantify to protein coding transcripts? (yes/no): ')
-        if add2.lower() == 'yes':
+        if add2.lower().replace(' ','') == 'yes':
             mod_value = mod_value + ' -p'
         add3 = input('Are you performing ribosome profiling or would other like to truncate each transcripts CDS records for quantification? (yes/no): ')
-        if add3.lower() == 'yes':
+        if add3.lower().replace(' ','') == 'yes':
             mod_value = mod_value + ' -t'
 
-        if add3.lower() == 'yes':
+        if add3.lower().replace(' ','') == 'yes':
             five_prime = input('Would you like to use a value for 5\' truncation other than the default of 45 nucleotides? (yes/no): ')
-            if five_prime.lower() == 'yes':
+            if five_prime.lower().replace(' ','') == 'yes':
                 five_prime = input('Please enter the value you would like to use (must be an int): ')
                 five_prime = ' --truncate_5prime ' + str(five_prime)
             else:
                 five_prime = ''
 
         three_prime = input('Would you like to use a value for 3\' truncation other than the default of 15 nucleotides? (yes/no): ')
-        if three_prime.lower() == 'yes':
+        if three_prime.lower().replace(' ','') == 'yes':
             three_prime = input('Please enter the value you would like to use (must be an int): ')
             three_prime = ' --truncate_3prime ' + str(three_prime)
         else:
@@ -195,10 +195,10 @@ def build_curation():
     sjdb_value = ' --sjdbOverhang ' + str(int(sjdb) - 1)
 
     genome = input('Does your organism have a relatively small genome (as compared to Homo sapiens)? (yes/no): ')
-    if genome.lower() == 'yes':
+    if genome.lower().replace(' ','') == 'yes':
         genome_size = input('Approximately how many bases long is the genome? Input an integer value: ')
-        genome_size = floor((np.log2(int(genome_size)) / 2) - 1)
-        genome_value = ' --genome_size ' + str(min([genome_size, 14]))
+
+        genome_value = ' --genome_size ' + str(genome_size)
     else:
         genome_value = ''
 
@@ -223,11 +223,11 @@ def build_curation():
         + str(genome_value)
         + str(proc_value)
         )
-    print('\n')
+    print('\nPlease double-check the output for accuracy and that all desired arguments were caught by the builder and incorporated into the command.')
 
     # Run
     run = input('Do you want to run this command now? (yes/no): ')
-    if run.lower() == 'yes':
+    if run.lower().replace(' ','') == 'yes':
         os.system(
             'xpresspipe curateReference'
             + ' -o ' + str(output)
@@ -246,14 +246,14 @@ def build_curation():
 
 def build_pipeline():
 
-    pipeline = input('What kind of processing would you like to perform (select the number)?\n1: Single-end RNA-seq\n2: Paired-end RNA-seq\n3: Ribosome Profiling\nInput choice: ')
+    pipeline = input('What kind of processing would you like to perform (select the number)?\n1: Ribosome Profiling\n2: Single-end RNA-seq\n3: Paired-end RNA-seq\nInput choice: ')
 
     if pipeline == '1':
-        pipeline = 'seRNAseq'
-    elif pipeline == '2':
-        pipeline = 'peRNAseq'
-    elif pipeline == '3':
         pipeline = 'riboseq'
+    elif pipeline == '2':
+        pipeline = 'seRNAseq'
+    elif pipeline == '3':
+        pipeline = 'peRNAseq'
     else:
         print('Invalid input, try again...\n')
         sys.exit(1)
@@ -273,9 +273,9 @@ def build_pipeline():
 
     # Get adaptors
     adaptors_bool = input('Were adaptors used in generating your sequence libraries? (yes/no): ')
-    if adaptors_bool.lower() == 'yes':
+    if adaptors_bool.lower().replace(' ','') == 'yes':
         polyx_bool = input('Were polyX adaptors used? (yes/no): ')
-        if polyx_bool.lower() == 'yes':
+        if polyx_bool.lower().replace(' ','') == 'yes':
             if pipeline == 'seRNAseq' or pipeline == 'riboseq':
                 adaptors = ' -a polyX'
             else:
@@ -299,49 +299,123 @@ def build_pipeline():
             adaptors = ' -a None'
 
     twopass_bool = input('Would you like to perform two-pass alignment to search for novel splice junctions?\nThis will significantly increase the time it takes to align and is not usually necessary for well-studied organisms (yes/no): ')
-    if twopass_bool.lower == 'yes':
+    if twopass_bool.lower().replace(' ','') == 'yes':
         twopass = ' --two-pass'
     else:
         twopass = ''
 
-    quality_value = input('Would you like to choose a minimum quality score other than 28? If no, press RETURN: ')
-    if quality_value == '' or quality_value.lower() == 'no':
+    quality_input = input('Would you like to choose a minimum quality score other than 28? (yes/no) ')
+    if str(quality_input).lower().replace(' ','') == 'yes':
+        quality_value = input('Please enter the value you would like to use (must be an integer equal to or above 0): ')
+        if isinstance(int(quality_value), int) and int(quality_value) >= 0:
+            quality = ' -q ' + str(quality_value)
+        else:
+            quality = ''
+            print('Invalid input provided. If you want to include a minimum cut-off, add \"-q your_integer\" to the end of the command the builder gives you.')
+    else:
         quality = ''
-    else:
-        quality = ' -q ' + str(quality_value)
 
-    length_value = input('Would you like to choose a minimum read length other than 18? If no, press RETURN: ')
-    if length_value == '' or length_value.lower() == 'no':
+    length_input = input('Would you like to choose a minimum read length other than 18? (yes/no) ')
+    if str(length_input).lower().replace(' ','') == 'yes':
+        length_value = input('Please enter the value you would like to use (must be an integer equal to or above 0): ')
+        if isinstance(int(length_value), int) and int(length_value) >= 0:
+            length = ' -q ' + str(length_value)
+        else:
+            length = ''
+            print('Invalid input provided. If you want to include a minimum cut-off, add \"-l your_integer\" to the end of the command the builder gives you.')
+    else:
         length = ''
-    else:
-        length = ' -l ' + str(length_value)
 
-    multimappers_value = input('Would you like to remove multimapped reads before quantification? (yes/no): ')
-    if multimappers_value.lower() == 'yes':
+    front_trim = input('Do you want to perform 5\' trimming of a certain number of bases? (yes/no): ')
+    if front_trim.lower().replace(' ','') == 'yes':
+        front_value = input('How many bases would you like trimmed? ')
+        if isinstance(int(front_value), int) and int(front_value) >= 0:
+            front = ' --front_trim ' + str(front_value)
+        else:
+            front = ''
+            print('Invalid input provided. If you want to include 5\' base trimming, add \"--front_trim your_integer\" to the end of the command the builder gives you.')
+    else:
+        front = ''
+
+    umi_input = input('Did your library preparation method use UMIs? (yes/no): ')
+    if umi_input.lower().replace(' ','') == 'yes':
+        region = input('Was the UMI in the 5\' or 3\' adapter? (5/3): ')
+        if str(region) == '5':
+            umi_five_input = input('Please refer to the fastp documentation for UMIs and provide the appropriate option for your usage of UMIs: ')
+            fastp_list = [
+                'index1',
+                'index2',
+                'read1',
+                'read2',
+                'per_index',
+                'per_read']
+
+            if umi_five_input in fastp_list:
+                umi_loc = ' --umi_location ' + str(umi_five_input)
+            else:
+                print('Could not find the provided input from fastp\'s list of acceptable inputs.')
+                umi_loc = ''
+        elif str(region) == '3':
+            umi_loc = ' --umi_location 3prime'
+        else:
+            umi_loc = ''
+            print('Invalid input provided. If you want to include a UMI specification, please see the documentation and add the appropriate argument flags and values.')
+
+        if umi_loc != '':
+            umi_len_value = input('Please provide the length of your UMI in basepairs: ')
+            if isinstance(int(umi_len_value), int) and int(umi_len_value) >= 0:
+                umi_len = ' --umi_length ' + str(umi_len_value)
+            else:
+                umi_len = ''
+                print('Invalid input provided. If you want to include a UMI specification, please see the documentation and add the appropriate argument flags and values.')
+
+            spacer_value = input('Please provide the length of your UMI spacer in basepairs. If none was used, provide 0 as your input: ')
+            if isinstance(int(spacer_value), int) and int(spacer_value) >= 0:
+                umi_spacer = ' --spacer_length ' + str(spacer_value)
+            else:
+                umi_spacer = ''
+                print('Invalid input provided. If you want to include a UMI specification, please see the documentation and add the appropriate argument flags and values.')
+
+        else:
+            umi_len = ''
+            umi_spacer = ''
+    else:
+        umi_loc = ''
+        umi_len = ''
+        umi_spacer = ''
+
+    multimappers_value = input('Would you like to remove multimapped reads before quantification (if a UMI sequence was provided above, this step is unnecessary and you can provide \"no\" as your input)? (yes/no): ')
+    if multimappers_value.lower().replace(' ','') == 'yes':
         multimappers = ' --no_multimappers'
     else:
         multimappers = ''
 
-    duplicates_value = input('Would you like to remove duplicated reads before quantification?\nWarning: this may over-compensate and remove biologically relevant reads, especially for shorter reads. (yes/no): ')
-    if duplicates_value.lower() == 'yes':
+    duplicates_value = input('Would you like to remove duplicated reads before quantification?\nWarning: this may over-compensate and remove biologically relevant reads, especially for shorter reads (if a UMI sequence was provided above, this step is unnecessary and you can provide \"no\" as your input): (yes/no) ')
+    if duplicates_value.lower().replace(' ','') == 'yes':
         duplicates = ' --deduplicate'
     else:
         duplicates = ''
 
     bed_value = input('Would you like to output a BED-formatted file? (yes/no): ')
-    if bed_value.lower() == 'yes':
+    if bed_value.lower().replace(' ','') == 'yes':
         bed = ' --output_bed'
     else:
         bed = ''
 
+    remove_rrna_alignments = input('Would you like to remove rRNA alignments from the alignment files? (yes/no): ')
+    if remove_rrna_alignments.lower().replace(' ','') == 'yes':
+        rrna_alignments = ' --remove_rrna'
+    else:
+        rrna_alignments = ''
+
     quant = input('By default, XPRESSpipe uses HTSeq for read quantification.\nHowever, if you would like to estimate isoform abundances, we suggest you use Cufflinks.\nWould you like to use Cufflinks? (yes/no): ')
-    if quant.lower() == 'yes':
+    if quant.lower().replace(' ','') == 'yes':
         quant_value = ' --quantification_method cufflinks'
     else:
         quant_value = ''
 
     feature = input('By default, if using HTSeq, quantifications will be made to the exons records, unless working with ribosome profiling data, in which case the CDS will be used.\nWould you like to change this default? (yes/no): ')
-    if feature.lower() == 'yes':
+    if feature.lower().replace(' ','') == 'yes':
         feature_value = input('Please provide the feature you would like to quantify to, and make sure your entry is case-sensitive: ')
         feature_value = feature_value.replace(' ','')
         feature_value = ' --feature_type ' + str(feature_value)
@@ -349,7 +423,7 @@ def build_pipeline():
         feature_value = ''
 
     stranded = input('Did you use a strand-aware RNA-seq kit? (yes/no): ')
-    if stranded.lower() == 'yes':
+    if stranded.lower().replace(' ','') == 'yes':
         if quant_value == 'htseq':
             stranded_value = ' --stranded yes'
         else:
@@ -360,18 +434,18 @@ def build_pipeline():
         stranded_value = ''
 
     method = input('XPRESSpipe will collect all read quantifications for each sample after processing and save them as a single table.\nWould you like to additionally perform a library normalization on these samples? (yes/no): ')
-    if method.lower() == 'yes':
+    if method.lower().replace(' ','') == 'yes':
         method_value = input('Please choose the normalization method (RPM, RPKM, FPKM, TPM): ')
         method_value = method_value.upper().replace(' ','')
         method_value = ' --method ' + str(method_value)
     else:
         method_value = ''
 
-    sjdb = input('Please input the number you used during reference curation for the --sjdbOverhang option (if no option was used, input \'no\'): ')
+    sjdb = input('Please input the number you provided during reference curation for the --sjdbOverhang option, not what was output in the reference command builder (if no option was used, input \'no\'): ')
     sjdb_value = ' --sjdbOverhang ' + str(sjdb)
 
     genome = input('Did you use the --genome_size option during reference creation? (yes/no): ')
-    if genome.lower() == 'yes':
+    if genome.lower().replace(' ','') == 'yes':
         genome_size = input('Please provide that number (integer required): ')
         genome_value = ' --genome_size ' + str(genome_size)
     else:
@@ -398,6 +472,11 @@ def build_pipeline():
         + str(twopass)
         + str(quality)
         + str(length)
+        + str(rrna_alignments)
+        + str(front)
+        + str(umi_loc)
+        + str(umi_len)
+        + str(umi_spacer)
         + str(multimappers)
         + str(duplicates)
         + str(bed)
@@ -409,10 +488,11 @@ def build_pipeline():
         + str(genome_value)
         + str(proc_value)
         )
+    print('Please double-check the output for accuracy and that all desired arguments were caught by the builder and incorporated into the command.')
 
     # Run
     run = input('\nWould you like to run this command now? (yes/no): ')
-    if run.lower() == 'yes':
+    if run.lower().replace(' ','') == 'yes':
         os.system(
             'xpresspipe '
             + str(pipeline)
@@ -425,6 +505,11 @@ def build_pipeline():
             + str(twopass)
             + str(quality)
             + str(length)
+            + str(rrna_alignments)
+            + str(front)
+            + str(umi_loc)
+            + str(umi_len)
+            + str(umi_spacer)
             + str(multimappers)
             + str(duplicates)
             + str(bed)
