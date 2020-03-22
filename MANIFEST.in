@@ -1,3 +1,4 @@
 include xpresspipe/cufflinks
 include xpresspipe/fastp_lite
 include xpresspipe/readDistribution.jl
+include xpresspipe/*.r
