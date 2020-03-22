@@ -30,7 +30,7 @@ before_install:
 
 # Install dependencies
 install:
-  - conda env create -v -n xpresspipe --file requirements.yml
+  - conda env create -v -n xpresspipe --file requirements.yml --verbose
   - source activate xpresspipe
   - conda info --envs
   - conda list
