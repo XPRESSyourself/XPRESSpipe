@@ -30,7 +30,9 @@ before_install:
 
 # Install dependencies
 install:
-  - conda env create -v -n xpresspipe --file requirements.yml --verbose
+  - conda config --set channel_priority strict
+  - conda install mamba -c conda-forge
+  - mamba env create -v -n xpresspipe --file requirements.yml --verbose
   - source activate xpresspipe
   - conda info --envs
   - conda list

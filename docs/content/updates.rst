@@ -10,6 +10,8 @@ v0.5.0
   - For example:
     5'-read-spacer-UMI-adapter-3'
   - Integrating this addition into options and trimming
+- Updated MANIFEST file to reliably copy R and Julia scripts to executing folder for XPRESSpipe
+- Updated builder to include recent additions
 
 ========================
 v0.4.4
