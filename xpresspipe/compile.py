@@ -110,7 +110,7 @@ def compile_matrix_metrics(
                 str(path) + str(file),
                 sep = '\t') # Initialize dataframe for relevant data
             df.index = df[str(lab_x)]
-            del df.index.name
+            df.index.name = None
 
         else:
             df = pd.read_csv(
@@ -621,7 +621,7 @@ def compile_complexity_metrics(
         axes[ax_y, ax_x].grid(False)
 
         file_number += 1
-        del df
+        df = None
 
     # Save catenated figure
     plot_title = str(experiment) + '_' + str(plot_type) # Make figure title to save as from experiment name and plot type

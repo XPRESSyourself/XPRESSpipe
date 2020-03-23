@@ -30,7 +30,6 @@ def woo(args):
 
     print('4Cleaning:' + str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss))
     bam = None # Some clean-up
-    del bam
     gc.collect()
     print('5Post:' + str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss))
 
