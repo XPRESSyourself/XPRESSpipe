@@ -101,7 +101,7 @@ def finish_metagene(
     if remove_outliers == True:
         # Will count the number of members in each group, will be the new meta_distance column of this dataframe
         bam_outliers = bam.groupby('seqnames').count().sort_values('meta_distance')
-        del bam_outliers.index.name # This is seqnames label
+        bam_outliers.index.name = None # This is seqnames label
 
         removal_amount = int(ceil(bam_outliers.shape[0] * 0.005))
         bam_outliers = bam_outliers.iloc[removal_amount:-removal_amount]
