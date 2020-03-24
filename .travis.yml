@@ -30,7 +30,7 @@ before_install:
 
 # Install dependencies
 install:
-  - conda config --set channel_priority strict
+  - conda config --set channel_priority flexible
   - conda env create -v -n xpresspipe --file requirements.yml
   - source activate xpresspipe
   - conda info --envs
