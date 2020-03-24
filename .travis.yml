@@ -25,8 +25,8 @@ before_install:
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH=$HOME/miniconda/bin:$PATH
   - hash -r
-  - conda update -n base -c defaults conda
   - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
+  - conda update -n base -c defaults conda
   - conda info -a
 
 # Install dependencies
