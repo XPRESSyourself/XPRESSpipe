@@ -63,6 +63,9 @@ if ("GenomicFeatures" %in% rownames(installed.packages()) == FALSE) {
 
 library(GenomicFeatures)
 
+install.packages("stringi", repos = "http://cran.us.r-project.org")
+library(stringi)
+
 if ("data.table" %in% rownames(installed.packages()) == FALSE) {
   print("Installing data.table...")
   install.packages("data.table", repos = "http://cran.us.r-project.org")
