@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Beginner’s Guide &mdash; XPRESSpipe 0.3.0 documentation</title>
+  <title>Beginner’s Guide &mdash; XPRESSpipe 0.5.0 documentation</title>
   
 
   
@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -258,7 +258,7 @@ $ bash fetch.sh
 <div class="line">2. If this didn’t work, we can navigate to <a class="reference external" href="https://www.ensembl.org/">Ensembl</a> to download the relevant data. We need to get the GTF and DNA chromosomal FASTA files for our organism of interest. The link to the chromosome sequence files actually contains more files than we need. We just need the files that start with <code class="xref py py-data docutils literal notranslate"><span class="pre">Homo_sapiens.GRCh38.dna.chromosome</span></code>. You can download them, move them to the appropriate directories within your reference directory, and unzip the files by double-clicking on them.</div>
 </div>
 <div class="line-block">
-<div class="line">- Now we need to curate these references files into something the sequencing alignment software can use. Since we are using ribosome profiling data, we want a reference that will allow us to <a class="reference external" href="https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1">avoid mapping to the 5’ and 3’ ends of genes</a>. We also don’t want to align to anything but protein coding genes. Finally, we want to quantify to the longest transcript. This last bit just helps the software avoid confusion when a gene has multiple splice variants to choose from. Since this is short read sequencing (let’s say we were doing 50 bp single-end sequencing), we also want to factor this into the curation of the reference (see the <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> argument below).</div>
+<div class="line">- Now we need to curate these references files into something the sequencing alignment software can use. Since we are using ribosome profiling data, we want a reference that will allow us to <a class="reference external" href="https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1">avoid mapping to the 5’ and 3’ ends of genes</a>. We also don’t want to align to anything but protein coding genes. Finally, we want to quantify to the longest transcript (although this is not required except in certain cases for downstream analysis compatibility). This last bit just helps the software avoid confusion when a gene has multiple splice variants to choose from. Since this is short read sequencing (let’s say we were doing 50 bp single-end sequencing), we also want to factor this into the curation of the reference (see the <code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span></code> argument below).</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe curateReference <span class="se">\</span>
               --output ./ <span class="se">\</span>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Curating References &mdash; XPRESSpipe 0.3.0 documentation</title>
+  <title>Curating References &mdash; XPRESSpipe 0.5.0 documentation</title>
   
 
   
@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -109,7 +109,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#transcript-reference-modification">Transcript Reference Modification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#reference-modification">Reference Modification</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id3">Arguments</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id4">Examples</a></li>
 </ul>
@@ -243,7 +243,7 @@ $ mv *fasta genome_fasta
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe curateReference --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -265,7 +265,7 @@ $ mv *fasta genome_fasta
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -340,7 +340,7 @@ $ mv *fasta genome_fasta
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe makeReference --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -362,7 +362,7 @@ $ mv *fasta genome_fasta
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -414,14 +414,14 @@ $ mv *fasta genome_fasta
 </div>
 </div>
 </div>
-<div class="section" id="transcript-reference-modification">
-<h2>Transcript Reference Modification<a class="headerlink" href="#transcript-reference-modification" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="reference-modification">
+<h2>Reference Modification<a class="headerlink" href="#reference-modification" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">At times, quantification of transcripts to a modified transcript reference is desirable. Below are some examples:</div>
+<div class="line">At times, quantification of transcripts or CDSs to a modified reference is desirable. Below are some examples:</div>
 <div class="line">1. As ribosomal RNA (rRNA) contamination is common in RNA-seq, even when a depletion step was performed prior to library preparation, it is sometimes desirable to not count these and other non-coding RNAs in the quantification and analysis.</div>
-<div class="line">2. During ribosome profiling library preparation, where a 5’ and 3’ pile-up of ribosome footprints due to slow initation and termination kinetics of footprints is common, it is suggested to <a class="reference external" href="https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1">exclude the first 45-50 nucleotides from the 5’ end and 15 nucleotides from the 3’ end of each transcript during quantification</a>. This command will automatically curate an Ensembl GTF to meet these demands for read quantification.</div>
+<div class="line">2. During ribosome profiling library preparation, where a 5’ and 3’ pile-up of ribosome footprints due to slow initiation and termination kinetics of footprints is common, it is suggested to <a class="reference external" href="https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1">exclude the first 45-50 nucleotides from the 5’ end and 15 nucleotides from the 3’ end of each CDS during quantification</a>. This command will automatically curate an Ensembl GTF to meet these demands for read quantification.</div>
 <div class="line">3. Several genes encode multiple isoforms or transcripts. During quantification, many software packages for counting reads to genes consider a read mapping to multiple transcripts of the same gene as a multi-mapper. Unless interested in alternate isoform usage, it is recommended that transcriptome reference files only contain the longest transcript for each gene.</div>
-<div class="line">The <code class="xref py py-data docutils literal notranslate"><span class="pre">modifyGTF</span></code> sub-module provides the ability to make the above-mentioned modifications to a GTF transcriptome reference file. The modified GTF file is output at the end and the filename is labeled with the modifications made. Truncations to each transcript reference are stranded-aware.</div>
+<div class="line">The <code class="xref py py-data docutils literal notranslate"><span class="pre">modifyGTF</span></code> sub-module provides the ability to make the above-mentioned modifications to a GTF reference file. The modified GTF file is output at the end and the filename is labeled with the modifications made. Truncations to each transcript or CDS reference are strand-aware.</div>
 </div>
 <div class="section" id="id3">
 <h3>Arguments<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
@@ -431,7 +431,7 @@ $ mv *fasta genome_fasta
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe modifyGTF --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -447,7 +447,7 @@ $ mv *fasta genome_fasta
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -459,19 +459,19 @@ $ mv *fasta genome_fasta
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-l,</span> <span class="pre">--longest_transcript</span></code></p></td>
-<td><p>Provide argument to keep only longest transcript per gene record (RECOMMENDED)</p></td>
+<td><p>Provide argument to keep only longest transcript per gene record (not necessary except in cases where the Ensembl canonical transcript is desired)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-p,</span> <span class="pre">--protein_coding</span></code></p></td>
 <td><p>Provide argument to keep only gene records annotated as protein coding genes</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-t,</span> <span class="pre">--truncate</span></code></p></td>
-<td><p>Provide argument to truncate gene records</p></td>
+<td><p>Provide argument to truncate the CDSs of gene records</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--truncate_5prime</span></code></p></td>
-<td><p>Amount to truncate from 5’ end of each transcript, requires –truncate argument (default: 45)</p></td>
+<td><p>Amount to truncate from 5’ end of each CDS, requires –truncate argument (default: 45)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--truncate_3prime</span></code></p></td>
-<td><p>Amount to truncate from 3’ end of each transcript, requires –truncate argument (default: 15)</p></td>
+<td><p>Amount to truncate from 3’ end of each CDS, requires –truncate argument (default: 15)</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>
@@ -485,8 +485,8 @@ $ mv *fasta genome_fasta
 <div class="line"><strong>Example 1 – Create longest transcript-only, protein coding-only, truncated reference:</strong></div>
 <div class="line">- Keeps the longest transcript for each gene record</div>
 <div class="line">- Keeps only protein_coding annotated transcripts</div>
-<div class="line">- Truncates the first 45 nucleotides from the first exon of every transcript (default)</div>
-<div class="line">- Truncates the last 15 nucleotides from the last exon of every transcript (default)</div>
+<div class="line">- Truncates the first 45 nucleotides from the first exon of every CDS (default)</div>
+<div class="line">- Truncates the last 15 nucleotides from the last exon of every CDS (default)</div>
 <div class="line">- Each modification desired must be implicitly passed to the sub-module</div>
 </div>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe modifyGTF -g /path/to/reference/transcripts.gtf --longest_transcript --protein_coding --truncate

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Alignment &mdash; XPRESSpipe 0.3.0 documentation</title>
+  <title>Alignment &mdash; XPRESSpipe 0.5.0 documentation</title>
   
 
   
@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -194,6 +194,10 @@
 <div class="line">- Standard: The foundation of the pipeline used in XPRESSpipe is based in the <a class="reference external" href="https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/">TCGA</a> standards for RNAseq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated.</div>
 <div class="line">- Variant Aware: The user can provide a VCF, such as those provided by <a class="reference external" href="ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/">ClinVar</a> and <a class="reference external" href="ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/">dbSNP</a>. These files are useful in integrating information about common or disease nucleotide variants into the RNA-Seq alignment stage. The files you use should match the build of the genome you are using (i.e., if using Homo Sapiens GRCh38, these builds should match between curated reference files and VCF file).</div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>rRNA depletion using the <code class="xref py py-data docutils literal notranslate"><span class="pre">--remove_rrna</span></code> option removes rRNA alignments from BAM files. This works by generating a BED file behind the scenes for rRNA transcripts, and removing them from the genome-aligned BAM file using <code class="xref py py-data docutils literal notranslate"><span class="pre">bedtools</span> <span class="pre">intersect</span></code>. For transcriptome-aligned BAM files, a modified GTF file is generated for this step only with rRNA records removed in order to prevent their transcript mapping during this step.</p>
+</div>
 <div class="section" id="single-end-rnaseq-alignment">
 <h2>Single-End RNAseq Alignment<a class="headerlink" href="#single-end-rnaseq-alignment" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
@@ -210,7 +214,7 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -235,7 +239,7 @@
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -249,31 +253,34 @@
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--two-pass</span></code></p></td>
 <td><p>Use a two-pass STAR alignment for novel splice junction discovery</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--no_multimappers&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--remove_rrna</span></code></p></td>
+<td><p>Provide flag to remove rRNA records from alignment files (BAM files)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--no_multimappers&gt;</span></code></p></td>
 <td><p>Include flag to remove multimapping reads to be output and used in downstream analyses</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--deduplicate</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--deduplicate</span></code></p></td>
 <td><p>Include flag to quantify reads with de-duplication (will search for files with suffix <code class="xref py py-data docutils literal notranslate"><span class="pre">_dedupRemoved.bam</span></code>)</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--vcf</span> <span class="pre">&lt;/path/to/file.vcf&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--vcf</span> <span class="pre">&lt;/path/to/file.vcf&gt;</span></code></p></td>
 <td><p>Provide full path and file name to VCF file if you would like detect personal variants overlapping alignments</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--output_bed</span></code></p></td>
 <td><p>Include flag to output BED files for each aligned file</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;sjdbOverhang_amount&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--sjdbOverhang</span> <span class="pre">&lt;sjdbOverhang_amount&gt;</span></code></p></td>
 <td><p>Specify length of genomic sequences for constructing splice-aware reference. Ideal length is <code class="xref py py-data docutils literal notranslate"><span class="pre">read</span> <span class="pre">length</span> <span class="pre">-</span> <span class="pre">1</span></code>, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of <code class="xref py py-data docutils literal notranslate"><span class="pre">100</span></code> should work in most cases</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--mismatchRatio</span> <span class="pre">&lt;mismatchRatio&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--mismatchRatio</span> <span class="pre">&lt;mismatchRatio&gt;</span></code></p></td>
 <td><p>Alignment ratio of mismatches to mapped length is less than this value. See STAR documentation for more information on setting this parameter</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--seedSearchStartLmax</span> <span class="pre">&lt;seedSearchStartLmax&gt;</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--seedSearchStartLmax</span> <span class="pre">&lt;seedSearchStartLmax&gt;</span></code></p></td>
 <td><p>Adjusting this parameter by providing a lower number will improve mapping sensitivity (recommended value = 15 for reads ~ 25 nts). See STAR documentation for more information on setting this parameter</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">genome_size</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">genome_size</span></code></p></td>
 <td><p>Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment. Enter the size of your organism’s genome in nucleotides</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-m</span></code></p></td>
 <td><p>Number of max processors to use for tasks (default: No limit)</p></td>
 </tr>
 </tbody>
@@ -310,7 +317,7 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe align --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -335,7 +342,7 @@
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />

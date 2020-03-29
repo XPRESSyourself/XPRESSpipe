@@ -5,13 +5,16 @@ Updates
 ========================
 v0.5.0
 ========================
-- Fixed issue where genome size calculation would round up and miscalculate genome_size parameter for STAR.
-- Added fastp_lite for removal of 3' internal UMIs (generally takes ~1 min per RNA-seq sample with about 30 million reads)
-  - For example:
-    5'-read-spacer-UMI-adapter-3'
-  - Integrating this addition into options and trimming
-- Updated MANIFEST file to reliably copy R and Julia scripts to executing folder for XPRESSpipe
-- Updated builder to include recent additions
+| - Fixed issue where genome size calculation would round up and miscalculate genome_size parameter for STAR.
+| - Added fastp_lite for removal of 3' internal UMIs (generally takes ~1 min per RNA-seq sample with about 30 million reads)
+|   - For example:
+|     5'-read-spacer-UMI-adapter-3'
+|   - Integrating this addition into options and trimming
+| - Updated MANIFEST file to reliably copy R and Julia scripts to executing folder for XPRESSpipe
+| - Updated command builder (:data:`xpresspipe build`) to include recent additions
+| - Updated requirements to prevent issue where solved environment required to install :data:`R 3.5.1` or greater would create an error where :data:`samtools markdup` would freeze
+| - Frequently, :data:`R 3.5.1` or greater would create library linking error to :data:`stringi`, causing :data:`GenomicFeatures` to not function. Added to :data:`RbuildIndex.r` to reinstall :data:`stringi`, which appears to clear up the issue.
+
 
 ========================
 v0.4.4

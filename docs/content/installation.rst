@@ -55,22 +55,20 @@ Install XPRESSpipe
 | - If a summary menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!
 | - You can run :data:`xpresspipe --help` to see a list of the available modules within XPRESSpipe. To see specific parameters for a module, type :data:`xpresspipe <module_name> --help`.
 
-======================
-Docker Container
-======================
-| NOTE: The Docker containerization is still under development.
-| XPRESSpipe is available as a fully independent `Docker <https://www.docker.com/>`_ container. By downloading the Docker software and using the below command, a image of XPRESSpipe and all associated dependencies localized to a single file for ease of use.
 
-| 1. Download XPRESSpipe Docker image:
+------------------------------
+Important!
+------------------------------
+| Currently, R is struggling to auto-install riboWaltz for p-site QC. If you run into issues in the time-being, please open an R session in your environment and run the following commands:
 
-.. code-block:: shell
+.. code-block:: R
 
-  $ docker image pull jordanberg/xpresspipe:latest
+  install.packages("devtools", repos = "http://cran.us.r-project.org")
 
-| 2. Run XPRESSpipe:
+  devtools::install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = c("Depends", "Imports", "LinkingTo"))
 
-.. code-block:: shell
+| And then run the following to test installation:
 
-  $ docker run jordanberg/xpresspipe --help
+.. code-block:: R
 
-| If the help menu prints, XPRESSpipe if functioning properly and you can replace the :data:`--help` option with the appropriate sub-module and arguments.
+  library(riboWaltz)

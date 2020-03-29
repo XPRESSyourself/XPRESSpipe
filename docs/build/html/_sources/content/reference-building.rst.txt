@@ -179,13 +179,13 @@ Examples
   $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf --sjdbOverhang 49 --genome_size 3000000
 
 ============================================
-Transcript Reference Modification
+Reference Modification
 ============================================
-| At times, quantification of transcripts to a modified transcript reference is desirable. Below are some examples:
+| At times, quantification of transcripts or CDSs to a modified reference is desirable. Below are some examples:
 | 1. As ribosomal RNA (rRNA) contamination is common in RNA-seq, even when a depletion step was performed prior to library preparation, it is sometimes desirable to not count these and other non-coding RNAs in the quantification and analysis.
-| 2. During ribosome profiling library preparation, where a 5' and 3' pile-up of ribosome footprints due to slow initation and termination kinetics of footprints is common, it is suggested to `exclude the first 45-50 nucleotides from the 5' end and 15 nucleotides from the 3' end of each transcript during quantification <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. This command will automatically curate an Ensembl GTF to meet these demands for read quantification.
+| 2. During ribosome profiling library preparation, where a 5' and 3' pile-up of ribosome footprints due to slow initiation and termination kinetics of footprints is common, it is suggested to `exclude the first 45-50 nucleotides from the 5' end and 15 nucleotides from the 3' end of each CDS during quantification <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. This command will automatically curate an Ensembl GTF to meet these demands for read quantification.
 | 3. Several genes encode multiple isoforms or transcripts. During quantification, many software packages for counting reads to genes consider a read mapping to multiple transcripts of the same gene as a multi-mapper. Unless interested in alternate isoform usage, it is recommended that transcriptome reference files only contain the longest transcript for each gene.
-| The :data:`modifyGTF` sub-module provides the ability to make the above-mentioned modifications to a GTF transcriptome reference file. The modified GTF file is output at the end and the filename is labeled with the modifications made. Truncations to each transcript reference are stranded-aware.
+| The :data:`modifyGTF` sub-module provides the ability to make the above-mentioned modifications to a GTF reference file. The modified GTF file is output at the end and the filename is labeled with the modifications made. Truncations to each transcript or CDS reference are strand-aware.
 
 -----------
 Arguments
@@ -212,15 +212,15 @@ Arguments
    * - Optional Arguments
      - Description
    * - :data:`-l, --longest_transcript`
-     -  Provide argument to keep only longest transcript per gene record (RECOMMENDED)
+     -  Provide argument to keep only longest transcript per gene record (not necessary except in cases where the Ensembl canonical transcript is desired)
    * - :data:`-p, --protein_coding`
      -  Provide argument to keep only gene records annotated as protein coding genes
    * - :data:`-t, --truncate`
-     -  Provide argument to truncate gene records
+     -  Provide argument to truncate the CDSs of gene records
    * - :data:`--truncate_5prime <amount>`
-     -  Amount to truncate from 5' end of each transcript, requires --truncate argument (default: 45)
+     -  Amount to truncate from 5' end of each CDS, requires --truncate argument (default: 45)
    * - :data:`--truncate_3prime <amount>`
-     -  Amount to truncate from 3' end of each transcript, requires --truncate argument (default: 15)
+     -  Amount to truncate from 3' end of each CDS, requires --truncate argument (default: 15)
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
@@ -230,8 +230,8 @@ Examples
 | **Example 1 -- Create longest transcript-only, protein coding-only, truncated reference:**
 | - Keeps the longest transcript for each gene record
 | - Keeps only protein_coding annotated transcripts
-| - Truncates the first 45 nucleotides from the first exon of every transcript (default)
-| - Truncates the last 15 nucleotides from the last exon of every transcript (default)
+| - Truncates the first 45 nucleotides from the first exon of every CDS (default)
+| - Truncates the last 15 nucleotides from the last exon of every CDS (default)
 | - Each modification desired must be implicitly passed to the sub-module
 
 .. code-block:: shell

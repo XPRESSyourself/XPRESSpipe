@@ -80,6 +80,6 @@ Methodology
 
 | - Metagene: Metagene analysis takes the read coverage across all transcripts in a sample and compiles their distribution along a representative transcript. This is useful in identifying any systematic 5' or 3' biases in the library preparation step.
 
-| - Periodicity: A helpful metric of ribosome profiling libraries is looking at the characteristic 3 nt/1 codon stepping of the translating ribosome.
+| - P-Site Statistics: Helpful metrics of ribosome profiling libraries including looking at the characteristic 3 nt/1 codon stepping of the translating ribosome and codon usage per sample.
 
 | - Gene Coverage: Aspects of a transcript's read coverage or occupancy can be of interest. However, other genome browsers like `IGV <https://software.broadinstitute.org/software/igv/>`_ retain introns, and in the case of transcripts with massive introns, the actually coding space will be difficult to analyze succinctly. XPRESSpipe will plot the gene coverage across an exon-only transcript representation. However, it may still be worthwhile to explore intron coverage in some instances.

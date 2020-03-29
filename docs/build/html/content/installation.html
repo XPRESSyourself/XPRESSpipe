@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; XPRESSpipe 0.3.0 documentation</title>
+  <title>Installation &mdash; XPRESSpipe 0.5.0 documentation</title>
   
 
   
@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -95,7 +95,10 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="beginner.html">Beginner’s Guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#install-xpresspipe">Install XPRESSpipe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-xpresspipe">Install XPRESSpipe</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#important">Important!</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#docker-container">Docker Container</a></li>
 </ul>
 </li>
@@ -229,6 +232,23 @@ $ xpresspipe <span class="nb">test</span>
 <div class="line-block">
 <div class="line">- If a summary menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!</div>
 <div class="line">- You can run <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">--help</span></code> to see a list of the available modules within XPRESSpipe. To see specific parameters for a module, type <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">&lt;module_name&gt;</span> <span class="pre">--help</span></code>.</div>
+</div>
+<div class="section" id="important">
+<h3>Important!<a class="headerlink" href="#important" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">Currently, R is struggling to auto-install riboWaltz for p-site QC. If you run into issues in the time-being, please open an R session in your environment and run the following commands:</div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">,</span> <span class="n">repos</span> <span class="o">=</span> <span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">)</span>
+
+<span class="n">devtools</span><span class="o">::</span><span class="nf">install_github</span><span class="p">(</span><span class="s">&quot;LabTranslationalArchitectomics/riboWaltz&quot;</span><span class="p">,</span> <span class="n">dependencies</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Depends&quot;</span><span class="p">,</span> <span class="s">&quot;Imports&quot;</span><span class="p">,</span> <span class="s">&quot;LinkingTo&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">And then run the following to test installation:</div>
+</div>
+<div class="highlight-R notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">riboWaltz</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="docker-container">

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Quality Control &mdash; XPRESSpipe 0.3.0 documentation</title>
+  <title>Quality Control &mdash; XPRESSpipe 0.5.0 documentation</title>
   
 
   
@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -114,7 +114,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#id2">Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#codon-periodicity-analysis">Codon Periodicity Analysis</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#p-site-analysis">P-site Analysis</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id3">Examples</a></li>
 </ul>
 </li>
@@ -210,7 +210,7 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe readDistribution --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -229,7 +229,7 @@
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -272,7 +272,7 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe metagene --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -294,7 +294,7 @@
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -340,7 +340,7 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe geneCoverage --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -365,7 +365,7 @@
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -418,15 +418,15 @@
 <p>NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In both A and B in the image above, the top plot was generated with IGV (<a class="reference external" href="https://software.broadinstitute.org/software/igv/">https://software.broadinstitute.org/software/igv/</a>) and the bottom with <code class="xref py py-data docutils literal notranslate"><span class="pre">xpresspipe</span> <span class="pre">geneCoverage</span></code>. Green boxes show approximately the same region for comparison.</p>
 </div>
 </div>
-<div class="section" id="codon-periodicity-analysis">
-<h2>Codon Periodicity Analysis<a class="headerlink" href="#codon-periodicity-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="p-site-analysis">
+<h2>P-site Analysis<a class="headerlink" href="#p-site-analysis" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
-<div class="line">Analyze periodicity of most abundant read length. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.</div>
+<div class="line">Analyze P-Sites. Useful in ribosome profiling samples for identifying that ribosomes are taking the expected 3 nucleotide steps along a transcript. If this is not apparent from the analysis, it may be indicative of poor sequence coverage of the ribosome profiling libraries.</div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe periodicity --help
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ xpresspipe p_sites --help
 </pre></div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -446,9 +446,12 @@
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
 <td><p>Path and file name to reference GTF</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-cdna_fasta</span> <span class="pre">&lt;/path/cdna_fasta.fa&gt;</span></code></p></td>
+<td><p>Path and file name to reference cDNA FASTA file for P-site reference generation/location</p></td>
+</tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -459,6 +462,12 @@
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--min_length</span> <span class="pre">&lt;length_value&gt;</span></code></p></td>
+<td><p>Minimum read length threshold to keep for reads (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">17</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--max_length</span> <span class="pre">&lt;length_value&gt;</span></code></p></td>
+<td><p>Maximum read length threshold to keep for reads (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">0</span></code>). Setting this argument to 0 will result in no upper length limit.</p></td>
+</tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span> <span class="pre">&lt;experiment_name&gt;,</span> <span class="pre">--experiment</span> <span class="pre">&lt;experiment_name&gt;</span></code></p></td>
 <td><p>Experiment name to save output summaries as</p></td>
 </tr>
@@ -473,9 +482,9 @@
 <div class="section" id="id3">
 <h3>Examples<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="line-block">
-<div class="line"><strong>Example 1 – Analyze periodicity from ribosome profiling libraries</strong></div>
+<div class="line"><strong>Example 1 – Analyze P-sites from ribosome profiling libraries</strong></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe periodicity -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ xpresspipe p_sites -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
 </pre></div>
 </div>
 </div>

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Ribosome Profiling Pipeline &mdash; XPRESSpipe 0.3.0 documentation</title>
+  <title>Ribosome Profiling Pipeline &mdash; XPRESSpipe 0.5.0 documentation</title>
   
 
   
@@ -23,11 +23,11 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -179,9 +179,9 @@
   <div class="section" id="ribosome-profiling-pipeline">
 <h1>Ribosome Profiling Pipeline<a class="headerlink" href="#ribosome-profiling-pipeline" title="Permalink to this headline">¶</a></h1>
 <div class="line-block">
-<div class="line">The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in other sections of this documentation. For more detailed information concerning these steps, please refer to the appropriate chapter for the step you are interested in.</div>
+<div class="line">The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in other sections of this documentation. For more detailed information concerning these steps, please refer to the Align chapter for the step you are interested in.</div>
 </div>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -204,12 +204,15 @@
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-g</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--gtf</span> <span class="pre">&lt;/path/transcripts.gtf&gt;</span></code></p></td>
 <td><p>Path and file name to GTF used for alignment quantification (only used for HTSeq quantification)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--experiment</span></code></p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-cdna_fasta</span> <span class="pre">&lt;/path/cdna_fasta.fa&gt;</span></code></p></td>
+<td><p>Path and file name to reference cDNA FASTA file for P-site reference generation/location</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">-e</span></code>, <code class="xref py py-data docutils literal notranslate"><span class="pre">--experiment</span></code></p></td>
 <td><p>Experiment name</p></td>
 </tr>
 </tbody>
 </table>
-<table class="colwidths-given docutils align-center">
+<table class="colwidths-given docutils align-default">
 <colgroup>
 <col style="width: 41%" />
 <col style="width: 59%" />
@@ -232,11 +235,23 @@
 <tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--min_length</span> <span class="pre">&lt;length_value&gt;</span></code></p></td>
 <td><p>Minimum read length threshold to keep for reads (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">17</span></code>)</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--umi_location</span> <span class="pre">&lt;location&gt;</span></code></p></td>
-<td><p>Provide parameter to process UMIs – provide location (see fastp documentation for more details, generally for single-end sequencing, you would provide ‘read1’ here; does not work with -a polyX option)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--max_length</span> <span class="pre">&lt;length_value&gt;</span></code></p></td>
+<td><p>Maximum read length threshold to keep for reads (default: <code class="xref py py-data docutils literal notranslate"><span class="pre">0</span></code>). Setting this argument to 0 will result in no upper length limit.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--umi_length</span> <span class="pre">&lt;length&gt;</span></code></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--remove_rrna</span></code></p></td>
+<td><p>Provide flag to remove rRNA records from alignment files (BAM files)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--front_trim</span> <span class="pre">&lt;length&gt;</span></code></p></td>
+<td><p>Number of base pairs to trim from the 5’ ends of reads (not available for polyX trimming) (default: 1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--umi_location</span> <span class="pre">&lt;location&gt;</span></code></p></td>
+<td><p>Provide parameter to process UMIs – provide location (if working with internal UMIs that need to be processed after adapter trimming, provide “3prime”; else see fastp documentation for more details, generally for single-end sequencing, you would provide ‘read1’ here; does not work with  -a polyX option)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--umi_length</span> <span class="pre">&lt;length&gt;</span></code></p></td>
 <td><p>Provide parameter to process UMIs – provide UMI length (must provide the –umi_location argument); does not work with -a polyX option)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--spacer_length</span> <span class="pre">&lt;length&gt;</span></code></p></td>
+<td><p>Provide UMI spacer length, if exists. (default: 0)</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="xref py py-data docutils literal notranslate"><span class="pre">--no_multimappers&gt;</span></code></p></td>
 <td><p>Include flag to remove multimapping reads to be output and used in downstream analyses</p></td>
