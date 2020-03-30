@@ -35,6 +35,10 @@ if ("devtools" %in% rownames(installed.packages()) == FALSE) {
 }
 library(devtools)
 
+# Run install of data.table to make sure most recent version is installed
+install.packages("data.table", repos = "http://cran.us.r-project.org")
+library(data.table)
+
 # note: conda-build may screw with this install, remove from conda environment to get this to work
 if ("riboWaltz" %in% rownames(as.data.frame(installed.packages()[,c(1,3:4)]))) {
   print("riboWaltz package already installed")
