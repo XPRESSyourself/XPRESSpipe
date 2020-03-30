@@ -54,6 +54,9 @@ sub_license <- function() {
 # Install dependencies
 if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
 
+install.packages("stringi", repos = "http://cran.us.r-project.org")
+library(stringi)
+
 if ("GenomicFeatures" %in% rownames(installed.packages()) == FALSE) {
   print("Installing GenomicFeatures...")
   BiocManager::install("GenomicFeatures", dependencies=c("Depends", "Imports", "LinkingTo"))
@@ -62,9 +65,6 @@ if ("GenomicFeatures" %in% rownames(installed.packages()) == FALSE) {
 }
 
 library(GenomicFeatures)
-
-install.packages("stringi", repos = "http://cran.us.r-project.org")
-library(stringi)
 
 if ("data.table" %in% rownames(installed.packages()) == FALSE) {
   print("Installing data.table...")
