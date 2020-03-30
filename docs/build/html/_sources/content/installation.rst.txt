@@ -72,24 +72,3 @@ Important!
 .. code-block:: R
 
   library(riboWaltz)
-
-
-======================
-Docker Container
-======================
-| NOTE: The Docker containerization is still under development.
-| XPRESSpipe is available as a fully independent `Docker <https://www.docker.com/>`_ container. By downloading the Docker software and using the below command, a image of XPRESSpipe and all associated dependencies localized to a single file for ease of use.
-
-| 1. Download XPRESSpipe Docker image:
-
-.. code-block:: shell
-
-  $ docker image pull jordanberg/xpresspipe:latest
-
-| 2. Run XPRESSpipe:
-
-.. code-block:: shell
-
-  $ docker run jordanberg/xpresspipe --help
-
-| If the help menu prints, XPRESSpipe if functioning properly and you can replace the :data:`--help` option with the appropriate sub-module and arguments.
