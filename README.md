@@ -55,6 +55,21 @@ $ xpresspipe test
 ```
 - Be sure to specify the correct release version in the first URL
 
+#### Using XPRESSpipe on a supercomputer
+- The conda environment, `xpresspipe`, will need to be activated
+- For example, if using a SLURM job scheduler, you should include the following after the `#SBATCH` lines and before any calls to XPRESSpipe in the slurm script, as below:
+```
+#!/bin/bash
+#SBATCH --time=72:00:00
+#SBATCH --nodes=1
+#SBATCH ...
+
+source $(conda info --base)/etc/profile.d/conda.sh
+conda activate xpresspipe
+
+... rest of the script
+```
+
 ### QuickStart:   
 - Reference building   
 [![asciicast](https://asciinema.org/a/256340.svg)](https://asciinema.org/a/256340?speed=4)

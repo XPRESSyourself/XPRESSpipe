@@ -72,3 +72,22 @@ Important!
 .. code-block:: R
 
   library(riboWaltz)
+
+
+==============================================================
+Using XPRESSpipe in a supercomputing environment (i.e. SLURM)
+==============================================================
+| If the dependencies for XPRESSpipe were installed to a conda environment as above, you will need to add a couple lines to you bash script to submit the supercomputing job.
+| For example, if using a SLURM job scheduler, you should include the following after the :data:`#SBATCH` lines and before any calls to XPRESSpipe in the slurm script, as below:
+
+.. code-block:: shell
+
+  #!/bin/bash
+  #SBATCH --time=72:00:00
+  #SBATCH --nodes=1
+  #SBATCH ...
+
+  source $(conda info --base)/etc/profile.d/conda.sh
+  conda activate xpresspipe
+
+  ... rest of the script
