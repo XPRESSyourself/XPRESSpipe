@@ -185,6 +185,7 @@ Install
 ---------------
 Run Data
 ---------------
+| - Assuming you installed the XPRESSpipe dependencies in a conda environment called :data:`xpresspipe`, you will use the following as a template. If you named the conda environment something else, you would replace the line :data:`conda activate xpresspipe` with :data:`conda activate env_name`. If dependencies were installed to the base environment, the :data:`source $(conda...` and :data:`conda activate ...` lines are unnecessary.
 | - The commands here are the same as above, but likely the method of execution will be different. A lot of supercomputing clusters manage job submission through a system called `SLURM <https://www.youtube.com/watch?v=RpkAyFI05yY>`_. Each supercomputing cluster should have individualized and tailored instructions for proper usage. We will briefly provide an example of how one would submit a job to a SLURM batch system:
 
 .. code-block:: shell
@@ -194,6 +195,10 @@ Run Data
   #SBATCH --nodes=1
   #SBATCH -o /scratch/general/lustre/$USER/slurmjob-%j
   #SBATCH --partition=this_cluster_has_no_name
+
+  source $(conda info --base)/etc/profile.d/conda.sh
+  conda activate xpresspipe
+
 
   #set up the temporary directory
   SCRDIR=/scratch/general/lustre/$USER/$SLURM_JOBID
