@@ -160,27 +160,50 @@ Supercomputing
 --------------------
 Install
 --------------------
-| - Much of the same commands will be performed as above, aside from a couple exceptions:
-| 1. When installing XPRESSpipe, you need to provide a location for personal storage of the software:
+| Much of the same commands will be performed as above, aside from a couple key modifications.
+| 1. Navigate to your user home directory on the supercomputer:
 
 .. code-block:: shell
 
-  $ python setup.py install --prefix ~/.local/bin
+  $ cd ~
 
-
-| 2. Add this path to your :data:`$PATH`:
+| 2. Install Anaconda if not already done and follow the prompts given when running the bash script. We recommend letting the installer set up the required PATHS needed for interfacing with Anaconda:
 
 .. code-block:: shell
 
-  $ echo 'export PATH="~/.local/bin:$PATH"' >> ~/.bash_profile
-  $ echo 'export PYTHONPATH="/uufs/chpc.utah.edu/common/home/u0690617/.local/bin/lib/python3.7/site-packages"' >> ~/.bash_profile
+  $ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  $ bash Miniconda3-latest-Linux-x86_64.sh
 
-| 3. Let's test this to make sure everything is operating properly:
+| 3. Install the XPRESSpipe package. The following will download the current development version of XPRESSpipe. When installing a specific version of XPRESSpipe, do so as you would from the above instructions. You may need to modify the directory name for the XPRESSpipe files if you do so.
+
+.. code-block:: shell
+
+  $ git clone https://github.com/XPRESSyourself/XPRESSpipe.git
+  $ conda env create -f ./XPRESSpipe/requirements.yml
+  $ conda activate xpresspipe
+  $ pip install ./XPRESSpipe
+
+| 4. If using XPRESSpipe for ribosome profiling data, we recommend manually installing riboWaltz as its auto-installation is not stable in the XPRESSpipe script since the software is not available through a package manager like Bioconductor or Conda. You can do this by opening an interactive R session in your :data:`xpresspipe` conda environment.
+
+.. code-block:: shell
+
+  $ conda activate xpresspipe
+  $ R
+
+.. code-block:: R
+
+  > install.packages("devtools", repos = "http://cran.us.r-project.org")
+  > devtools::install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = c("Depends", "Imports", "LinkingTo"))
+  > library(riboWaltz) # test installation
+  > q() # No need to save the session data
+
+| 5. Let's test this to make sure everything is operating properly:
 
 .. code-block:: shell
 
   $ cd ~/
   $ xpresspipe test
+
 
 ---------------
 Run Data
@@ -197,7 +220,7 @@ Run Data
   #SBATCH --partition=this_cluster_has_no_name
 
   source $(conda info --base)/etc/profile.d/conda.sh
-  conda activate xpresspipe
+  source activate xpresspipe
 
 
   #set up the temporary directory

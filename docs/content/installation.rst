@@ -88,6 +88,6 @@ Using XPRESSpipe in a supercomputing environment (i.e. SLURM)
   #SBATCH ...
 
   source $(conda info --base)/etc/profile.d/conda.sh
-  conda activate xpresspipe
+  source activate xpresspipe
 
   ... rest of the script
