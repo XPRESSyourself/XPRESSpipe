@@ -171,7 +171,7 @@ Install
 
 .. code-block:: shell
 
-  $ wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  $ curl -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
   $ bash Miniconda3-latest-Linux-x86_64.sh
 
 | 3. Install the XPRESSpipe package. The following will download the current development version of XPRESSpipe. When installing a specific version of XPRESSpipe, do so as you would from the above instructions. You may need to modify the directory name for the XPRESSpipe files if you do so.
