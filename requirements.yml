@@ -15,6 +15,7 @@ dependencies:
   - r-base<=3.5.0
   - r-devtools
   - r-data.table
+  - r-mgcv
   - bioconductor-genomicfeatures
   - bioconductor-rsubread
   - bioconductor-dupradar
