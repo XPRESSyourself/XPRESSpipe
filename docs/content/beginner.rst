@@ -192,6 +192,7 @@ Install
 
 .. code-block:: R
 
+  > install.packages("stringi", repos = "http://cran.us.r-project.org")
   > install.packages("devtools", repos = "http://cran.us.r-project.org")
   > devtools::install_github("LabTranslationalArchitectomics/riboWaltz", dependencies = c("Depends", "Imports", "LinkingTo"))
   > library(riboWaltz) # test installation
