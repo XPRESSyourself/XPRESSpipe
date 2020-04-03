@@ -3,6 +3,12 @@ Updates
 ###############
 
 ========================
+v0.5.1
+========================
+| - Added instructions for running a conda environment on a HPC environment
+| - Added R dependency to conda environment that adds stability for riboWaltz install
+
+========================
 v0.5.0
 ========================
 | - Fixed issue where genome size calculation would round up and miscalculate genome_size parameter for STAR.
