@@ -13,14 +13,13 @@ dependencies:
   - numpy>=1.16.0
   - scipy
   - r-base<=3.5.0
-  - r-devtools
   - r-data.table
   - bioconductor-genomicfeatures
+  - bioconductor-genomicalignments
   - bioconductor-rsubread
   - bioconductor-dupradar
   - bioconductor-deseq2
   - bioconductor-apeglm
-  - bioconductor-genomicalignments
   - libiconv
   - ncurses
   - fastp

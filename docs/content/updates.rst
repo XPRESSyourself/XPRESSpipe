@@ -3,6 +3,13 @@ Updates
 ###############
 
 ========================
+v0.6.0
+========================
+| - Minor modification to instructions on how to install XPRESSpipe and use its conda environment on a supercomputing node.
+| - Removed version specifications for conda environment setup to ease install (fixes issues in a better way than the solution from v0.5.0)
+| - Moved required riboWaltz functions to XPRESSpipe as installation has been recurrently problematic 
+
+========================
 v0.5.0
 ========================
 | - Fixed issue where genome size calculation would round up and miscalculate genome_size parameter for STAR.

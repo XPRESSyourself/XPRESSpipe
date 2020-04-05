@@ -127,6 +127,7 @@ def make_periodicity(
         + ' ' + str(args_dict['input'])
         + ' ' + str(args_dict['gtf'])
         + ' ' + str(args_dict['p_site_qc']) + 'metrics/'
+        + ' ' + str(args_dict['path'])
         + str(args_dict['log']))
 
     for f in files:

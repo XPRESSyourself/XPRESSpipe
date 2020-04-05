@@ -100,7 +100,6 @@ def get_files(
 
     if len(file_list) == 0:
         print('The provided directory does not contain any files with the suffix(es) ' + str(', '.join(suffix)) + '.\nPlease check the suffix(es) of your files and see they are different than ' + str(', '.join(suffix)) + '. If working with BAM files, try using the --bam_suffix argument to specify a different BAM suffix.')
-        sys.exit(1)
 
     return tuple(file_list)
 
