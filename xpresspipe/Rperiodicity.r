@@ -23,7 +23,7 @@ license <- function() {
   }
 
 # Run install of data.table to make sure most recent version is installed
-install.packages("stringi", repos = "http://cran.us.r-project.org")
+install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
 library(stringi)
 
 library(data.table)
@@ -42,9 +42,9 @@ OUTPUT_P_SITES <- args[3] # Path and filename with .txt extension
 PATH <- args[4] # File directory
 
 # Install riboWaltz functions
-source(paste(toString(PATH), "ribowaltz_annotation.R", sep=""))
-source(paste(toString(PATH), "ribowaltz_psites.R", sep=""))
-source(paste(toString(PATH), "ribowaltz_combine_bam.R", sep=""))
+source(paste(toString(PATH), "ribowaltz_annotation.r", sep=""))
+source(paste(toString(PATH), "ribowaltz_psites.r", sep=""))
+source(paste(toString(PATH), "ribowaltz_combine_bam.r", sep=""))
 
 # Get p-site offsets
 annotation_dt <- create_annotation(gtfpath=GTF)

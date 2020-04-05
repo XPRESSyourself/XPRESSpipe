@@ -23,7 +23,7 @@ license <- function() {
   }
 
 # Control batch effects for prep, chips, etc
-install.packages("stringi", repos = "http://cran.us.r-project.org")
+install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
 library(stringi)
 
 if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
