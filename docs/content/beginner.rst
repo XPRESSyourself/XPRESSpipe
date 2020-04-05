@@ -49,7 +49,7 @@ Generate Reference Files
   ### Change these ###
   $ echo 'GTF_URL=ftp://ftp.ensembl.org/pub/release-97/gtf/homo_sapiens/Homo_sapiens.GRCh38.97.gtf.gz' >> fetch.sh
   $ echo 'FASTA_URL=ftp://ftp.ensembl.org/pub/release-97/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome' >> fetch.sh
-  $ echo 'CHROMOSOMES="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y"'
+  $ echo 'CHROMOSOMES="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y"' >> fetch.sh
   ####################
 
   $ echo 'curl -O $GTF_URL' >> fetch.sh
@@ -183,14 +183,7 @@ Install
   $ conda activate xpresspipe
   $ pip install ./XPRESSpipe
 
-| 4. If using XPRESSpipe for ribosome profiling data, we recommend manually installing riboWaltz as its auto-installation is not stable in the XPRESSpipe script since the software is not available through a package manager like Bioconductor or Conda. You can do this by opening an interactive R session in your :data:`xpresspipe` conda environment.
-
-.. code-block:: shell
-
-  $ conda activate xpresspipe
-  $ R
-
-| 5. Let's test this to make sure everything is operating properly:
+| 4. Let's test this to make sure everything is operating properly:
 
 .. code-block:: shell
 
