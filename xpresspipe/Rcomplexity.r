@@ -23,6 +23,8 @@ license <- function() {
   }
 
 # Measure library complexity of RNA-seq sample
+install.packages("stringi", repos = "http://cran.us.r-project.org")
+library(stringi)
 
 # Install dependencies
 if (!requireNamespace("BiocManager", quietly = TRUE)) {

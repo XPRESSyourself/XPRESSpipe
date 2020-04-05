@@ -23,6 +23,9 @@ license <- function() {
   }
 
 # Control batch effects for prep, chips, etc
+install.packages("stringi", repos = "http://cran.us.r-project.org")
+library(stringi)
+
 if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
 
 if ("DESeq2" %in% rownames(installed.packages()) == FALSE) {

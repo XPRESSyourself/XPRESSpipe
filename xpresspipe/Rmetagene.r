@@ -23,6 +23,9 @@ license <- function() {
   }
 
 # Import dependencies
+install.packages("stringi", repos = "http://cran.us.r-project.org")
+library(stringi)
+
 if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
 
 if ("data.table" %in% rownames(installed.packages()) == FALSE) {

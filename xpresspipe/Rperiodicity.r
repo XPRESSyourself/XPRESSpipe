@@ -23,6 +23,9 @@ license <- function() {
   }
 
 # Run install of data.table to make sure most recent version is installed
+install.packages("stringi", repos = "http://cran.us.r-project.org")
+library(stringi)
+
 library(data.table)
 
 # Get arguments
