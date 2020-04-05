@@ -119,11 +119,11 @@ run_list <- function (
       write.table(bam, file=output_file, sep='\t', col.names=NA)
 
       # Clean the batch
-      rm(file)
-      rm(bam)
-      rm(file_name)
-      rm(output_file)
-      gc()
+      #rm(file)
+      #rm(bam)
+      #rm(file_name)
+      #rm(output_file)
+      #gc()
     }
   }
 

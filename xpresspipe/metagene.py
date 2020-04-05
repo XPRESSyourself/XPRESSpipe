@@ -137,9 +137,9 @@ def finish_metagene(
     dict = None
     profile = None
     gc.collect()
-    os.system(
-        'rm'
-        + ' ' + str(args_dict['metagene']) + 'metrics/' + str(file).split('.')[0] + '.metaposit')
+    #os.system(
+    #    'rm'
+    #    + ' ' + str(args_dict['metagene']) + 'metrics/' + #str(file).split('.')[0] + '.metaposit')
 
 def run_metagene(args):
 
