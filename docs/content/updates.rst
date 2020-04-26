@@ -3,11 +3,17 @@ Updates
 ###############
 
 ========================
+v0.6.1
+========================
+- (In progress) Add flag during curation steps to allow of UCSC/refseq GTFs during GTF modification steps (truncation, etc.)
+- Fixed error in XPRESSpipe interface with XPRESSplot's convert_names function where XPRESSpipe did not read in first column of table as index
+
+========================
 v0.6.0
 ========================
 | - Minor modification to instructions on how to install XPRESSpipe and use its conda environment on a supercomputing node.
 | - Removed version specifications for conda environment setup to ease install (fixes issues in a better way than the solution from v0.5.0)
-| - Moved required riboWaltz functions to XPRESSpipe as installation has been recurrently problematic 
+| - Moved required riboWaltz functions to XPRESSpipe as installation has been recurrently problematic
 
 ========================
 v0.5.0

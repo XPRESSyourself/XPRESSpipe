@@ -457,7 +457,7 @@ def main(
             delim = '\t'
             suf = '.tsv'
 
-        data = pd.read_csv(str(args_dict['input']), sep=delim)
+        data = pd.read_csv(str(args_dict['input']), sep=delim, index_col=0)
         data = convert_names(
             data,
             args_dict['gtf'],
