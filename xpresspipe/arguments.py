@@ -1863,6 +1863,11 @@ def get_arguments(
         type = int,
         required = False)
     curate_opts.add_argument(
+        '--ucsc_format',
+        help = 'Input GTF is UCSC/refseq formatted. This flag only pertains to GTF modification, such as end truncation, not to STAR curation processes. Errors related to STAR GTF formatting need to be separately addressed.',
+        action = 'store_true',
+        required = False)
+    curate_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -1917,6 +1922,11 @@ def get_arguments(
         metavar = '<amount>',
         type = int,
         default = DEFAULT_TRUNCATE_3PRIME,
+        required = False)
+    truncate_opts.add_argument(
+        '--ucsc_format',
+        help = 'Input GTF is UCSC/refseq formatted. This flag only pertains to GTF modification, such as end truncation, not to STAR curation processes. Errors related to STAR GTF formatting need to be separately addressed.',
+        action = 'store_true',
         required = False)
     truncate_opts.add_argument(
         '-m', '--max_processors',

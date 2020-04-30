@@ -82,6 +82,8 @@ Arguments
      - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
    * - :data:`--genome_size \<int\>`
      - If mapping to an organism with a small genome, provide the length in nucleotides. If you are not sure your organism has a small genome, provide the number of bases and XPRESSpipe will decide if this parameter needs to be changed during runtime
+   * - :data:`--ucsc_format`
+     -  Input GTF is UCSC/refseq formatted. This flag only pertains to GTF modification, such as end truncation, not to STAR curation processes. Errors related to STAR GTF formatting need to be separately addressed.
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
@@ -183,7 +185,7 @@ Reference Modification
 ============================================
 | At times, quantification of transcripts or CDSs to a modified reference is desirable. Below are some examples:
 | 1. As ribosomal RNA (rRNA) contamination is common in RNA-seq, even when a depletion step was performed prior to library preparation, it is sometimes desirable to not count these and other non-coding RNAs in the quantification and analysis.
-| 2. During ribosome profiling library preparation, where a 5' and 3' pile-up of ribosome footprints due to slow initiation and termination kinetics of footprints is common, it is suggested to `exclude the first 45-50 nucleotides from the 5' end and 15 nucleotides from the 3' end of each CDS during quantification <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. This command will automatically curate an Ensembl GTF to meet these demands for read quantification.
+| 2. During ribosome profiling library preparation, where a 5' and 3' pile-up of ribosome footprints due to slow initiation and termination kinetics of footprints is common, it is suggested to `exclude the first 45-50 nucleotides from the 5' end and 15 nucleotides from the 3' end of each CDS during quantification <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. This command will automatically curate an Ensembl GTF to meet these demands for read quantification. If a UCSC-formatted GTF is desired, users should supply the :data:`--ucsc-format` flag; however, the :data:`--longest_transcript` flag will not work with a UCSC-formatted GTF as longest transcript definitions are dependent on Ensembl annotations.
 | 3. Several genes encode multiple isoforms or transcripts. During quantification, many software packages for counting reads to genes consider a read mapping to multiple transcripts of the same gene as a multi-mapper. Unless interested in alternate isoform usage, it is recommended that transcriptome reference files only contain the longest transcript for each gene.
 | The :data:`modifyGTF` sub-module provides the ability to make the above-mentioned modifications to a GTF reference file. The modified GTF file is output at the end and the filename is labeled with the modifications made. Truncations to each transcript or CDS reference are strand-aware.
 
@@ -221,6 +223,8 @@ Arguments
      -  Amount to truncate from 5' end of each CDS, requires --truncate argument (default: 45)
    * - :data:`--truncate_3prime <amount>`
      -  Amount to truncate from 3' end of each CDS, requires --truncate argument (default: 15)
+   * - :data:`--ucsc_format`
+     -  Input GTF is UCSC/refseq formatted. This flag only pertains to GTF modification, such as end truncation, not to STAR curation processes. Errors related to STAR GTF formatting need to be separately addressed.
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 

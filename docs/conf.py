@@ -21,13 +21,13 @@ import sphinx_rtd_theme
 # -- Project information -----------------------------------------------------
 
 project = 'XPRESSpipe'
-copyright = '2019, Jordan A. Berg'
+copyright = '2019-2020, Jordan A. Berg'
 author = 'Jordan A. Berg'
 
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.6.0'
+release = '0.6.1'
 
 
 # -- General configuration ---------------------------------------------------

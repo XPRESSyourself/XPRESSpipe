@@ -5,7 +5,8 @@ Updates
 ========================
 v0.6.1
 ========================
-- (In progress) Add flag during curation steps to allow of UCSC/refseq GTFs during GTF modification steps (truncation, etc.)
+- Add flag during curation steps to allow of UCSC/refseq GTFs during GTF modification steps (truncation, etc.)
+  Usage: Provide the :data:`--ucsc_format` flag to the :data:`curateReference` or :data:`modifyGTF` sub-modules. These modifications in format only apply to XPRESSpipe GTF truncation features. Any formatting errors with the GTF file that pertain to alignment, counting, etc. dependencies will need to be addressed by the user.
 - Fixed error in XPRESSpipe interface with XPRESSplot's convert_names function where XPRESSpipe did not read in first column of table as index
 
 ========================

@@ -360,6 +360,13 @@ def main(
 
         # Truncate transcript reference
         if (args_dict['longest_transcript'] == True) or (args_dict['protein_coding'] == True) or (args_dict['truncate'] == True):
+
+            if 'ucsc_format' in args_dict and args_dict['ucsc_format'] == True:
+                print("Processing a UCSC-formatted GTF file...")
+                ucsc_formatted = True
+            else:
+                ucsc_formatted = False
+
             edit_gtf(
                 args_dict['gtf'],
                 longest_transcript = args_dict['longest_transcript'],
@@ -367,6 +374,7 @@ def main(
                 truncate_reference = args_dict['truncate'],
                 _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
                 _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
+                ucsc_formatted = ucsc_formatted,
                 output = True,
                 threads = args_dict['threads'])
 
@@ -407,6 +415,13 @@ def main(
         args_dict['threads'], args_dict['workers'] = get_cores(
             args_dict,
             mod_workers=True)
+
+        if 'ucsc_format' in args_dict and args_dict['ucsc_format'] == True:
+            print("Processing a UCSC-formatted GTF file...")
+            ucsc_formatted = True
+        else:
+            ucsc_formatted = False
+
         edit_gtf(
             args_dict['gtf'],
             longest_transcript = args_dict['longest_transcript'],
@@ -414,6 +429,7 @@ def main(
             truncate_reference = args_dict['truncate'],
             _5prime = args_dict['truncate_5prime'], # If no 5' truncation desired, set to 0
             _3prime = args_dict['truncate_3prime'], # If no 3' truncation desired, set to 0
+            ucsc_formatted = ucsc_formatted,
             output = True,
             threads = args_dict['threads'])
 

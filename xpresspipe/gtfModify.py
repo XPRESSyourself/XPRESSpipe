@@ -217,13 +217,30 @@ def protein_gtf(
 
     return gtf_coding
 
+def get_ucsc_proteins(
+        gtf,
+        identifier='transcript_id \"',
+        type='CDS'):
+
+    gtf['gene'] = gtf[8].str.split(identifier).str[1]
+    gtf['gene'] = gtf['gene'].str.split('\";').str[0]
+    protein_list = set(gtf.loc[gtf[2] == type]['gene'].tolist())
+
+    gtf_coding = gtf.copy()
+    gtf_coding = gtf_coding[gtf_coding['gene'].isin(protein_list)]
+    gtf_coding = gtf_coding.reset_index(drop=True)
+    gtf_coding = gtf_coding.drop('gene', axis=1)
+
+    return gtf_coding
+
 """
 Parse GTF down to chunks per cores for multiprocessing
 Requires unmodified GTF with gene records intact
 """
 def get_chunks(
     gtf,
-    threads=None):
+    threads=None,
+    identifier='gene_id \"'):
 
     # Determine number of chunks to create based on indicated or available cpus
     cores = cpu_count() # Number of CPU cores on your system
@@ -237,15 +254,17 @@ def get_chunks(
 
     # Get number of times 'gene' is references in column 2 of GTF and if cores > #genes, limit
     if len(gtf.columns.tolist()) == 9:
-        gene_instances = len(gtf.loc[gtf[gtf_type_column] == 'gene'][gtf_type_column].tolist())
+        gtf_check = gtf.copy()
+        gtf_check['gene'] = gtf_check[8].str.split(identifier).str[1]
+        gtf_check['gene'] = gtf_check['gene'].str.split('\";').str[0]
+        gene_instances = len(gtf_check['gene'].unique().tolist())
         if gene_instances == 0:
-            gene_instances = len(gtf.loc[gtf[gtf_type_column] == 'transcript'][gtf_type_column].tolist())
-            if gene_instances == 0:
-                raise Exception('No gene or transcript records found in GTF')
+            raise Exception('No gene or transcript records found in GTF')
+        gtf_check = None
     else:
-        print(gtf)
         raise Exception('It appears a properly formatted GTF file was not provided')
 
+    print('Processing', gene_instances, 'gene instances.')
     if cores > gene_instances:
         cores = gene_instances
 
@@ -328,6 +347,7 @@ def edit_gtf(
     truncate_reference=True,
     _5prime=45, # If no 5' truncation desired, set to 0
     _3prime=15, # If no 3' truncation desired, set to 0
+    ucsc_formatted=False,
     output=True, # True will output all intermediates, not possible if inputting a GTF as pandas dataframe
     threads=None): # Give int for core threshold if desired
 
@@ -356,7 +376,7 @@ def edit_gtf(
 
     # Run GTF modifications
     # Parse each gene record for longest transcript
-    if longest_transcript == True:
+    if longest_transcript == True and ucsc_formatted == False:
         chunks = run_chunks(
             longest_transcripts,
             chunks,
@@ -364,13 +384,24 @@ def edit_gtf(
 
         if output == True:
             file_name = str(file_name) + 'L'
+    elif longest_transcript == True and ucsc_formatted == True:
+        print("\nWarning: Cannot perform longest transcripts operation on UCSC-formatted GTFs... Skipping...\n")
+    else:
+        pass
 
     # Get only protein coding annotated records
     if protein_coding == True:
-        chunks = run_chunks(
-            protein_gtf,
-            chunks,
-            target_message = 'protein coding genes')
+
+        if ucsc_formatted == True:
+            chunks = run_chunks(
+                get_ucsc_proteins,
+                chunks,
+                target_message = 'protein coding genes')
+        else:
+            chunks = run_chunks(
+                protein_gtf,
+                chunks,
+                target_message = 'protein coding genes')
 
         if output == True:
             file_name = str(file_name) + 'C'
@@ -381,7 +412,8 @@ def edit_gtf(
         func = partial(
             truncate_gtf,
             _5prime = _5prime,
-            _3prime = _3prime)
+            _3prime = _3prime,
+            ucsc_formatted = ucsc_formatted)
         chunks = run_chunks(
             func,
             chunks,
