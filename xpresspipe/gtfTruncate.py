@@ -449,90 +449,78 @@ def truncate_gtf(
     bad_transcript = []
     bad_exons = []
     limit = _5prime + _3prime
+    parse_id = ''
 
-    # Set up usage for parsing GTFs without transcript records
-    if 'transcript' in gtf[gtf_type_column].tolist():
-        use_transcript = True
-    else:
-        use_transcript = False
-    previous_transcript = 'none'
-    transcript_id = ''
-    
     """Step 1"""
     # Remove transcripts with exon space smaller than truncation sum
     for index, row in gtf.iterrows():
 
-        if use_transcript == True and row[gtf_type_column] == 'transcript':
-
-            # Get transcript ID
+        # Get transcript ID
+        if parse_type in row[gtf_annotation_column]:
             transcript_id = gtf.at[index, gtf_annotation_column][(gtf.at[index, gtf_annotation_column].find(parse_type) + 15):].split('\";')[0]
-            parse_id = transcript_id
 
-        # Start at a transcript
-        elif transcript_id != previous_transcript:
+            if transcript_id != parse_id:
+                parse_id = transcript_id
+                # Find range for this transcript and parse out
+                n = 0
+                while transcript_id == parse_id:
+                    n += 1
 
-            transcript_id = gtf.at[index, gtf_annotation_column][(gtf.at[index, gtf_annotation_column].find(parse_type) + 15):].split('\";')[0]
-            parse_id = transcript_id = previous_transcript
+                    # Check if we reached the end of the GTF
+                    if index + n > gtf.index[-1]:
+                        break
+                    # Handles a GTF where gene record present -- without this
+                    # it will try to parse transcript_id incorrectly from row
+                    # and screw things up
+                    elif parse_type in gtf.at[index + n, gtf_annotation_column]:
+                        parse_id = gtf.at[index + n, gtf_annotation_column][(gtf.at[index + n, gtf_annotation_column].find(parse_type) + 15):].split('\";')[0]
+                    else:
+                        break
 
-        if (use_transcript == True and row[gtf_type_column] == 'transcript') \
-        or (transcript_id != previous_transcript):
-            # Find range for this transcript and parse out
-            n = 0
-            while transcript_id == parse_id:
-                n += 1
+                gtf_parse = gtf.loc[index:index + n - 1]
+                parse_id = transcript_id # reset for next round check
 
-                if index + n > gtf.index[-1]: # Check if we reached the end of the GTF
-                    break
-                elif parse_type in gtf.at[index + n, gtf_annotation_column]: # Handles a GTF where gene record present -- without this it will try to parse transcript_id incorrectly from row and screw things up
-                    parse_id = gtf.at[index + n, gtf_annotation_column][(gtf.at[index + n, gtf_annotation_column].find(parse_type) + 15):].split('\";')[0]
+                # If target type not in transcript record, skip
+                # Without, will remove all exons and transcript IDs
+                if trim_type not in gtf_parse[gtf_type_column].tolist():
+                    continue
+
+                # Create exon length array for each exon labeled record for the transcript
+                exon_lengths = gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_rightCoordinate_column] \
+                    - gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_leftCoordinate_column] \
+                    + 1
+
+                # Check exons for this record and check
+                if exon_lengths.sum() <= limit:
+
+                    # If failing, add transcript_id to bad list
+                    for x in range(index, index + n):
+                        bad_transcript.append(x)
+
                 else:
-                    break
+                    """STEP 2"""
+                    # Run truncator
+                    # Recursively scan forward in the transcript to truncate n nucleotides
+                    gtf_c, bad_exons = scan_forward(
+                        gtf_c,
+                        bad_exons,
+                        index,
+                        index + n - 1,
+                        trim_type,
+                        _5prime,
+                        _3prime,
+                        ucsc_formatted)
 
-            gtf_parse = gtf.loc[index:index + n - 1]
-
-            # If target type not in transcript record, skip
-            # Without, will remove all exons and transcript IDs
-            if trim_type not in gtf_parse[gtf_type_column].tolist():
-                continue
-
-            # Create exon length array for each exon labeled record for the transcript
-            exon_lengths = gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_rightCoordinate_column] \
-                - gtf_parse.loc[gtf_parse[gtf_type_column] == trim_type][gtf_leftCoordinate_column] \
-                + 1
-
-            # Check exons for this record and check
-            if exon_lengths.sum() <= limit:
-
-                # If failing, add transcript_id to bad list
-                for x in range(index, index + n):
-                    bad_transcript.append(x)
-
-            else:
-                """STEP 2"""
-                # Run truncator
-                # Recursively scan forward in the transcript to truncate n nucleotides
-                gtf_c, bad_exons = scan_forward( # add recursive_counter to outputs
-                    gtf_c,
-                    bad_exons,
-                    index,
-                    index + n - 1,
-                    trim_type,
-                    _5prime,
-                    _3prime,
-                    ucsc_formatted)
-                    #recursive_counter)
-
-                # Forward scan for next transcript, then backtrack to last exon record for transcript
-                gtf_c, bad_exons = scan_backward( # add recursive_counter to outputs
-                    gtf_c,
-                    bad_exons,
-                    index,
-                    index + n - 1,
-                    trim_type,
-                    _5prime,
-                    _3prime,
-                    ucsc_formatted)
-                    #recursive_counter)
+                    # Forward scan for next transcript, then backtrack to last exon record for transcript
+                    gtf_c, bad_exons = scan_backward(
+                        gtf_c,
+                        bad_exons,
+                        index,
+                        index + n - 1,
+                        trim_type,
+                        _5prime,
+                        _3prime,
+                        ucsc_formatted)
 
     """STEP 3"""
     # Do final check that no column 3 value is greater or equal to column 4
