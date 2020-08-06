@@ -23,9 +23,6 @@ license <- function() {
   }
 
 # Import dependencies
-install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
-library(stringi)
-
 if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 
 if ("data.table" %in% rownames(installed.packages()) == FALSE) {
@@ -42,6 +39,9 @@ if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
   print("GenomicAlignments package already installed")
 }
 library(GenomicAlignments)
+
+install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
+library(stringi)
 
 # Set globals
 chromosome <- 'chromosome'

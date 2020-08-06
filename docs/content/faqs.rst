@@ -41,3 +41,13 @@ The pipeline breaks because of a segmentation fault during alignment.
     or
 
     WARNING: fastp uses up to 16 threads although you specified 32
+
+------------------------------------------------------------------------------
+The pipeline breaks and some of my input FASTQ files are reporting zero reads
+------------------------------------------------------------------------------
+| Check for hidden files (empty files from GEO or during the copying stage of files). This you can check for hidden, empty files by running :data:`ls -lha` in the command line. If you see FASTQ files that begin with a period (:data:`.`), remove these files.
+
+---------------------------------------------------------------------------
+My Conda environment loading is not working
+---------------------------------------------------------------------------
+| Check the path that it is trying to reference. Is this correct? Was it changed somehow from what you specified? Make sure only one environment is loaded. There may be a default imported environment that your account is loading each time as well.

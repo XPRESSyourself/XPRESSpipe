@@ -44,6 +44,8 @@ catch e
 
 end
 
+Pkg.instantiate()
+
 # Parse FASTQ line by line and accumulate stats
 function readFastq(filename::String)
     counter = 0

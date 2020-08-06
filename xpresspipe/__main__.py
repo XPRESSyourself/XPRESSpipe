@@ -543,8 +543,8 @@ def main(
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)
 
-        args_dict['input'] = args_dict['trimmed_fastq']
-        make_readDistributions(args_dict)
+        #args_dict['input'] = args_dict['trimmed_fastq']
+        #make_readDistributions(args_dict)
 
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
@@ -626,8 +626,8 @@ def main(
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)
 
-        args_dict['input'] = args_dict['trimmed_fastq']
-        make_readDistributions(args_dict)
+        #args_dict['input'] = args_dict['trimmed_fastq']
+        #make_readDistributions(args_dict)
 
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'
@@ -711,8 +711,8 @@ def main(
         # Get multiqc report and print close message
         get_multiqc_summary(args_dict)
 
-        args_dict['input'] = args_dict['trimmed_fastq']
-        make_readDistributions(args_dict)
+        #args_dict['input'] = args_dict['trimmed_fastq']
+        #make_readDistributions(args_dict)
 
         args_dict['input'] = args_dict['alignments_coordinates']
         args_dict['gtf'] = str(args_dict['reference']) + 'transcripts.gtf'

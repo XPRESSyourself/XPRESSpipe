@@ -90,48 +90,58 @@ description_table  =  """\
     'xpresspipe module_name --help'
 
     Sub-module descriptions:
-        +-----------------------+---------------------------------------------------------------------------------------+
-        |    seRNAseq           |   Trim, align, count, and perform quality control on single-end RNAseq raw data       |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    peRNAseq           |   Trim, align, count, and perform quality control on paired-end RNAseq raw data       |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    riboseq            |   Trim, align, count, and perform quality control on single-end Ribosome Profiling    |
-        |                       |   raw data                                                                            |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    trim               |   Trim RNAseq reads of adapters and for quality                                       |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    align              |   Align RNAseq reads to reference genome (memory intensive)                           |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    count              |   Get counts and a counts table from aligned output                                   |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    normalizeMatrix    |   Perform normalization on sequence matrix                                            |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    diffxpress         |   Perform DESeq2 differential expression analysis on counts matrix                    |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    metagene           |   Compile summarized metagene profiles for each sample in a directory                 |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    geneCoverage       |   Compile coverage profiles for a given gene for each sample in a directory across    |
-        |                       |   exons or CDS (no introns)                                                           |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    readDistribution   |   Compile summarized distributions for each sample in a directory                     |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    p_sites        |   Calculate P-site statistics of transcripts using the most abundant transcript length      |
-        |                       |   for alignments to map per sample                                                    |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    complexity         |   Generate summary of library complexity                                              |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    curateReference    |   Run makeReference, makeReference, and modifyGTF in a single command                 |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    makeReference      |   Create a STAR reference directory (memory intensive)                                |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    modifyGTF          |   Create a longest isoform-only, protein-coding only, and/or truncated GTF file       |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    rrnaProbe          |   Collect overrepresented sequences from multiple FastQC zipfile outputs (IMPORTANT:  |
-        |                       |   Run a BLAST search on sequences you choose to use as depletion probes to verify     |
-        |                       |   they are rRNAs)                                                                     |
-        |-----------------------|---------------------------------------------------------------------------------------|
-        |    convertNames       |   Convert gene identifiers using a GTF reference                                      |
-        +-----------------------+---------------------------------------------------------------------------------------+
+        +------------------+--------------------------------------------------+
+        | seRNAseq         | Trim, align, count, and perform quality control  |
+        |                  | on single-end RNAseq raw data                    |
+        +------------------+--------------------------------------------------+
+        | peRNAseq         | Trim, align, count, and perform quality control  |
+        |                  | on paired-end RNAseq raw data                    |
+        +------------------+--------------------------------------------------+
+        | riboseq          | Trim, align, count, and perform quality control  |
+        |                  | on single-end Ribosome Profiling raw data        |
+        +------------------+--------------------------------------------------+
+        | trim             | Trim RNAseq reads of adapters and for quality    |
+        +------------------+--------------------------------------------------+
+        | align            | Align RNAseq reads to reference genome (memory   |
+        |                  | intensive)                                       |
+        +------------------+--------------------------------------------------+
+        | count            | Get counts and a counts table from aligned       |
+        |                  | output                                           |
+        +------------------+--------------------------------------------------+
+        | normalizeMatrix  | Perform normalization on sequence matrix         |
+        +------------------+--------------------------------------------------+
+        | diffxpress       | Perform DESeq2 differential expression analysis  |
+        |                  | on counts matrix                                 |
+        +------------------+--------------------------------------------------+
+        | metagene         | Compile summarized metagene profiles for each    |
+        |                  | sample in a directory                            |
+        +------------------+--------------------------------------------------+
+        | geneCoverage     | Compile coverage profiles for a given gene for   |
+        |                  | each sample in a directory across exons or CDS   |
+        |                  | (no introns)                                     |
+        +------------------+--------------------------------------------------+
+        | readDistribution | Compile summarized distributions for each sample | |                  | in a directory                                   |
+        +------------------+--------------------------------------------------+
+        | p_sites          | Calculate P-site statistics of transcripts using |
+        |                  | the most abundant transcript length for          |
+        |                  | alignments to map sample                         |
+        +------------------+--------------------------------------------------+
+        | complexity       | Generate summary of library complexity           |
+        +------------------+--------------------------------------------------+
+        | curateReference  | Run makeReference, makeReference, and modifyGTF  |
+        |                  | in a single command                              |
+        +------------------+--------------------------------------------------+
+        | makeReference    | Create a STAR reference directory (memory        | |                  | intensive)                                       |
+        +------------------+--------------------------------------------------+
+        | modifyGTF        | Create a longest isoform-only, protein-coding    |
+        |                  | only, and/or truncated GTF file                  |
+        +------------------+--------------------------------------------------+
+        | rrnaProbe        | Collect overrepresented sequences from multiple  |
+        |                  | FastQC zipfile outputs (IMPORTANT: Run a BLAST   | |                  | search on sequences you choose to use as         |
+        |                  | depletion probes to verify they are rRNAs)       |
+        +------------------+--------------------------------------------------+
+        | convertNames     | Convert gene identifiers using a GTF reference   |
+        +------------------+--------------------------------------------------+
 """
 
 """
@@ -154,18 +164,14 @@ def check_inputs(
 
     # Check user-provided directory formatting
     for key, value in args_dict.items():
-
         if os.path.isdir(str(value)) == True and key in argument_directories:
             args_dict[key] = check_directories(
                 args_dict[key])
 
-        else:
-            pass
-
     if 'max_processors' in args_dict and (args_dict['max_processors'] == None or args_dict['max_processors'] == 'None'):
         args_dict['max_processors'] = cpu_count()
 
-    if 'gtf' in args_dict:
+    if 'gtf' in args_dict and args_dict['gtf'] != None:
         args_dict['gtf'] = os.path.abspath(args_dict['gtf'])
 
     if 'gtf' in args_dict and args_dict['gtf'] != None and str(args_dict['gtf']).lower()[-4:] != '.gtf':
@@ -281,9 +287,13 @@ def check_inputs(
         else:
             raise Exception('Invalid quantification method provided')
 
-    if 'genome_size' in args_dict and args_dict['genome_size'] != 14:
-        genome_size = floor((np.log2(int(args_dict['genome_size'])) / 2) - 1)
+    if 'genome_size' in args_dict:
+        pass
+    elif 'genome_size_bp' in args_dict:
+        genome_size = floor((np.log2(int(args_dict['genome_size_bp'])) / 2) - 1)
         args_dict['genome_size'] = min([genome_size, 14])
+    else:
+        pass
 
     # Determine output directory for log file
     if 'output' in args_dict \
@@ -655,8 +665,15 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--genome_size',
-        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment and a STAR formatted parameter was used',
         default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    se_opts.add_argument(
+        '--genome_size_bp',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment and the genome size was provided in base pairs (bps)',
+        default = 3000000000,
         metavar = '<value>',
         type = int,
         required = False)
@@ -870,8 +887,15 @@ def get_arguments(
         required = False)
     pe_opts.add_argument(
         '--genome_size',
-        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment and a STAR formatted parameter was used',
         default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    pe_opts.add_argument(
+        '--genome_size_bp',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment and the genome size was provided in base pairs (bps)',
+        default = 3000000000,
         metavar = '<value>',
         type = int,
         required = False)
@@ -1093,8 +1117,15 @@ def get_arguments(
         required = False)
     rp_opts.add_argument(
         '--genome_size',
-        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment and a STAR formatted parameter was used',
         default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    rp_opts.add_argument(
+        '--genome_size_bp',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment and the genome size was provided in base pairs (bps)',
+        default = 3000000000,
         metavar = '<value>',
         type = int,
         required = False)
@@ -1304,8 +1335,15 @@ def get_arguments(
         required = False)
     align_opts.add_argument(
         '--genome_size',
-        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment and a STAR formatted parameter was used',
         default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    align_opts.add_argument(
+        '--genome_size_bp',
+        help = 'Only needs to be changed if provided parameter during reference building and using a two-pass alignment and the genome size was provided in base pairs (bps)',
+        default = 3000000000,
         metavar = '<value>',
         type = int,
         required = False)
@@ -1857,8 +1895,15 @@ def get_arguments(
         required = False)
     curate_opts.add_argument(
         '--genome_size',
-        help = 'For small genomes, the genome size in nucleotides should be provided',
+        help = 'For small genomes, the genome size formatted using STAR\'s method should be provided',
         default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    curate_opts.add_argument(
+        '--genome_size_bp',
+        help = 'For small genomes, the genome size should be provided in base pairs (bps)',
+        default = 3000000000,
         metavar = '<value>',
         type = int,
         required = False)
@@ -1977,8 +2022,15 @@ def get_arguments(
         required = False)
     reference_opts.add_argument(
         '--genome_size',
-        help = 'For small genomes, the genome size in nucleotides should be provided',
+        help = 'For small genomes, the genome size formatted using STAR\'s method should be provided',
         default = 14,
+        metavar = '<value>',
+        type = int,
+        required = False)
+    reference_opts.add_argument(
+        '--genome_size_bp',
+        help = 'For small genomes, the genome size should be provided in base pairs (bps)',
+        default = 3000000000,
         metavar = '<value>',
         type = int,
         required = False)

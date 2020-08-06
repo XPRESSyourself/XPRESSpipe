@@ -3,6 +3,14 @@ Updates
 ###############
 
 ========================
+v0.6.2
+========================
+- Updated docs for some troubleshooting (in FAQs page)
+- Moved stringi install to last call in `Rmetagene.r` to solve install issues
+- Moved `readDistribution` module to stand-alone (removed from pipeline) as its purpose is to provide a grid displayed view of all samples' read distributions. If this view is not needed, users can view this in the `MultiQC` output html file.
+- Added code to fix Julia dependency install and compilation
+
+========================
 v0.6.1
 ========================
 - Add flag during curation steps to allow of UCSC/refseq GTFs during GTF modification steps (truncation, etc.)
