@@ -27,6 +27,13 @@ os.system('mkdir ' + args_dict['metagene'] + 'metrics')
 
 args = [file, args_dict]
 run_metagene(args)
+
+
+f=open( __path__ + 'metagene/test.log', "r")
+if f.mode == 'r':
+    contents =f.read()
+    print(contents)
+
 print(args)
 print(args_dict)
 os.system('ls -lha ' + args_dict['metrics'])
