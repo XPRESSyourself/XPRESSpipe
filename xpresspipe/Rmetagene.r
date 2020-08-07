@@ -5,7 +5,7 @@ license <- function() {
   An alignment and analysis pipeline for RNAseq data
   alias: xpresspipe
 
-  Copyright (C) 2019  Jordan A. Berg
+  Copyright (C) 2019-2020  Jordan A. Berg
   jordan <dot> berg <at> biochem <dot> utah <dot> edu
 
   This program is free software: you can redistribute it and/or modify it under
@@ -23,24 +23,33 @@ license <- function() {
   }
 
 # Import dependencies
-if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages(
+    "BiocManager",
+    repos = "http://cran.us.r-project.org",
+    quiet = TRUE)
+}
 
 if ("data.table" %in% rownames(installed.packages()) == FALSE) {
   print("Installing data.table...")
-  install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)
+  install.packages(
+    "data.table",
+    repos = "http://cran.us.r-project.org",
+    quiet = TRUE)
 } else {
   print("data.table package already installed")
 }
 library(data.table)
 
 if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("GenomicAlignments", dependencies=c("Depends", "Imports", "LinkingTo"))
+  BiocManager::install(
+    "GenomicAlignments",
+    dependencies=c("Depends", "Imports", "LinkingTo"))
 } else {
   print("GenomicAlignments package already installed")
 }
 library(GenomicAlignments)
 
-install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
 library(stringi)
 
 # Set globals
