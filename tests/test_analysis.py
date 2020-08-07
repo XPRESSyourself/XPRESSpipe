@@ -28,7 +28,7 @@ os.system('mkdir ' + args_dict['metagene'] + 'metrics')
 args = [file, args_dict]
 run_metagene(args)
 print(args)
-print(args_dict
+print(args_dict)
 os.system('ls -lha ' + args_dict['metrics'])
 table = pd.read_csv(
     args_dict['metrics'] + 'sample_small.metaposit',
