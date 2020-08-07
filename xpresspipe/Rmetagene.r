@@ -50,6 +50,15 @@ if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
 }
 library(GenomicAlignments)
 
+if ("stringi" %in% rownames(installed.packages()) == FALSE) {
+  print("Installing stringi...")
+  install.packages(
+    "stringi",
+    repos = "http://cran.us.r-project.org",
+    quiet = TRUE)
+} else {
+  print("stringi package already installed")
+}
 library(stringi)
 
 # Set globals
