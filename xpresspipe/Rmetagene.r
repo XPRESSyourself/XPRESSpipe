@@ -114,12 +114,14 @@ run_list <- function (
   file_path, file_list, output_path) {
 
     for (f in file_list) {
-
+      print(f)
       # Import BAM and get coverage
       file <- paste(file_path, f, sep='')
+      print(file)
       bam <- read_bam(file)
-
+      print(head(bam))
       # Analyze
+      print(dim(bam)[1])
       if (dim(bam)[1] == 0) {
 
         print(paste('No records for', toString(target_transcript), 'were found', sep=' '))
@@ -128,12 +130,14 @@ run_list <- function (
 
         bam$meta_position <- bam$end - floor((bam$end - bam$start) / 2)
         bam <- bam[,c('seqnames','meta_position')]
-
+        print(head(bam))
       }
 
       # Write BAM coverage metrics to output file
       file_name = vapply(strsplit(f, "[.]"), `[`, 1, FUN.VALUE=character(1))
+      print(file_name)
       output_file = paste(output_path, file_name, '.metaposit', sep='')
+      print(output_file)
       write.table(bam, file=output_file, sep='\t', col.names=NA)
 
       # Clean the batch
