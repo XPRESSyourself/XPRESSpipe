@@ -499,8 +499,12 @@ def main(
         print('Normalizing matrix...')
 
         #Run in sample normalization
-        run_normalization(args_dict)
-        get_dependencies(args_dict)
+        if args_dict['method'] == None and args_dict['batch'] == None:
+            print('No normalization method provided. Exiting...')
+            sys.exit(1)
+        else:
+            run_normalization(args_dict)
+            get_dependencies(args_dict)
 
         # Check log file for errors and exceptions
         #No os.sys call, no log created when run on own
