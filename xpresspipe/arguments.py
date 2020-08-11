@@ -685,6 +685,11 @@ def get_arguments(
         type = str,
         required = False)
     se_opts.add_argument(
+        '--smoothen',
+        help = 'Use a rolling window of 20 bps to smoothen coverage plot',
+        action = 'store_true',
+        required = False)
+    se_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -905,6 +910,11 @@ def get_arguments(
         metavar = '<gene name>',
         default = 'GAPDH',
         type = str,
+        required = False)
+    pe_opts.add_argument(
+        '--smoothen',
+        help = 'Use a rolling window of 20 bps to smoothen coverage plot',
+        action = 'store_true',
         required = False)
     pe_opts.add_argument(
         '-m', '--max_processors',
@@ -1135,6 +1145,11 @@ def get_arguments(
         metavar = '<gene name>',
         default = 'GAPDH',
         type = str,
+        required = False)
+    rp_opts.add_argument(
+        '--smoothen',
+        help = 'Use a rolling window of 20 bps to smoothen coverage plot',
+        action = 'store_true',
         required = False)
     rp_opts.add_argument(
         '-m', '--max_processors',
@@ -1510,7 +1525,6 @@ def get_arguments(
         action = 'store_true',
         required = False)
 
-
     """METAGENE SUBPARSER"""
     metagene_parser = subparser.add_parser(
         'metagene',
@@ -1644,6 +1658,11 @@ def get_arguments(
         metavar = '<color>',
         type = str,
         default = 'red',
+        required = False)
+    coverage_opts.add_argument(
+        '--smoothen',
+        help = 'Use a rolling window of 20 bps to smoothen coverage plot',
+        action = 'store_true',
         required = False)
     coverage_opts.add_argument(
         '-m', '--max_processors',

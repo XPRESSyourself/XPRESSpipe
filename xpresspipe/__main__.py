@@ -739,7 +739,6 @@ def main(
         success = index_gtf(args_dict, gene_name=args_dict['gene_name'])
 
         if success != -1:
-
             make_coverage(args_dict, files)
             os.system(
                 'rm'
