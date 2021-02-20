@@ -33,11 +33,16 @@ def check_process(
         step):
 
     try:
-        os.system(
-            '[[ $(cat ' + log_file + ' | grep -iv \"Error in (function (x)\" | grep -i "error\|exception\|command not found" | wc -l) -eq 0 ]]'
-            + ' || { echo "Errors or exceptions were present in ' + step + ', please refer to the '
-            + str(log_file[log_file.rfind('/') + 1:])
-            + ' file for information concerning errors"; exit 1; }')
+        with open(log_file) as file:
+            contents = file.read()
+            search_words = ['error', 'exception', 'command not found']
+            for s in search_words:
+                if s in contents:
+                    raise Exception(
+                        'Errors or exceptions were present in '
+                        + step + ', please refer to the '
+                        + str(log_file[log_file.rfind('/') + 1:])
+                        + ' file for information concerning errors')
     except:
         message_func
 

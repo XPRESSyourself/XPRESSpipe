@@ -32,11 +32,15 @@ def check_file(file, type, size=1000000):
 # Curate references
 print('Creating riboseq reference for testing...')
 rp_reference = str(__path__) + 'riboseq/rp_reference/'
-
+if os.path.exists(rp_reference):
+    os.system(
+        'rm -rf ' + str(rp_reference))
 os.system('mkdir -p ' + str(rp_reference))
 
-os.system('curl http://ftp.ensembl.org/pub/release-103/gtf/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.103.gtf.gz -o ' + str(rp_reference) + 'transcripts.gtf')
-os.system('curl http://ftp.ensembl.org/pub/release-103/fasta/saccharomyces_cerevisiae/dna/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz -o ' + str(rp_reference) + 'toplevel.fa')
+os.system('curl http://ftp.ensembl.org/pub/release-103/gtf/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.103.gtf.gz -o ' + str(rp_reference) + 'transcripts.gtf.gz')
+os.system('gzip -d -f ' + str(rp_reference) + 'transcripts.gtf.gz')
+os.system('curl http://ftp.ensembl.org/pub/release-103/fasta/saccharomyces_cerevisiae/dna/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz -o ' + str(rp_reference) + 'toplevel.fa.gz')
+os.system('gzip -d -f ' + str(rp_reference) + 'toplevel.fa.gz')
 
 os.system(
     'xpresspipe curateReference'
@@ -44,6 +48,7 @@ os.system(
     + ' -f ' + str(rp_reference)
     + ' -g ' + str(rp_reference) + 'transcripts.gtf'
     + ' --sjdbOverhang 49'
+    + ' --genome_size 12100000'
     + ' -p -t')
 
 # Test riboseq pipeline on test data
@@ -53,7 +58,6 @@ rp_output = str(__path__) + 'riboseq/riboseq_out/'
 if os.path.exists(rp_output):
     os.system(
         'rm -rf ' + str(rp_output))
-
 os.makedirs(rp_output)
 rp_gtf = str(__path__) + 'riboseq/rp_reference/transcripts_CT.gtf'
 rp_fa = str(__path__) + 'riboseq/rp_reference/test.cdna.all.fa'
