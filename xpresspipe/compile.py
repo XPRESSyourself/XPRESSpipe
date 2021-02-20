@@ -212,9 +212,7 @@ def correct_psites(
         pass
 
     # Map codon sequence to P-sites
-    seq_failed = []
     def map_sequence(name, position):
-
         # Convert nucleotide sequence (i.e. position 1)
         # to Python (array position 0)
         try:
@@ -228,10 +226,7 @@ def correct_psites(
                 return codon_seq.replace('T','U')
 
         except:
-            try:
-                seq_failed.append(name)
-            except:
-                seq_failed = []
+            pass
 
     data['sequence'] = np.vectorize(map_sequence)(
         data['transcript'],

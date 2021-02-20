@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
-%matplotlib inline
+#%matplotlib inline
 
 """
 - Meta-coordinate is taken as only the mid-point of the read to avoid any biases from longer reads counting more to meta-profile than shorter reads

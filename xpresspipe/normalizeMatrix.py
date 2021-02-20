@@ -73,15 +73,6 @@ def run_normalization(
                 str(args_dict['input']).rsplit('.',1)[0] + '_' + str(type) + 'Normalized.tsv',
                 sep = '\t')
 
-        # Log normalization
-        elif args_dict['method'].upper() == 'LOG':
-            type = 'log'
-            df = log_scale(
-                df,
-                log_base = 10)
-            df.to_csv(
-                str(args_dict['input']).rsplit('.',1)[0] + '_' + str(type) + 'Normalized.tsv',
-                sep = '\t')
         else:
             raise Exception('Unknown \"method\" argument provided')
 

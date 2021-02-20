@@ -4,7 +4,7 @@ import pandas as pd
 import scipy.stats as stats
 
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
-#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
+#__path__ = '~/Desktop/projects/XPRESSpipe/tests/'
 
 def list_files(startpath):
     for root, dirs, files in os.walk(startpath):
@@ -34,6 +34,9 @@ print('Creating riboseq reference for testing...')
 rp_reference = str(__path__) + 'riboseq/rp_reference/'
 
 os.system('mkdir -p ' + str(rp_reference))
+
+os.system('curl http://ftp.ensembl.org/pub/release-103/gtf/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.103.gtf.gz -o ' + str(rp_reference) + 'transcripts.gtf')
+os.system('curl http://ftp.ensembl.org/pub/release-103/fasta/saccharomyces_cerevisiae/dna/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz -o ' + str(rp_reference) + 'toplevel.fa')
 
 os.system(
     'xpresspipe curateReference'

@@ -51,7 +51,7 @@ def get_overrep_seqs(directory):
                     pass
 
     if len(overrep_seqs) <= 0:
-        print ("No fastqc data file found in fastqc folder: " + file)
+        print ("No fastqc data file found in fastqc folder from: " + str(filename))
         sys.exit(1)
     return overrep_seqs
 

@@ -519,11 +519,11 @@ def align(
     else:
         thread_count = args_dict['threads']
 
-    if 'mask' in args_dict and args_dict['mask'] == True:
-        file = masking_star(
-            file,
-            output,
-            args_dict)
+    #if 'mask' in args_dict and args_dict['mask'] == True:
+    #    file = masking_star(
+    #        file,
+    #        output,
+    #        args_dict)
 
     if 'two-pass' in args_dict and args_dict['two-pass'] == True:
 

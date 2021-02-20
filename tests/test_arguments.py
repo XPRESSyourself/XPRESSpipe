@@ -94,7 +94,7 @@ try:
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to catch non-list input')
+    raise Exception('check_inputs() failed to catch non-list input')
 
 # Test 1
 adap2 = 'CTGTAGGCACCATCAAT CTGTAGGCACCATCAAG'
@@ -106,7 +106,7 @@ try:
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to catch non-list input')
+    raise Exception('check_inputs() failed to catch non-list input')
 
 # Test 2
 adap3 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCACCATCAAG']
@@ -134,7 +134,7 @@ try:
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to catch input list with greater than two adapters')
+    raise Exception('check_inputs() failed to catch input list with greater than two adapters')
 
 # Test 5
 adap6 = ['CTGTAGGCACCATCAAT', 'CTGTAGGCA262343CCATCAaAG']
@@ -146,7 +146,7 @@ try:
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to make sure input adapters only contain valid characters')
+    raise Exception('check_inputs() failed to make sure input adapters only contain valid characters')
 
 # Test 6
 adap7 = ['GCTCGCGCHATC']
@@ -158,7 +158,7 @@ try:
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to make sure input adapters only contain valid characters')
+    raise Exception('check_inputs() failed to make sure input adapters only contain valid characters')
 
 # Test 7
 adap8 = False
@@ -170,7 +170,7 @@ try:
 except Exception:
     pass
 else:
-    raise Error('check_inputs() failed to make sure input adapters only contain valid characters')
+    raise Exception('check_inputs() failed to make sure input adapters only contain valid characters')
 
 """
 check_inputs() -- Log file formatting tests
