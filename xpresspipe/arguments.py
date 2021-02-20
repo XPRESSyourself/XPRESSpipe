@@ -362,31 +362,36 @@ def check_inputs(
         raise Exception('Invalid UMI location input')
 
     # Check program version
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urlopen(req).read()
-    page = webpage.decode('utf-8').splitlines()
-    found = False
-    for p in page:
-        if '__version__' in p:
-            if p.replace("__version__ = \'",'').replace("\'","") == str(__version__):
-                os.system(
-                    'echo \"You are using the current version of XPRESSpipe...\"'
-                    + str(args_dict['log']))
-                print('\nYou are using the current version of XPRESSpipe...')
-                found = True
-                break
-            else:
-                os.system(
-                    'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
-                    + str(args_dict['log']))
-                print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
-                found = True
-                break
-    if found == False:
-        os.system(
-            'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
-            + str(args_dict['log']))
-        print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    if 'suppress_version_check' in args_dict \
+    and (args_dict['suppress_version_check'] == True \
+    or args_dict['suppress_version_check'] == 'True'):
+        pass
+    else:
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        webpage = urlopen(req).read()
+        page = webpage.decode('utf-8').splitlines()
+        found = False
+        for p in page:
+            if '__version__' in p:
+                if p.replace("__version__ = \'",'').replace("\'","") == str(__version__):
+                    os.system(
+                        'echo \"You are using the current version of XPRESSpipe...\"'
+                        + str(args_dict['log']))
+                    print('\nYou are using the current version of XPRESSpipe...')
+                    found = True
+                    break
+                else:
+                    os.system(
+                        'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
+                        + str(args_dict['log']))
+                    print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: You appear to be using an outdated version of XPRESSpipe.\n!!!The current version is ' + str(p.replace("__version__ = \'",'').replace("\'","")) + ' and you are currently using version ' + str(__version__) + '\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' )
+                    found = True
+                    break
+        if found == False:
+            os.system(
+                'echo \"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\"'
+                + str(args_dict['log']))
+            print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n!!!WARNING: Can not find current version of XPRESSpipe. Please make sure you are using the most up-to-date version.\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
     # Print out user commands to log file
     os.system(
@@ -445,6 +450,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    test_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
 
     """BUILD SUBPARSER"""
     build_parser = subparser.add_parser(
@@ -457,6 +467,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    build_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
 
     """SERNASEQ SUBPARSER"""
     se_parser = subparser.add_parser(
@@ -501,6 +516,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    se_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
     se_opts.add_argument(
         '--small_output',
         help = 'Providing this parameter will remove all intermediate files except logs, base alignment files, quantifications, and quality control metrics',
@@ -718,6 +738,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    pe_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
     pe_opts.add_argument(
         '--small_output',
         help = 'Providing this parameter will remove all intermediate files except logs, base alignment files, quantifications, and quality control metrics',
@@ -940,6 +965,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     rp_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    rp_opts.add_argument(
         '--small_output',
         help = 'Providing this parameter will remove all intermediate files except logs, base alignment files, quantifications, and quality control metrics',
         action = 'store_true',
@@ -1139,6 +1169,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     trim_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    trim_opts.add_argument(
         '-a', '--adapters',
         help = 'Specify adapters in space separated list of strings -- for paired-end, two adapters are expected -- if"None None\" is \
         provided, software will attempt to auto-detect adapters',
@@ -1241,6 +1276,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    align_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
     align_opts.add_argument(
         '--two-pass',
         help = 'Use a two-pass STAR alignment for novel splice junction discovery',
@@ -1349,6 +1389,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     count_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    count_opts.add_argument(
         '-e', '--experiment',
         help = 'Experiment name',
         metavar = '<experiment_name>',
@@ -1415,6 +1460,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     normalize_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    normalize_opts.add_argument(
         '--method',
         help = 'Normalization method to perform (options:"RPM\", \"TPM\", \"RPKM\", \"FPKM\") -- if using either RPKM or FPKM, a \
         GTF reference file must be included',
@@ -1467,6 +1517,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     diffx_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    diffx_opts.add_argument(
         '--shrink',
         help = 'Provide argument to perform shrinkage of effect size on log fold changes. Useful for visualization and ranking of hits',
         action = 'store_true',
@@ -1505,6 +1560,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    metagene_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
     metagene_opts.add_argument(
         '--feature_type',
         help = 'Specify feature type (3rd column in GTF file) to be used in calculating metagene coverage (default: exon; alternative: CDS)',
@@ -1571,6 +1631,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    coverage_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
     coverage_opts.add_argument(
         '-e', '--experiment',
         help = 'Experiment name',
@@ -1641,6 +1706,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     distribution_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    distribution_opts.add_argument(
         '-t', '--type',
         help = 'Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
         metavar = '<SE or PE>',
@@ -1698,6 +1768,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    period_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
     period_opts.add_argument(
         '--min_length',
         help = 'Minimum read length threshold to keep for reads (default: %s)' % DEFAULT_READ_MIN,
@@ -1767,6 +1842,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     complex_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    complex_opts.add_argument(
         '-t', '--type',
         help = 'Sequencing type (\"SE\" for single-end, \"PE\" for paired-end)',
         metavar = '<SE or PE>',
@@ -1818,6 +1898,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    curate_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
     curate_opts.add_argument(
         '-l', '--longest_transcript',
         help = 'Provide parameter to keep only longest transcript per gene record (RECOMMENDED)',
@@ -1895,6 +1980,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     truncate_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    truncate_opts.add_argument(
         '-l', '--longest_transcript',
         help = 'Provide parameter to keep only longest transcript per gene record (RECOMMENDED)',
         action = 'store_true',
@@ -1968,6 +2058,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     reference_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    reference_opts.add_argument(
         '--sjdbOverhang',
         help = 'Specify length of genomic sequences for constructing splice-aware reference. Ideal length is read length -1, \
         so for 2x100bp paired-end reads, you would use 100-1 = 99. However, the default value of 100 should work in most cases',
@@ -2017,6 +2112,11 @@ def get_arguments(
         action = 'help',
         help = 'Show help message and exit')
     probe_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
+    probe_opts.add_argument(
         '-m', '--min_overlap',
         help = 'Minimum number of bases that must match on a side to combine sequences (default: %s)' % 5,
         default = 15,
@@ -2054,6 +2154,11 @@ def get_arguments(
         '-h', '--help',
         action = 'help',
         help = 'Show help message and exit')
+    convert_opts.add_argument(
+        '--suppress_version_check',
+        help = 'Suppress version checks and other features that require internet access during processing',
+        action = 'store_true',
+        required = False)
     convert_opts.add_argument(
         '--orig_name_label',
         help = 'Label of original name (usually "gene_id")',

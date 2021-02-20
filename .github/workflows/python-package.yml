@@ -28,6 +28,7 @@ jobs:
         conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
         conda update -n base -c defaults conda
         conda info -a
+        conda init bash
         conda env create --name xpresspipe -f requirements.yml
         conda activate xpresspipe
         pip install .
