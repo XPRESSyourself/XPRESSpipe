@@ -31,7 +31,6 @@ import multiprocessing # For debugging
 from multiprocessing import cpu_count, Pool
 import gc
 from functools import partial
-from Bio import SeqIO
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .gtfTruncate import truncate_gtf

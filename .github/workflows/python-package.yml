@@ -28,9 +28,8 @@ jobs:
         conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
         conda update -n base -c defaults conda
         conda info -a
-        conda init bash
         conda env create --name xpresspipe -f requirements.yml
-        conda activate xpresspipe
+        source activate xpresspipe
         pip install .
     - name: Lint with flake8
       run: |
@@ -52,6 +51,13 @@ jobs:
         coverage run -a tests/test_modifyGTF.py
         coverage run -a tests/test_truncateGTF.py
         coverage run -a tests/test_analysis.py
+
+        coverage run -a tests/test_pipelines.py
+        coverage run -a tests/test_genecov.py
+        coverage run -a tests/test_parallel.py
+        coverage run -a tests/test_rrnaProbe.py
+
+
         coverage run -a tests/test_help.py
         coverage report
         bash <(curl -s https://codecov.io/bash) -cF python
