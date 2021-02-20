@@ -39,8 +39,8 @@ os.system('mkdir -p ' + str(rp_reference))
 
 os.system('curl http://ftp.ensembl.org/pub/release-103/gtf/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.103.gtf.gz -o ' + str(rp_reference) + 'transcripts.gtf.gz')
 os.system('gzip -d -f ' + str(rp_reference) + 'transcripts.gtf.gz')
-os.system('curl http://ftp.ensembl.org/pub/release-103/fasta/saccharomyces_cerevisiae/dna/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz -o ' + str(rp_reference) + 'toplevel.fa.gz')
-os.system('gzip -d -f ' + str(rp_reference) + 'toplevel.fa.gz')
+os.system('curl http://ftp.ensembl.org/pub/release-103/fasta/saccharomyces_cerevisiae/dna/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz -o ' + str(rp_reference) + 'test.cdna.all.fa.gz')
+os.system('gzip -d -f ' + str(rp_reference) + 'test.cdna.all.fa.gz')
 
 os.system(
     'xpresspipe curateReference'
@@ -109,20 +109,34 @@ check_file(multiqc, 'Multiqc summary', size = 10000)
 log = rp_output + 'riboseq_test.log'
 check_file(log, 'Log', size = 1000)
 
+os.system(
+    'rm -rf ' + str(rp_reference))
+os.system(
+    'rm -rf ' + str(rp_output))
 print('riboseq tests complete')
 
 
 # Paired-end tests -- hiding for now until R dep load time can be faster
-"""
 print('\n\nCreating paired-end reference for testing...')
 pe_reference = str(__path__) + 'paired_end/pe_reference/'
+if os.path.exists(pe_reference):
+    os.system(
+        'rm -rf ' + str(pe_reference))
+os.system('mkdir -p ' + str(pe_reference))
+
+
+os.system('curl http://ftp.ensembl.org/pub/release-103/gtf/saccharomyces_cerevisiae/Saccharomyces_cerevisiae.R64-1-1.103.gtf.gz -o ' + str(pe_reference) + 'transcripts.gtf.gz')
+os.system('gzip -d -f ' + str(pe_reference) + 'transcripts.gtf.gz')
+os.system('curl http://ftp.ensembl.org/pub/release-103/fasta/saccharomyces_cerevisiae/dna/Saccharomyces_cerevisiae.R64-1-1.dna.toplevel.fa.gz -o ' + str(pe_reference) + 'test.cdna.all.fa.gz')
+os.system('gzip -d -f ' + str(pe_reference) + 'test.cdna.all.fa.gz')
+
 
 os.system(
     'xpresspipe curateReference'
     + ' -o ' + str(pe_reference)
     + ' -f ' + str(pe_reference)
     + ' -g ' + str(pe_reference) + 'transcripts.gtf'
-    + ' --genome_size 11'
+    + ' --genome_size 12100000'
     + ' -p')
 
 # Test paired end pipeline on test data
@@ -185,4 +199,3 @@ log = pe_output + 'pe_test.log'
 check_file(log, 'Log', size = 1000)
 
 print('paired-end tests complete')
-"""

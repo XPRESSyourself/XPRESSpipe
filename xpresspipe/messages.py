@@ -37,7 +37,7 @@ def check_process(
             contents = file.read()
             search_words = ['error', 'exception', 'command not found']
             for s in search_words:
-                if s in contents:
+                if s in contents.lower():
                     raise Exception(
                         'Errors or exceptions were present in '
                         + step + ', please refer to the '
