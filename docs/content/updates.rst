@@ -3,6 +3,12 @@ Updates
 ###############
 
 ========================
+v0.6.2
+========================
+- Added :data:`--suppress_version_check` flag to enable use of XPRESSpipe without internet access
+
+
+========================
 v0.6.1
 ========================
 - Add flag during curation steps to allow of UCSC/refseq GTFs during GTF modification steps (truncation, etc.)

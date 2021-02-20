@@ -41,7 +41,7 @@ Install XPRESSpipe
 .. code-block:: shell
 
   $ conda env create --name xpresspipe -f requirements.yml
-  # conda activate xpresspipe
+  $ conda activate xpresspipe
 
 
 | - This installation method will create a separate environment for XPRESSpipe and all its dependencies to live in. Each time you open the command line, you will need to type :data:`conda activate xpresspipe` to use XPRESSpipe

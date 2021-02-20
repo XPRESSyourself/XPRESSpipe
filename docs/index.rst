@@ -62,8 +62,8 @@ Questions?
 
 
 
-.. |build-status| image:: https://travis-ci.org/XPRESSyourself/XPRESSpipe.svg?branch=master
-    :target: https://travis-ci.org/XPRESSyourself/XPRESSpipe
+.. |build-status| image:: https://github.com/XPRESSyourself/XPRESSpipe/workflows/build/badge.svg
+    :target: https://github.com/XPRESSyourself/XPRESSpipe/workflows/build/
     :alt: Build Status
 
 .. |codecov| image:: https://codecov.io/gh/XPRESSyourself/XPRESSpipe/XPRESSpipe.svg?branch=master
