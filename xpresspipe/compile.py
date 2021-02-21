@@ -634,6 +634,7 @@ def compile_coverage(
     plot_type,
     plot_output,
     plot_color='red',
+    smoothen=False,
     dpi=600):
 
     # Get feature regions data
@@ -680,7 +681,9 @@ def compile_coverage(
             sep = '\t')
 
         # Smoothen coverage data
-        df['coverage'] = df[input_count].rolling(window = window, min_periods=1).mean()
+        if smoothen == True \
+        or smoothen == "True":
+            df['coverage'] = df[input_count].rolling(window = window, min_periods=1).mean()
         df['coverage'] = df['coverage'].fillna(0)
         df['feature'] = ''
 

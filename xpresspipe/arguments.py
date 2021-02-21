@@ -688,6 +688,11 @@ def get_arguments(
         type = str,
         required = False)
     se_opts.add_argument(
+        '--smoothen',
+        help = 'Use a rolling window average for plotting gene coverage profiles (window = 20)',
+        action = 'store_true',
+        required = False)
+    se_opts.add_argument(
         '-m', '--max_processors',
         help = 'Number of max processors to use for tasks (default: No limit)',
         metavar = '<processors>',
@@ -906,6 +911,11 @@ def get_arguments(
         metavar = '<gene name>',
         default = 'GAPDH',
         type = str,
+        required = False)
+    pe_opts.add_argument(
+        '--smoothen',
+        help = 'Use a rolling window average for plotting gene coverage profiles (window = 20)',
+        action = 'store_true',
         required = False)
     pe_opts.add_argument(
         '-m', '--max_processors',
@@ -1134,6 +1144,11 @@ def get_arguments(
         metavar = '<gene name>',
         default = 'GAPDH',
         type = str,
+        required = False)
+    rp_opts.add_argument(
+        '--smoothen',
+        help = 'Use a rolling window average for plotting gene coverage profiles (window = 20)',
+        action = 'store_true',
         required = False)
     rp_opts.add_argument(
         '-m', '--max_processors',
@@ -1625,6 +1640,7 @@ def get_arguments(
         metavar = '<gene name>',
         type = str,
         required = True)
+
     # Optional arguments
     coverage_opts  = coverage_parser.add_argument_group('optional arguments')
     coverage_opts.add_argument(
@@ -1671,6 +1687,11 @@ def get_arguments(
         metavar = '<color>',
         type = str,
         default = 'red',
+        required = False)
+    coverage_opts.add_argument(
+        '--smoothen',
+        help = 'Use a rolling window average for plotting gene coverage profiles (window = 20)',
+        action = 'store_true',
         required = False)
     coverage_opts.add_argument(
         '-m', '--max_processors',

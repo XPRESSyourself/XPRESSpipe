@@ -5,15 +5,15 @@ Updates
 ========================
 v0.6.2
 ========================
-- Added :data:`--suppress_version_check` flag to enable use of XPRESSpipe without internet access
-
+| - Added :data:`--suppress_version_check` flag to enable use of XPRESSpipe without internet access
+| - Added :data:`--smoothen` flag to any module that uses the :data:`geneCoverage` sub-module. By default, a sliding window will not be used to smoothen the geneCoverage plots. If provided, a rolling window set at 20 will be used to smoothen the plots.
 
 ========================
 v0.6.1
 ========================
-- Add flag during curation steps to allow of UCSC/refseq GTFs during GTF modification steps (truncation, etc.)
-  Usage: Provide the :data:`--ucsc_format` flag to the :data:`curateReference` or :data:`modifyGTF` sub-modules. These modifications in format only apply to XPRESSpipe GTF truncation features. Any formatting errors with the GTF file that pertain to alignment, counting, etc. dependencies will need to be addressed by the user.
-- Fixed error in XPRESSpipe interface with XPRESSplot's convert_names function where XPRESSpipe did not read in first column of table as index
+| - Add flag during curation steps to allow of UCSC/refseq GTFs during GTF modification steps (truncation, etc.)
+|   Usage: Provide the :data:`--ucsc_format` flag to the :data:`curateReference` or :data:`modifyGTF` sub-modules. These modifications in format only apply to XPRESSpipe GTF truncation features. Any formatting errors with the GTF file that pertain to alignment, counting, etc. dependencies will need to be addressed by the user.
+| - Fixed error in XPRESSpipe interface with XPRESSplot's convert_names function where XPRESSpipe did not read in first column of table as index
 
 ========================
 v0.6.0

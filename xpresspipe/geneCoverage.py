@@ -136,6 +136,11 @@ def make_coverage(
 
     for file_list in file_lists:
 
+        if 'smoothen' in args_dict:
+            smoothen = args_dict['smoothen']
+        else:
+            smoothen = False
+
         # Plot metrics for each file
         compile_coverage(
             str(args_dict['coverage']) + 'metrics/',
@@ -145,7 +150,8 @@ def make_coverage(
             args_dict['sample_names'],
             str(args_dict['gene_name']) + '_geneCoverage' + str(z),
             args_dict['coverage'],
-            args_dict['plot_color'])
+            args_dict['plot_color'],
+            smoothen)
 
         z += 1
 

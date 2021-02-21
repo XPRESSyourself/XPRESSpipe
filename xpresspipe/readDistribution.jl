@@ -44,10 +44,21 @@ catch e
 
 end
 
+# Install DataStructures if not found and load
+try
+    using DataStructures
+
+catch e
+    Pkg.add("DataStructures")
+
+    using DataStructures
+
+end
+
 # Parse FASTQ line by line and accumulate stats
 function readFastq(filename::String)
     counter = 0
-    seq_dict = Dict()
+    seq_dict = SortedDict()
 
     for seq in eachline(filename)
         if (counter - 1) % 4 == 0
@@ -99,7 +110,7 @@ function readFastqPE(filename1::String, filename2::String)
     try
         seq_comb = map((seq_list1, seq_list2) -> seq_list1 + seq_list2, seq_list1, seq_list2)
 
-        seq_dict = Dict()
+        seq_dict = SortedDict()
 
         for seq_len in seq_comb
             if haskey(seq_dict, seq_len)
@@ -119,11 +130,12 @@ function readFastqPE(filename1::String, filename2::String)
 end
 
 # Save metrics to output file
-function saveMetrics(seq_dict::Dict, output::String)
+function saveMetrics(seq_dict::SortedDict, output::String)
 
-    metrics = DataFrame(Any[collect(keys(seq_dict)), collect(values(seq_dict))])
+    metrics = DataFrame(A = collect(keys(seq_dict)), B = collect(values(seq_dict)))
+
     colnames = ["read size (bp)", "count"]
-    names!(metrics, Symbol.(colnames))
+    rename!(metrics, Symbol.(colnames))
 
     metrics |> CSV.write(output, delim='\t')
 
