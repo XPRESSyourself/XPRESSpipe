@@ -3,8 +3,7 @@ from xpresspipe.utils import check_directories, add_directory, get_files, unzip_
 import os
 import sys
 __path__  =  os.path.dirname(os.path.realpath(__file__)) + '/'
-#__path__ = '/Users/jordan/scripts/XPRESSyourself/XPRESSpipe/tests/'
-
+#__path__ = '~/Desktop/projects/XPRESSpipe/tests/'
 
 # Check directory
 str1 = __path__
@@ -38,3 +37,5 @@ fasta_path2 = str(__path__) + 'references/fasta_test2/'
 fasta_files2 = get_fasta(fasta_path2)
 fasta_truth2 = str(fasta_path2) + 'fast1.fasta ' + str(fasta_path2) + 'fast2.fasta ' + str(fasta_path2) + 'fast3.fasta'
 assert fasta_files2 == fasta_truth2, 'get_fasta() failed to recurse through children directories to find fasta files'
+
+print("Util tests complete")
