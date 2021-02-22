@@ -31,7 +31,7 @@ Get Sequence Files
   $ mv *fasta genome_fasta
 
 | - The chromosome IDs may vary depending on your organism.
-| - *We recommend against using the :data:`toplevel` Ensembl files. In our experience, this leads to RAM issues in STAR.*
+| - **We recommend against using the** :data:`toplevel` **Ensembl files. In our experience, this leads to RAM issues in STAR.**
 
 
 ============================================
