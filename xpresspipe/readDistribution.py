@@ -161,7 +161,7 @@ def make_readDistributions(
         compile_matrix_metrics(
             str(args_dict['read_distributions']) + 'metrics/',
             file_list,
-            'read size (bp)',
+            'read_length',
             'count',
             'read_distribution_' + str(z),
             args_dict['experiment'],
