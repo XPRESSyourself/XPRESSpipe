@@ -79,7 +79,7 @@ read_bam <- function(
       sample_amount <- ceiling(rows * sample_factor)
       bam <- bam[sample(nrow(bam), sample_amount), ]
 
-      print(paste('Processing', toString(sample_amount), 'BAM records (', toString(sample_factor * 100), 'percent of total reads)...', sep=' '))
+      print(paste('Processing', toString(sample_amount), 'BAM records (', toString(sample_factor * 100), 'percent of total reads )...', sep=' '))
       return(bam)
 
     } else {
@@ -117,13 +117,6 @@ run_list <- function (
       file_name = vapply(strsplit(f, "[.]"), `[`, 1, FUN.VALUE=character(1))
       output_file = paste(output_path, file_name, '.metaposit', sep='')
       write.table(bam, file=output_file, sep='\t', col.names=NA)
-
-      # Clean the batch
-      #rm(file)
-      #rm(bam)
-      #rm(file_name)
-      #rm(output_file)
-      #gc()
     }
   }
 
