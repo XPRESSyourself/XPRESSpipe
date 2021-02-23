@@ -263,8 +263,11 @@ def prep_codon(
     """"""
 
     df_corrected = df_corrected.loc[df_corrected[col_name] >= 0]
-    df_corrected = df_corrected['sequence'].value_counts().drop('None')
-
+    try:
+        df_corrected = df_corrected['sequence'].value_counts().drop('None')
+    except:
+        df_corrected = df_corrected['sequence'].value_counts()  # Ignore removing 'None' if not found in column
+        
     #### Need to fix this to remove those mapping to utr3
 
     return df_corrected[::-1]
