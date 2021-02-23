@@ -132,11 +132,7 @@ end
 # Save metrics to output file
 function saveMetrics(seq_dict::SortedDict, output::String)
 
-    metrics = DataFrame(A = collect(keys(seq_dict)), B = collect(values(seq_dict)))
-
-    colnames = ["read size (bp)", "count"]
-    rename!(metrics, Symbol.(colnames))
-
+    metrics = DataFrame(read_length = collect(keys(seq_dict)), count = collect(values(seq_dict)))
     metrics |> CSV.write(output, delim='\t')
 
 end
