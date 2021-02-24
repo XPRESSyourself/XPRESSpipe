@@ -98,7 +98,9 @@ run_list <- function (
     for (f in file_list) {
 
       # Import BAM and get coverage
+      print(paste('Processing records for', toString(f), sep=' '))
       file <- paste(file_path, f, sep='')
+      print(paste('Reading records for', toString(f), sep=' '))
       bam <- read_bam(file)
 
       # Analyze
@@ -122,4 +124,5 @@ run_list <- function (
 
 # MAIN
 # Run files through coverage checker
+print(paste('Rscript processing file list:', BAM_LIST, sep=' '))
 run_list(BAM_PATH, BAM_LIST, OUTPUT_LOCATION)
