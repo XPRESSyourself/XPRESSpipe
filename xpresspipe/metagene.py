@@ -49,6 +49,8 @@ def finish_metagene(
 
     file, args_dict = args[0], args[1]
 
+    print('Reading in ' + str(args_dict['metagene']) + 'metrics/' + str(file).split('.')[0] + '.metaposit')
+
     # Read in parsed bam
     bam = pd.read_csv(
         str(args_dict['metagene']) + 'metrics/' + str(file).split('.')[0] + '.metaposit',
@@ -130,6 +132,7 @@ def finish_metagene(
     profile.to_csv(
         str(args_dict['metagene']) + 'metrics/' + str(file).split('.')[0] + '_metrics.txt',
         sep='\t')
+    print('Profile exported to ' + str(args_dict['metagene']) + 'metrics/' + str(file).split('.')[0] + '_metrics.txt')
 
     # Clean up
     bam = None

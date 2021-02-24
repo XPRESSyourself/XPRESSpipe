@@ -119,6 +119,8 @@ run_list <- function (
       file_name = vapply(strsplit(f, "[.]"), `[`, 1, FUN.VALUE=character(1))
       output_file = paste(output_path, file_name, '.metaposit', sep='')
       write.table(bam, file=output_file, sep='\t', col.names=NA)
+
+      print(paste('Metagene profile for', toString(f), 'written to', toString(output_file), sep=' '))
     }
   }
 
@@ -126,3 +128,4 @@ run_list <- function (
 # Run files through coverage checker
 print(paste('Rscript processing file list:', BAM_LIST, sep=' '))
 run_list(BAM_PATH, BAM_LIST, OUTPUT_LOCATION)
+print("Metagene BAM file processing complete.")
