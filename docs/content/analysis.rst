@@ -25,11 +25,12 @@ Sample Factor Files
 .. code-block:: python
 
   **sample_info.txt**
-    Sample   Condition
-    s1_rna        a_WT
-    s2_rna        a_WT
-    s3_rna        b_EXP
-    s4_rna        b_EXP
+
+    Sample      Condition
+    s1_rna      a_WT
+    s2_rna      a_WT
+    s3_rna      b_EXP
+    s4_rna      b_EXP
 
 | Your base (denominator) parameter in a given factor column in the :data:`sample_info` file must be first alphabetically. In the case provided above, we want to compare the experimental condition *VS* the wild-type control condition, however these labels are not alphabetically formatted correctly. In this case, you can append letters to the beginning to force alphabetical order. For example, if you performed a :data:`experiment` vs :data:`wild-type` experiment, you would need to use the labels :data:`b_experiment` vs :data:`a_wild-type` to force a :data:`b_experiment` / :data:`a_wild-type` comparison.
 
@@ -39,15 +40,16 @@ Sample Factor Files
 .. code-block:: python
 
   **sample_info.txt**
-    Sample  Condition Type
-    s1_fp   a_WT      RPF
-    s1_rna  a_WT      RNA
-    s2_fp   a_WT      RPF
-    s2_rna  a_WT      RNA
-    s3_fp   b_EXP     RPF
-    s3_rna  b_EXP     RNA
-    s4_fp   b_EXP     RPF
-    s4_rna  b_EXP     RNA
+
+    Sample    Condition   Type
+    s1_fp     a_WT        RPF
+    s1_rna    a_WT        RNA
+    s2_fp     a_WT        RPF
+    s2_rna    a_WT        RNA
+    s3_fp     b_EXP       RPF
+    s3_rna    b_EXP       RNA
+    s4_fp     b_EXP       RPF
+    s4_rna    b_EXP       RNA
 
 -----------
 Arguments
@@ -83,10 +85,9 @@ Arguments
     - Provide argument to perform shrinkage of effect size on log fold changes. Useful for visualization and ranking of hits
 
 
------------
-Examples
------------
-| **Example 1 -- Analyze ribosome profiling data:**
+--------------------------------------------
+Example 1 -- Analyze ribosome profiling data
+--------------------------------------------
 | The source files can be found `here <https://github.com/XPRESSyourself/xpressyourself_manuscript/tree/main/isrib_analysis/isrib_de/xpresspipe_data_deseq2>`_.
 | If we want to perform differential expression of translation efficiency for ribosome profiling data, we need to provide :data:`Condition` and :data:`Type` factor columns in the :data:`sample_info` file. If we want to include the :data:`RPF` / :data:`RNA` comparison to account for translation efficiency, we would need to include these factor label as a column to ensure the appropriate :data:`RPF` / :data:`RNA` evaluation.
 
@@ -94,14 +95,17 @@ Examples
 .. code-block:: python
 
   **tm_counts.tsv**
+
           ribo_untr_a  ribo_untr_b  ribo_tm_a  ribo_tm_b  untr_a_hek  untr_b_hek  tm_a_hek  tm_b_hek
-  A1BG    29           43           21         11         67          73      56         85
-  A2M     3            5            2          2          73          57      32         37
-  AAAS    1441         1981         934        601        1144        1067    1012       1124
-  AACS    575          727          310        192        351         335     220        291
-  AADAT   98           120          51         29         322         315     192        292
+  A1BG    29           43           21         11         67          73          56        85
+  A2M     3            5            2          2          73          57          32        37
+  AAAS    1441         1981         934        601        1144        1067        1012      1124
+  AACS    575          727          310        192        351         335         220       291
+  AADAT   98           120          51         29         322         315         192       292
+
 
   **tm_deseq.txt**
+
   Sample         Condition       Type
   untr_a_hek     UNTR            RNA
   untr_b_hek     UNTR            RNA
@@ -123,47 +127,55 @@ Examples
 .. code-block:: python
 
   **tm_counts_diffx.tsv**
+
           baseMean	   log2FoldChange	lfcSE	       stat	         pvalue	   padj
   ATF4	  3283.072674	 2.542784311	  0.134284453	 18.93580577	 5.78E-80	 5.03E-76
-  PTP4A1	460.6444433	 2.473962772	  0.185061193	 13.36834986	 9.26E-41	 4.03E-37
+  PTP4A1  460.6444433	 2.473962772	  0.185061193	 13.36834986	 9.26E-41	 4.03E-37
   SPEN	  7902.554413	 1.192124338	  0.109445545	 10.89239713	 1.25E-27	 3.63E-24
-  RPS15A	1823.967865	 -1.391099082	  0.152069954	 -9.147757652	 5.81E-20	 1.26E-16
-  DYNC1H1	11985.60418	 0.85282198	    0.094425503	 9.031691164	 1.69E-19	 2.56E-16
+  RPS15A  1823.967865	 -1.391099082	  0.152069954	 -9.147757652	 5.81E-20	 1.26E-16
+  DYNC1H1 11985.60418	 0.85282198	    0.094425503	 9.031691164	 1.69E-19	 2.56E-16
 
 | From this output, we can focus on the :data:`log2FoldChange` and :data:`padj` columns. From this output, we see that ATF4 is the most significantly upregulated gene by translation efficiency between the TM and UNTR conditions, which is what we expect (see the `XPRESSyourself manuscript <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007625>`_ for further discussion of this example). Further explanations of the other columns of this output can be found in the `DESeq2 documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html>`_.
 
 
-| **Example 2 -- Analyze RNA-seq data**
+---------------------------------
+Example 2 -- Analyze RNA-seq data
+---------------------------------
 | For a standard two-condition RNA-seq experiment comparison, we are only interested in the differential expression of :data:`EXP` vs :data:`WT`. To ensure this comparison if performed correctly, we need to force these :data:`Condition` factor labels to be alphabetical. We will thus rename them :data:`b_EXP` and :data:`a_WT` and do the following:
 
 .. ident with TABs
 .. code-block:: python
 
-  > data = pd.read_csv('/path/to/expression_counts.tsv', index_col=0)
-  > data
+  **expression_counts.tsv**
+
                   s1  s2  s3  s4  ...
   ENSG00000227232 66  59  1   82  ...
   ENSG00000240361 35  0   7   72  ...
   ENSG00000238009 20  70  85  78  ...
   ENSG00000241860 96  7   93  38  ...
   ENSG00000187634 73  41  92  77  ...
-  > batch = pd.read_csv('/path/to/sample_info.tsv', index_col=0)
-  > batch
-    Sample  Condition
-  0 s1      a_WT
-  1 s2      a_WT
-  2 s3      a_WT
-  3 s4      a_WT
-  4 s5      b_EXP
-  5 s6      b_EXP
-  6 s7      b_EXP
-  7 s8      b_EXP
+
+
+  **sample_info.tsv**
+
+  Sample  Condition
+  s1      a_WT
+  s2      a_WT
+  s3      a_WT
+  s4      a_WT
+  s5      b_EXP
+  s6      b_EXP
+  s7      b_EXP
+  s8      b_EXP
 
 .. code-block:: shell
 
   $ xpresspipe diffxpress -i test_r/test_dataset.tsv --sample test_r/sample_info.tsv --design Condition
 
-| **Example 3 -- Analyze RNA-seq data that was prepared in different batches:**
+
+-------------------------------------------------------------------------
+Example 3 -- Analyze RNA-seq data that was prepared in different batches
+-------------------------------------------------------------------------
 | If samples were performed in multiple batches and you would like to control for batch effect, you can add a :data:`Batch` factor column and provide different batch labels. This example below will control for batch effect and compare :data:`EXP` vs :data:`WT` expression.
 | See the `DESeq2 documentation example <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start>`_ for further information.
 
@@ -171,6 +183,7 @@ Examples
 .. code-block:: python
 
   **expression_counts.tsv**
+
                   s1  s2  s3  s4  ...
   ENSG00000227232 66  59  1   82  ...
   ENSG00000240361 35  0   7   72  ...
@@ -178,16 +191,18 @@ Examples
   ENSG00000241860 96  7   93  38  ...
   ENSG00000187634 73  41  92  77  ...
 
+
   **sample_info.tsv**
-    Sample  Condition Batch
-  0 s1      a_WT      batch1
-  1 s2      a_WT      batch1
-  2 s3      a_WT      batch1
-  3 s4      a_WT      batch1
-  4 s5      b_EXP     batch2
-  5 s6      b_EXP     batch2
-  6 s7      b_EXP     batch2
-  7 s8      b_EXP     batch2
+
+  Sample  Condition Batch
+  s1      a_WT      batch1
+  s2      a_WT      batch1
+  s3      a_WT      batch1
+  s4      a_WT      batch1
+  s5      b_EXP     batch2
+  s6      b_EXP     batch2
+  s7      b_EXP     batch2
+  s8      b_EXP     batch2
 
 .. code-block:: shell
 
