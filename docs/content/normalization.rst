@@ -53,6 +53,8 @@ Arguments
 
   * - Optional Arguments
     - Description
+  * - :data:`--suppress_version_check`
+    - Suppress version checks and other features that require internet access during processing
   * - :data:`--method \<RPM, RPKM, FPKM, LOG\>`
     - Normalization method to perform (options: "RPM", "TPM", "RPKM", "FPKM") -- if using either TPM, RPKM, or FPKM, a GTF reference file must be included
   * - :data:`-g \</path/transcripts.gtf\>, --gtf \</path/transcripts.gtf\>`

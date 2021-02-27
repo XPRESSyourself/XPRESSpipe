@@ -8,7 +8,7 @@ Alignment
 | - Variant Aware: The user can provide a VCF, such as those provided by `ClinVar <ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/>`_ and `dbSNP <ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/>`_. These files are useful in integrating information about common or disease nucleotide variants into the RNA-Seq alignment stage. The files you use should match the build of the genome you are using (i.e., if using Homo Sapiens GRCh38, these builds should match between curated reference files and VCF file).
 
 .. note::
-  rRNA depletion using the :data:`--remove_rrna` option removes rRNA alignments from BAM files. This works by generating a BED file behind the scenes for rRNA transcripts, and removing them from the genome-aligned BAM file using :data:`bedtools intersect`. For transcriptome-aligned BAM files, a modified GTF file is generated for this step only with rRNA records removed in order to prevent their transcript mapping during this step. 
+  rRNA depletion using the :data:`--remove_rrna` option removes rRNA alignments from BAM files. This works by generating a BED file behind the scenes for rRNA transcripts, and removing them from the genome-aligned BAM file using :data:`bedtools intersect`. For transcriptome-aligned BAM files, a modified GTF file is generated for this step only with rRNA records removed in order to prevent their transcript mapping during this step.
 
 ============================
 Single-End RNAseq Alignment
@@ -48,6 +48,8 @@ Arguments
 
    * - Optional Arguments
      - Description
+   * - :data:`--suppress_version_check`
+     - Suppress version checks and other features that require internet access during processing
    * - :data:`--two-pass`
      - Use a two-pass STAR alignment for novel splice junction discovery
    * - :data:`--remove_rrna`
@@ -123,6 +125,8 @@ Arguments
 
    * - Optional Arguments
      - Description
+   * - :data:`--suppress_version_check`
+     - Suppress version checks and other features that require internet access during processing
    * - :data:`--output_bed`
      - Include flag to output BED files for each aligned file
    * - :data:`--output_bigwig`

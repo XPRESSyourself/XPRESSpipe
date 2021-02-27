@@ -34,8 +34,10 @@ Arguments
   :widths: 35 50
   :header-rows: 1
 
-  * - Required Arguments
+  * - Optional Arguments
     - Description
+  * - :data:`--suppress_version_check`
+    - Suppress version checks and other features that require internet access during processing
   * - :data:`-t \<SE or PE\>, --type \<SE or PE\>`
     - Sequencing type ("SE" for single-end, "PE" for paired-end)
   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
@@ -85,6 +87,8 @@ Metagene Analysis
 
   * - Optional Arguments
     - Description
+  * - :data:`--suppress_version_check`
+    - Suppress version checks and other features that require internet access during processing
   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
     - Experiment name
   * - :data:`--feature_type \<feature_type\>`
@@ -141,6 +145,8 @@ Intron-collapsed Gene Coverage Analysis
 
   * - Optional Arguments
     - Description
+  * - :data:`--suppress_version_check`
+    - Suppress version checks and other features that require internet access during processing
   * - :data:`-e \<experiment_name\>, --experiment \<experiment_name\>`
     - Experiment name to save output summaries as
   * - :data:`--bam_suffix \<suffix\>`
@@ -211,6 +217,8 @@ P-site Analysis
 
   * - Optional Arguments
     - Description
+  * - :data:`--suppress_version_check`
+    - Suppress version checks and other features that require internet access during processing
   * - :data:`--min_length \<length_value\>`
     - Minimum read length threshold to keep for reads (default: :data:`17`)
   * - :data:`--max_length \<length_value\>`

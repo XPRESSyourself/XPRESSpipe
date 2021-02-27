@@ -33,6 +33,8 @@ Arguments
 
     * - Optional Arguments
       - Description
+    * - :data:`--suppress_version_check`
+      - Suppress version checks and other features that require internet access during processing
     * - :data:`--orig_name_label \<label\>`
       - Label of original name (usually "gene_id ")
     * - :data:`--orig_name_location \<position\>`

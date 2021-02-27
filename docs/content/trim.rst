@@ -38,6 +38,8 @@ Arguments
 
    * - Optional Arguments
      - Description
+   * - :data:`--suppress_version_check`
+     - Suppress version checks and other features that require internet access during processing
    * - :data:`-a \<adapter1 ...\> [\<adapter1 ...\> ...]`, :data:`--adapter \<adapter1 ...\> [\<adapter1 ...\> ...]`
      - Specify adapter(s) in list of strings -- for single-end, only provide one adapter -- if :data:`None` are provided, software will attempt to auto-detect adapters -- if "POLYX" is provided as a single string in the list, polyX adapters will be trimmed. If you want to auto-detect adapters in for paired-end reads, provide :data:`None` twice
    * - :data:`-q \<PHRED_value\>, --quality \<PHRED_value\>`

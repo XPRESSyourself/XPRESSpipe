@@ -36,6 +36,8 @@ Arguments
 
    * - Optional Arguments
      - Description
+   * - :data:`--suppress_version_check`
+     - Suppress version checks and other features that require internet access during processing
    * - :data:`-e <experiment_name>`, :data:`--experiment <experiment_name>`
      - Experiment name
    * - :data:`-c <method>`, :data:`--quantification_method <method>`

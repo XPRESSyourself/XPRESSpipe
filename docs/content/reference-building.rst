@@ -69,6 +69,8 @@ Arguments
 
    * - Optional Arguments
      - Description
+   * - :data:`--suppress_version_check`
+     - Suppress version checks and other features that require internet access during processing
    * - :data:`-l, --longest_transcript`
      -  Provide argument to keep only longest transcript per gene record (RECOMMENDED)
    * - :data:`-p, --protein_coding`
@@ -146,6 +148,8 @@ Arguments
 
    * - Optional Arguments
      - Description
+   * - :data:`--suppress_version_check`
+     - Suppress version checks and other features that require internet access during processing
    * - :data:`--sjdbOverhang \<int\>`
      - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
    * - :data:`--genome_size \<int\>`
@@ -214,6 +218,8 @@ Arguments
 
    * - Optional Arguments
      - Description
+   * - :data:`--suppress_version_check`
+     - Suppress version checks and other features that require internet access during processing
    * - :data:`-l, --longest_transcript`
      -  Provide argument to keep only longest transcript per gene record (not necessary except in cases where the Ensembl canonical transcript is desired)
    * - :data:`-p, --protein_coding`

@@ -28,6 +28,8 @@ Ribosome Profiling Pipeline
 
    * - Optional Arguments
      - Description
+   * - :data:`--suppress_version_check`
+     - Suppress version checks and other features that require internet access during processing
    * - :data:`--two-pass`
      - Use a two-pass STAR alignment for novel splice junction discovery
    * - :data:`-a \<adapter1 ...\> [\<adapter1 ...\> ...]`, :data:`--adapter \<adapter1 ...\> [\<adapter1 ...\> ...]`
