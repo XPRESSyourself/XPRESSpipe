@@ -21,5 +21,5 @@ Add any other context or screenshots about the feature request here.
 
 
 
-**Keep this to auto-ping a maintainer
+**Keep this to auto-ping a maintainer**
 @j-berg
