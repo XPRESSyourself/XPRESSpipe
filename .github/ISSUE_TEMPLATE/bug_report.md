@@ -33,5 +33,5 @@ Add any other context about the problem here.
 
 
 
-**Keep this to auto-ping a maintainer
+**Keep this to auto-ping a maintainer**
 @j-berg
