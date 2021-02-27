@@ -128,12 +128,12 @@ Example 1 -- Analyze ribosome profiling data
 
   **tm_counts_diffx.tsv**
 
-          baseMean	 log2FoldChange	lfcSE	       stat	         pvalue	   padj
+          baseMean	 log2FoldChange	lfcSE  stat	         pvalue	       padj
   ATF4	  3283.072674	 2.542784311	       0.134284453	 18.93580577	 5.78E-80	 5.03E-76
   PTP4A1  460.6444433	 2.473962772	       0.185061193	 13.36834986	 9.26E-41	 4.03E-37
   SPEN	  7902.554413	 1.192124338	       0.109445545	 10.89239713	 1.25E-27	 3.63E-24
   RPS15A  1823.967865	 -1.391099082	       0.152069954	 -9.147757652	 5.81E-20	 1.26E-16
-  DYNC1H1 11985.60418	 0.85282198	         0.094425503	 9.031691164	 1.69E-19	 2.56E-16
+  DYNC1H1 11985.60418	 0.85282198	       0.094425503	   9.031691164	 1.69E-19	 2.56E-16
 
 | From this output, we can focus on the :data:`log2FoldChange` and :data:`padj` columns. From this output, we see that ATF4 is the most significantly upregulated gene by translation efficiency between the TM and UNTR conditions, which is what we expect (see the `XPRESSyourself manuscript <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007625>`_ for further discussion of this example). Further explanations of the other columns of this output can be found in the `DESeq2 documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html>`_.
 
