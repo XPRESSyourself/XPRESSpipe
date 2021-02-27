@@ -249,6 +249,8 @@ def main(
         files = get_files(
             args_dict['input'],
             [str(args_dict['bam_suffix'])])
+        print('Processing the following file list:')
+        print(files)
         if len(files) == 0:
             raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
@@ -256,10 +258,6 @@ def main(
         args_dict['gene_name'] = None
         index_gtf(args_dict)
         make_metagene(args_dict, files)
-
-        os.system(
-            'rm'
-            + ' ' + args_dict['output'] + '*.idx')
 
         # Check log file for errors and exceptions
         get_dependencies(args_dict)

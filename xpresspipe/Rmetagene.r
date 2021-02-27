@@ -79,7 +79,7 @@ read_bam <- function(
       sample_amount <- ceiling(rows * sample_factor)
       bam <- bam[sample(nrow(bam), sample_amount), ]
 
-      print(paste('Processing', toString(sample_amount), 'BAM records (', toString(sample_factor * 100), 'percent of total reads)...', sep=' '))
+      print(paste('Processing', toString(sample_amount), 'BAM records (', toString(sample_factor * 100), 'percent of total reads )...', sep=' '))
       return(bam)
 
     } else {
@@ -98,7 +98,9 @@ run_list <- function (
     for (f in file_list) {
 
       # Import BAM and get coverage
+      print(paste('Processing records for', toString(f), sep=' '))
       file <- paste(file_path, f, sep='')
+      print(paste('Reading records for', toString(f), sep=' '))
       bam <- read_bam(file)
 
       # Analyze
@@ -118,15 +120,12 @@ run_list <- function (
       output_file = paste(output_path, file_name, '.metaposit', sep='')
       write.table(bam, file=output_file, sep='\t', col.names=NA)
 
-      # Clean the batch
-      #rm(file)
-      #rm(bam)
-      #rm(file_name)
-      #rm(output_file)
-      #gc()
+      print(paste('Metagene profile for', toString(f), 'written to', toString(output_file), sep=' '))
     }
   }
 
 # MAIN
 # Run files through coverage checker
+print(paste('Rscript processing file list:', BAM_LIST, sep=' '))
 run_list(BAM_PATH, BAM_LIST, OUTPUT_LOCATION)
+print("Metagene BAM file processing complete.")
