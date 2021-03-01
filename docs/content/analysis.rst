@@ -51,6 +51,10 @@ Sample Factor Files
     s4_fp     b_EXP       RPF
     s4_rna    b_EXP       RNA
 
+| For more information on factor levels and design parameters, please see the `DESeq2 documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#multi-factor-designs>`_ and `this note <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#can-i-run-deseq2-to-contrast-the-levels-of-many-groups>`_. Any standard design formula that will work in DESeq2 will work within the XPRESSpipe wrapper, as long as the formatted described above is followed.
+
+| Other possible variations to DESeq2 analysis are available `here <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#variations-to-the-standard-workflow>`_, but not all will be compatible with the XPRESSpipe wrapper. In general, the XPRESSpipe wrapper is best suited to simple multi-factor design (Experimental vs Wild-type, Footprints vs RNA-sequencing, plus any other factors relevant to your experiment). For advice in preparing your design formula differently than in the examples listed below, please reach out to us `here <https://github.com/XPRESSyourself/XPRESSpipe/issues>`_.
+
 -----------
 Arguments
 -----------
