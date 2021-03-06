@@ -51,7 +51,7 @@ Sample Factor Files
     s4_fp     b_EXP       RPF
     s4_rna    b_EXP       RNA
 
-| The alphabetical order of the factor names (i.e., "Condition", "Type") does not matter. Instead, according to the DESeq2 documentation, these design factors are evaluated in the order listed. However, changes to the order will cause negligible differences in output. For example, if we scramble the order the factors are listed in the design formula, we obtain essentially the same output:
+| The alphabetical order of the factor names (i.e., "Condition", "Type") does not matter. Instead, according to the DESeq2 documentation, these design factors are `evaluated in the order listed <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#the-deseqdataset>`_. However, changes to the order will cause negligible differences in output. For example, if we scramble the order the factors are listed in the design formula, we obtain essentially the same output:
 
 .. ident with TABs
 .. code-block:: python
