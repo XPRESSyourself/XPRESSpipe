@@ -10,7 +10,7 @@ Differential Expression Analysis
 | NOTE: If intending to use the :data:`diffxpress` sub-module, you need to have used :data:`--quantification_method htseq` during read quantification as `DESeq2 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/>`_ requires integer count data.
 
 |
-| Assumptions:
+| Requirements:
 |   - R is installed on your machine and is in your $PATH (this should be handled in the installation)
 |   - All input files are tab-delimited (with .txt or .tsv suffix)
 |   - Design formula does not include the tilde (~) and there are no spaces
@@ -19,7 +19,7 @@ Differential Expression Analysis
 ---------------------
 Sample Factor Files
 ---------------------
-| Different factors to be evaluated in the differential expression analysis should be denoted as a separate factor column in the :data:`sample_info` file. For example, if you were evaluating a experimental vs control experiment for RNA-sequencing, you would provide a :data:`sample_info` file as follows:
+| Different factors to be evaluated in the differential expression analysis should each be denoted as a separate factor column in the :data:`sample_info` file. For example, if you were evaluating a experimental vs control experiment for RNA-sequencing, you would provide a :data:`sample_info` file as follows:
 
 .. ident with TABs
 .. code-block:: python
@@ -32,9 +32,9 @@ Sample Factor Files
     s3_rna      b_EXP
     s4_rna      b_EXP
 
-| Your base (denominator) parameter in a given factor column in the :data:`sample_info` file must be first alphabetically. In the case provided above, we want to compare the experimental condition *VS* the wild-type control condition, however these labels are not alphabetically formatted correctly. In this case, you can append letters to the beginning to force alphabetical order. For example, if you performed a :data:`experiment` vs :data:`wild-type` experiment, you would need to use the labels :data:`b_experiment` vs :data:`a_wild-type` to force a :data:`b_experiment` / :data:`a_wild-type` comparison.
+| Your base (denominator) parameter in a given factor column in the :data:`sample_info` file must be first alphabetically. In the case provided above, we want to compare the experimental condition *VS* the wild-type control condition, however these labels are not alphabetical. In this case, you can append letters to the beginning to force alphabetical order. For example, if you performed a :data:`experiment` vs :data:`wild-type` experiment, you would need to use the labels :data:`b_experiment` vs :data:`a_wild-type` to force a :data:`b_experiment` / :data:`a_wild-type` comparison.
 
-| If we want to consider additional factors, such as translation efficiency of  footprint vs RNA-sequence samples for ribosome profiling, these should be included as additional factor columns in the :data:`sample_info` file. Since we want to perform another comparison with the footprint vs RNA-sequencing samples, we need to again ensure that these labels are listed in the correct alphabetical order to ensure we are performing a footprint *VS* RNA-sequencing comparison to reflect translation efficiency.
+| If we want to consider additional factors, such as translation efficiency of  footprint vs RNA-sequence samples for ribosome profiling, these should be included as additional factor columns in the :data:`sample_info` file. Since we want to perform another comparison with the footprint vs RNA-sequencing samples, we need to again ensure that these labels for this "Type" factor are listed in the correct alphabetical order to ensure we are performing a footprint *VS* RNA-sequencing comparison to reflect translation efficiency.
 
 .. ident with TABs
 .. code-block:: python
@@ -50,6 +50,26 @@ Sample Factor Files
     s3_rna    b_EXP       RNA
     s4_fp     b_EXP       RPF
     s4_rna    b_EXP       RNA
+
+| The alphabetical order of the factor names (i.e., "Condition", "Type") does not matter. Instead, according to the DESeq2 documentation, these design factors are evaluated in the order listed. However, changes to the order will cause negligible differences in output. For example, if we scramble the order the factors are listed in the design formula, we obtain essentially the same output:
+
+.. ident with TABs
+.. code-block:: python
+
+  $ xpresspipe diffxpress -i tm1.tsv -s tm_deseq.txt \
+                          --design Type+Condition+Type:Condition
+
+          "baseMean"           "log2FoldChange"    "lfcSE"                "stat"              "pvalue"                "padj"
+  "ATF4"  3283.07267363348     2.5427843106451     0.134284452518271      18.9358057687216    5.78241665951195e-80    5.02954601044349e-76
+
+
+  $ xpresspipe diffxpress -i tm_counts.tsv -s tm_deseq.txt \
+                          --design Type+Condition+Type:Condition
+
+          "baseMean"           "log2FoldChange"    "lfcSE"                "stat"              "pvalue"                "padj"
+  "ATF4"  3283.07267363348     2.54278431064905    0.134284452463494      18.9358057764753    5.78241580816713e-80    5.02954526994377e-76
+
+
 
 | For more information on factor levels and design parameters, please see the `DESeq2 documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#multi-factor-designs>`_ and `this note <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#can-i-run-deseq2-to-contrast-the-levels-of-many-groups>`_. Any standard design formula that will work in DESeq2 will work within the XPRESSpipe wrapper, as long as the formatted described above is followed.
 
