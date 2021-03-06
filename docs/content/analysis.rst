@@ -115,7 +115,7 @@ Example 1 -- Analyze ribosome profiling data
 | The source files can be found `here <https://github.com/XPRESSyourself/xpressyourself_manuscript/tree/main/isrib_analysis/isrib_de/xpresspipe_data_deseq2>`_.
 | If we want to perform differential expression of translation efficiency for ribosome profiling data, we need to provide :data:`Condition` and :data:`Type` factor columns in the :data:`sample_info` file. If we want to include the :data:`RPF` / :data:`RNA` comparison to account for translation efficiency, we would need to include these factor label as a column to ensure the appropriate :data:`RPF` / :data:`RNA` evaluation. To perform a comparison between Tm-treated and Untreated cells, we will provide the :data:`TM` and :data:`UNTR` labels for the :data:`Condition` factor. With the provided design formula used below, we will be calculating:
 
-| :math:`\frac{ RPF _{\textit{TM}} / RNA _{\textit{TM}} }  { RPF _{\textit{UNTR}} / RNA _{\textit{UNTR}} }`
+| :math:`\frac{ ( RPF _{\textit{TM}} / RNA _{\textit{TM}} ) }  { ( RPF _{\textit{UNTR}} / RNA _{\textit{UNTR}} ) }`
 
 
 .. ident with TABs
