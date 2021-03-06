@@ -64,7 +64,7 @@ Sample Factor Files
 
 
   $ xpresspipe diffxpress -i tm_counts.tsv -s tm_deseq.txt \
-                          --design Type+Condition+Type:Condition
+                          --design Condition+Type+Condition:Type
 
           "baseMean"           "log2FoldChange"    "lfcSE"                "stat"              "pvalue"                "padj"
   "ATF4"  3283.07267363348     2.54278431064905    0.134284452463494      18.9358057764753    5.78241580816713e-80    5.02954526994377e-76
