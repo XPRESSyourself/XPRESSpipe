@@ -16,7 +16,7 @@ then
 else
     make -f Makefile_Linux
 fi
-mv $DIR/fastp_lite $DIR/xpresspipe
+mv $DIR/fastp_lite/fastp_lite $DIR/xpresspipe
 cd $DIR
 
 # Install cufflinks
