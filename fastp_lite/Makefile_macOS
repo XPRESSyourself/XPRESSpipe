@@ -13,7 +13,7 @@ CXX = c++
 SRCS = ${ROOT_DIR}/src/main.cpp ${ROOT_DIR}/src/fastqreader.cpp ${ROOT_DIR}/src/read.cpp ${ROOT_DIR}/src/sequence.cpp
 OBJS = ${SRCS:.cpp=.o}
 
-MAIN = ${ROOT_DIR}/fastp_lite_macOS
+MAIN = ${ROOT_DIR}/fastp_lite
 
 all: ${MAIN} clean
 	@echo fastp_lite compiled successfully

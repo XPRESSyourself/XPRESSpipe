@@ -98,19 +98,19 @@ def se_trim(
     file, args_dict = args[0], args[1] # Parse args
 
     os.system(
-    'fastp'
-    + ' -f ' + str(args_dict['front_trim'])
-    + ' --thread ' + str(args_dict['threads'])
-    + ' -i ' + str(args_dict['input']) + str(file)
-    + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
-    + ' -a ' + str(args_dict['adapters'][0])
-    + ' -l ' + str(args_dict['min_length'])
-    + ' --length_limit ' + str(args_dict['max_length'])
-    + ' -q ' + str(args_dict['quality'])
-    + str(args_dict['umi_seq'])
-    + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
-    + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
-    + str(args_dict['log']))
+        'fastp'
+        + ' -f ' + str(args_dict['front_trim'])
+        + ' --thread ' + str(args_dict['threads'])
+        + ' -i ' + str(args_dict['input']) + str(file)
+        + ' -o ' + str(args_dict['trimmed_fastq']) + 'trimmed_' + str(file)
+        + ' -a ' + str(args_dict['adapters'][0])
+        + ' -l ' + str(args_dict['min_length'])
+        + ' --length_limit ' + str(args_dict['max_length'])
+        + ' -q ' + str(args_dict['quality'])
+        + str(args_dict['umi_seq'])
+        + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
+        + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
+        + str(args_dict['log']))
 
     if args_dict['lite_umi'] != '':
         os.system(

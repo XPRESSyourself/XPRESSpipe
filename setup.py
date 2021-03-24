@@ -27,6 +27,7 @@ import subprocess
 from setuptools import setup
 __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
 
+"""
 def get_cufflinks():
 
     # Get python version
@@ -62,25 +63,28 @@ def move_fastp_lite():
             'make -f ' + str(__path__) + 'fastp_lite/Makefile_macOS; ' \
             + 'echo "fastp_lite built";',
             shell = True)
-        build_name = 'fastp_lite_macOS'
+        build_name = 'fastp_lite'
 
     elif 'linux' in sys.platform:
         subprocess.call(
             'make -f ' + str(__path__) + 'fastp_lite/Makefile_Linux; ' \
             + 'echo "fastp_lite built";',
             shell = True)
-        build_name = 'fastp_lite_linux'
+        build_name = 'fastp_lite'
 
     else:
         build_name = ''
         raise Exception('Cannot recognize operating system. Expected \"darwin\" or \"linux\", got ' + str(sys.platform))
 
-    if build_name != '':
-        subprocess.call(
-            'cp ' + str(__path__) + 'fastp_lite/' + build_name + ' ' \
-            + str(__path__) + 'xpresspipe/fastp_lite; ' \
-            + 'echo "fastp_lite installed";',
-            shell = True)
+    #if build_name != '':
+    #    subprocess.call(
+    #        'cp ' + str(__path__) + 'fastp_lite/' + build_name + ' ' \
+    #        + str(__path__) + 'xpresspipe/fastp_lite; ' \
+    #        + 'echo "fastp_lite installed";',
+    #        shell = True)
+"""
+
+
 
 """Get version"""
 with open('xpresspipe/__init__.py', 'r') as fd:

@@ -589,7 +589,7 @@ def get_arguments(
         required = False)
     se_opts.add_argument(
         '--spacer_length',
-        help = 'Provide UMI spacer length, if exists. ) (default: %s)' % DEFAULT_SPACER_LENGTH,
+        help = 'Provide UMI spacer length, if it exists. ) (default: %s)' % DEFAULT_SPACER_LENGTH,
         metavar = '<length>',
         type = int,
         default = DEFAULT_SPACER_LENGTH,
