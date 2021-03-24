@@ -92,8 +92,8 @@ with open('xpresspipe/__init__.py', 'r') as fd:
                         fd.read(), re.MULTILINE).group(1)
 
 """Setup arguments"""
-get_cufflinks()
-move_fastp_lite()
+#get_cufflinks()
+#move_fastp_lite()
 setup(
     name = 'XPRESSpipe',
     version = version,
