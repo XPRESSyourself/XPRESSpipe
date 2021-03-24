@@ -74,7 +74,7 @@ def auto_trim(
         + ' -l ' + str(args_dict['min_length'])
         + ' --length_limit ' + str(args_dict['max_length'])
         + ' -q ' + str(args_dict['quality'])
-        + str(args_dict['umi'])
+        + str(args_dict['umi_seq'])
         + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
@@ -107,7 +107,7 @@ def se_trim(
     + ' -l ' + str(args_dict['min_length'])
     + ' --length_limit ' + str(args_dict['max_length'])
     + ' -q ' + str(args_dict['quality'])
-    + str(args_dict['umi'])
+    + str(args_dict['umi_seq'])
     + ' -j ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.json'
     + ' -h ' + str(args_dict['trimmed_fastq']) + str(file).rsplit('.', 1)[0] + 'fastp.html'
     + str(args_dict['log']))
@@ -160,7 +160,7 @@ def auto_pe_trim(
         + ' -l ' + str(args_dict['min_length'])
         + ' --length_limit ' + str(args_dict['max_length'])
         + ' -q ' + str(args_dict['quality'])
-        + str(args_dict['umi'])
+        + str(args_dict['umi_seq'])
         + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.json'
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
@@ -183,7 +183,7 @@ def pe_trim(
         + ' -l ' + str(args_dict['min_length'])
         + ' --length_limit ' + str(args_dict['max_length'])
         + ' -q ' + str(args_dict['quality'])
-        + str(args_dict['umi'])
+        + str(args_dict['umi_seq'])
         + ' -j ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.json'
         + ' -h ' + str(args_dict['trimmed_fastq']) + str(file1).rsplit('.', 1)[0] + 'fastp.html'
         + str(args_dict['log']))
@@ -209,7 +209,7 @@ def run_trim(
 
     # Get UMI info
     if str(args_dict['umi_location']).lower() == '3prime':
-        args_dict['umi'] = ''
+        args_dict['umi_seq'] = ''
         args_dict['lite_umi'] = ''
         args_dict['lite_umi'] = ' -l ' + str(args_dict['umi_length']) \
             + ' -s ' + str(args_dict['spacer_length']) \
@@ -217,16 +217,16 @@ def run_trim(
 
     elif str(args_dict['umi_location']).lower() != 'none':
         args_dict['lite_umi'] = ''
-        args_dict['umi'] = str(args_dict['umi']) \
+        args_dict['umi_seq'] = str(args_dict['umi_seq']) \
             + ' -U --umi_loc ' + str(args_dict['umi_location'])
         if str(args_dict['umi_length']).lower() != 'none':
-            args_dict['umi'] = str(args_dict['umi']) \
+            args_dict['umi_seq'] = str(args_dict['umi_seq']) \
                 + ' --umi_len ' + str(args_dict['umi_length'])
         if int(args_dict['spacer_length']) != 0:
-            args_dict['umi'] = str(args_dict['umi']) \
+            args_dict['umi_seq'] = str(args_dict['umi_seq']) \
                 + ' --umi_skip ' + str(args_dict['spacer_length'])
     else:
-        args_dict['umi'] = ''
+        args_dict['umi_seq'] = ''
         args_dict['lite_umi'] = ''
 
     # Mod workers if threads > 16 as fastp maxes at 16 per task
