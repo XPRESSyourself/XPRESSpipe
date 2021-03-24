@@ -5,9 +5,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 echo "Installing XPRESSpipe for ${OS}..."
 
-# Install XPRESSpipe
-pip install $DIR
-
 # Install fastp-lite
 cd $DIR/fastp_lite
 if [ ${OS} == "Darwin" ]
@@ -36,5 +33,8 @@ else
   mv $DIR/cufflinks/cufflinks $DIR/xpresspipe
   echo "Cufflinks installed";
 fi
+
+# Install XPRESSpipe
+pip install $DIR
 
 echo "XPRESSpipe installation complete."
