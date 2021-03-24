@@ -9,14 +9,14 @@ echo "Installing XPRESSpipe for ${OS}..."
 pip install $DIR
 
 # Install fastp-lite
-cd fastp_lite
+cd $DIR/fastp_lite
 if [ ${OS} == "Darwin" ]
 then
     make -f Makefile_macOS
 else
     make -f Makefile_Linux
 fi
-cd fastp_lite ../xpresspipe
+cd $DIR/fastp_lite $DIR/xpresspipe
 cd $DIR
 
 # Install cufflinks
