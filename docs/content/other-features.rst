@@ -46,10 +46,10 @@ Arguments
     * - :data:`--refill \<label\>`
       - In some cases, where common gene names are unavailable, the dataframe will fill the gene name with the improper field of the GTF. In this case, specify this improper string and these values will be replaced with the original name
 
------------
-Examples
------------
-| **Example 1 -- Convert gene names in count dataframe**
+
+--------------------------------------------------------------------------------
+Example 1: Convert gene names in count dataframe
+--------------------------------------------------------------------------------
 
 .. ident with TABs
 .. code-block:: python

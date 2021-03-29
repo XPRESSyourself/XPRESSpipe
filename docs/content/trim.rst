@@ -59,10 +59,10 @@ Arguments
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: Max)
 
---------------
-Examples
---------------
-| **Example 1 -- Trim ribosome profiling (or single-end) sequence data using default preferences:**
+
+--------------------------------------------------------------------------------
+Example 1: Trim ribosome profiling sequence data using default preferences
+--------------------------------------------------------------------------------
 | - Raw reads are :data:`.fastq`-like and found in the :data:`-i riboprof_test/` directory. Can be uncompressed or compressed via :data:`.gz` or :data:`.zip`
 | - A general output directory has been created, :data:`-o riboprof_out/`
 | - All other arguments use the default value
@@ -71,7 +71,10 @@ Examples
 
   $ xpresspipe trim -i riboprof_test/ -o riboprof_out/
 
-| **Example 2 -- Predict adapter and trim ribosome profiling (or single-end) sequence data:**
+
+--------------------------------------------------------------------------------
+Example 2: Predict adapter and trim ribosome profiling sequence data
+--------------------------------------------------------------------------------
 | - A minimum read length of 22 nucleotides after trimming is required in order to keep the read
 | - A maximum or 6 processors can be used for the task
 | - The :data:`--adapters` argument was not passed, so an attempt to discover adapter sequences will be made (this is not always the most efficient or thorough method of trimming and providing the adapter sequences is recommended)
@@ -80,7 +83,10 @@ Examples
 
   $ xpresspipe trim -i riboprof_test/ -o riboprof_out/ --min_length 22 -m 6
 
-| **Example 3 -- Pass explicit adapter trim ribosome profiling (or single-end) sequence data:**
+
+--------------------------------------------------------------------------------
+Example 3: Pass explicit adapter trim ribosome profiling sequence data
+--------------------------------------------------------------------------------
 | - The default minimum read length threshold will be used
 | - The maximum number of processors will be used by default
 | - The :data:`--adapters` argument was passed, so adapter sequences will trimmed explicitly
@@ -89,21 +95,30 @@ Examples
 
   $ xpresspipe trim -i riboprof_test/ -o riboprof_out/ -a CTGTAGGCACCATCAAT
 
-| **Example 4 -- Predict adapter and trim paired-end sequence data:**
+
+--------------------------------------------------------------------------------
+Example 4: Predict adapter and trim paired-end sequence data
+--------------------------------------------------------------------------------
 | - The :data:`--adapters` argument was passed as :data:`None None`, so an attempt to discover adapter sequences will be made for paired-end reads. The :data:`-a None None` syntax is essential for :data:`trim` to recognize the reads as paired-end
 
 .. code-block:: shell
 
   $ xpresspipe trim -i pe_test/ -o pe_out/ -a None None
 
-| **Example 5 -- Pass explicit adapter and trim paired-end sequence data:**
+
+--------------------------------------------------------------------------------
+Example 5: Pass explicit adapter and trim paired-end sequence data
+--------------------------------------------------------------------------------
 | - The :data:`--adapters` argument was passed, so adapter sequences will trimmed explicitly
 
 .. code-block:: shell
 
   $ xpresspipe trim -i pe_test/ -o pe_out/ -a ACACTCTTTCCCTACACGACGCTCTTCCGATC GATCGGAAGAGCGGTTCAGCAGGAATGCCGAG
 
-| **Example 6 -- Trim single-end sequence data of polyX adapters:**
+
+--------------------------------------------------------------------------------
+Example 6: Trim single-end sequence data of polyX adapters
+--------------------------------------------------------------------------------
 | - The :data:`--adapters POLYX` argument was passed, so adapter sequences will trimmed of polyX sequences
 
 .. code-block:: shell

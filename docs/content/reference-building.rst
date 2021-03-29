@@ -90,10 +90,10 @@ Arguments
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
------------
-Examples
------------
-| **Example 1 -- Create XPRESSpipe-formatted reference for single-end alignment:**
+
+--------------------------------------------------------------------------------
+Example 1: Create XPRESSpipe-formatted reference for single-end alignment
+--------------------------------------------------------------------------------
 | - Creates a star reference for single-end read mapping (1x50bp reads)
 | - Keeps the longest transcript for each gene record
 | - Keeps only protein_coding annotated transcripts
@@ -104,7 +104,9 @@ Examples
 
   $ xpresspipe curateReference -o /path/to/se/ref/ -f /path/to/se/ref/ -g /path/to/se/ref/transcripts.gtf --longest_transcript --protein_coding --truncate --sjdbOverhang 49
 
-| **Example 2 -- Create refFlat files:**
+--------------------------------------------------------------------------------
+Example 2: Create refFlat files
+--------------------------------------------------------------------------------
 | - Creates a star reference for paired-end read mapping (2x100bp reads)
 | - No modifications are made to the GTF file
 | - Processes are limited to 10 cores
@@ -157,10 +159,10 @@ Arguments
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
------------
-Examples
------------
-| **Example 1 -- Create a single-end sequencing reference:**
+
+--------------------------------------------------------------------------------
+Example 1: Create a single-end sequencing reference
+--------------------------------------------------------------------------------
 | - Paths to output and location of genome fasta files for each chromosome are provided, as well as path and file name to transcripts.gtf file
 | - Default number of threads are used for preparing reference
 
@@ -168,7 +170,10 @@ Examples
 
   $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf --sjdbOverhang 49
 
-| **Example 2 -- Create a paired-end sequencing reference:**
+
+--------------------------------------------------------------------------------
+Example 2: Create a paired-end sequencing reference
+--------------------------------------------------------------------------------
 | - 12 threads are specified for reference creation
 | - The as 2x100bp paired-end sequencing was used, the default value for :data:`--sjdbOverhang` of :data:`100` is appropriate in this case
 
@@ -176,7 +181,10 @@ Examples
 
   $ xpresspipe makeReference -o /path/to/reference/ -f /path/to/reference/ -g /path/to/reference/transcripts.gtf -t 12
 
-| **Example 3 -- Create a single-end sequencing reference for Saccharomyces cerevisiae:**
+
+--------------------------------------------------------------------------------
+Example 3: Create a single-end sequencing reference for Saccharomyces cerevisiae
+--------------------------------------------------------------------------------
 | - Paths to output and location of genome fasta files for each chromosome are provided, as well as path and file name to transcripts.gtf file
 | - Default number of threads are used for preparing reference\
 | - Genome size is specified
@@ -235,10 +243,10 @@ Arguments
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
------------
-Examples
------------
-| **Example 1 -- Create longest transcript-only, protein coding-only, truncated reference:**
+
+--------------------------------------------------------------------------------
+Example 1: Create longest transcript, protein coding-only, truncated reference
+--------------------------------------------------------------------------------
 | - Keeps the longest transcript for each gene record
 | - Keeps only protein_coding annotated transcripts
 | - Truncates the first 45 nucleotides from the first exon of every CDS (default)

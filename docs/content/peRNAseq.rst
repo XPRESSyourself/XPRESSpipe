@@ -84,10 +84,10 @@ Paired-End RNA-seq Pipeline
 
   $ xpresspipe peRNAseq --help
 
------------
-Examples
------------
-| **Example 1 -- Run pipeline on paired-end RNA-seq sample files**
+
+------------------------------------------------------------------
+Example 1: Run pipeline on paired-end RNA-seq sample files
+------------------------------------------------------------------
 
 .. ident with TABs
 .. code-block:: python

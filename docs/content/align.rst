@@ -136,10 +136,10 @@ Arguments
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
------------
-Examples
------------
-| **Example 1 -- Paired-end RNAseq alignment:**
+
+--------------------------------------------------------------------------------
+Example 1: Paired-end RNAseq alignment
+--------------------------------------------------------------------------------
 | - Raw reads are :data:`.fastq`-like and found in the :data:`-i pe_test/` directory. Can be uncompressed or compressed via :data:`.gz` or :data:`.zip`
 | - A general output directory has been created, :data:`-o pe_out/`
 | - :data:`--type` is specified as 'PE' and path to parent reference directory is provided

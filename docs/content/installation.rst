@@ -1,3 +1,5 @@
+.. _install_link:
+
 ############
 Installation
 ############
@@ -5,12 +7,7 @@ Installation
 =================================
 Install XPRESSpipe
 =================================
-| - Let's enter the command line.
-| 1. Click on the Finder icon the top right side of the screen on your Mac (or wherever else it might be located)
-| 2. Type "Terminal" into the search bar and click on the app icon
-
-| - Great! Now we are in the command line interface. As a review, anything followed by a "$" in the command line is a command and you can execute each command by pressing Enter after typing. You can also auto-complete file names using Tab. But be careful, **space and characters must be typed exactly and commands are case-sensitive**.
-| - First, let's install `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/install/>`_, a package manager that will help us download all required dependencies.
+| 1. Open your command line interface and install `conda <https://docs.conda.io/projects/conda/en/latest/user-guide/install/>`_, if not already installed.
 
 .. code-block:: shell
 
@@ -26,34 +23,33 @@ Install XPRESSpipe
   rm ~/Miniconda3-latest-MacOSX-x86_64.sh
 
 
-
-| - Let's get the latest version of XPRESSpipe by executing the lines of code in the code block below. Replace the URL for the version of XPRESSpipe for whatever version you want (these can be found under the :data:`releases` tab on the `XPRESSpipe GitHub repository <https://github.com/XPRESSyourself/XPRESSpipe/releases>`_).
+| 2. Download the latest version of XPRESSpipe by executing the lines of code in the code block below. Replace the URL for the version of XPRESSpipe for whatever version you want (these can be found under the :data:`releases` tab on the `XPRESSpipe GitHub repository <https://github.com/XPRESSyourself/XPRESSpipe/releases>`_).
 
 .. code-block:: shell
 
   $ cd ~
-  $ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/v0.2.1b0.tar.gz
-  $ tar xvzf v0.2.1b0.tar.gz
-  $ cd XPRESSpipe-0.2.1b0
+  $ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/v0.6.3.tar.gz
+  $ tar xvzf v0.6.3.tar.gz
+  $ cd XPRESSpipe-0.6.3
 
-| - Now we can give Conda the dependency file to process for us from XPRESSpipe:
+| 3. Install XPRESSpipe dependencies via Conda and activate the XPRESSpipe environment:
 
 .. code-block:: shell
 
   $ conda env create --name xpresspipe -f requirements.yml
   $ conda activate xpresspipe
 
-
-| - This installation method will create a separate environment for XPRESSpipe and all its dependencies to live in. Each time you open the command line, you will need to type :data:`conda activate xpresspipe` to use XPRESSpipe
-| - Let's install XPRESSpipe and test that the installation was successful by executing the following:
+| 4. This installation method will create a separate environment for XPRESSpipe and all its dependencies to live in. Each time you open the command line, you will need to type :data:`conda activate xpresspipe` to use XPRESSpipe
+| 5. Install XPRESSpipe and test that the installation was successful:
 
 .. code-block:: shell
 
-  $ pip install .
+  $ bash install.sh
   $ xpresspipe test
 
 | - If a summary menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!
 | - You can run :data:`xpresspipe --help` to see a list of the available modules within XPRESSpipe. To see specific parameters for a module, type :data:`xpresspipe <module_name> --help`.
+| - Note: :data:`v0.6.3` and later employs the :data:`bash install.sh` method for installing XPRESSpipe. If using :data:`v0.6.2` or earlier, you should instead run :data:`pip install .`
 
 
 ==============================================================

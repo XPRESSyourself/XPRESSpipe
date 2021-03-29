@@ -110,7 +110,7 @@ Arguments
 
 
 --------------------------------------------
-Example 1 -- Analyze ribosome profiling data
+Example 1: Analyze ribosome profiling data
 --------------------------------------------
 | The source files can be found `here <https://github.com/XPRESSyourself/xpressyourself_manuscript/tree/main/isrib_analysis/isrib_de/xpresspipe_data_deseq2>`_.
 | If we want to perform differential expression of translation efficiency for ribosome profiling data, we need to provide :data:`Condition` and :data:`Type` factor columns in the :data:`sample_info` file. If we want to include the :data:`RPF` / :data:`RNA` comparison to account for translation efficiency, we would need to include these factor label as a column to ensure the appropriate :data:`RPF` / :data:`RNA` evaluation. To perform a comparison between Tm-treated and Untreated cells, we will provide the :data:`TM` and :data:`UNTR` labels for the :data:`Condition` factor. With the provided design formula used below, we will be calculating:
@@ -166,7 +166,7 @@ Example 1 -- Analyze ribosome profiling data
 
 
 ---------------------------------
-Example 2 -- Analyze RNA-seq data
+Example 2: Analyze RNA-seq data
 ---------------------------------
 | For a standard two-condition RNA-seq experiment comparison, we are only interested in the differential expression of :data:`EXP` vs :data:`WT`. To ensure this comparison if performed correctly, we need to force these :data:`Condition` factor labels to be alphabetical. We will thus rename them :data:`b_EXP` and :data:`a_WT` and do the following:
 
@@ -201,7 +201,7 @@ Example 2 -- Analyze RNA-seq data
 
 
 -------------------------------------------------------------------------
-Example 3 -- Analyze RNA-seq data that was prepared in different batches
+Example 3: Analyze RNA-seq data that was prepared in different batches
 -------------------------------------------------------------------------
 | If samples were performed in multiple batches and you would like to control for batch effect, you can add a :data:`Batch` factor column and provide different batch labels. This example below will control for batch effect and compare :data:`EXP` vs :data:`WT` expression.
 | See the `DESeq2 documentation example <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start>`_ for further information.
@@ -276,10 +276,10 @@ rRNA Probe
    * - :data:`--footprint_only`
      - Only take zip files that are ribosome profiling footprints (file names must contain "FP", "RPF", or "FOOTPRINT")
 
------------
-Examples
------------
-| **Example 1 -- Generate rank-ordered list of over-represented sequences**
+
+--------------------------------------------------------------------------------
+Example 1: Generate rank-ordered list of over-represented sequences
+--------------------------------------------------------------------------------
 
 .. ident with TABs
 .. code-block:: python

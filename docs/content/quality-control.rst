@@ -45,10 +45,10 @@ Arguments
   * - :data:`-m <processors>, --max_processors <processors>`
     - Number of max processors to use for tasks (default: No limit)
 
------------
-Examples
------------
-| **Example 1 -- Analyze read distributions from ribosome profiling libraries**
+
+--------------------------------------------------------------------------------
+Example 1: Analyze read distributions from ribosome profiling libraries
+--------------------------------------------------------------------------------
 
 .. ident with TABs
 .. code-block:: python
@@ -98,10 +98,10 @@ Metagene Analysis
   * - :data:`-m \<processors\>, --max_processors \<processors\>`
     - Number of max processors to use for tasks (default: No limit)
 
------------
-Examples
------------
-| **Example 1 -- Analyze metagene profiles of sequence libraries**
+
+--------------------------------------------------------------------------------
+Example 1: Analyze metagene profiles of sequence libraries
+--------------------------------------------------------------------------------
 | - Use default transcript reference (maps to all transcripts, even if non-coding)
 
 .. ident with TABs
@@ -163,10 +163,10 @@ Intron-collapsed Gene Coverage Analysis
     - Number of max processors to use for tasks (default: No limit)
 
 
------------
-Examples
------------
-| **Example 1 -- Analyze gene coverage profile of sequence libraries**
+
+--------------------------------------------------------------------------------
+Example 1: Analyze gene coverage profile of sequence libraries
+--------------------------------------------------------------------------------
 | - Use default transcript reference (will generate a longest transcript-only reference)
 | - Analyze SLC1A1
 | - Analyze along chosen record type (default: exon, but could also use CDS if looking at ribosome profiling data)
@@ -231,10 +231,9 @@ P-site Analysis
     - Number of max processors to use for tasks (default: No limit)
 
 
------------
-Examples
------------
-| **Example 1 -- Analyze P-sites from ribosome profiling libraries**
+--------------------------------------------------------------------------------
+Example 1: Analyze P-sites from ribosome profiling libraries
+--------------------------------------------------------------------------------
 
 .. ident with TABs
 .. code-block:: python

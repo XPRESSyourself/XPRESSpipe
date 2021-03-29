@@ -53,10 +53,10 @@ Arguments
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
------------
-Examples
------------
-| **Example 1 -- Count ribosome profiling alignments:**
+
+--------------------------------------------------------------------------------
+Example 1: Count ribosome profiling alignments
+--------------------------------------------------------------------------------
 | - Input points to directory with SAM alignment files that are sorted by name
 | - An experiment name is provided to name the final data matrix
 | - Reads are quantified only to coding genes and are not counted if mapping to the first x nucleotides of each transcript exon 1 (x being the value provided for truncation when initially creating the reference files)
@@ -65,7 +65,10 @@ Examples
 
   $ xpresspipe count -i riboseq_out/alignments/ -o riboseq_out/ -r se_reference/ -g se_reference/transcripts_codingOnly_truncated.gtf -e se_test
 
-| **Example 2 -- Count paired-end alignments:**
+
+--------------------------------------------------------------------------------
+Example 2: Count paired-end alignments
+--------------------------------------------------------------------------------
 | - Input points to directory with SAM alignment files that are sorted by name
 | - An experiment name is not provided and a default name is given to the data matrix using datatime
 | - Reads are quantified to the entire transcriptome (coding and non-coding, no truncation)

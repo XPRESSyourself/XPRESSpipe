@@ -85,10 +85,9 @@ Single-End RNA-seq Pipeline
 
   $ xpresspipe seRNAseq --help
 
------------
-Examples
------------
-| **Example 1 -- Run pipeline on single-end RNA-seq sample files**
+--------------------------------------------------------------------------------
+Example 1: Run pipeline on single-end RNA-seq sample files
+--------------------------------------------------------------------------------
 
 .. ident with TABs
 .. code-block:: python

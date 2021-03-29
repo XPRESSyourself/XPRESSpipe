@@ -62,17 +62,19 @@ Arguments
   * - :data:`--batch \</path/filename.tsv\>`
     - Include path and filename of dataframe with batch normalization parameters
 
------------
-Examples
------------
-| **Example 1 -- Perform RPKM normalization on single-end RNA-seq data:**
+
+--------------------------------------------------------------------------------
+Example 1: Perform RPKM normalization on single-end RNA-seq data
+--------------------------------------------------------------------------------
 
 .. code-block:: shell
 
   $ xpresspipe normalizeMatrix -i riboprof_out/counts/se_test_counts_table.tsv --method RPKM -g se_reference/transcripts_coding_truncated.gtf
 
 
-| **Example 2 -- Perform batch normalization on RNA-seq data:**
+--------------------------------------------------------------------------------
+Example 2: Perform batch normalization on RNA-seq data
+--------------------------------------------------------------------------------
 
 .. ident with TABs
 .. code-block:: python

@@ -405,7 +405,7 @@ def alignment_process(
     if ('umi_location' in args_dict
     and (args_dict['umi_location'] != None
     and str(args_dict['umi_location']).lower() != 'none')
-    ) or ('umi' in args_dict and args_dict['umi'] == True):
+    ) or ('umi_seq' in args_dict and args_dict['umi_seq'] == True):
         os.system(
             'umi_tools dedup'
             + ' -I ' + str(args_dict['alignments_coordinates']) + str(output) + str(file_suffix) # Input BAM
