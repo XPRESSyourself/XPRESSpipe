@@ -25,6 +25,8 @@ into data. PLoS Comp Biol. doi: https://doi.org/10.1371/journal.pcbi.1007625
 The following is a short tutorial showing you how to install XPRESSpipe:   
 [![asciicast](https://asciinema.org/a/262192.svg)](https://asciinema.org/a/262192?speed=4)
 
+NOTE: Previous versions utilized the `pip install .` command to install. Users of >= v0.6.3 should instead use `bash install.sh`
+
 - Make sure you let Anaconda set up the PATH info for you.
 - If the help menu is not displayed when testing, try adding the path where you installed XPRESSpipe to the system PATH
 ```
@@ -33,12 +35,12 @@ $ echo 'export PATH=$PATH:/path/to/xpresspipe' >> ~/.bash_profile
 - If you do not have a file names `~/.bash_profile`, try looking for one called `~/.profile`
 - The commands used in the video above are summarized here:
 ```
-$ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/v0.2.3b0.zip
-$ unzip v0.2.3b0.zip
-$ cd XPRESSpipe-0.2.3b0/
+$ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/refs/tags/XPRESSpipe-v0.6.3.zip
+$ unzip XPRESSpipe-XPRESSpipe-v0.6.3.zip
+$ cd XPRESSpipe-XPRESSpipe-v0.6.3/
 $ conda env create -f requirements.yml
 $ conda activate xpresspipe
-$ python setup.py install
+$ bash install.sh
 $ xpresspipe -h
 $ xpresspipe test
 ```

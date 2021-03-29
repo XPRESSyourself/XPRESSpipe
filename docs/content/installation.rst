@@ -28,9 +28,9 @@ Install XPRESSpipe
 .. code-block:: shell
 
   $ cd ~
-  $ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/v0.6.3.tar.gz
-  $ tar xvzf v0.6.3.tar.gz
-  $ cd XPRESSpipe-0.6.3
+  $ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/refs/tags/XPRESSpipe-v0.6.3.zip
+  $ unzip XPRESSpipe-XPRESSpipe-v0.6.3.zip
+  $ cd XPRESSpipe-XPRESSpipe-v0.6.3/
 
 | 3. Install XPRESSpipe dependencies via Conda and activate the XPRESSpipe environment:
 
