@@ -35,9 +35,9 @@ $ echo 'export PATH=$PATH:/path/to/xpresspipe' >> ~/.bash_profile
 - If you do not have a file names `~/.bash_profile`, try looking for one called `~/.profile`
 - The commands used in the video above are summarized here:
 ```
-$ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/refs/tags/XPRESSpipe-v0.6.3.zip
-$ unzip XPRESSpipe-XPRESSpipe-v0.6.3.zip
-$ cd XPRESSpipe-XPRESSpipe-v0.6.3/
+$ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/refs/tags/v0.6.3.zip
+$ unzip XPRESSpipe-v0.6.3.zip
+$ cd XPRESSpipe-v0.6.3/
 $ conda env create -f requirements.yml
 $ conda activate xpresspipe
 $ bash install.sh
