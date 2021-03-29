@@ -6,10 +6,10 @@ Updates
 v0.6.3 (in progress)
 ========================
 | **Major**
-| - New installation method: Instead of installing the software with the :data:`pip install .` method, a new install script is provided that handles installation of some dependencies better. The new method now only requires the user to run :data:`bash install.sh`. See the :ref:`install_link` for more information.
+| - New installation method: Instead of installing the software with the :data:`pip install .` method, a new install script is provided that handles installation of some dependencies better. The new method now only requires the user to run :data:`bash install.sh`. See the :ref:`install_link` page for an updated walkthrough on this update.
 |
 | **Minor**
-| - Updated docs
+| - Updated docs and examples
 | - Removed unused variable in :data:`args_dict`
 
 ========================
