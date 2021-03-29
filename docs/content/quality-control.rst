@@ -112,7 +112,8 @@ Example 1: Analyze metagene profiles of sequence libraries
 .. image:: se_test_metagene_summary.png
   :width: 450px
 
-NOTE: As you can appreciate, there are systematic 5' biases in these library preparations. A good RNA-seq library should generally have even coverage across all transcripts.
+.. note::
+  As you can probably see, there are systematic 5' biases in these library preparations. A good RNA-seq library should generally have even coverage across all transcript positions.
 
 
 =================================
@@ -183,7 +184,8 @@ Example 1: Analyze gene coverage profile of sequence libraries
 .. image:: geneCoverage_IGV_comparison.png
   :width: 750px
 
-NOTE: The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In both A and B in the image above, the top plot was generated with IGV (https://software.broadinstitute.org/software/igv/) and the bottom with :data:`xpresspipe geneCoverage`. Green boxes show approximately the same region for comparison.
+.. note::
+  The coverage estimations use a 20 nt rolling window mean method to smoothen the coverage plots. In both A and B in the image above, the top plot was generated with IGV (https://software.broadinstitute.org/software/igv/) and the bottom with :data:`xpresspipe geneCoverage`. Green boxes show approximately the same region for comparison.
 
 
 
@@ -238,4 +240,8 @@ Example 1: Analyze P-sites from ribosome profiling libraries
 .. ident with TABs
 .. code-block:: python
 
-  $ xpresspipe p_sites -i riboprof_out/alignments/ -o riboprof_out -g se_reference/transcripts.gtf -e se_test
+  $ xpresspipe p_sites \
+    -i riboprof_out/alignments \
+    -o riboprof_out \
+    -g se_reference/transcripts.gtf \
+    -e se_test

@@ -7,16 +7,12 @@ XPRESSpipe
 About
 =================
 | `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is a part of the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite of sequencing tools. `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is an automated, efficient, and flexible pipeline for end-to-end processing of ribosome profiling data.
-|
 | `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is currently capable of handling single-end (SE), paired-end (PE), and ribosome profiling data.
+| Other analyses can be performed by `XPRESSplot <https://github.com/XPRESSyourself/XPRESSplot>`_. Please read the relevant documentation for more information.
 |
 | If you have limited or no computational experience, please see our :ref:`beginners_link`.
 |
 | Please refer to the :ref:`overview_link` page for more details regarding functionality.
-|
-| For each sequencing type pipeline, all relevant quality control analyses are performed for that sequencing type, as well as gene coverage analysis of a housekeeping gene.
-|
-| Other analyses can be performed by `XPRESSplot <https://github.com/XPRESSyourself/XPRESSplot>`_. Please read the relevant documentation for more information.
 
 =================
 Table of contents
@@ -51,7 +47,7 @@ Table of contents
 =======
 License
 =======
-| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ and the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite is developed and maintained by Jordan Berg in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators. We welcome pull requests if you would like to contribute to the project.
+| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ and the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite is developed and maintained by `Jordan Berg <https://j-berg.github.io/>`_ in the `Rutter Lab <https://biochem.utah.edu/rutter/index.html>`_ @ the `University of Utah <https://www.utah.edu/>`_, along with other collaborators. We welcome pull requests if you would like to contribute to the project.
 |
 | `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is perpetually open source under a GNU General Public License (v3.0).
 

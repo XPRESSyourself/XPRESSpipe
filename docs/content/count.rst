@@ -8,9 +8,9 @@ Quantifying and Collating Reads
 | In order to quantify aligned reads, they must be counts to a reference transcriptome. This will tell you in relative terms how much of each transcript is expressed in a system. The following sub-module will perform this quantification, as well as compile all sample quantifications into a single data matrix for downstream use.
 | XPRESSpipe uses `Cufflinks <http://cole-trapnell-lab.github.io/cufflinks/>`_ as the default, but `HTSeq <https://htseq.readthedocs.io/en/release_0.11.1/>`_ can also be specified. Cufflinks is one of the most accurate read quantifiers currently available, but HTSeq is still widely used and is part of the `TCGA <https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/>`_ pipeline.
 
------------
+===============================
 Arguments
------------
+===============================
 | The help menu can be accessed by calling the following from the command line:
 
 .. code-block:: shell
@@ -54,9 +54,9 @@ Arguments
      - Number of max processors to use for tasks (default: No limit)
 
 
---------------------------------------------------------------------------------
+==============================================================
 Example 1: Count ribosome profiling alignments
---------------------------------------------------------------------------------
+==============================================================
 | - Input points to directory with SAM alignment files that are sorted by name
 | - An experiment name is provided to name the final data matrix
 | - Reads are quantified only to coding genes and are not counted if mapping to the first x nucleotides of each transcript exon 1 (x being the value provided for truncation when initially creating the reference files)
@@ -66,9 +66,9 @@ Example 1: Count ribosome profiling alignments
   $ xpresspipe count -i riboseq_out/alignments/ -o riboseq_out/ -r se_reference/ -g se_reference/transcripts_codingOnly_truncated.gtf -e se_test
 
 
---------------------------------------------------------------------------------
+==============================================================
 Example 2: Count paired-end alignments
---------------------------------------------------------------------------------
+==============================================================
 | - Input points to directory with SAM alignment files that are sorted by name
 | - An experiment name is not provided and a default name is given to the data matrix using datatime
 | - Reads are quantified to the entire transcriptome (coding and non-coding, no truncation)

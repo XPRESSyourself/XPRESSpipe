@@ -47,13 +47,16 @@ Install XPRESSpipe
   $ bash install.sh
   $ xpresspipe test
 
-| - If a summary menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!
-| - You can run :data:`xpresspipe --help` to see a list of the available modules within XPRESSpipe. To see specific parameters for a module, type :data:`xpresspipe <module_name> --help`.
-| - Note: :data:`v0.6.3` and later employs the :data:`bash install.sh` method for installing XPRESSpipe. If using :data:`v0.6.2` or earlier, you should instead run :data:`pip install .`
+| If a summary menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!
+|
+| You can run :data:`xpresspipe --help` to see a list of the available modules within XPRESSpipe. To see specific parameters for a module, type :data:`xpresspipe <module_name> --help`.
+
+.. note::
+  :data:`v0.6.3` and later employs the :data:`bash install.sh` method for installing XPRESSpipe. If using :data:`v0.6.2` or earlier, you should instead run :data:`pip install .`
 
 
 ==============================================================
-Using XPRESSpipe in a supercomputing environment (i.e. SLURM)
+Install in a supercomputing environment
 ==============================================================
 | If the dependencies for XPRESSpipe were installed to a conda environment as above, you will need to add a couple lines to you bash script to submit the supercomputing job.
 | For example, if using a SLURM job scheduler, you should include the following after the :data:`#SBATCH` lines and before any calls to XPRESSpipe in the slurm script, as below:

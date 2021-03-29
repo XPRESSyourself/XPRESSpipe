@@ -7,7 +7,7 @@ FAQs
 | As this software is used more, we will compile some of the most commonly asked questions here...
 
 -----------------------------------------------------------
-A step of the pipeline is erroring for no apparent reason?
+A step of the pipeline is erroring for no apparent reason
 -----------------------------------------------------------
 | First, please check the output in your terminal, along with in the log file. If the step that the pipeline breaks on does not output any useful information, check that the required dependencies were installed correctly. For example, when we were testing the the :data:`geneCoverage` module on a supercomputing cluster, the pipeline responded saying it couldn't find the appropriate index file. It turned out the R package, GenomicFeatures was not downloaded due to issues with the rtracklayers package. For this situation, we fixed it by uninstalling Anaconda and reinstalling the dependencies, as below:
 

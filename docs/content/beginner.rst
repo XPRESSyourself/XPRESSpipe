@@ -18,11 +18,15 @@ Install XPRESSpipe
 =================================
 | - Please refer to the :doc:`installation documentation <./installation>` or the walkthrough video below:
 
+.. note::
+  The :data:`pip install .` method has been replaced with a script that is executed by running :data:`bash install.sh`.
+
 .. raw:: html
 
     <embed>
-        <script id="asciicast-256347" src="https://asciinema.org/a/256347.js" async></script>
+        <script id="asciicast-262192" src="https://asciinema.org/a/262192.js" async></script>
     </embed>
+
 
 =================================
 Generate Reference Files
@@ -35,22 +39,24 @@ Generate Reference Files
   $ mkdir reference_folder
   $ mkdir reference_folder/fasta_files
 
-| 1. The first command helped us navigate to the Desktop. The "~" icon is a shortcut for the User directory, and every directory needs to be separated by a "/"
+| 1. The first command helped us navigate to the Desktop. The :data:`~` icon is a shortcut for the User directory, and every directory needs to be separated by a :data:`/`
 | 2. The second command created a new folder in the Desktop directory called :data:`reference_folder`
 | 3. The third command created a new folder in the reference directory for intermediate reference files
 
-| - Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are a bit long, I used the "\" character to indicate I am continuing the command in the next line. You not include these characters when executing the command, they just help make the code more readable. We will first read the retrieval commands into a file which will additionally act as a log file for the version for the genome version we are using.
+| - Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are a bit long, I used the :data:`\` character to indicate I am continuing the command in the next line. You not include these characters when executing the command, they just help make the code more readable. We will first read the retrieval commands into a file which will additionally act as a log file for the version for the genome version we are using.
 | - You should modify the the variable calls between the :data:`#` signs. For :data:`GTF_URL`, you should change the URL currently provided to the one appropriate for your organism of interest. Make sure you are downloading the GTF file and NOT the GFF file. For :data:`FASTA_URL`, you should do the same as before with the URL to the chromosome DNA FASTA files, but you should only copy the URL up to "chromosome", but not include the chromosome identifier. For :data:`CHROMOSOMES`, type out the chromosome identifiers you want to download between the " characters with a space between each.
+
+.. note::
+| I do not personally recommend using the :data:`toplevel` genome sequence files. Whenever I have used these, I often run into a memory overload error during genome curation.
 
 .. code-block:: shell
 
   $ cd reference_folder/
 
-  ### Change these ###
+  ### Change specific organism file names based on your organism of interest ###
   $ echo 'GTF_URL=ftp://ftp.ensembl.org/pub/release-97/gtf/homo_sapiens/Homo_sapiens.GRCh38.97.gtf.gz' >> fetch.sh
   $ echo 'FASTA_URL=ftp://ftp.ensembl.org/pub/release-97/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome' >> fetch.sh
   $ echo 'CHROMOSOMES="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y"' >> fetch.sh
-  ####################
 
   $ echo 'curl -O $GTF_URL' >> fetch.sh
   $ echo 'gzip -d Homo_sapiens.GRCh38.97.gtf.gz' >> fetch.sh
@@ -62,7 +68,7 @@ Generate Reference Files
   $ echo 'cd ../' >> fetch.sh
   $ bash fetch.sh
 
-| - Let's discuss what we just did:
+| Let's discuss what we just did:
 | 1. We navigated into the reference folder, downloaded a GTF reference file and unzipped it, then navigated to the :data:`fasta_file` directory to download the raw reference data and unzipped it. Finally, we returned to the main reference directory.
 | 2. If this didn't work, we can navigate to `Ensembl <https://www.ensembl.org/>`_ to download the relevant data. We need to get the GTF and DNA chromosomal FASTA files for our organism of interest. The link to the chromosome sequence files actually contains more files than we need. We just need the files that start with :data:`Homo_sapiens.GRCh38.dna.chromosome`. You can download them, move them to the appropriate directories within your reference directory, and unzip the files by double-clicking on them.
 
@@ -94,7 +100,7 @@ Generate Reference Files
 =================================
 Process Raw Sequencing Files
 =================================
-| - Now let's get our raw data::
+| Now let's get our raw data::
 | 1. Make a new folder, something called :data:`raw_data` or whatever you like and place your data there.
 | 2. Make sure the files follow proper naming conventions (see naming conventions at :ref:`general_link`)
 | 3. Now let's process the data
@@ -122,7 +128,7 @@ Process Raw Sequencing Files
   ### And then choose the appropriate pipeline to build
 
 
-| - If you are running a lot of files, especially for human samples, this may take a lot of time. We recommend running this on some kind of server. A situation like yeast with few samples may be feasible to run on a personal computer, but will likely also take some time.
+| If you are running a lot of files, especially for human samples, this may take a lot of time. We recommend running this on some kind of server. A situation like yeast with few samples may be feasible to run on a personal computer, but will likely also take some time.
 
 ------------------
 Sequencing Metrics
@@ -187,15 +193,15 @@ Install
 
 .. code-block:: shell
 
-  $ cd ~/
+  $ cd ~
   $ xpresspipe test
 
 
 ---------------
 Run Data
 ---------------
-| - Assuming you installed the XPRESSpipe dependencies in a conda environment called :data:`xpresspipe`, you will use the following as a template. If you named the conda environment something else, you would replace the line :data:`conda activate xpresspipe` with :data:`conda activate env_name`. If dependencies were installed to the base environment, the :data:`source $(conda...` and :data:`conda activate ...` lines are unnecessary.
-| - The commands here are the same as above, but likely the method of execution will be different. A lot of supercomputing clusters manage job submission through a system called `SLURM <https://www.youtube.com/watch?v=RpkAyFI05yY>`_. Each supercomputing cluster should have individualized and tailored instructions for proper usage. We will briefly provide an example of how one would submit a job to a SLURM batch system:
+| 1. Assuming you installed the XPRESSpipe dependencies in a conda environment called :data:`xpresspipe`, you will use the following as a template. If you named the conda environment something else, you would replace the line :data:`conda activate xpresspipe` with :data:`conda activate env_name`. If dependencies were installed to the base environment, the :data:`source $(conda...` and :data:`conda activate ...` lines are unnecessary.
+| 2. The commands here are the same as above, but likely the method of execution will be different. A lot of supercomputing clusters manage job submission through a system called `SLURM <https://www.youtube.com/watch?v=RpkAyFI05yY>`_. Each supercomputing cluster should have individualized and tailored instructions for proper usage. We will briefly provide an example of how one would submit a job to a SLURM batch system:
 
 .. code-block:: shell
 
@@ -228,19 +234,19 @@ Run Data
   xpresspipe riboseq -i $SCRDIR/input -o $SCRDIR/output/ -r $REF --gtf $REF/transcripts_CT.gtf -e this_is_a_test -a CTGTAGGCACCATCAAT --sjdbOverhang
 
 
-| - To queue this script into the job pool, you would do the following:
+| 3. To queue this script into the job pool, you would do the following:
 
 .. code-block:: shell
 
   $ sbatch my_batch_script.sh
 
-| - To monitor the progress of your job, execute the following:
+| 4. To monitor the progress of your job, execute the following:
 
 .. code-block:: shell
 
   $ watch -n1 squeue -u $USER
 
-| - After the job is finished, you can export the data as shown in the next section.
+| After the job is finished, you can export the data as shown in the next section.
 
 
 
@@ -248,9 +254,10 @@ Run Data
 Explore the Data
 ----------------
 | Once the data is finished processing, we can start exploring the output. Explanations each quality control analysis can be found in the :ref:`analysis_link` section of the documentation.
+|
 | In order to get the data from a HPC to your personal computer, you can use a command like the following:
 
 .. code-block:: shell
 
   $ cd ~/Desktop # Or any other location where you want to store and analyze the data
-  $ scp USERNAME@this_cluster_has_no_name.chpc.university.edu:/full/path/to/files/file_name.suffix ./
+  $ scp USERNAME@myCluster.chpc.university.edu:/full/path/to/files/file_name.suffix ./

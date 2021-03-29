@@ -3,9 +3,9 @@ Ribosome Profiling Pipeline
 ############################
 | The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in other sections of this documentation. For more detailed information concerning these steps, please refer to the Align chapter for the step you are interested in.
 
--------------
+==============
 Arguments
--------------
+==============
 | The help menu can be accessed by calling the following from the command line:
 
 .. code-block:: shell
@@ -89,9 +89,9 @@ Arguments
      - Number of max processors to use for tasks (default: No limit)
 
 
--------------------------------------------------------------
+======================================================================
 Example 1: Run pipeline on ribosome profiling sample files
--------------------------------------------------------------
+======================================================================
 .. ident with TABs
 .. code-block:: python
 
@@ -107,9 +107,9 @@ Example 1: Run pipeline on ribosome profiling sample files
                 --sjdbOverhang 49
 
 
--------------------------------------------------------------------------
+======================================================================
 Example 2: Run pipeline on ribosome profiling sample files with UMIs
--------------------------------------------------------------------------
+======================================================================
 | If following a ribosome profiling protocol that utilizes 3' UMIs (unique molecular identifiers), as in `McGlincey, 2017 <https://pubmed.ncbi.nlm.nih.gov/28579404/>`_, you will want to provide the relevant details to the :data:`riboseq` sub-module. In this case, they use a 5 nucleotide UMI that is found at the 3'-end of each read, so the :data:`--umi_location 3prime` and :data:`--umi_length 5` options should be used. If a UMI spacer is part of the UMI structure, this can be provided with the :data:`--umi_spacer` option with the spacer length as input.
 
 

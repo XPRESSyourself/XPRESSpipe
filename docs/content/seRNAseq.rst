@@ -4,9 +4,9 @@ Single-End RNA-seq Pipeline
 | The following pipeline will pre-process, align, and quality check single-end RNA-seq samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the Align chapter.
 
 
--------------
+==============
 Arguments
--------------
+==============
 | The help menu can be accessed by calling the following from the command line:
 
 .. code-block:: shell
@@ -88,9 +88,9 @@ Arguments
      - Number of max processors to use for tasks (default: No limit)
 
 
---------------------------------------------------------------------------------
+======================================================================
 Example 1: Run pipeline on single-end RNA-seq sample files
---------------------------------------------------------------------------------
+======================================================================
 
 .. ident with TABs
 .. code-block:: python

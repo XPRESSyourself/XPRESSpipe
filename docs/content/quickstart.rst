@@ -19,6 +19,10 @@ Running XPRESSpipe
 Video Walkthroughs
 -----------------------
 | The following is a short tutorial showing you how to install XPRESSpipe:
+
+.. note::
+| The :data:`pip install .` method has been replaced with a script that is executed by running :data:`bash install.sh`.
+
 .. raw:: html
 
     <embed>

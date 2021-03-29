@@ -13,7 +13,9 @@ XPRESSpipe Reference Requirements
 | - All chromosomal genome fasta files are in their own directory within the parent reference directory. If a FASTA file with all chromosomes combined is available for your organism, this can be provided, but must be in its own directory.
 | - A sub-directory, named :data:`genome`, contains the STAR reference files. If :data:`createReference` is used to curate the reference, and the parent reference directory was provided as output location, this directory creation and file formatting will be handled automatically by XPRESSpipe.
 | - A transcript reference (GTF), is located in the reference parent directory and is named :data:`transcripts.gtf`. If a coding-only or truncated reference GTFs are desired for read quantification, these should also be in this directory (:data:`truncate` will handle file naming and formatting so long as the output location is specified as this parent directory). This file will then need to be specified within an XPRESSpipe pipeline.
-| **A completed reference directory can be created that follows these requirements by creating a directory, placing the transcripts.gtf and genomic chromosome fasta files in the parent directory and running :data:`curateReference` as described below**
+
+.. note::
+  A completed reference directory can be created that follows these requirements by creating a directory, placing the transcripts.gtf and genomic chromosome fasta files in the parent directory and running :data:`curateReference` as described below**
 
 ============================
 Get Sequence Files
@@ -30,8 +32,9 @@ Get Sequence Files
   $ gzip -d *.gz
   $ mv *fasta genome_fasta
 
-| - The chromosome IDs may vary depending on your organism.
-| - **We recommend against using the** :data:`toplevel` **Ensembl files. In our experience, this leads to RAM issues in STAR.**
+| The chromosome IDs may vary depending on your organism.
+.. note::
+  We recommend against using the :data:`toplevel` Ensembl files. In our experience, this leads to RAM issues in STAR.
 
 
 ============================================
@@ -39,7 +42,8 @@ Perform Full Reference Curation
 ============================================
 | The following will create a XPRESSpipe-formatted reference directory containing all STAR reference files and transcript references needs for quantification and meta-analysis.
 | A parent reference directory containing the transcripts.gtf file and all chromosomal genome fasta files must be present.
-| *More details as to what each specific parameter is doing can be found in the sections below.*
+|
+| More details as to what each specific parameter is doing can be found in the sections below.*
 
 -----------
 Arguments

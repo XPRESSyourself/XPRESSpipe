@@ -2,10 +2,10 @@
 Alignment
 ############################
 | In order to quantify transcription on a transcript to transcript basis, individual reads called during sequencing must be mapped to the genome. While there are multiple alignment software packages available, XPRESSpipe uses a current version of `STAR <https://github.com/alexdobin/STAR>`_ to perform this step in transcription quantification for several reasons:
-| - Performance: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the `performance and accuracy is superior to the majority of other splice aware aligners currently available <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/>`_
-| - Splice Junction Aware: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.
-| - Standard: The foundation of the pipeline used in XPRESSpipe is based in the `TCGA <https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/>`_ standards for RNAseq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated.
-| - Variant Aware: The user can provide a VCF, such as those provided by `ClinVar <ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/>`_ and `dbSNP <ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/>`_. These files are useful in integrating information about common or disease nucleotide variants into the RNA-Seq alignment stage. The files you use should match the build of the genome you are using (i.e., if using Homo Sapiens GRCh38, these builds should match between curated reference files and VCF file).
+| - **Performance**: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the `performance and accuracy is superior to the majority of other splice aware aligners currently available <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/>`_
+| - **Splice Junction Aware**: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.
+| - **Standardized**: The foundation of the pipeline used in XPRESSpipe is based in the `TCGA <https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/>`_ standards for RNAseq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated.
+| - **Variant Aware**: The user can provide a VCF, such as those provided by `ClinVar <ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/VCF/>`_ and `dbSNP <ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/>`_. These files are useful in integrating information about common or disease nucleotide variants into the RNA-Seq alignment stage. The files you use should match the build of the genome you are using (i.e., if using Homo Sapiens GRCh38, these builds should match between curated reference files and VCF file).
 
 .. note::
   rRNA depletion using the :data:`--remove_rrna` option removes rRNA alignments from BAM files. This works by generating a BED file behind the scenes for rRNA transcripts, and removing them from the genome-aligned BAM file using :data:`bedtools intersect`. For transcriptome-aligned BAM files, a modified GTF file is generated for this step only with rRNA records removed in order to prevent their transcript mapping during this step.
@@ -73,10 +73,10 @@ Arguments
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
------------
-Examples
------------
-| **Example 1 -- Single-end RNAseq alignment:**
+
+-------------------------------------------------------
+Example 1: Single-end RNAseq alignment
+-------------------------------------------------------
 | - Raw reads are :data:`.fastq`-like and found in the :data:`-i /path/to/input/files/` directory. Can be uncompressed or compressed via :data:`.gz` or :data:`.zip`
 | - A general output directory has been created, :data:`-o riboseq_out/`
 | - :data:`--type` is specified as 'SE' and path to parent reference directory is provided
