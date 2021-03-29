@@ -2,6 +2,7 @@
 Alignment
 ############################
 | In order to quantify transcription on a transcript to transcript basis, individual reads called during sequencing must be mapped to the genome. While there are multiple alignment software packages available, XPRESSpipe uses a current version of `STAR <https://github.com/alexdobin/STAR>`_ to perform this step in transcription quantification for several reasons:
+|
 | - **Performance**: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the `performance and accuracy is superior to the majority of other splice aware aligners currently available <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/>`_
 | - **Splice Junction Aware**: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.
 | - **Standardized**: The foundation of the pipeline used in XPRESSpipe is based in the `TCGA <https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/>`_ standards for RNAseq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated.
@@ -10,17 +11,10 @@ Alignment
 .. note::
   rRNA depletion using the :data:`--remove_rrna` option removes rRNA alignments from BAM files. This works by generating a BED file behind the scenes for rRNA transcripts, and removing them from the genome-aligned BAM file using :data:`bedtools intersect`. For transcriptome-aligned BAM files, a modified GTF file is generated for this step only with rRNA records removed in order to prevent their transcript mapping during this step.
 
-============================
-Single-End RNAseq Alignment
-============================
-| The following runs single-end reads alignment using the specified XPRESSpipe-formatted reference directory.
-| Notes:
-| - For the :data:`--sjdbOverhang` argument, the same value should be entered that was used when creating the STAR reference files.
-| - Ribosome profiling data can be run as a single-end RNA-seq
 
------------
+============================
 Arguments
------------
+============================
 | The help menu can be accessed by calling the following from the command line:
 
 .. code-block:: shell
@@ -74,6 +68,15 @@ Arguments
      - Number of max processors to use for tasks (default: No limit)
 
 
+============================
+Single-End RNAseq Alignment
+============================
+| The following runs single-end reads alignment using the specified XPRESSpipe-formatted reference directory.
+| Notes:
+| - For the :data:`--sjdbOverhang` argument, the same value should be entered that was used when creating the STAR reference files.
+| - Ribosome profiling data can be run as a single-end RNA-seq
+
+
 -------------------------------------------------------
 Example 1: Single-end RNAseq alignment
 -------------------------------------------------------
@@ -88,54 +91,13 @@ Example 1: Single-end RNAseq alignment
 
   $ xpresspipe align -i /path/to/input/files/ -o riboseq_out/ -t SE -r /path/to/reference/ --sjdbOverhang 49 --output_bed --output_bigwig
 
+
 ============================
 Paired-End RNAseq Alignment
 ============================
 | The following runs paired-end reads alignment using the specified XPRESSpipe-formatted reference directory.
 | Notes:
 | - For the :data:`--sjdbOverhang` argument, the same value should be entered that was used when creating the STAR reference files.
-
------------
-Arguments
------------
-| The help menu can be accessed by calling the following from the command line:
-
-.. code-block:: shell
-
-  $ xpresspipe align --help
-
-.. list-table::
-   :widths: 35 50
-   :header-rows: 1
-
-   * - Required Arguments
-     - Description
-   * - :data:`-i \<path\>, --input \<path\>`
-     - Path to input directory
-   * - :data:`-o \<path\>, --output \<path\>`
-     - Path to output directory
-   * - :data:`-r \<path\>, --reference \<path\>`
-     - Path to parent organism reference directory
-   * - :data:`-t \<SE or PE\>, --type \<SE or PE\>`
-     - Sequencing type ("SE" for single-end, "PE" for paired-end)
-
-.. list-table::
-   :widths: 35 50
-   :header-rows: 1
-
-   * - Optional Arguments
-     - Description
-   * - :data:`--suppress_version_check`
-     - Suppress version checks and other features that require internet access during processing
-   * - :data:`--output_bed`
-     - Include flag to output BED files for each aligned file
-   * - :data:`--output_bigwig`
-     - Include flag to output bigwig files for each aligned file
-   * - :data:`--sjdbOverhang \<sjdbOverhang_amount\>`
-     - Specify length of genomic sequences for constructing splice-aware reference. Ideal length is :data:`read length - 1`, so for 2x100bp paired-end reads, you would use 100 - 1 = 99. However, the default value of :data:`100` should work in most cases
-   * - :data:`-m <processors>, --max_processors <processors>`
-     - Number of max processors to use for tasks (default: No limit)
-
 
 --------------------------------------------------------------------------------
 Example 1: Paired-end RNAseq alignment

@@ -2,6 +2,7 @@
 Curating References
 ###################
 | In order to quantify transcription levels from RNA-Seq data, reads must be mapped to a reference genome or transcriptome. While there are multiple alignment software packages available, XPRESSpipe performs this step using a current version of `STAR <https://github.com/alexdobin/STAR>`_ for several reasons:
+|
 | - **Splice Junction Aware**: STAR is capable of mapping reads spanning a splice junction, where more traditional packages, such as Bowtie, are incapable of doing so and are better suited for tasks such as genome alignment.
 | - **Performance**: While computationally greedy (a human genome alignment requires upwards of 30 Gb RAM), the `performance and accuracy is excellent compared to the majority of other splice-aware aligners currently available <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5792058/>`_
 | - **Standard**: The foundation of the pipeline used in XPRESSpipe is based in the `TCGA <https://docs.gdc.cancer.gov/Data/Bioinformatics_Pipelines/Expression_mRNA_Pipeline/>`_ standards for RNA-Seq alignment. This method utilizes a guided or 2-pass alignment program. In the guided alignment, a GTF with annotated splice junctions is used to guide the alignments over splice juntions. In the 2-pass alignment, reads are mapped across the genome to identify novel splice junctions. These new annotations are then incorporated into the reference index and reads are re-aligned with this new reference. While more time-intensive, this step can aid in aligning across these junctions, especially in organisms where the transcriptome is not as well annotated. If mapping to a well-documented organism, this step can be forgone and STAR will use the GTF annotations to determine intronic regions of transcripts for read mapping.
@@ -10,6 +11,7 @@ Curating References
 XPRESSpipe Reference Requirements
 =================================
 | An XPRESSpipe compatible reference directory must meet some requirements:
+|
 | - All chromosomal genome fasta files are in their own directory within the parent reference directory. If a FASTA file with all chromosomes combined is available for your organism, this can be provided, but must be in its own directory.
 | - A sub-directory, named :data:`genome`, contains the STAR reference files. If :data:`createReference` is used to curate the reference, and the parent reference directory was provided as output location, this directory creation and file formatting will be handled automatically by XPRESSpipe.
 | - A transcript reference (GTF), is located in the reference parent directory and is named :data:`transcripts.gtf`. If a coding-only or truncated reference GTFs are desired for read quantification, these should also be in this directory (:data:`truncate` will handle file naming and formatting so long as the output location is specified as this parent directory). This file will then need to be specified within an XPRESSpipe pipeline.
@@ -201,6 +203,7 @@ Example 3: Create a single-end sequencing reference for Saccharomyces cerevisiae
 Reference Modification
 ============================================
 | At times, quantification of transcripts or CDSs to a modified reference is desirable. Below are some examples:
+|
 | 1. As ribosomal RNA (rRNA) contamination is common in RNA-seq, even when a depletion step was performed prior to library preparation, it is sometimes desirable to not count these and other non-coding RNAs in the quantification and analysis.
 | 2. During ribosome profiling library preparation, where a 5' and 3' pile-up of ribosome footprints due to slow initiation and termination kinetics of footprints is common, it is suggested to `exclude the first 45-50 nucleotides from the 5' end and 15 nucleotides from the 3' end of each CDS during quantification <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. This command will automatically curate an Ensembl GTF to meet these demands for read quantification. If a UCSC-formatted GTF is desired, users should supply the :data:`--ucsc-format` flag; however, the :data:`--longest_transcript` flag will not work with a UCSC-formatted GTF as longest transcript definitions are dependent on Ensembl annotations.
 | 3. Several genes encode multiple isoforms or transcripts. During quantification, many software packages for counting reads to genes consider a read mapping to multiple transcripts of the same gene as a multi-mapper. Unless interested in alternate isoform usage, it is recommended that transcriptome reference files only contain the longest transcript for each gene.

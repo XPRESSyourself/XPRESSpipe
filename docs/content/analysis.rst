@@ -12,7 +12,7 @@ Differential Expression Analysis
   If intending to use the :data:`diffxpress` sub-module, you need to have used :data:`--quantification_method htseq` during read quantification as `DESeq2 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4302049/>`_ requires integer count data.
 
 |
-| Requirements:
+| **Requirements**:
 |   - R is installed on your machine and is in your $PATH (this should be handled in the installation)
 |   - All input files are tab-delimited (with .txt or .tsv suffix)
 |   - Design formula does not include the tilde (~) and there are no spaces

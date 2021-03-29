@@ -6,9 +6,7 @@ XPRESSpipe
 =================
 About
 =================
-| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is a part of the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite of sequencing tools. `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is an automated, efficient, and flexible pipeline for end-to-end processing of ribosome profiling data.
-| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is currently capable of handling single-end (SE), paired-end (PE), and ribosome profiling data.
-| Other analyses can be performed by `XPRESSplot <https://github.com/XPRESSyourself/XPRESSplot>`_. Please read the relevant documentation for more information.
+| `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is a part of the `XPRESSyourself <https://github.com/XPRESSyourself/>`_ suite of sequencing tools. `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is an automated, efficient, and flexible pipeline for end-to-end processing of ribosome profiling data. `XPRESSpipe <https://github.com/XPRESSyourself/XPRESSpipe>`_ is currently capable of handling single-end (SE), paired-end (PE), and ribosome profiling data. Other analyses can be performed by `XPRESSplot <https://github.com/XPRESSyourself/XPRESSplot>`_. Please read the relevant documentation for more information.
 |
 | If you have limited or no computational experience, please see our :ref:`beginners_link`.
 |

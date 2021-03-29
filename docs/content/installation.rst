@@ -42,6 +42,9 @@ Install XPRESSpipe
 | 4. This installation method will create a separate environment for XPRESSpipe and all its dependencies to live in. Each time you open the command line, you will need to type :data:`conda activate xpresspipe` to use XPRESSpipe
 | 5. Install XPRESSpipe and test that the installation was successful:
 
+.. note::
+  :data:`v0.6.3` and later employs the :data:`bash install.sh` method for installing XPRESSpipe. If using :data:`v0.6.2` or earlier, you should instead run :data:`pip install .`
+
 .. code-block:: shell
 
   $ bash install.sh
@@ -50,9 +53,6 @@ Install XPRESSpipe
 | If a summary menu appeared in the command line interface, it means we are good to go! Congrats! You are almost ready to use XPRESSpipe!
 |
 | You can run :data:`xpresspipe --help` to see a list of the available modules within XPRESSpipe. To see specific parameters for a module, type :data:`xpresspipe <module_name> --help`.
-
-.. note::
-  :data:`v0.6.3` and later employs the :data:`bash install.sh` method for installing XPRESSpipe. If using :data:`v0.6.2` or earlier, you should instead run :data:`pip install .`
 
 
 ==============================================================

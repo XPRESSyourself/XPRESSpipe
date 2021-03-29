@@ -112,6 +112,7 @@ Methodology
 Transcriptomic Reference Files
 ---------------------------------------
 | Read quantification often requires a transcriptome reference file in order to know what alignment coordinates map to what genes. We introduce a suite of GTF modification tools included in XPRESSpipe that we will briefly discuss:
+|
 | - **Isoforms**: GTF files contain records for every isoform of a gene. However, since these isoforms all contain overlapping regions, many tools count a read mapping to one of these regions as a multi-mapper and either penalizes it or discards it completely. A common way to handle this is by taking only the longest transcript for each gene during quantification. This can be performed with :data:`xpresspipe modifyGTF -l`.
 | - **Protein Coding**: When calculating mRNA expression levels, sample normalization to reduce technical bias from RNA-seq platforms is important. However, highly-abundant rRNAs can confound these metrics. Therefore, we provide an option to create a GTF file with only protein-coding annotated genes as input for quantification using :data:`xpresspipe modifyGTF -p`.
 | - **Ribosome Profiling Bias**: During translation, there are three steps: 1) Initiation, 2) Elongation, and 3) Termination. There is usually a pause during Initiation and Termination, which will present itself as systematic spikes on the 5' and 3' ends of each transcript for ribosome profiling reads. A way to correct for the kinetics of initiation and termination and measure translational capacity itself is to `avoid mapping reads to the first 15 codons and last 5 codons of a transcript <https://www.ncbi.nlm.nih.gov/pubmed/28579404>`_. :data:`xpresspipe modifyGTF -t` handles this by searching the exon space of each transcript and pruning the given amounts off of each so that these regions are considered non-coding space. This process is performed recursively, so that if you were trimming 45 nt from the 5' end and exon 1 was only 30 nt, exon 1 would be removed and exon 2 would be trimmed by 15 nt.
@@ -124,10 +125,10 @@ PCR De-Duplication
 ---------------------------------------
 Meta-Analysis
 ---------------------------------------
-| - **Read distribution**: Once reads are trimmed of low quality bases or adapter sequences, looking at the distribution of read lengths can be helpful in identifying that the expected RNA was incorporated into the library. This is especially useful in ribosome profiling datasets, where ideally all reads isolated and incorporated into the library should fall within the 21-33 nt range.
-
-| - **Metagene**: Metagene analysis takes the read coverage across all transcripts in a sample and compiles their distribution along a representative transcript. This is useful in identifying any systematic 5' or 3' biases in the library preparation step.
-
-| - **P-Site Statistics**: Helpful metrics of ribosome profiling libraries including looking at the characteristic 3 nt/1 codon stepping of the translating ribosome and codon usage per sample.
-
-| - **Gene Coverage**: Aspects of a transcript's read coverage or occupancy can be of interest. However, other genome browsers like `IGV <https://software.broadinstitute.org/software/igv/>`_ retain introns, and in the case of transcripts with massive introns, the actually coding space will be difficult to analyze succinctly. XPRESSpipe will plot the gene coverage across an exon-only transcript representation. However, it may still be worthwhile to explore intron coverage in some instances.
+| **Read distribution**: Once reads are trimmed of low quality bases or adapter sequences, looking at the distribution of read lengths can be helpful in identifying that the expected RNA was incorporated into the library. This is especially useful in ribosome profiling datasets, where ideally all reads isolated and incorporated into the library should fall within the 21-33 nt range.
+|
+| **Metagene**: Metagene analysis takes the read coverage across all transcripts in a sample and compiles their distribution along a representative transcript. This is useful in identifying any systematic 5' or 3' biases in the library preparation step.
+|
+| **P-Site Statistics**: Helpful metrics of ribosome profiling libraries including looking at the characteristic 3 nt/1 codon stepping of the translating ribosome and codon usage per sample.
+|
+| **Gene Coverage**: Aspects of a transcript's read coverage or occupancy can be of interest. However, other genome browsers like `IGV <https://software.broadinstitute.org/software/igv/>`_ retain introns, and in the case of transcripts with massive introns, the actually coding space will be difficult to analyze succinctly. XPRESSpipe will plot the gene coverage across an exon-only transcript representation. However, it may still be worthwhile to explore intron coverage in some instances.

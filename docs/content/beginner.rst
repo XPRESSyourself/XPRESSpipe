@@ -16,7 +16,7 @@ First Steps
 =================================
 Install XPRESSpipe
 =================================
-| - Please refer to the :doc:`installation documentation <./installation>` or the walkthrough video below:
+| Please refer to the :doc:`installation documentation <./installation>` or the walkthrough video below:
 
 .. note::
   The :data:`pip install .` method has been replaced with a script that is executed by running :data:`bash install.sh`.
@@ -31,7 +31,7 @@ Install XPRESSpipe
 =================================
 Generate Reference Files
 =================================
-| - Before we can process our raw RNA-seq data, we need to create a reference directory (or for a folder, in other terms). In this example, we will be working with human-derived RNA-seq data, so let's perform the following in the command line:
+| Before we can process our raw RNA-seq data, we need to create a reference directory (or for a folder, in other terms). In this example, we will be working with human-derived RNA-seq data, so let's perform the following in the command line:
 
 .. code-block:: shell
 
@@ -43,11 +43,12 @@ Generate Reference Files
 | 2. The second command created a new folder in the Desktop directory called :data:`reference_folder`
 | 3. The third command created a new folder in the reference directory for intermediate reference files
 
-| - Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are a bit long, I used the :data:`\` character to indicate I am continuing the command in the next line. You not include these characters when executing the command, they just help make the code more readable. We will first read the retrieval commands into a file which will additionally act as a log file for the version for the genome version we are using.
-| - You should modify the the variable calls between the :data:`#` signs. For :data:`GTF_URL`, you should change the URL currently provided to the one appropriate for your organism of interest. Make sure you are downloading the GTF file and NOT the GFF file. For :data:`FASTA_URL`, you should do the same as before with the URL to the chromosome DNA FASTA files, but you should only copy the URL up to "chromosome", but not include the chromosome identifier. For :data:`CHROMOSOMES`, type out the chromosome identifiers you want to download between the " characters with a space between each.
+| Now let's get the reference files. We're going to do this directly in the command line, but if you have trouble with this, I will explain an alternative afterwards. Quick note, because the next lines of code are a bit long, I used the :data:`\` character to indicate I am continuing the command in the next line. You not include these characters when executing the command, they just help make the code more readable. We will first read the retrieval commands into a file which will additionally act as a log file for the version for the genome version we are using.
+|
+| You should modify the the variable calls between the :data:`#` signs. For :data:`GTF_URL`, you should change the URL currently provided to the one appropriate for your organism of interest. Make sure you are downloading the GTF file and NOT the GFF file. For :data:`FASTA_URL`, you should do the same as before with the URL to the chromosome DNA FASTA files, but you should only copy the URL up to "chromosome", but not include the chromosome identifier. For :data:`CHROMOSOMES`, type out the chromosome identifiers you want to download between the " characters with a space between each.
 
 .. note::
-| I do not personally recommend using the :data:`toplevel` genome sequence files. Whenever I have used these, I often run into a memory overload error during genome curation.
+  I do not personally recommend using the :data:`toplevel` genome sequence files. Whenever I have used these, I often run into a memory overload error during genome curation.
 
 .. code-block:: shell
 
@@ -69,10 +70,11 @@ Generate Reference Files
   $ bash fetch.sh
 
 | Let's discuss what we just did:
+|
 | 1. We navigated into the reference folder, downloaded a GTF reference file and unzipped it, then navigated to the :data:`fasta_file` directory to download the raw reference data and unzipped it. Finally, we returned to the main reference directory.
 | 2. If this didn't work, we can navigate to `Ensembl <https://www.ensembl.org/>`_ to download the relevant data. We need to get the GTF and DNA chromosomal FASTA files for our organism of interest. The link to the chromosome sequence files actually contains more files than we need. We just need the files that start with :data:`Homo_sapiens.GRCh38.dna.chromosome`. You can download them, move them to the appropriate directories within your reference directory, and unzip the files by double-clicking on them.
-
-| - Now we need to curate these references files into something the sequencing alignment software can use. Since we are using ribosome profiling data, we want a reference that will allow us to `avoid mapping to the 5' and 3' ends of genes <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. We also don't want to align to anything but protein coding genes. Finally, we want to quantify to the longest transcript (although this is not required except in certain cases for downstream analysis compatibility). This last bit just helps the software avoid confusion when a gene has multiple splice variants to choose from. Since this is short read sequencing (let's say we were doing 50 bp single-end sequencing), we also want to factor this into the curation of the reference (see the :data:`--sjdbOverhang` argument below).
+|
+| Now we need to curate these references files into something the sequencing alignment software can use. Since we are using ribosome profiling data, we want a reference that will allow us to `avoid mapping to the 5' and 3' ends of genes <https://www.cell.com/cms/10.1016/j.celrep.2016.01.043/attachment/257faf34-ff8f-4071-a642-bfdb531c75b8/mmc1>`_. We also don't want to align to anything but protein coding genes. Finally, we want to quantify to the longest transcript (although this is not required except in certain cases for downstream analysis compatibility). This last bit just helps the software avoid confusion when a gene has multiple splice variants to choose from. Since this is short read sequencing (let's say we were doing 50 bp single-end sequencing), we also want to factor this into the curation of the reference (see the :data:`--sjdbOverhang` argument below).
 
 .. code-block:: shell
 
