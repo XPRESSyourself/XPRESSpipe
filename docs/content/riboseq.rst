@@ -3,6 +3,15 @@ Ribosome Profiling Pipeline
 ############################
 | The following pipeline will pre-process, align, and quality check ribosome profiling samples using the sub-modules discussed in other sections of this documentation. For more detailed information concerning these steps, please refer to the Align chapter for the step you are interested in.
 
+-------------
+Arguments
+-------------
+| The help menu can be accessed by calling the following from the command line:
+
+.. code-block:: shell
+
+  $ xpresspipe riboseq --help
+
 .. list-table::
    :widths: 35 50
    :header-rows: 1
@@ -79,12 +88,6 @@ Ribosome Profiling Pipeline
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
 
-| Run the following for more details:
-
-.. ident with TABs
-.. code-block:: python
-
-  $ xpresspipe riboseq --help
 
 -------------------------------------------------------------
 Example 1: Run pipeline on ribosome profiling sample files

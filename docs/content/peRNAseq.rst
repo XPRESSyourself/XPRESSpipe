@@ -3,6 +3,15 @@ Paired-End RNA-seq Pipeline
 ############################
 | The following pipeline will pre-process, align, and quality check paired-end RNA-seq samples using the sub-modules discussed in earlier chapters. For more detailed information concerning these steps, please refer to the Align chapter.
 
+-------------
+Arguments
+-------------
+| The help menu can be accessed by calling the following from the command line:
+
+.. code-block:: shell
+
+  $ xpresspipe peRNAseq --help
+
 .. list-table::
    :widths: 35 50
    :header-rows: 1
@@ -76,13 +85,6 @@ Paired-End RNA-seq Pipeline
      - Only needs to be changed if this argument was provided curing reference building AND using a two-pass alignment. This should be the length of the organism's genome in nucleotides
    * - :data:`-m <processors>, --max_processors <processors>`
      - Number of max processors to use for tasks (default: No limit)
-
-| Run the following for more details:
-
-.. ident with TABs
-.. code-block:: python
-
-  $ xpresspipe peRNAseq --help
 
 
 ------------------------------------------------------------------
