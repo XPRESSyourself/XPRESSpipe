@@ -8,11 +8,18 @@ Normalize
 Sample Normalization
 =========================
 | Due to inherent biases in RNA-seq samples (most commonly, different amounts of total RNA per sample in a given lane), samples must be normalized to obtain an accurate representation of transcription per sample. Additional normalization can be performed to normalize for transcript length ("per kilobase million") as longer transcripts will naturally create more fragments mapping to a given gene, thus potentially making 1 transcript appear as many when quantified.
-|
 
----------------------------
+
+=========================
+Assumptions
+=========================
+| - R is installed on your machine and is in your $PATH if using the :data:`batch` argument
+| - All input files are tab-delimited (with .txt or .tsv suffix)
+
+
+=========================
 Normalization Methods
----------------------------
+=========================
 | The following equations summarize different way to normalize samples for RNA-seq:
 |
 | **Reads per Million**
@@ -30,20 +37,15 @@ Normalization Methods
 |
 | In each of the above, assume *g* is gene *n*, *ge* is cumulative exon space for gene *n*, *r* is total reads, *f* is total fragments, and *l* is length
 
-----------------
-Assumptions
-----------------
-| - R is installed on your machine and is in your $PATH if using the :data:`batch` argument
-| - All input files are tab-delimited (with .txt or .tsv suffix)
 
---------------------------------
+=========================
 Batch Correction
---------------------------------
+=========================
 | When multiple people perform library preparation, or when libraries are prepared on different days, this can lead to inherent biases in count distributions between batches of samples. It is therefore necessary to normalize these effects when appropriate.
 
------------
+=========================
 Arguments
------------
+=========================
 | The help menu can be accessed by calling the following from the command line:
 
 .. code-block:: shell
@@ -75,18 +77,18 @@ Arguments
     - Include path and filename of dataframe with batch normalization parameters
 
 
---------------------------------------------------------------------------------
+===========================================================================
 Example 1: Perform RPKM normalization on single-end RNA-seq data
---------------------------------------------------------------------------------
+===========================================================================
 
 .. code-block:: shell
 
   $ xpresspipe normalizeMatrix -i riboprof_out/counts/se_test_counts_table.tsv --method RPKM -g se_reference/transcripts_coding_truncated.gtf
 
 
---------------------------------------------------------------------------------
+===========================================================================
 Example 2: Perform batch normalization on RNA-seq data
---------------------------------------------------------------------------------
+===========================================================================
 
 | **Inputs**
 
