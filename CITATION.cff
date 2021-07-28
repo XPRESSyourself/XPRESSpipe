@@ -1,0 +1,10 @@
+cff-version: 0.0.1
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Berg
+    given-names: Jordan A.
+    orcid: https://orcid.org/0000-0002-5096-0558
+title: "XPRESSyourself"
+version: 0.6.3
+doi: 10.1371/journal.pcbi.1007625
+date-released: 2021-03-29
