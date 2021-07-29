@@ -35,13 +35,9 @@ evaluating a experimental vs control experiment for RNA-sequencing, you would pr
     s3_rna      b_EXP
     s4_rna      b_EXP
 
-| Your base (denominator) parameter in a given factor column in the :data:`sample_info` file must be first alphabetically. In the case provided above, we want to compare the experimental 
-condition *VS* the wild-type control condition, however these labels are not alphabetical. In this case, you can append letters to the beginning to force alphabetical order. For example, if 
-you performed a :data:`experiment` vs :data:`wild-type` experiment, you would need to use the labels :data:`b_experiment` vs :data:`a_wild-type` to force a :data:`b_experiment` / :data:`a_wild-type` comparison.
+| Your base (denominator) parameter in a given factor column in the :data:`sample_info` file must be first alphabetically. In the case provided above, we want to compare the experimental condition *VS* the wild-type control condition, however these labels are not alphabetical. In this case, you can append letters to the beginning to force alphabetical order. For example, if you performed a :data:`experiment` vs :data:`wild-type` experiment, you would need to use the labels :data:`b_experiment` vs :data:`a_wild-type` to force a :data:`b_experiment` / :data:`a_wild-type` comparison.
 
-| If we want to consider additional factors, such as translation efficiency of  footprint vs RNA-sequence samples for ribosome profiling, these should be included as additional factor columns in 
-the :data:`sample_info` file. Since we want to perform another comparison with the footprint vs RNA-sequencing samples, we need to again ensure that these labels for this "Type" factor are listed 
-in the correct alphabetical order to ensure we are performing a footprint *VS* RNA-sequencing comparison to reflect translation efficiency.
+| If we want to consider additional factors, such as translation efficiency of  footprint vs RNA-sequence samples for ribosome profiling, these should be included as additional factor columns in the :data:`sample_info` file. Since we want to perform another comparison with the footprint vs RNA-sequencing samples, we need to again ensure that these labels for this "Type" factor are listed in the correct alphabetical order to ensure we are performing a footprint *VS* RNA-sequencing comparison to reflect translation efficiency.
 
 .. ident with TABs
 .. code-block:: python
@@ -58,29 +54,19 @@ in the correct alphabetical order to ensure we are performing a footprint *VS* R
     s4_fp     b_EXP       RPF
     s4_rna    b_EXP       RNA
 
-| The alphabetical order of the factor names (i.e., "Condition", "Type") does not matter. Instead, according to the DESeq2 documentation, these design factors are `evaluated in the order 
-listed <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#the-deseqdataset>`_. 
+| The alphabetical order of the factor names (i.e., "Condition", "Type") does not matter. Instead, according to the DESeq2 documentation, these design factors are `evaluated in the order listed <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#the-deseqdataset>`_. 
 
 | The DESeq2 design formula specifies what is being modeled from the data. 
 
 .. note::
   As stated in the DESeq2 documentation:    
-  With no additional arguments to results, the log2 fold change and Wald test p value will be for the last variable in the design formula, and if this is a factor, the comparison will be the 
-  last level of this variable over the reference level (see previous note on factor levels). However, the order of the variables of the design do not matter so long as the user specifies the 
-  comparison to build a results table for, using the name or contrast arguments of results.
+  With no additional arguments to results, the log2 fold change and Wald test p value will be for the last variable in the design formula, and if this is a factor, the comparison will be the last level of this variable over the reference level (see previous note on factor levels). However, the order of the variables of the design do not matter so long as the user specifies the comparison to build a results table for, using the name or contrast arguments of results.
 
-| So, in the case of :data:`Type+Condition+Type:Condition` where we are interesting in testing the difference in translation efficiencies between conditions, the interaction :data:`Type:Condition` 
-is the coefficient being tested for differential expression. The model as designed will also account for differences only seen in the :data:`Type` or :data:`Condition` co-variates alone (for example, 
-a specific bias to ribosome footprints vs. mRNA fragments).
+| So, in the case of :data:`Type+Condition+Type:Condition` where we are interesting in testing the difference in translation efficiencies between conditions, the interaction :data:`Type:Condition` is the coefficient being tested for differential expression. The model as designed will also account for differences only seen in the :data:`Type` or :data:`Condition` co-variates alone (for example, a specific bias to ribosome footprints vs. mRNA fragments).
 
-| For more information on factor levels and design parameters, please see the `DESeq2 documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#multi-factor-designs>`_ 
-and `this note <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#can-i-run-deseq2-to-contrast-the-levels-of-many-groups>`_. Any standard design formula that will work in 
-DESeq2 will work within the XPRESSpipe wrapper, as long as the formatted described above is followed.
+| For more information on factor levels and design parameters, please see the `DESeq2 documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#multi-factor-designs>`_ and `this note <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#can-i-run-deseq2-to-contrast-the-levels-of-many-groups>`_. Any standard design formula that will work in DESeq2 will work within the XPRESSpipe wrapper, as long as the formatted described above is followed.
 
-| Other possible variations to DESeq2 analysis are available `here <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#variations-to-the-standard-workflow>`_, but not all 
-will be compatible with the XPRESSpipe wrapper. In general, the XPRESSpipe wrapper is best suited to simple multi-factor design (Experimental vs Wild-type, Footprints vs RNA-sequencing, plus any other 
-factors relevant to your experiment). For advice in preparing your design formula differently than in the examples listed below, please reach out to us 
-`here <https://github.com/XPRESSyourself/XPRESSpipe/issues>`_.
+| Other possible variations to DESeq2 analysis are available `here <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#variations-to-the-standard-workflow>`_, but not all will be compatible with the XPRESSpipe wrapper. In general, the XPRESSpipe wrapper is best suited to simple multi-factor design (Experimental vs Wild-type, Footprints vs RNA-sequencing, plus any other factors relevant to your experiment). For advice in preparing your design formula differently than in the examples listed below, please reach out to us `here <https://github.com/XPRESSyourself/XPRESSpipe/issues>`_.
 
 -----------
 Arguments
@@ -120,10 +106,7 @@ Arguments
 Example 1: Analyze ribosome profiling data
 --------------------------------------------
 | The source files can be found `here <https://github.com/XPRESSyourself/xpressyourself_manuscript/tree/main/isrib_analysis/isrib_de/xpresspipe_data_deseq2>`_.
-| If we want to perform differential expression of translation efficiency for ribosome profiling data, we need to provide :data:`Condition` and :data:`Type` factor columns in the :data:`sample_info` file. 
-If we want to include the :data:`RPF` / :data:`RNA` comparison to account for translation efficiency, we would need to include these factor label as a column to ensure the appropriate 
-:data:`RPF` / :data:`RNA` evaluation. To perform a comparison between Tm-treated and Untreated cells, we will provide the :data:`TM` and :data:`UNTR` labels for the :data:`Condition` factor. With the 
-provided design formula used below, we will be calculating:
+| If we want to perform differential expression of translation efficiency for ribosome profiling data, we need to provide :data:`Condition` and :data:`Type` factor columns in the :data:`sample_info` file. If we want to include the :data:`RPF` / :data:`RNA` comparison to account for translation efficiency, we would need to include these factor label as a column to ensure the appropriate :data:`RPF` / :data:`RNA` evaluation. To perform a comparison between Tm-treated and Untreated cells, we will provide the :data:`TM` and :data:`UNTR` labels for the :data:`Condition` factor. With the provided design formula used below, we will be calculating:
 
 | :math:`\frac{ ( RPF _{\textit{TM}} / RNA _{\textit{TM}} ) }  { ( RPF _{\textit{UNTR}} / RNA _{\textit{UNTR}} ) }`
 
@@ -172,16 +155,13 @@ provided design formula used below, we will be calculating:
   RPS15A  1823.967865	 -1.391099082	       0.152069954	 -9.147757652	 5.81E-20	 1.26E-16
   DYNC1H1 11985.60418	 0.85282198	       0.094425503	  9.031691164	 1.69E-19	 2.56E-16
 
-| From this output, we can focus on the :data:`log2FoldChange` and :data:`padj` columns. From this output, we see that ATF4 is the most significantly upregulated gene by translation efficiency 
-between the TM and UNTR conditions, which is what we expect (see the `XPRESSyourself manuscript <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007625>`_ for further 
-discussion of this example). Further explanations of the other columns of this output can be found in the `DESeq2 documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html>`_.
+| From this output, we can focus on the :data:`log2FoldChange` and :data:`padj` columns. From this output, we see that ATF4 is the most significantly upregulated gene by translation efficiency between the TM and UNTR conditions, which is what we expect (see the `XPRESSyourself manuscript <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007625>`_ for further discussion of this example). Further explanations of the other columns of this output can be found in the `DESeq2 documentation <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html>`_.
 
 
 ---------------------------------
 Example 2: Analyze RNA-seq data
 ---------------------------------
-| For a standard two-condition RNA-seq experiment comparison, we are only interested in the differential expression of :data:`EXP` vs :data:`WT`. To ensure this comparison if performed correctly, 
-we need to force these :data:`Condition` factor labels to be alphabetical. We will thus rename them :data:`b_EXP` and :data:`a_WT` and do the following:
+| For a standard two-condition RNA-seq experiment comparison, we are only interested in the differential expression of :data:`EXP` vs :data:`WT`. To ensure this comparison if performed correctly, we need to force these :data:`Condition` factor labels to be alphabetical. We will thus rename them :data:`b_EXP` and :data:`a_WT` and do the following:
 
 .. ident with TABs
 .. code-block:: python
@@ -216,8 +196,7 @@ we need to force these :data:`Condition` factor labels to be alphabetical. We wi
 -------------------------------------------------------------------------
 Example 3: Analyze RNA-seq data that was prepared in different batches
 -------------------------------------------------------------------------
-| If samples were performed in multiple batches and you would like to control for batch effect, you can add a :data:`Batch` factor column and provide different batch labels. This example below 
-will control for batch effect and compare :data:`EXP` vs :data:`WT` expression.
+| If samples were performed in multiple batches and you would like to control for batch effect, you can add a :data:`Batch` factor column and provide different batch labels. This example below will control for batch effect and compare :data:`EXP` vs :data:`WT` expression.
 | See the `DESeq2 documentation example <https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#quick-start>`_ for further information.
 
 .. ident with TABs
@@ -255,11 +234,7 @@ will control for batch effect and compare :data:`EXP` vs :data:`WT` expression.
 ======================
 rRNA Probe
 ======================
-| Ribosome RNA (rRNA) contamination is common in RNA-seq library preparation. As the bulk of RNA in a cell at any given time is dedicated to rRNA, and as these rRNA sequences are relatively few 
-and therefore highly repeated, depletion of these sequences is often desired in order to have better depth of coverage of non-rRNA sequences. In order to facilitate this depletion, many commercial 
-kits are available that target specific rRNA sequences for depletion, or that enrich mRNA polyA tails. However, and especially in the case of ribosome profiling experiments, where RNA is digested 
-to create ribosome footprints that commercial depletion kits won't detect and polyA selection kits are inoperable as footprints will not have the requisite polyA sequence. To this end, 
-`custom rRNA probes <https://www.ncbi.nlm.nih.gov/pubmed/28579404>`_ are recommended, and the :data:`rrnaProbe` sub-module was designed to facilitate this process.
+| Ribosome RNA (rRNA) contamination is common in RNA-seq library preparation. As the bulk of RNA in a cell at any given time is dedicated to rRNA, and as these rRNA sequences are relatively few and therefore highly repeated, depletion of these sequences is often desired in order to have better depth of coverage of non-rRNA sequences. In order to facilitate this depletion, many commercial kits are available that target specific rRNA sequences for depletion, or that enrich mRNA polyA tails. However, and especially in the case of ribosome profiling experiments, where RNA is digested to create ribosome footprints that commercial depletion kits won't detect and polyA selection kits are inoperable as footprints will not have the requisite polyA sequence. To this end, `custom rRNA probes <https://www.ncbi.nlm.nih.gov/pubmed/28579404>`_ are recommended, and the :data:`rrnaProbe` sub-module was designed to facilitate this process.
 | :data:`rrnaProbe` works by doing the following:
 | 1. Run FASTQC to detect over-represented sequences
 | 2. Collate these sequences to determine consensus fragments
