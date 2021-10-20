@@ -38,7 +38,8 @@ $ echo 'export PATH=$PATH:/path/to/xpresspipe' >> ~/.bash_profile
 $ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/refs/tags/v0.6.3.zip
 $ unzip XPRESSpipe-v0.6.3.zip
 $ cd XPRESSpipe-v0.6.3/
-$ conda env create -f requirements.yml
+$ conda install -c conda-forge mamba
+$ mamba env create -f requirements.yml
 $ conda activate xpresspipe
 $ bash install.sh
 $ xpresspipe -h

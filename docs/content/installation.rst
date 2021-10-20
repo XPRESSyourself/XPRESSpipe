@@ -34,9 +34,20 @@ Install XPRESSpipe
 
 | 3. Install XPRESSpipe dependencies via Conda and activate the XPRESSpipe environment:
 
+.. note::
+  20 Oct 2021 - Currently, base conda is having issues resolving the dependencies required for XPRESSpipe. We recommend installing dependencies using mamba instead, which appears to resolve dependencies without issues. mamba is also conveniently faster than base conda.
+
+| Installing dependencies using base conda:
 .. code-block:: shell
 
-  $ conda env create --name xpresspipe -f requirements.yml
+  $ conda env create -f requirements.yml
+  $ conda activate xpresspipe
+
+| Installing dependencies using `mamba <https://github.com/mamba-org/mamba>`_:
+.. code-block:: shell
+
+  $ conda install -c conda-forge mamba
+  $ mamba env create -f requirements.yml
   $ conda activate xpresspipe
 
 | 4. This installation method will create a separate environment for XPRESSpipe and all its dependencies to live in. Each time you open the command line, you will need to type :data:`conda activate xpresspipe` to use XPRESSpipe
@@ -67,6 +78,7 @@ Install in a supercomputing environment
   #SBATCH --time=72:00:00
   #SBATCH --nodes=1
   #SBATCH ...
+  ... 
 
   source $(conda info --base)/etc/profile.d/conda.sh
   source activate xpresspipe
