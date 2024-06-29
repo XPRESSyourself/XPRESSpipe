@@ -6,7 +6,6 @@ on:
       - '*'
     branches-ignore:
       - 'main'
-      - 'master'  
     tags-ignore:
       - '*'  
   pull_request:
@@ -14,7 +13,6 @@ on:
       - '*'
     branches-ignore:
       - 'main'
-      - 'master'
 
 jobs:
   build:
