@@ -13,7 +13,6 @@ dependencies:
   - conda-forge::numpy>=1.16.0
   - conda-forge::scipy
   - conda-forge::r-base>=4.0.0
-  - conda-forge::openssl
   - fastp
   - umi_tools
   - STAR>=2.5.1

@@ -46,8 +46,8 @@ packages <- c("Rsamtools", "GenomicAlignments")
 # Install each package if missing
 for (pkg in packages) {
     install_if_missing(pkg)
+    library(pkg)
 }
-library(GenomicAlignments)
 
 # Set globals
 chromosome <- 'chromosome'
