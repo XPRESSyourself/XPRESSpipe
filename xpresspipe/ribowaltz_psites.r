@@ -153,6 +153,12 @@ psite <- function(
         offset_temp[is.na(corrected_offset_from_3), corrected_offset_from_3 := best_offset
                     ][, corrected_offset_from_5 := -corrected_offset_from_3 + length - 1]
       } else {
+        if(extremity == "auto" &
+           ((best_from3_tab[, perc] <= best_from5_tab[, perc] &
+             as.numeric(best_from5_tab[, offset_from_5]) <= minlen - 1) |
+            (best_from3_tab[, perc] > best_from5_tab[, perc] &
+             as.numeric(best_from3_tab[, offset_from_3]) > minlen - 2)) |
+           extremity == "5end"){
         best_offset <- as.numeric(best_from5_tab[, offset_from_5])
         line_plot <- "5end"
         adj_tab <- site_sub[, list(corrected_offset_from_5 = adj_off(.SD, "site_dist_end5", 1, best_offset)), by = length]
@@ -160,6 +166,7 @@ psite <- function(
         offset_temp[is.na(corrected_offset_from_5), corrected_offset_from_5 := best_offset
                     ][, corrected_offset_from_5 := abs(corrected_offset_from_5)
                       ][, corrected_offset_from_3 := abs(corrected_offset_from_5 - length + 1)]
+        }
       }
 
       cat(sprintf("best offset: %i nts from the %s\n", abs(best_offset), gsub("end", "' end", line_plot)))
@@ -187,10 +194,6 @@ psite <- function(
   }
   return(offset)
 }
-
-
-
-
 
 description2 <- function() {
   "
