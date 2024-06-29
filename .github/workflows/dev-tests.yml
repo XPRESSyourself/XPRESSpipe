@@ -31,11 +31,6 @@ jobs:
         python-version: ${{ matrix.python-version }}
         activate-environment: xpresspipe
 
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libssl-dev
-
     - name: Install dependencies
       shell: bash -l {0}
       run: |
@@ -43,7 +38,7 @@ jobs:
         conda env update --file requirements.yml --name xpresspipe
         conda activate xpresspipe
         pip install .
-        pip install codecov flake8
+        pip install codecov
 
     - name: Run test_arguments.py
       shell: bash -l {0}
