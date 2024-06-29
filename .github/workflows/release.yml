@@ -26,8 +26,7 @@ jobs:
       shell: bash -l {0}
       run: |
         conda clean --all
-        conda install -c conda-forge mamba
-        mamba env update --file requirements.yml --name xpresspipe
+        conda env update --file requirements.yml --name xpresspipe
         conda activate xpresspipe
         pip install .
         pip install codecov flake8
