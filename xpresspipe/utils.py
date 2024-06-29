@@ -57,11 +57,15 @@ def add_directory(
     if name.endswith('/'):
         name = name[:-1]
 
-    os.system(
-        'mkdir'
-        + ' -p'
-        + ' ' + str(args_dict[str(parent)]) + str(name)
-        + str(args_dict['log']))
+    # Check if directory already exists 
+    if os.path.isdir(str(args_dict[str(parent)]) + str(name) + '/') == True:
+        print('Directory ' + str(args_dict[str(parent)]) + str(name) + ' already exists. Skipping...')
+    else:
+        cmd = ('mkdir'
+            + ' -p'
+            + ' ' + str(args_dict[str(parent)]) + str(name)
+            + str(args_dict['log']))
+        os.system(cmd)
 
     args_dict[name] = str(str(args_dict[str(parent)]) + str(name) + '/')
 

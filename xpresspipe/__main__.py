@@ -26,7 +26,7 @@ import sys
 import pandas as pd
 import datetime
 
-from xpressplot import rpm, r_fpkm, batch_normalize, convert_names #tpm, add back when pip install updated
+from .xpressplot import rpm, r_fpkm, batch_normalize, convert_names, tpm
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .__init__ import __version__

@@ -24,7 +24,7 @@ from __future__ import print_function
 import os
 import sys
 import pandas as pd
-from xpressplot import batch_normalize, rpm, tpm, r_fpkm
+from .xpressplot import batch_normalize, rpm, tpm, r_fpkm
 
 """Run normalization of count dataframe"""
 def run_normalization(

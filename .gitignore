@@ -28,3 +28,16 @@ xpresspipe/cufflinks
 xpresspipe/fastp_lite*
 fastp_lite/fastp_lite_*
 fastp_lite_*
+tests/awscli-bundle/*
+.vscode/settings.json
+fastp_lite
+fastp_lite/obj/*
+tests/awscli-bundle.zip
+tests/p_site_qc/codon_usage/test_codon_usage_1_summary.pdf
+tests/p_site_qc/periodicity/test_periodicity_1_summary.pdf
+tests/p_site_qc/metrics/SRR1795425_Aligned_small_metrics.txt
+tests/complexity/output/complexity/test_library_complexity_1_summary.pdf
+tests/complexity/output/complexity/metrics/sample.sort_dedupMarked_metrics.txt
+tests/p_site_qc/metrics/annotation.txt
+tests/references/periodicity/Homo_sapiens.GRCh38.112.gtf
+tests/periodicity/references/filtered_transcripts.gtf

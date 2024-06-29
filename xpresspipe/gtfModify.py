@@ -232,18 +232,14 @@ def get_ucsc_proteins(
 
     return gtf_coding
 
-"""
-Parse GTF down to chunks per cores for multiprocessing
-Requires unmodified GTF with gene records intact
-"""
-def get_chunks(
-    gtf,
-    threads=None,
-    identifier='gene_id \"'):
 
+def get_chunks(gtf, threads=None, identifier='gene_id \"'):
+    """Parse GTF down to chunks per cores for multiprocessing
+    Requires unmodified GTF with gene records intact
+    """
     # Determine number of chunks to create based on indicated or available cpus
     cores = cpu_count() # Number of CPU cores on your system
-    if threads == None or threads >= cores:
+    if threads is None or threads >= cores:
         pass
     elif threads < 1:
         print('Warning: Indicated less than 1 CPU, setting to 1')
@@ -251,7 +247,7 @@ def get_chunks(
     else:
         cores = int(threads)
 
-    # Get number of times 'gene' is references in column 2 of GTF and if cores > #genes, limit
+    # Get number of times 'gene' is referenced in column 2 of GTF and if cores > #genes, limit
     if len(gtf.columns.tolist()) == 9:
         gtf_check = gtf.copy()
         gtf_check['gene'] = gtf_check[8].str.split(identifier).str[1]
@@ -273,11 +269,9 @@ def get_chunks(
     # Get chunking indices
     chunks = [] # Initialize chunk storage
     for y in range(cores):
-
         # If the last chunk, get the remainder of the GTF dataframe
         if y == cores - 1:
             new_chunk = gtf.loc[start:]
-
         else:
             end = start + batch  # Set tentative end of next chunk
 
@@ -299,6 +293,8 @@ def get_chunks(
                         gtf_remainder = gtf # Point back to original GTF to move past original end set for sub-GTF
 
                     n += amount # Take another step back until a new gene_id is found (or forward if hit the start)
+                    if end + n >= len(gtf.index):  # Check if the index exceeds the dataframe length
+                        break
                     gene_id_next = gtf_remainder.at[end + n, gtf_annotation_column][(gtf_remainder.at[end + n, gtf_annotation_column].find('gene_id \"') + 9):].split('\";')[0]
 
             if amount == 1: # Correct for scan direction pivot
@@ -308,14 +304,31 @@ def get_chunks(
             new_chunk = gtf.loc[start:end + n]
             start = end + n + 1 # End coordinate for last chunk to start with next
 
-        if new_chunk.empty == False:
+        if not new_chunk.empty:
             chunks.append(new_chunk)
 
     print('Dataframe split into ' + str(len(chunks)) + ' chunks for parallelization')
     gtf = None # Garbage management
     gc.collect()
 
+    # Ensure that unique genes in each chunk equals the total number of original genes 
+    genes = []
+    unique_genes = set()
+    for chunk in chunks:
+        chunk['gene'] = chunk[8].str.split(identifier).str[1]
+        chunk['gene'] = chunk['gene'].str.split('\";').str[0]
+        unique_chunk_genes = set(chunk['gene'].unique().tolist())
+        genes.append(len(unique_chunk_genes))
+        unique_genes.update(unique_chunk_genes)
+
+    if len(unique_genes) == gene_instances:
+        print("All genes are uniquely divided among the chunks.")
+    else:
+        print("Discrepancy in gene division among chunks.")
+        print(f"Unique genes counted: {len(unique_genes)}, Expected: {gene_instances}")
+
     return chunks
+
 
 """Run a given function on chunks"""
 def run_chunks(

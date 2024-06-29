@@ -39,7 +39,7 @@ $ curl -L -O https://github.com/XPRESSyourself/XPRESSpipe/archive/refs/tags/v0.6
 $ unzip XPRESSpipe-v0.6.3.zip
 $ cd XPRESSpipe-v0.6.3/
 $ conda install -c conda-forge mamba
-$ mamba env create -f requirements.yml
+$ mamba env create -f requirements.yml  # Or requirements_frozen.yml for a recent working dependency set
 $ conda activate xpresspipe
 $ bash install.sh
 $ xpresspipe -h
@@ -47,20 +47,6 @@ $ xpresspipe test
 ```
 - Be sure to specify the correct release version in the first URL
 
-#### Using XPRESSpipe on a supercomputer
-- The conda environment, `xpresspipe`, will need to be activated
-- For example, if using a SLURM job scheduler, you should include the following after the `#SBATCH` lines and before any calls to XPRESSpipe in the slurm script, as below:
-```
-#!/bin/bash
-#SBATCH --time=72:00:00
-#SBATCH --nodes=1
-#SBATCH ...
-
-source $(conda info --base)/etc/profile.d/conda.sh
-conda activate xpresspipe
-
-... rest of the script
-```
 
 ### QuickStart:   
 - Reference building   

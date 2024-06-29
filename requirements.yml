@@ -7,21 +7,12 @@ channels:
   - conda-forge
 
 dependencies:
-  - python>=3.0.0
-  - julia>=1.0.0
-  - pandas>=1.0.0
-  - numpy>=1.16.0
-  - scipy
-  - r-base<=3.5.0
-  - r-data.table
-  - bioconductor-genomicfeatures
-  - bioconductor-genomicalignments
-  - bioconductor-rsubread
-  - bioconductor-dupradar
-  - bioconductor-deseq2
-  - bioconductor-apeglm
-  - libiconv
-  - ncurses
+  - conda-forge::python>=3.0.0
+  - conda-forge::julia>=1.0.0
+  - conda-forge::pandas>=1.0.0
+  - conda-forge::numpy>=1.16.0
+  - conda-forge::scipy
+  - conda-forge::r-base>=4.0.0
   - fastp
   - umi_tools
   - STAR>=2.5.1
@@ -31,11 +22,10 @@ dependencies:
   - codecov
   - fastqc
   - biopython
-  - matplotlib<3.0.0,>=2.1.1
-  - matplotlib-base<3.0.0,>=2.1.1
+  - conda-forge::matplotlib
+  - conda-forge::matplotlib-base
   - multiqc
   - numpydoc
   - psutil
   - scikit-learn
   - seaborn
-  - xpressplot

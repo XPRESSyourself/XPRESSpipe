@@ -28,12 +28,11 @@ import numpy as np
 from math import ceil
 from scipy.stats import gaussian_kde
 import matplotlib
+import matplotlib.pyplot as plt
 if str(matplotlib.get_backend()).lower() != 'agg':
-    import matplotlib.pyplot as plt
     plt.switch_backend('agg')
-else:
-    import matplotlib.pyplot as plt
-matplotlib.rcParams['font.sans-serif'] = 'Arial'
+plt.rcParams['font.sans-serif'] = ['Arial', 'DejaVu Sans', 'Helvetica', 'sans-serif']
+plt.rcParams['font.family'] = 'sans-serif'
 import seaborn as sns
 
 import warnings
@@ -196,7 +195,7 @@ def correct_psites(
         fasta,
         anno_dict,
         length_min=None,
-        length_max=None,):
+        length_max=None):
     """"""
 
     if length_max == 0:
@@ -212,25 +211,27 @@ def correct_psites(
         pass
 
     # Map codon sequence to P-sites
-    def map_sequence(name, position):
-        # Convert nucleotide sequence (i.e. position 1)
-        # to Python (array position 0)
+    def map_sequence(name, position, fasta):
         try:
             convert_position = position - 1
-
             codon_seq = fasta[name][convert_position:convert_position + 3]
-
-            if len(codon_seq) != 3:
-                pass
+            if len(codon_seq) == 3:
+                return codon_seq.replace('T', 'U')
             else:
-                return codon_seq.replace('T','U')
+                return ''
+        except KeyError:
+            #print(f"Transcript {name} not found in FASTA")
+            return ''
+        except IndexError:
+            #print(f"Position {position} out of range for transcript {name}")
+            return ''
 
-        except:
-            pass
+    data['sequence'] = data.apply(lambda row: map_sequence(row['transcript'], row['psite'], fasta), axis=1)
 
-    data['sequence'] = np.vectorize(map_sequence)(
-        data['transcript'],
-        data['psite'])
+    data = data.dropna(subset=['sequence'])
+    if data.empty:
+        print("Warning: All sequences were invalid or not found. Check your FASTA file and transcript names.")
+        return data
 
     # Correct P-site position in regard to CDS start and stop
     def correct_to_cds_start(transcript, psite):
@@ -300,19 +301,21 @@ def prep_periodicity_3prime(
 
     return df_corrected
 
-def prep_bar_colors(
-        df_codon):
-
-        colors = []
-        for value in df_codon.index.tolist(): # keys are the names of the boys
-            if value == 'UAG' or value == 'UAA' or value == 'UGA':
-                colors.append('#d95f02')
-            elif value == 'AUG':
-                colors.append('#1b9e77')
-            else:
-                colors.append('#c2c5cc')
-
-        return colors
+def prep_bar_colors(df_codon):
+    colors = []
+    for value in df_codon.index.tolist():
+        if value in ['UAG', 'UAA', 'UGA']:
+            colors.append('#d95f02')
+        elif value == 'AUG':
+            colors.append('#1b9e77')
+        else:
+            colors.append('#c2c5cc')
+    
+    if not colors:
+        print("Warning: No colors were assigned, using default")
+        colors = ['#c2c5cc'] * len(df_codon)
+    
+    return colors
 
 def prep_periodicity_steps(
         data,
@@ -434,19 +437,25 @@ def compile_p_site_qc_metrics(
             col_name='psite_corrected_5prime'
         )
 
-        colors = prep_bar_colors(
-            df_codon
-        )
-
-        df_codon.plot.bar(width=0.9, color=colors, ax=axes_codon[ax_y])
+        if df_codon.empty:
+            print("Warning: No valid codons found. Using default colors for all data points.")
+            colors = ['#c2c5cc'] * len(df_corrected)
+        else:
+            colors = prep_bar_colors(df_codon)
+        
+        try:
+            df_codon.plot.bar(width=0.9, color=colors, ax=axes_codon[ax_y])
+        except:
+            df_codon.plot.bar(width=0.9, ax=axes_codon[ax_y])
         axes_codon[ax_y].set_ylabel(name, size=25)
         axes_codon[ax_y].set_xlabel('Codon', size=25)
 
         plot_position = 0
         for p in axes_codon[ax_y].patches:
             codon = df_codon.keys()[plot_position]
+            amino_acid = conversion_table.get(codon, 'X')  # Use 'X' for unknown codons
             axes_codon[ax_y].annotate(
-                conversion_table[codon],
+                amino_acid,
                 (p.get_x() + 0.22, p.get_height() + 13000))
             plot_position += 1
 

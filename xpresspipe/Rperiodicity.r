@@ -23,10 +23,38 @@ license <- function() {
   }
 
 # Run install of data.table to make sure most recent version is installed
-install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
-library(stringi)
+#install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = FALSE)
+#library(stringi)
 
-library(data.table)
+# Install BiocManager if not already installed
+if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("BH", quietly = TRUE)) {install.packages("BH", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("cpp11", quietly = TRUE)) {install.packages("cpp11", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("plogr", quietly = TRUE)) {install.packages("plogr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("XML", quietly = TRUE)) {install.packages("XML", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("dbplyr", quietly = TRUE)) {install.packages("dbplyr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("data.table", quietly = TRUE)) {install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+
+# Define a function to install a package if not already installed
+install_if_missing <- function(pkg) {
+    if (!pkg %in% rownames(installed.packages())) {
+        BiocManager::install(pkg, dependencies = c("Depends", "Imports"), quiet = TRUE)
+    } else {
+        message(pkg, " package already installed")
+    }
+}
+
+# List of packages to install
+packages <- c("Rhtslib", "rtracklayer", "biomaRt", "AnnotationDbi", "BiocFileCache", 
+              "GenomicFeatures","SummarizedExperiment", "GenomicAlignments", "txdbmaker")
+
+# Install each package if missing
+for (pkg in packages) {
+    install_if_missing(pkg)
+}
+
+# Load the GenomicFeatures library
+library(GenomicFeatures)
 
 # Get arguments
 # args[1] = BAMtranscriptome directory
@@ -60,10 +88,15 @@ write.table(
   col.names=NA)
 
 # Get p-sites
+print("Reading BAM files...")
 reads_list <- bamtolist(bamfolder = BAM_LIST, annotation = annotation_dt)
+
+print("Getting p-sites...")
 p_sites <- psite(reads_list, extremity="5end") # This will fail if the input files are too small and don't have good representation across genes
 
+# Get p-site information
 if (typeof(p_sites) != "NULL") {
+  print("Getting p-site information...")
   p_info <- psite_info(reads_list, p_sites)
 
   # Get list of unique elements in 'sample' column in p_sites

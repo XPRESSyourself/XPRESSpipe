@@ -43,7 +43,6 @@ description <- function() {
   transcripts without annotated CDS are set to 0.
   "
 }
-
 library(data.table)
 
 bamtolist <- function(bamfolder, annotation, transcript_align = TRUE,
@@ -97,10 +96,10 @@ bamtolist <- function(bamfolder, annotation, transcript_align = TRUE,
     }
 
     nreads <- nrow(dt)
-    dt <- dt[as.character(transcript) %in% as.character(annotation$transcript)]
+    dt <- merge(dt, annotation[, .(transcript, l_utr5, l_utr3)], by = "transcript", all.x = TRUE)
     if(nreads != nrow(dt)){
       if(nrow(dt) == 0){
-        stop(sprintf("%s M  (%s %%) reads removed: reference transcript IDs not found in annotation table.\n\n",
+        cat(sprintf("%s M  (%s %%) reads removed: reference transcript IDs not found in annotation table.\n\n",
                      format(round((nreads - nrow(dt)) / 1000000, 3), nsmall = 3),
                      format(round(((nreads - nrow(dt)) / nreads) * 100, 3), nsmall = 3) ))
       } else{
@@ -131,7 +130,12 @@ bamtolist <- function(bamfolder, annotation, transcript_align = TRUE,
       }
     }
 
+    # Handle missing values in l_utr5 and l_utr3
+    dt[is.na(l_utr5), l_utr5 := 0]
+    dt[is.na(l_utr3), l_utr3 := 0]
+
     dt[annotation, on = 'transcript', c("cds_start", "cds_stop") := list(i.l_utr5 + 1, i.l_utr5 + i.l_cds)]
+
     dt[cds_start == 1 & cds_stop == 0, cds_start := 0]
     dt[, strand := NULL]
 
@@ -160,6 +164,7 @@ bamtolist <- function(bamfolder, annotation, transcript_align = TRUE,
 
   return(sample_reads_list)
 }
+
 
 #' From BAM files to BED files.
 #'

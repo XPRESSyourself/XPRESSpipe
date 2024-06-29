@@ -23,21 +23,25 @@ license <- function() {
   }
 
 # Measure library complexity of RNA-seq sample
-install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
-library(stringi)
+#install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
+#library(stringi)
 
 # Install dependencies
-if (!requireNamespace("BiocManager", quietly = TRUE)) {
-  install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)
-}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("BH", quietly = TRUE)) {install.packages("BH", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("cpp11", quietly = TRUE)) {install.packages("cpp11", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("plogr", quietly = TRUE)) {install.packages("plogr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("XML", quietly = TRUE)) {install.packages("XML", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("dbplyr", quietly = TRUE)) {install.packages("dbplyr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("data.table", quietly = TRUE)) {install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 
 if ("Rsubread" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("Rsubread", dependencies=c("Depends", "Imports", "LinkingTo"))
+  BiocManager::install("Rsubread", dependencies=c("Depends", "Imports"), quiet = TRUE)
 } else {
   print("Rsubread package already installed")
 }
 if ("dupRadar" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("dupRadar", dependencies=c("Depends", "Imports", "LinkingTo"))
+  BiocManager::install("dupRadar", dependencies=c("Depends", "Imports"), quiet = TRUE)
 } else {
   print("dupRadar package already installed")
 }
