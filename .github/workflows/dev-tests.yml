@@ -3,16 +3,16 @@ name: dev-tests
 on:
   push:
     branches:
-      - '*'
-    branches-ignore:
-      - 'main'
+      - '**'
+      - '!main'
+      - '!master'
     tags-ignore:
-      - '*'  
+      - '*'
   pull_request:
     branches:
-      - '*'
-    branches-ignore:
-      - 'main'
+      - '**'
+      - '!main'
+      - '!master'
 
 jobs:
   build:
