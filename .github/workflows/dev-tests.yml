@@ -1,0 +1,58 @@
+name: dev-tests
+
+on:
+  push:
+    branches:
+      - main  
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Miniconda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniconda-version: "latest"
+        auto-update-conda: true
+        python-version: ${{ matrix.python-version }}
+        activate-environment: xpresspipe
+
+    - name: Install dependencies
+      shell: bash -l {0}
+      run: |
+        conda install -c conda-forge mamba
+        mamba env update --file requirements.yml --name xpresspipe
+        conda activate xpresspipe
+        pip install .
+        pip install codecov flake8
+
+    - name: Run Tests
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
+        coverage run -a tests/test_arguments.py
+        coverage run -a tests/test_utils.py
+        coverage run -a tests/test_bam.py
+        coverage run -a tests/test_modifyGTF.py
+        coverage run -a tests/test_truncateGTF.py
+        coverage run -a tests/test_metagene.py
+        coverage run -a tests/test_periodicity.py
+        coverage run -a tests/test_complexity.py
+        coverage run -a tests/test_rrnaProbe.py
+        coverage run -a tests/test_help.py
+        coverage run -a tests/test_pipelines.py
+
+    - name: Generate coverage report
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
+        coverage report
+        bash <(curl -s https://codecov.io/bash) -cF python

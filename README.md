@@ -3,7 +3,8 @@
 
 ### An alignment and analysis pipeline for RNAseq data
 
-![Build Status](https://github.com/XPRESSyourself/XPRESSpipe/workflows/build/badge.svg)
+[![Release Status](https://github.com/XPRESSyourself/XPRESSpipe/workflows/release/badge.svg)](https://github.com/XPRESSyourself/XPRESSpipe/actions?query=workflow%3Arelease) Latest Release
+[![Dev Status](https://github.com/XPRESSyourself/XPRESSpipe/workflows/dev-tests/badge.svg)](https://github.com/XPRESSyourself/XPRESSpipe/actions?query=workflow%3Adev-tests) Main Branch
 [![Documentation Status](https://readthedocs.org/projects/xpresspipe/badge/?version=latest)](https://xpresspipe.readthedocs.io/en/latest/?badge=latest)
 [![DOI](https://zenodo.org/badge/170939943.svg)](https://zenodo.org/badge/latestdoi/170939943)
 <!--[![Anaconda-Server Badge](https://anaconda.org/bioconda/xpresspipe/badges/version.svg)](https://anaconda.org/bioconda/xpresspipe)-->

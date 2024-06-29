@@ -3,7 +3,6 @@ python test_utils.py
 python test_bam.py
 python test_modifyGTF.py
 python test_truncateGTF.py
-#python test_analysis.py
 python test_metagene.py 
 python test_complexity.py
 python test_periodicity.py
