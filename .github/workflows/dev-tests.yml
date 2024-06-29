@@ -40,20 +40,70 @@ jobs:
         pip install .
         pip install codecov flake8
 
-    - name: Run Tests
+    - name: Run test_arguments.py
       shell: bash -l {0}
       run: |
         conda activate xpresspipe
         coverage run -a tests/test_arguments.py
+
+    - name: Run test_utils.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_utils.py
+
+    - name: Run test_bam.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_bam.py
+
+    - name: Run test_modifyGTF.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_modifyGTF.py
+
+    - name: Run test_truncateGTF.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_truncateGTF.py
+
+    - name: Run test_metagene.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_metagene.py
+
+    - name: Run test_periodicity.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_periodicity.py
+
+    - name: Run test_complexity.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_complexity.py
+
+    - name: Run test_rrnaProbe.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_rrnaProbe.py
+
+    - name: Run test_help.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_help.py
+
+    - name: Run test_pipelines.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
         coverage run -a tests/test_pipelines.py
 
     - name: Generate coverage report

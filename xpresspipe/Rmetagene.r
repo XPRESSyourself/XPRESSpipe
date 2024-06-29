@@ -32,10 +32,20 @@ if (!requireNamespace("dbplyr", quietly = TRUE)) {install.packages("dbplyr", rep
 if (!requireNamespace("data.table", quietly = TRUE)) {install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 library(data.table)
 
-if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("GenomicAlignments", dependencies=c("Depends", "Imports"), quiet = TRUE)
-} else {
-  print("GenomicAlignments package already installed")
+# Define a function to install a package if not already installed
+install_if_missing <- function(pkg) {
+    if (!pkg %in% rownames(installed.packages())) {
+        BiocManager::install(pkg, dependencies = c("Depends", "Imports"), quiet = FALSE)
+    } else {
+        message(pkg, " package already installed")
+    }
+}
+# List of packages to install
+packages <- c("Rsamtools", "GenomicAlignments")
+
+# Install each package if missing
+for (pkg in packages) {
+    install_if_missing(pkg)
 }
 library(GenomicAlignments)
 

@@ -16,44 +16,93 @@ jobs:
         python-version: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Miniconda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        miniconda-version: "latest"
-        auto-update-conda: true
-        python-version: ${{ matrix.python-version }}
-        activate-environment: xpresspipe
-
-    - name: Install dependencies
-      shell: bash -l {0}
-      run: |
-        conda clean --all
-        conda install -c conda-forge mamba
-        mamba env update --file requirements.yml --name xpresspipe
-        conda activate xpresspipe
-        pip install .
-        pip install codecov flake8
-
-    - name: Run Tests
-      shell: bash -l {0}
-      run: |
-        conda activate xpresspipe
-        coverage run -a tests/test_arguments.py
-        coverage run -a tests/test_utils.py
-        coverage run -a tests/test_bam.py
-        coverage run -a tests/test_modifyGTF.py
-        coverage run -a tests/test_truncateGTF.py
-        coverage run -a tests/test_metagene.py
-        coverage run -a tests/test_periodicity.py
-        coverage run -a tests/test_complexity.py
-        coverage run -a tests/test_rrnaProbe.py
-        coverage run -a tests/test_help.py
-        coverage run -a tests/test_pipelines.py
-
-    - name: Generate coverage report
-      shell: bash -l {0}
-      run: |
-        conda activate xpresspipe
-        coverage report
-        bash <(curl -s https://codecov.io/bash) -cF python
+      - uses: actions/checkout@v3
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          miniconda-version: "latest"
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+          activate-environment: xpresspipe
+  
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          conda clean --all
+          conda env update --file requirements.yml --name xpresspipe
+          conda activate xpresspipe
+          pip install .
+          pip install codecov flake8
+  
+      - name: Run test_arguments.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_arguments.py
+  
+      - name: Run test_utils.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_utils.py
+  
+      - name: Run test_bam.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_bam.py
+  
+      - name: Run test_modifyGTF.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_modifyGTF.py
+  
+      - name: Run test_truncateGTF.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_truncateGTF.py
+  
+      - name: Run test_metagene.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_metagene.py
+  
+      - name: Run test_periodicity.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_periodicity.py
+  
+      - name: Run test_complexity.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_complexity.py
+  
+      - name: Run test_rrnaProbe.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_rrnaProbe.py
+  
+      - name: Run test_help.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_help.py
+  
+      - name: Run test_pipelines.py
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage run -a tests/test_pipelines.py
+  
+      - name: Generate coverage report
+        shell: bash -l {0}
+        run: |
+          conda activate xpresspipe
+          coverage report
+          bash <(curl -s https://codecov.io/bash) -cF python
