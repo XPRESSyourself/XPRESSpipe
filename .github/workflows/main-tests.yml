@@ -1,20 +1,12 @@
-name: dev-tests
+name: Main Branch
 
 on:
   push:
     branches:
-      - '*'
-    branches-ignore:
-      - 'main'
-      - 'master'  
-    tags-ignore:
-      - '*'  
+      - main 
   pull_request:
     branches:
-      - '*'
-    branches-ignore:
-      - 'main'
-      - 'master'
+      - main
 
 jobs:
   build:
