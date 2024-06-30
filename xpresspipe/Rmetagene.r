@@ -22,7 +22,7 @@ license <- function() {
   "
   }
 
-# Import dependencies
+# Install BiocManager if not already installed
 if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 if (!requireNamespace("BH", quietly = TRUE)) {install.packages("BH", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 if (!requireNamespace("cpp11", quietly = TRUE)) {install.packages("cpp11", repos = "http://cran.us.r-project.org", quiet = TRUE)}
@@ -35,18 +35,23 @@ library(data.table)
 # Define a function to install a package if not already installed
 install_if_missing <- function(pkg) {
     if (!pkg %in% rownames(installed.packages())) {
-        BiocManager::install(pkg, dependencies = c("Depends", "Imports"), quiet = FALSE)
+        BiocManager::install(pkg, dependencies = c("Depends", "Imports"), quiet = TRUE)
     } else {
         message(pkg, " package already installed")
     }
 }
+
 # List of packages to install
-packages <- c("GenomicAlignments")
+packages <- c("Rhtslib", "rtracklayer", "biomaRt", "AnnotationDbi", "BiocFileCache", 
+              "GenomicFeatures","SummarizedExperiment", "GenomicAlignments", "txdbmaker")
 
 # Install each package if missing
 for (pkg in packages) {
     install_if_missing(pkg)
 }
+
+# Load the GenomicFeatures library
+library(GenomicFeatures)
 library(GenomicAlignments)
 
 # Set globals
