@@ -70,6 +70,11 @@ jobs:
         conda activate xpresspipe
         coverage run -a tests/test_truncateGTF.py
 
+    - name: Run test_metagene.py
+      shell: bash -l {0}
+      run: |
+        conda activate xpresspipe
+        coverage run -a tests/test_metagene.py
 
     - name: Run test_periodicity.py
       shell: bash -l {0}
@@ -82,12 +87,6 @@ jobs:
       run: |
         conda activate xpresspipe
         coverage run -a tests/test_complexity.py
-
-    - name: Run test_metagene.py
-      shell: bash -l {0}
-      run: |
-        conda activate xpresspipe
-        coverage run -a tests/test_metagene.py
 
     - name: Run test_rrnaProbe.py
       shell: bash -l {0}
