@@ -41,13 +41,13 @@ install_if_missing <- function(pkg) {
     }
 }
 # List of packages to install
-packages <- c("Rsamtools", "GenomicAlignments")
+packages <- c("GenomicAlignments")
 
 # Install each package if missing
 for (pkg in packages) {
     install_if_missing(pkg)
-    library(pkg)
 }
+library(GenomicAlignments)
 
 # Set globals
 chromosome <- 'chromosome'
