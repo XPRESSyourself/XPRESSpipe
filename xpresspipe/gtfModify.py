@@ -266,7 +266,7 @@ def get_chunks(gtf, threads=None, identifier='gene_id \"'):
     for y in range(cores):
         # If the last chunk, get the remainder of the GTF dataframe
         if y == cores - 1:
-            new_chunk = gtf.loc[start:]
+            new_chunk = gtf.loc[start:].copy()
         else:
             end = start + batch  # Set tentative end of next chunk
 
@@ -277,7 +277,7 @@ def get_chunks(gtf, threads=None, identifier='gene_id \"'):
                 gtf_remainder = gtf.iloc[start:end]
 
                 n = -1 # Start at current record
-                gene_id_original = gtf_remainder.at[end + n, gtf_annotation_column][(gtf_remainder.at[end + n, gtf_annotation_column].find('gene_id \"') + 9):].split('\";')[0]
+                gene_id_original = gtf_remainder.at[end + n, gtf_annotation_column].split('gene_id \"')[1].split('\";')[0]
                 gene_id_next = gene_id_original
 
                 amount = -1 # Set scan direction as reverse
@@ -290,13 +290,13 @@ def get_chunks(gtf, threads=None, identifier='gene_id \"'):
                     n += amount # Take another step back until a new gene_id is found (or forward if hit the start)
                     if end + n >= len(gtf.index):  # Check if the index exceeds the dataframe length
                         break
-                    gene_id_next = gtf_remainder.at[end + n, gtf_annotation_column][(gtf_remainder.at[end + n, gtf_annotation_column].find('gene_id \"') + 9):].split('\";')[0]
+                    gene_id_next = gtf_remainder.at[end + n, gtf_annotation_column].split('gene_id \"')[1].split('\";')[0]
 
             if amount == 1: # Correct for scan direction pivot
                 n -= 1
 
             # Parse out current chunk
-            new_chunk = gtf.loc[start:end + n]
+            new_chunk = gtf.loc[start:end + n].copy()
             start = end + n + 1 # End coordinate for last chunk to start with next
 
         if not new_chunk.empty:
@@ -348,7 +348,7 @@ def run_chunks(
 
 """Run all GTF-editing functions"""
 def edit_gtf(
-    gtf, # Dataframe of file path and name to GTF reference
+    gtf, # File path and name to GTF reference or DataFrame
     longest_transcript=True,
     protein_coding=True,
     truncate_reference=True,
@@ -365,7 +365,7 @@ def edit_gtf(
         output = False # Turn off intermediates output
         file_name = None
     elif str(gtf).endswith('.gtf'):
-        file_name = str(gtf[:-gtf_rightCoordinate_column]) + '_' # Get rid of GTF extension for now
+        file_name = str(gtf[:-4]) + '_' # Get rid of GTF extension for now
         
         # Read the file and store comments
         with open(str(gtf), 'r') as f:
@@ -388,7 +388,7 @@ def edit_gtf(
     # Get chunks
     chunks = get_chunks(
         gtf,
-        threads = threads)
+        threads=threads)
 
     gtf = None # Garbage management
     gc.collect()
@@ -399,7 +399,7 @@ def edit_gtf(
         chunks = run_chunks(
             longest_transcripts,
             chunks,
-            target_message = 'longest transcripts')
+            target_message='longest transcripts')
 
         if output == True:
             file_name = str(file_name) + 'L'
@@ -410,17 +410,16 @@ def edit_gtf(
 
     # Get only protein coding annotated records
     if protein_coding == True:
-
         if ucsc_formatted == True:
             chunks = run_chunks(
                 get_ucsc_proteins,
                 chunks,
-                target_message = 'protein coding genes')
+                target_message='protein coding genes')
         else:
             chunks = run_chunks(
                 protein_gtf,
                 chunks,
-                target_message = 'protein coding genes')
+                target_message='protein coding genes')
 
         if output == True:
             file_name = str(file_name) + 'C'
@@ -430,13 +429,13 @@ def edit_gtf(
     if truncate_reference == True:
         func = partial(
             truncate_gtf,
-            _5prime = _5prime,
-            _3prime = _3prime,
-            ucsc_formatted = ucsc_formatted)
+            _5prime=_5prime,
+            _3prime=_3prime,
+            ucsc_formatted=ucsc_formatted)
         chunks = run_chunks(
             func,
             chunks,
-            target_message = 'truncation')
+            target_message='truncation')
 
         if output == True:
             file_name = str(file_name) + 'T'
@@ -445,6 +444,9 @@ def edit_gtf(
     if len(chunks) > 0:
         gtf = pd.concat(chunks)
         gtf = gtf.reset_index(drop=True)
+
+        # Remove any extra columns (keeping only the first 9 columns)
+        gtf = gtf.iloc[:, :9]
 
         chunks = None # Garbage management
         gc.collect()
@@ -458,14 +460,14 @@ def edit_gtf(
             # Append the modified GTF data
             gtf.to_csv(
                 str(file_name) + '.gtf',
-                sep = '\t',
-                header = None,
-                index = False,
-                quoting = csv.QUOTE_NONE,
+                sep='\t',
+                header=None,
+                index=False,
+                quoting=csv.QUOTE_NONE,
                 mode='a'  # Append mode
             )
         else:
-            return gtf
+            return gtf 
 
     else:
         raise Warning('0 chunks of the original file remain')
