@@ -21,20 +21,15 @@ this program.  If not, see <https://www.gnu.org/licenses/>.
 from __future__ import print_function
 
 """IMPORT DEPENDENCIES"""
-import os
-import sys
 import csv
-import warnings
 import pandas as pd
 pd.options.mode.chained_assignment = None
-import multiprocessing # For debugging
 from multiprocessing import cpu_count, Pool
 import gc
 from functools import partial
 
 """IMPORT INTERNAL DEPENDENCIES"""
 from .gtfTruncate import truncate_gtf
-from .utils import get_files
 
 """GLOBALS"""
 gtf_chr_column = 1
@@ -382,10 +377,11 @@ def edit_gtf(
 
         gtf = pd.read_csv(
             str(gtf),
-            sep = '\t',
-            header = None,
-            comment = '#',
-            low_memory = False)
+            sep='\t',
+            header=None,
+            comment='#',
+            quoting=csv.QUOTE_NONE,
+            low_memory=False)
     else:
         raise Exception('Error: A GTF-formatted file or dataframe was not provided')
 
