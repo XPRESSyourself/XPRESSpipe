@@ -363,12 +363,23 @@ def edit_gtf(
     output=True, # True will output all intermediates, not possible if inputting a GTF as pandas dataframe
     threads=None): # Give int for core threshold if desired
 
+    comments = []
+
     # Import GTF reference file
     if isinstance(gtf, pd.DataFrame) and len(gtf.columns) == 9:
         output = False # Turn off intermediates output
         file_name = None
     elif str(gtf).endswith('.gtf'):
         file_name = str(gtf[:-gtf_rightCoordinate_column]) + '_' # Get rid of GTF extension for now
+        
+        # Read the file and store comments
+        with open(str(gtf), 'r') as f:
+            for line in f:
+                if line.startswith('#'):
+                    comments.append(line.strip())
+                else:
+                    break
+
         gtf = pd.read_csv(
             str(gtf),
             sep = '\t',
@@ -443,12 +454,20 @@ def edit_gtf(
         gc.collect()
 
         if output == True:
+            # Write comments to the output file
+            with open(str(file_name) + '.gtf', 'w') as f:
+                for comment in comments:
+                    f.write(comment + '\n')
+            
+            # Append the modified GTF data
             gtf.to_csv(
                 str(file_name) + '.gtf',
                 sep = '\t',
                 header = None,
                 index = False,
-                quoting = csv.QUOTE_NONE)
+                quoting = csv.QUOTE_NONE,
+                mode='a'  # Append mode
+            )
         else:
             return gtf
 
