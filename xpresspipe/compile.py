@@ -317,14 +317,19 @@ def prep_bar_colors(df_codon):
     
     return colors
 
-def prep_periodicity_steps(
-        data,
-        number_of_steps = 10):
-
+def prep_periodicity_steps(data, number_of_steps=10):
     min_value = data.index.min()
     max_value = data.index.max()
 
-    return np.arange(min_value, max_value+1, number_of_steps)
+    # Check if the range is valid
+    if min_value >= max_value:
+        return np.array([min_value])  # Return a single-element array if range is invalid
+
+    # Calculate the step size
+    step_size = (max_value - min_value) / (number_of_steps - 1)
+
+    # Use linspace instead of arange for more reliable number of steps
+    return np.linspace(min_value, max_value, num=number_of_steps, dtype=int)
 
 def set_lines(
         ax,
@@ -503,8 +508,14 @@ def compile_p_site_qc_metrics(
         axes_period[ax_y, 1].spines['bottom'].set_color('black')
         axes_period[ax_y, 1].spines['left'].set_color('black')
 
-        steps_5prime = prep_periodicity_steps(df_periodicity_5prime)
-        steps_3prime = prep_periodicity_steps(df_periodicity_3prime)
+        if not df_periodicity_5prime.empty:
+            steps_5prime = prep_periodicity_steps(df_periodicity_5prime)
+        else:
+            steps_5prime = [0]
+        if not df_periodicity_3prime.empty:
+            steps_3prime = prep_periodicity_steps(df_periodicity_3prime)
+        else:
+            steps_3prime = [0]
 
         axes_period[ax_y, 0].set(xticks=steps_5prime, xticklabels=steps_5prime)
         axes_period[ax_y, 1].set(xticks=steps_3prime, xticklabels=steps_3prime)

@@ -32,27 +32,34 @@ if (!requireNamespace("dbplyr", quietly = TRUE)) {install.packages("dbplyr", rep
 if (!requireNamespace("data.table", quietly = TRUE)) {install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 library(data.table)
 
-# Define a function to install a package if not already installed
-install_if_missing <- function(pkg) {
-    if (!pkg %in% rownames(installed.packages())) {
-        BiocManager::install(pkg, dependencies = c("Depends", "Imports"), quiet = TRUE)
-    } else {
-        message(pkg, " package already installed")
+# Function to install and load a package
+install_and_load <- function(pkg) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+        message(paste("Installing", pkg))
+        BiocManager::install(pkg, update = TRUE, ask = FALSE)
     }
+    library(pkg, character.only = TRUE)
 }
 
-# List of packages to install
+# List of packages to install and load
 packages <- c("Rhtslib", "rtracklayer", "biomaRt", "AnnotationDbi", "BiocFileCache", 
-              "GenomicFeatures","SummarizedExperiment", "GenomicAlignments", "txdbmaker")
+              "GenomicFeatures", "SummarizedExperiment", "GenomicAlignments", "txdbmaker")
 
-# Install each package if missing
+# Install and load each package
 for (pkg in packages) {
-    install_if_missing(pkg)
+    tryCatch({
+        install_and_load(pkg)
+    }, error = function(e) {
+        message(paste("Error installing or loading", pkg, ":", e$message))
+    })
 }
 
-# Load the GenomicFeatures library
-library(GenomicFeatures)
-library(GenomicAlignments)
+# Check if GenomicFeatures is loaded
+if ("GenomicFeatures" %in% (.packages())) {
+    message("GenomicFeatures successfully loaded")
+} else {
+    message("GenomicFeatures not loaded. Check for errors above.")
+}
 
 # Set globals
 chromosome <- 'chromosome'

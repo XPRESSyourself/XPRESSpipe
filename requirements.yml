@@ -29,3 +29,5 @@ dependencies:
   - psutil
   - scikit-learn
   - seaborn
+  - pip:
+    - typing_extensions
