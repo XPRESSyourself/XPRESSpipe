@@ -71,7 +71,7 @@ os.system(
     + ' --cdna_fasta ' + str(rp_fa) \
     + ' -e riboseq_test' \
     + ' -a CTGTAGGCACCATCAAT' \
-    + ' -n RPS19' \
+    + ' -n BIO3' \
     + ' --method RPM' \
     + ' --sjdbOverhang 49')
 

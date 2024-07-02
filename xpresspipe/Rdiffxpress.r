@@ -23,19 +23,22 @@ license <- function() {
   }
 
 # Control batch effects for prep, chips, etc
-install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
-library(stringi)
-
-if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("BH", quietly = TRUE)) {install.packages("BH", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("cpp11", quietly = TRUE)) {install.packages("cpp11", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("plogr", quietly = TRUE)) {install.packages("plogr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("XML", quietly = TRUE)) {install.packages("XML", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("dbplyr", quietly = TRUE)) {install.packages("dbplyr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("data.table", quietly = TRUE)) {install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 
 if ("DESeq2" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("DESeq2", dependencies=c("Depends", "Imports", "LinkingTo"))
+  BiocManager::install("DESeq2", dependencies=c("Depends", "Imports"), quiet = TRUE)
 } else {
   print("DESeq2 package already installed")
 }
 
 if ("apeglm" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("apeglm", dependencies=c("Depends", "Imports", "LinkingTo"))
+  BiocManager::install("apeglm", dependencies=c("Depends", "Imports"), quiet = TRUE)
 } else {
   print("apeglm package already installed")
 }

@@ -25,12 +25,12 @@ import os
 import sys
 import datetime
 import pandas as pd
-from xpressplot import count_table
 
 """IMPORT INTERNAL DEPENDENCIES
 """
 from .utils import get_files, get_directories, add_directory
 from .parallel import parallelize
+from .xpressplot import count_table
 
 __path__ = str(os.path.dirname(os.path.realpath(__file__))) + '/'
 

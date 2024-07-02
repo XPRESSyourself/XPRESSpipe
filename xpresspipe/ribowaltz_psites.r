@@ -56,8 +56,8 @@ psite <- function(
     log_file=FALSE,
     log_file_dir=NULL) {
 
-  if(log_file == T | log_file == TRUE){
-    if(length(log_file_dir) == 0){
+  if (log_file) {
+    if (length(log_file_dir) == 0) {
       log_file_dir <- getwd()
     }
     if (!dir.exists(log_file_dir)) {
@@ -69,45 +69,63 @@ psite <- function(
 
   names <- names(data)
   offset <- NULL
+  
   for (n in names) {
-    cat(sprintf("processing %s\n", n))
     dt <- data[[n]]
+    
+    # Ensure necessary columns are present
+    required_columns <- c("transcript", "end5", "end3", "cds_start", "cds_stop", "length", "l_utr5", "l_utr3")
+    missing_columns <- setdiff(required_columns, colnames(dt))
+    
+    if (length(missing_columns) > 0) {
+      stop(sprintf("Missing required columns: %s", paste(missing_columns, collapse = ", ")))
+    }
+
     lev <- sort(unique(dt$length))
-    if(start == T | start == TRUE){
+    
+    if (start) {
       base <- 0
-      dt[, site_dist_end5 := end5 - cds_start]
-      dt[, site_dist_end3 := end3 - cds_start]
+      dt[, site_dist_end5 := ifelse(is.na(cds_start), NA, end5 - cds_start)]
+      dt[, site_dist_end3 := ifelse(is.na(cds_start), NA, end3 - cds_start)]
     } else {
       base <- -5
-      dt[, site_dist_end5 := end5 - cds_stop - base]
-      dt[, site_dist_end3 := end3 - cds_stop - base]
+      dt[, site_dist_end5 := ifelse(is.na(cds_stop), NA, end5 - cds_stop - base)]
+      dt[, site_dist_end3 := ifelse(is.na(cds_stop), NA, end3 - cds_stop - base)]
     }
-    site_sub <- dt[site_dist_end5 <= -flanking & site_dist_end3 >= flanking - 1]
-    minlen <- min(site_sub$length)
-    maxlen <- max(site_sub$length)
+    
+    site_sub <- dt  #[!is.na(site_dist_end5) & site_dist_end5 <= -flanking & !is.na(site_dist_end3) & site_dist_end3 >= flanking - 1]
+
+
+    if (nrow(site_sub) == 0) {
+      warning(sprintf("Could not find valid records from %s", n))
+      next
+    }
+    
+    minlen <- min(site_sub$length, na.rm = TRUE)
+    maxlen <- max(site_sub$length, na.rm = TRUE)
+
     t <- table(factor(site_sub$length, levels = lev))
 
-    # offset
-    offset_temp <- data.table(length = as.numeric(as.character(names(t))), percentage = (as.vector(t)/sum(as.vector(t))) * 100)
+    offset_temp <- data.table(length = as.numeric(as.character(names(t))), percentage = (as.vector(t) / sum(as.vector(t))) * 100)
     offset_temp[, around_site := "T"
                 ][percentage == 0, around_site := "F"]
-    tempoff <- function(v_dist){
-      ttable <- sort(table(v_dist), decreasing = T)
-      ttable_sr <- ttable[as.character(as.numeric(names(ttable))+1)]
-      ttable_sl <- ttable[as.character(as.numeric(names(ttable))-1)]
-      tsel <- rowSums(cbind(ttable > ttable_sr, ttable > ttable_sl), na.rm = T)
+    
+    tempoff <- function(v_dist) {
+      ttable <- sort(table(v_dist), decreasing = TRUE)
+      ttable_sr <- ttable[as.character(as.numeric(names(ttable)) + 1)]
+      ttable_sl <- ttable[as.character(as.numeric(names(ttable)) - 1)]
+      tsel <- rowSums(cbind(ttable > ttable_sr, ttable > ttable_sl), na.rm = TRUE)
       return(as.numeric(names(tsel[tsel == 2][1])))
     }
 
     offset_temp5 <- site_sub[, list(offset_from_5 = tempoff(.SD$site_dist_end5)), by = length]
     offset_temp3 <- site_sub[, list(offset_from_3 = tempoff(.SD$site_dist_end3)), by = length]
     merge_allx <- function(x, y) merge(x, y, all.x = TRUE, by = "length")
-    offset_temp  <-  Reduce(merge_allx, list(offset_temp, offset_temp5, offset_temp3))
+    offset_temp <- Reduce(merge_allx, list(offset_temp, offset_temp5, offset_temp3))
 
-    # adjusted offset
-    adj_off <- function(dt_site, dist_site, add, bestoff){
+    adj_off <- function(dt_site, dist_site, add, bestoff) {
       temp_v <- dt_site[[dist_site]]
-      t <- table(factor(temp_v, levels = seq(min(temp_v) - 2, max(temp_v) + add)))
+      t <- table(factor(temp_v, levels = seq(min(temp_v, na.rm = TRUE) - 2, max(temp_v, na.rm = TRUE) + add)))
       t[1:2] <- t[3] + 1
       locmax <- as.numeric(as.character(names(t[which(diff(sign(diff(t))) == -2)]))) + 1
       adjoff <- locmax[which.min(abs(locmax - bestoff))]
@@ -116,22 +134,18 @@ psite <- function(
 
     best_from5_tab <- offset_temp[!is.na(offset_from_5), list(perc = sum(percentage)), by = offset_from_5
                                   ][perc == max(perc)]
-    best_from3_tab <- offset_temp[!is.na(offset_from_5), list(perc = sum(percentage)), by = offset_from_3
+    best_from3_tab <- offset_temp[!is.na(offset_from_3), list(perc = sum(percentage)), by = offset_from_3
                                   ][perc == max(perc)]
 
     if ((nrow(best_from3_tab) == 0) | (nrow(best_from5_tab) == 0)) {
-
-      print(paste("Could not find valid records from", toString(n), sep=" "))
-      # Will not modify offset table
-
+      warning(sprintf("Could not find valid records from %s", n))
     } else {
-
-      if(extremity == "auto" &
+      if (extremity == "auto" &
          ((best_from3_tab[, perc] > best_from5_tab[, perc] &
            as.numeric(best_from3_tab[, offset_from_3]) <= minlen - 2) |
           (best_from3_tab[, perc] <= best_from5_tab[, perc] &
            as.numeric(best_from5_tab[, offset_from_5]) > minlen - 1)) |
-         extremity == "3end"){
+         extremity == "3end") {
         best_offset <- as.numeric(best_from3_tab[, offset_from_3])
         line_plot <- "3end"
         adj_tab <- site_sub[, list(corrected_offset_from_3 = adj_off(.SD, "site_dist_end3", 0, best_offset)), by = length]
@@ -145,30 +159,30 @@ psite <- function(
             (best_from3_tab[, perc] > best_from5_tab[, perc] &
              as.numeric(best_from3_tab[, offset_from_3]) > minlen - 2)) |
            extremity == "5end"){
-          best_offset <- as.numeric(best_from5_tab[, offset_from_5])
-          line_plot <- "5end"
-          adj_tab <- site_sub[, list(corrected_offset_from_5 = adj_off(.SD, "site_dist_end5", 1, best_offset)), by = length]
-          offset_temp <- merge(offset_temp, adj_tab, all.x = TRUE, by = "length")
-          offset_temp[is.na(corrected_offset_from_5), corrected_offset_from_5 := best_offset
-                      ][, corrected_offset_from_5 := abs(corrected_offset_from_5)
-                        ][, corrected_offset_from_3 := abs(corrected_offset_from_5 - length + 1)]
+        best_offset <- as.numeric(best_from5_tab[, offset_from_5])
+        line_plot <- "5end"
+        adj_tab <- site_sub[, list(corrected_offset_from_5 = adj_off(.SD, "site_dist_end5", 1, best_offset)), by = length]
+        offset_temp <- merge(offset_temp, adj_tab, all.x = TRUE, by = "length")
+        offset_temp[is.na(corrected_offset_from_5), corrected_offset_from_5 := best_offset
+                    ][, corrected_offset_from_5 := abs(corrected_offset_from_5)
+                      ][, corrected_offset_from_3 := abs(corrected_offset_from_5 - length + 1)]
         }
       }
 
       cat(sprintf("best offset: %i nts from the %s\n", abs(best_offset), gsub("end", "' end", line_plot)))
 
-      if(log_file == T | log_file == TRUE){
+      if (log_file) {
         cat(sprintf("%s\t%s\t%i\n", n, gsub("end", "'end", line_plot), abs(best_offset)), file = logpath, append = TRUE)
       }
 
       t <- table(factor(dt$length, levels = lev))
       offset_temp[!is.na(offset_from_5), offset_from_5 := abs(offset_from_5)
-                  ][, total_percentage := as.numeric(format(round((as.vector(t)/sum(as.vector(t))) * 100, 3), nsmall=4))
-                    ][, percentage := as.numeric(format(round(percentage, 3), nsmall=4))
+                  ][, total_percentage := as.numeric(format(round((as.vector(t) / sum(as.vector(t))) * 100, 3), nsmall = 4))
+                    ][, percentage := as.numeric(format(round(percentage, 3), nsmall = 4))
                       ][, sample := n]
 
       setcolorder(offset_temp, c("length", "total_percentage", "percentage", "around_site", "offset_from_5", "offset_from_3", "corrected_offset_from_5", "corrected_offset_from_3", "sample"))
-      if(start == TRUE | start == T){
+      if (start) {
         setnames(offset_temp, c("length", "total_percentage", "start_percentage", "around_start", "offset_from_5", "offset_from_3", "corrected_offset_from_5", "corrected_offset_from_3", "sample"))
       } else {
         setnames(offset_temp, c("length", "total_percentage", "stop_percentage", "around_stop", "offset_from_5", "offset_from_3", "corrected_offset_from_5", "corrected_offset_from_3", "sample"))

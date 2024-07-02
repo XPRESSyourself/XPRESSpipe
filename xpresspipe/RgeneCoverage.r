@@ -23,18 +23,17 @@ license <- function() {
   }
 
 # Import dependencies
-if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org")}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("BH", quietly = TRUE)) {install.packages("BH", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("cpp11", quietly = TRUE)) {install.packages("cpp11", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("plogr", quietly = TRUE)) {install.packages("plogr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("XML", quietly = TRUE)) {install.packages("XML", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("dbplyr", quietly = TRUE)) {install.packages("dbplyr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("data.table", quietly = TRUE)) {install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 
-if ("data.table" %in% rownames(installed.packages()) == FALSE) {
-  print("Installing data.table...")
-  install.packages("data.table", repos = "http://cran.us.r-project.org")
-} else {
-  print("data.table package already installed")
-}
-library(data.table)
 
 if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("GenomicAlignments", dependencies=c("Depends", "Imports", "LinkingTo"))
+  BiocManager::install("GenomicAlignments", dependencies=c("Depends", "Imports"), quiet = TRUE)
 } else {
   print("GenomicAlignments package already installed")
 }

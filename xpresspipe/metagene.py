@@ -156,13 +156,15 @@ def run_metagene(args):
     # args[2] = List of BAM files
     # args[3] = Index file with path
     # args[4] = Output file path
-    os.system(
-        'Rscript'
+    
+    cmd = ('Rscript'
         + ' ' + str(args_dict['path']) + 'Rmetagene.r'
         + ' ' + str(args_dict['input'])
         + ' ' + str(file)
         + ' ' + str(args_dict['metagene']) + 'metrics/'
         + str(args_dict['log']))
+    print(cmd)
+    os.system(cmd)
 
 """Manager for running metagene summary plotting"""
 def make_metagene(

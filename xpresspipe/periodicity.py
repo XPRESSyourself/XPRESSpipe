@@ -91,7 +91,6 @@ def make_periodicity(
         args_dict,
         'p_site_qc',
         'metrics')
-
     args_dict = add_directory(
         args_dict,
         'p_site_qc',
@@ -121,7 +120,7 @@ def make_periodicity(
         raise Exception('No files with suffix ' + str(args_dict['bam_suffix']) + ' found in the directory ' +  str(args_dict['input']))
 
     # Run riboWaltz in R
-    os.system(
+    cmd = (
         'Rscript'
         + ' ' + str(args_dict['path']) + 'Rperiodicity.r'
         + ' ' + str(args_dict['input'])
@@ -129,6 +128,8 @@ def make_periodicity(
         + ' ' + str(args_dict['p_site_qc']) + 'metrics/'
         + ' ' + str(args_dict['path'])
         + str(args_dict['log']))
+    print(cmd)
+    os.system(cmd)
 
     for f in files:
         if f.endswith(str(args_dict['bam_suffix'])):

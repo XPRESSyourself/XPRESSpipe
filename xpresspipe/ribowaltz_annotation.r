@@ -40,8 +40,9 @@ description <- function() {
   "
 }
 
-library(GenomicFeatures)
 library(data.table)
+library(GenomicFeatures)
+#library(txdbmaker, character.only = TRUE)
 
 create_annotation <-  function(gtfpath = NULL, txdb = NULL, dataSource = NA, organism = NA) {
 
@@ -58,15 +59,9 @@ create_annotation <-  function(gtfpath = NULL, txdb = NULL, dataSource = NA, org
 
   if(length(gtfpath) != 0){
     path_to_gtf <- gtfpath
-    txdbanno <- GenomicFeatures::makeTxDbFromGFF(file = path_to_gtf, format = "gtf", dataSource = dataSource, organism = organism)
+    print(path_to_gtf)
+    txdbanno <- txdbmaker::makeTxDbFromGFF(file = path_to_gtf, format = "gtf", dataSource = dataSource, organism = organism)
   } else {
-    if(txdb %in% rownames(installed.packages())){
-      library(txdb, character.only = TRUE)
-    } else {
-      source("https://bioconductor.org/biocLite.R")
-      biocLite(txdb, suppressUpdates = TRUE)
-      library(txdb, character.only = TRUE)
-    }
     txdbanno <- get(txdb)
   }
 

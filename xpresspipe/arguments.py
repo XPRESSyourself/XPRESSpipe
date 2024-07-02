@@ -58,7 +58,6 @@ deps = [
     'scipy',
     'scikit-learn',
     'multiqc',
-    'XPRESSplot',
     'seaborn']
 r_deps = [
     'sva',

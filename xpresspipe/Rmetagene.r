@@ -22,26 +22,37 @@ license <- function() {
   "
   }
 
-# Import dependencies
-install.packages("stringi", repos = "http://cran.us.r-project.org", quiet = TRUE)
-library(stringi)
-
+# Install BiocManager if not already installed
 if (!requireNamespace("BiocManager", quietly = TRUE)) {install.packages("BiocManager", repos = "http://cran.us.r-project.org", quiet = TRUE)}
-
-if ("data.table" %in% rownames(installed.packages()) == FALSE) {
-  print("Installing data.table...")
-  install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)
-} else {
-  print("data.table package already installed")
-}
+if (!requireNamespace("BH", quietly = TRUE)) {install.packages("BH", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("cpp11", quietly = TRUE)) {install.packages("cpp11", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("plogr", quietly = TRUE)) {install.packages("plogr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("XML", quietly = TRUE)) {install.packages("XML", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("dbplyr", quietly = TRUE)) {install.packages("dbplyr", repos = "http://cran.us.r-project.org", quiet = TRUE)}
+if (!requireNamespace("data.table", quietly = TRUE)) {install.packages("data.table", repos = "http://cran.us.r-project.org", quiet = TRUE)}
 library(data.table)
 
-if ("GenomicAlignments" %in% rownames(installed.packages()) == FALSE) {
-  BiocManager::install("GenomicAlignments", dependencies=c("Depends", "Imports", "LinkingTo"))
-} else {
-  print("GenomicAlignments package already installed")
+# Function to install and load a package
+install_and_load <- function(pkg) {
+    if (!requireNamespace(pkg, quietly = TRUE)) {
+        message(paste("Installing", pkg))
+        BiocManager::install(pkg, update = TRUE, ask = FALSE)
+    }
+    library(pkg, character.only = TRUE)
 }
-library(GenomicAlignments)
+
+# List of packages to install and load
+packages <- c("Rhtslib", "rtracklayer", "biomaRt", "AnnotationDbi", "BiocFileCache", 
+              "GenomicFeatures", "SummarizedExperiment", "GenomicAlignments", "txdbmaker")
+
+# Install and load each package
+for (pkg in packages) {
+    tryCatch({
+        install_and_load(pkg)
+    }, error = function(e) {
+        message(paste("Error installing or loading", pkg, ":", e$message))
+    })
+}
 
 # Set globals
 chromosome <- 'chromosome'
@@ -96,7 +107,6 @@ run_list <- function (
   file_path, file_list, output_path) {
 
     for (f in file_list) {
-
       # Import BAM and get coverage
       print(paste('Processing records for', toString(f), sep=' '))
       file <- paste(file_path, f, sep='')
