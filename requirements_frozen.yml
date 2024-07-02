@@ -1,4 +1,4 @@
-name: xpresspipe_v0.7.0
+name: xpresspipe_v0.6.4
 channels:
   - bioconda
   - conda-forge

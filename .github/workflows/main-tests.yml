@@ -114,10 +114,9 @@ jobs:
           conda list --explicit > conda-spec-file.txt
           cat conda-spec-file.txt
 
-      - name: Generate R packages version report 
+      - name: Generate R packages version report
         shell: bash -l {0}
         run: |
           conda activate xpresspipe
-          Rscript -e 'installed.packages() %>% as.data.frame() %>% write.table("R-packages-version-report.txt", sep="\t")'
+          Rscript -e 'write.table(as.data.frame(installed.packages()), "R-packages-version-report.txt", sep="\t")'
           cat R-packages-version-report.txt
-          
