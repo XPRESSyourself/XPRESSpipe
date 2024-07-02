@@ -54,13 +54,6 @@ for (pkg in packages) {
     })
 }
 
-# Check if GenomicFeatures is loaded
-if ("GenomicFeatures" %in% (.packages())) {
-    message("GenomicFeatures successfully loaded")
-} else {
-    message("GenomicFeatures not loaded. Check for errors above.")
-}
-
 # Set globals
 chromosome <- 'chromosome'
 left_coordinate <- 'left_coordinate'
